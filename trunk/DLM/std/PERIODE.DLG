@@ -1,0 +1,11 @@
+// PERIODE.DLG
+field block={|x|SetPeriode(x)} \
+    picture="@k@!" \
+    caption=utr("Period from-to ","Periode von-bis ","P‚riodes de-… ") \
+    valid={||ph_refresh()} \
+    pick={|x|PickPerRange(x)}
+field caption=utr("Currency  ","W„hrung  ","Devise  ") \
+      block={|x|SetDevise(x)}\
+      picture="@k@!"\
+      pick={|x|PickDev(x)}\
+      valid={||DevExist(SetDevise())}

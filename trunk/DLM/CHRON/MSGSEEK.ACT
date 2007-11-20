@@ -1,0 +1,3 @@
+// MSGSEEK.ACT
+!empty(DlgValue("MsgSearch"))
+ddEditSearch(DlgValue("MsgFilter"))

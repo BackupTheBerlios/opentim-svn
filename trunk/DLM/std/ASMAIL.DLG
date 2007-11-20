@@ -1,0 +1,31 @@
+before setvar("mailto",padr(getvar("mailto",.f.,""),240))
+before setvar("mailbcc",padr(getvar("mailbcc",.f.,""),240))
+// #if !empty(getvar("mailhost"))
+field caption2=utr(" send as e-mail",\
+        " als E-Mail verschicken", \
+        " envoyer comme e-mail") \
+      reader={|g|CbxReader(g)} \
+      default=iif(SetAsMail(),"X"," ") \
+      block={|x|iif(x==NIL,iif(SetAsMail(),"X"," "),\
+                    SetAsMail(iif(empty(x),.f.,.t.)))}
+field name="mailto" \
+      caption="  mailto " \
+      picture="@k@s70" \
+      pick={|x|PickMailTo(x)}
+field name="mailbcc" \
+      caption=" mailbcc " \
+      picture="@k@s70"
+field name="mailhost" \
+      value=padr(getvar("mailhost",.f.,""),240)\
+      caption="SMTP host " \
+      picture="@k@s70" \
+      when={||.f.} color="N/W"
+field name="mailbody" \
+      default=""\
+      caption="Comment " \
+      picture="80x10"\
+      reader={|oGet|MemoReader(oGet)}
+after setvar("mailhost",trim(getvar("mailhost")))
+after setvar("mailto",trim(getvar("mailto")))
+after setvar("mailbcc",trim(getvar("mailbcc")))
+// #endif

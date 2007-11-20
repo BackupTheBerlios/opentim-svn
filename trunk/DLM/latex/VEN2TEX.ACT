@@ -1,0 +1,5 @@
+SetTplLang(PAR->Langue)
+DlgDefine("InFile","VEN"+DlgValue("Model")+".TEX")
+DlgDefine("OutFile",VEN->IdJnl)
+DlgDefine("Tray2Copies",if(VEN->IdJnl$"VNA,VEN",1,0))
+ActExec("TEXPARSE")

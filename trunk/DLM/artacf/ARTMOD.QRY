@@ -1,0 +1,14 @@
+//
+// C:\SOFT\RELEASE\TIM220\STD01D\ARTMOD.QRY - generated 09.10.97
+// for ART.DBF
+//
+window 18 80 0 0 
+column 5 Bezeichnung D pict @K@S25
+column 20 VK pict @K@!
+column 24 inkl.MWSt pict @K@!
+column 34 Art-Nr
+column 4 Bezeichnung F pict @K@S20
+column 6 Bezeichnung N pict @K@S20
+column 1 Gru pict @K@!
+column 19 Attrib pict @K@!
+mask ARTMOD

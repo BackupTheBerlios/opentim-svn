@@ -1,0 +1,129 @@
+// VerwaltermenÅ
+MnuAddTitle(utr("~Configuration","~Konfigurierung","~Configuration"))
+
+MnuAddItem("~Journale                  ",{||WinEdit(oJnl(),"Journale")})
+MnuAddItem("~Benutzerliste                 ",{||UsrEdit()})
+MnuAddItem("Buchungs~perioden              ",{||WinEdit(oPer(),MnuItemName())})
+MnuAddItem("Druckmasken und ~Textblocks",{||TplConfig()})
+#if oReg()!=NIL
+MnuAddItem("~MWSt-Codes                ",{||TaxEdit(MnuItemName())})
+MnuAddItem("MWSt-~Regimes              ",{||WinEdit(oReg(), MnuItemName())})
+#endif
+MnuAddItem("~Fakturierungsanweisungen  ",{||WinEdit(oIfc(), MnuItemName())})
+MnuAddItem("Buchungs~anweisungen       ",{||DbfEdit({oIpb(),oGen()}, MnuItemName())})
+MnuAddItem("Basispre~ise               ",{||WinEdit(oIpr(), MnuItemName())})
+#if oVnr() !=NIL
+MnuAddItem("~ErmÑ·igungsanweisungen    ",{||DbfEdit({oVnr()}, MnuItemName())})
+#endif
+#if oFrf()!=NIL
+MnuAddItem("~Kostenanweisungen"         ,{||DbfEdit({oFrf()}, MnuItemName())})
+#endif
+#if oUnt()!=NIL
+MnuAddItem("~Liefereinheiten           ",{||WinEdit(oUnt(), MnuItemName())})
+#endif
+#if HasDlm("VNA")
+MnuAddItem("Befriedi~gungstabelle      ",{||WinEdit(oTrn(), MnuItemName())})
+#endif
+MnuAddItem("~Zentralisierungsarten     ",{||WinEdit(oCtr(), MnuItemName())})
+MnuAddItem("Zahlungs~differenzen       ",{||WinEdit(oDif(), MnuItemName())})
+MnuAddSep()
+MnuAddItem(utr("Database ~parameters       ","Datenbank~parameter        ","~Paramätres du dossier     "),{||ParaGen()})
+MnuAddItem(utr("Printer ~settings          ","~Standarddrucker           ","Imprimante ~standard       "),{||DlgExec("PARAM")})
+#if TptLocate("TXT")!=NIL
+MnuAddItem("~Info-Texte                ",{||TplEdit(TptLocate("TXT"),"Info-Texte")})
+#endif
+MnuAddItem(utr("~Currencies                ","~WÑhrungen                 ","~Devises                   "),{||WinEdit(oDev(),MnuItemName())})
+MnuAddItem(\
+  utr("~Nations (Countries)",\
+      "~Nationen (LÑnder)",\
+      "~Nations (pays)"),\
+      {||DbfEdit({oNat()},MnuItemName())})
+#if oBic()!=NIL
+MnuAddItem("~Bank Identifier Codes     ",{||DbfEdit({oBic()}, MnuItemName())})
+#endif
+
+
+MnuAddTitle("~Editor")
+MnuAddItem("~dbc-Dateien               ",{||DbcEdit("*.dbc",,MnuItemName())})
+MnuAddItem("~act-Dateien               ",{||DbcEdit("*.act",,MnuItemName())})
+MnuAddItem("de~f-Dateien               ",{||DbcEdit("*.def",,MnuItemName())})
+#if SetActivePps()
+MnuAddItem("~pps-Dateien               ",{||DbcEdit("*.pps",,MnuItemName())})
+#endif
+MnuAddItem("~rep-Dateien               ",{||DbcEdit("*.rep",,MnuItemName())})
+MnuAddItem("dl~g-Dateien               ",{||DbcEdit("*.dlg",,MnuItemName())})
+MnuAddItem("~lst-Dateien               ",{||DbcEdit("*.lst",,MnuItemName())})
+MnuAddItem("in~c-Dateien               ",{||DbcEdit("*.inc",,MnuItemName())})
+MnuAddItem("e~xp-Dateien               ",{||DbcEdit("*.exp",,MnuItemName())})
+MnuAddItem("~tex-Dateien               ",{||DbcEdit("*.tex",,MnuItemName())})
+#if HasDlm("WWW")
+MnuAddItem("~htm-Dateien               ",{||DbcEdit("*.htm",,MnuItemName())})
+#endif
+#if SetActiveMenus()
+MnuAddItem("~mnu-Dateien               ",{||DbcEdit("*.mnu",,MnuItemName())})
+#endif
+MnuAddItem("t~pl-Dateien               ",{||DbcEdit("*.tpl",,MnuItemName())})
+MnuAddSep()
+MnuAddItem("Dr~uckertreiber            ",{||DbcEdit("*.drv",,MnuItemName())})
+MnuAddSep()
+MnuAddItem("TIM.I~NI                   ",{||FileEdit(CfgProgramPath()+"\tim.ini")})
+MnuAddItem("TIM.DB~I                   ",{||FileEdit(DbPath()+"\tim.dbi")})
+// MnuAddItem("~NEWS.TXT                  ",{||FileEdit(DbPath()+"\news.txt")})
+MnuAddItem("MENU.HTM",{||FileEdit(ArcPath()+"\menu.htm")})
+
+
+MnuAddTitle(utr("~Database","~Datenbank","Base de ~donnÇes"))
+MnuAddItem("~Reorganisieren                ",{||AppReorg()})
+MnuAddItem("~Sammelhistorik rekonstruieren ",{||Rebuild()})
+MnuAddItem("~IntegritÑtstest               ",{||TimTest() })
+MnuAddItem("~Journale abschlie·en          ",{||JnlClose("EKR VKR")})
+MnuAddSep()
+MnuAddItem("~Lettrierungen rekonstruieren  ",{||ActExec("HSTSATIS")})
+MnuAddItem("Jahres~abschlussbuchung        ",{||FinAuto("REP","499000",.t.,MnuItemName(),"600000","799999")})
+MnuAddItem("~öbertragsbuchung              ",{||FinAuto("REP","499000",.f.,MnuItemName(),"100000","599999")})
+MnuAddItem("~Historik rekonstruieren       ",{||ReClose(MnuItemName())})
+MnuAddItem("Buchhaltung ~lîschen           ",{||DlgExec("HSTDELE")})
+
+#if HasDlm("CRM")
+MnuAddSep()
+MnuAddItem("Adressbuch exportieren ~LDIF   ",{||ActExec("PAR2LDI")})
+MnuAddItem("Adressbuch exportieren ~Mozilla",{||ActExec("PAR2MOZ")})
+MnuAddItem("Adressbuch exportieren ~Eudora ",{||ActExec("PAREUDO")})
+#if HasDlm("LATEX")
+MnuAddItem("Adressbuch e~xportieren TEX    ",{||ActExec("PARBOOK")})
+#endif
+MnuAddItem("~Adressbuch exportieren RTF    ",{||ActExec("PAR2ADR")})
+#endif
+#if .f.
+MnuAddSep()
+MnuAddItem("~LagerbestÑnde neu rechnen     ",{||StkReset()})
+MnuAddItem("Lager ~valorisieren            ",{||MvsValorise()})
+MnuAddItem("Import aus TIM ~2.10           ",{||Upgrade()})
+#endif
+
+MnuAddItem("E~xport ANALBI                 ",{||GenExport(MnuItemName(),DbPath()+"\BALGEN.TXT")})
+MnuAddSep()
+MnuAddItem("Ba~ckup                        ",{||ActExec("BACKUP")})
+MnuAddItem("Res~tore                       ",{||ActExec("RESTORE")})
+
+!HasDlm("IVT").or.FileExec("IVT.MNU")
+
+
+MnuAddTitle(utr("~Utilities","~Utilities","~Utilitaires"))
+MnuAddItem("Umgebungs~diagnose             ",{||ActExec("DIAG")})
+MnuAddItem("LagerbestÑnde ~rekonstruieren  ",{||ActExec("STKRESET")})
+MnuAddItem("Fakturation ~aufrÑumen         ",{||JnlClean("LIE")})
+#if "E"$UsrAttrib()
+MnuAddSep()
+MnuAddItem("Artikelstammdaten ~lîschen     ",{||DlgExec("ARTCLEAN")})
+MnuAddItem("Export nach S~QL-Datenbank     ",{||ActExec("TIM2SQL")})
+MnuAddItem("~Mengenfelder anpassen         ",{||ActExec("QTEALIGN")})
+MnuAddItem("~VnaMatch initialisieren       ",{||ActExec("VNAMATCH")})
+MnuAddItem("~Partner mit Memo exportieren  ",{||ActExec("PAR2MEMO")})
+#endif
+#if HasDlm("TESTS")
+MnuAddItem("~Unit Tests                    ",{||ActExec("TESTS")})
+#endif
+
+FileExec("PROG.MNU")
+

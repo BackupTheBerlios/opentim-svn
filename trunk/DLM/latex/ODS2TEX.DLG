@@ -1,0 +1,66 @@
+// ODS2TEX.DLG
+before SetDlgTitle(MsgIdJnlDoc()+" : Produktionsschein drucken")
+
+// before ParExist(ODS->IdPar)
+
+before DlgDefault("AsFax"," ")
+before DlgDefault("Draft"," ")
+before DlgDefault("Model","EAN")
+before DlgDefault("AsPdf","X")
+
+// before DlgDefine("User",UserId())
+// before DlgDefine("co",PAR->Name3)
+// before DlgDefine("Anrede",padr(PAR->Name4,80))
+before DlgDefine("Copies",1)
+before DlgDefine("psnup",1)
+before DlgDefine("Scale",80)
+before DlgDefine("ColCount",4)
+
+// field block={||PAR->IdPar+" "+padr(ParName(),40)} \
+      caption="Partner : " \
+      when={||.f.} color="N/W"
+// field name="co" \
+      caption="zu H„nden " \
+      picture="@k@s40"
+// field name="Anrede" \
+      caption="Briefanrede     " \
+    picture="@k@s40"
+// field caption='                (leer = "Sehr geehrter Kunde,")'
+// field name="InFile" \
+      caption="Vorlage         " \
+      picture="@k@s40"
+// field name="OutFile" \
+      caption="Tempor„re Datei " \
+      picture="@k@s40"
+// field name="Spool" \
+    caption2=" imprimer directement (ne foncionne pas encore)" \
+    value=" " \
+    reader={|g|CbxReader(g)}
+field block={|x|SetPreview(x)} \
+    caption2=" Pr‚visualisation" \
+    value="X" \
+    reader={|g|CbxReader(g)}
+
+field name="Scale" \
+      caption="Gr”áe (80...200) " \
+      picture="9999"
+field name="ColCount" \
+      caption="Kolonnen " \
+      picture="999"
+field name="Model" \
+      caption="Modell " \
+      picture="@k@!"
+
+// field name="AsPdf" \
+    caption2=" Format PDF au lieu de DVI" \
+    reader={|g|CbxReader(g)}
+
+field name="AsFax" \
+    caption2=" comme Fax (avec signature)" \
+    reader={|g|CbxReader(g)}
+
+// after SetTplLang(PAR->Langue)
+after DlgDefine("InFile",DbPath()+"\ODS"+DlgValue("Model")+".TEX")
+after DlgDefine("OutFile",ODS->IdJnl)
+after ActExec("TEXPARSE")
+after .f.

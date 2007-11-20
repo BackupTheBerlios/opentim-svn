@@ -1,0 +1,26 @@
+title "Produktionsplanung"
+before DlgDefault("Date1",ctod(""))
+before DlgDefault("Date2",ctod(""))
+before DlgDefault("IdDev",DevDefault(MemPer2))
+before DlgDefault("IdUsr",padr("",LenIdUsr()))
+// field name="Alle" \
+      caption2=" alle (nicht nur die offenen)" \
+      reader={|g|CbxReader(g)}
+field name="Date1" \
+    caption="Liefertermin zwischen " \
+    attrib="N"
+field name="Date2" \
+    caption=" und "
+// field caption="W„hrung  " \
+      name="IdDev"\
+      picture="@k@!"\
+      pick={|x|PickDev(x)}\
+      valid={||DevExist(DlgValue("IdDev"))}
+// field block={|x|SetPeriode(x)} \
+    picture="@k@!" \
+    caption=if(MemLang1=="D","Periode von-bis ","P‚riodes de-… ") \
+    pick={|x|PickPerRange(x)}
+
+#include "PREVIEW.DLG"
+
+after SetDevise(DlgValue("IdDev"))

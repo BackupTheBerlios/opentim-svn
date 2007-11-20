@@ -1,0 +1,14 @@
+//
+// RPLRAP.QRY - generated 01/12/1999
+// for RPL.DBF
+//
+window 15 78 0 0 
+column 4 R-Datum say ""
+column 6 Verfall say ""
+column 9 Match
+column 5 Bemerkung pict @k@s18
+column 12 Debit pict @K@!
+column 13 Kredit pict @K@!
+column 10 MG pict @K@!
+column 11 Betrag FW pict @K@!
+column 2 Pos

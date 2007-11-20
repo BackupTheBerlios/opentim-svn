@@ -1,0 +1,17 @@
+//
+// C:\SOFT\RELEASE\TIM220\STD01D\HSTMATCH.QRY - generated 14.07.97
+// for HST.DBF
+//
+window 10 76 0 0 
+column 1 =utr("Accnt","Konto","Compte")
+column 3 Jnl pict @K@!
+column 4 Dok.Nr pict @K@!
+column 6 =utr("Date","Datum","Date")
+column 8 =utr("Remark","Bemerkung","Remarque") pict @k@s16
+column 17 Debit
+column 18 =utr("Credit","Kredit","Cr‚dit")
+column 9 Periode
+column 5 Pos
+column 12 =utr("Amnt FC","Betrag FW","MontDev")
+column 2 =utr("IdPar","P-Kto","CptPar")
+column 15 Z

@@ -1,0 +1,8 @@
+SetTplIni("LISTE")
+DlgExec("DCFGEN")
+// RETURN xprint({||\
+//   SetPageHeader(cblock("PrintHeader('Cash-Flow Statement Details')"))\
+//   .and.ddScan(\
+//     cblock("MsgDisplay(DCF->Name1).and.fparse('DCFGEN.TPL',NIL,'[]')")\
+// )}) if getvar("ForAll")=="X"
+fprint("DCFGEN.TPL","[]",66+if(empty(getvar("range3")),0,13))

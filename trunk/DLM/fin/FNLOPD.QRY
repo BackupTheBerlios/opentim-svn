@@ -1,0 +1,20 @@
+//
+// FNLOPD.QRY - generated 21.02.03
+// for FNL.DBF
+//
+window 16 78 5 0 
+column 4 =utr("Date","Datum","Date") IfExpr "A"$FnlJnlAttrib()
+column 10 =utr("G-acc","G-Kto","Cpte.g") pict @K@! attr P
+column 5 =utr("P-acc","P-Kto","Cpte.p") pict @K@!
+column 15 Konto / Bemerkung pict @k@s26 skip .t.
+column 12 Debit pict @K@!
+column 13 Kredit pict @K@!
+column 14 Match pict @K@! skip .t.
+column 6 =utr("Ctr","Ztr","Ctr") pict @K@! skip empty(FNL->IdCtr) attr P
+column 8 Konto pict @K@S20 skip .t.
+column 9 =utr("Remark","Bemerkung","Remarque") pict @K@S20 skip .t.
+column 3 Op. pict @K@! skip .t.
+column 21 FW pict @K@! skip .t.
+column 19 Debit (FW) skip .t.
+column 20 Kredit (FW) skip .t.
+mask FNLOPD

@@ -1,0 +1,31 @@
+//
+// JNL.QRY - generated 16/11/07
+// for JNL.FOX
+//
+column 1 Jnl
+column 9 Seq pict @K@!
+column 33 N pict @K@!
+column 3 Bezeichnung pict @K@S20
+column 14 JGr pict @K@!
+column 10 W„ pict @K@!
+column 28 Dok.Nr. pict @K@!
+column 29 Periode
+column 7 Z pict @K@!
+column 6 Konto
+column 8 DC pict @K@!
+column 4 Attr. pict @K@!
+column 16 V pict @K@!
+column 23 View pict @K@!
+column 2 Typ pict @K@!
+column 27 DocAttr pict @K@!
+column 17 TPT pict @K@!
+column 5 Druckm. pict @K@!
+column 15 TaxDecPos
+column 11 Dokumentbezeichnung 1
+column 12 Dokumentbezeichnung 2
+column 13 Dokumentbezeichnung 3
+column 30 IdHcl pict @K@!
+column 25 CodeBqe pict @K@!
+column 26 Compte pict @K@!
+mask JNL
+order 2

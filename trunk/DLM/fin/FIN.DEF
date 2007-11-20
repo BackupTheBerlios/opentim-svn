@@ -1,0 +1,8 @@
+// FIN.DEF
+ddAddSpecial(\
+  {||DlgExec("JNLIDDOC")}, \
+  "~Letzte Dokumentnummer setzen  ",\
+  NIL,{||"S"$UsrAttrib()}\
+)
+ddAddSpecial({||FinRename()}, NIL, -31, {||"E"$UsrAttrib()} )
+

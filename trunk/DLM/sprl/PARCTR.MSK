@@ -1,0 +1,14 @@
+//
+// C:\SOFT\RELEASE\TIM220\STD01D\PARCTR.MSK - generated 28.05.97
+// for PAR.DBF
+//
+
+
+string 5 1 [F9] Historik :
+string 20 37 Saldo
+string 20 1 [F7] Kontoauszug drucken
+
+get 0 20 44 block solde2(val(PAR->Debit),val(PAR->Credit))
+get 3 2 1 pict @k@s30
+get 4 2 44
+wait 13 78 6 1 9

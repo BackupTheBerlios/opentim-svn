@@ -1,0 +1,43 @@
+// TEX2PDF.ACT
+// called from TEXPARSE.ACT
+// Confirm(DlgValue("OutFile")+".PDF")
+FileDelete(DlgValue("OutFile")+".PDF",.f.,.t.)
+// !file(DlgValue("OutFile")+".PDF")\
+  .or.FileDelete(DlgValue("OutFile")+".PDF",.f.)\
+  .or.!Warning(SetMsg())
+AppShell(\
+  "pdflatex "\
+  +if("E"$UsrAttrib(),"","--quiet ")\
+  +DlgValue("OutFile")+".TEX",\
+  "Lancement de pdfLaTeX...",.f.\
+)
+file(DlgValue("OutFile")+".PDF").or.!Warning(\
+  DlgValue("OutFile")+".PDF wurde nicht erstellt.",\
+  "(Ist der PATH korrekt? "+getenv("PATH")+")"\
+)
+RETURN AppShell(\
+  "start "+DlgValue("OutFile")+".pdf",\
+  "Acrobat Reader wird gestartet..."\
+) if .t..or.SetPreview()=="X"
+
+FileDelete(".\tmp.ps",.f.,.t.)
+
+DlgDefine("Cmd",AppPath()+"\gs")
+// DlgPlus("Cmd"," -q")
+DlgPlus("Cmd"," "+DlgValue("OutFile")+".pdf")
+
+//  +if(DlgValue("Copies")==1,""," -b "+ntrim(DlgValue("Copies")))
+
+AppShell(DlgValue("Cmd"),"GhostScript wird gestartet...",.f.)
+file("tmp.ps").or.!Warning(\
+  "Datei tmp.ps wurde nicht erstellt."\
+)
+AppShell(\
+  "copy tmp.ps LPT2:",\
+  "Envoi vers LPT2..."\
+)
+DlgDefault("Tray2Copies",0)
+DlgValue("Tray2Copies")==0.or.AppShell(\
+  "copy "+AppPath()+"\tray2.ps+tmp.ps LPT2:",\
+  "Envoi vers LPT2..."\
+)

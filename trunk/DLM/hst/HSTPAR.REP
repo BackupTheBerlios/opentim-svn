@@ -1,0 +1,101 @@
+// Historik Partner
+header1 utr("Partner history",\
+            "Historik Partner",\
+            "Historique comptes particuliers")\
+            +" "+CtrName(trim(DlgValue("IdCtrList")))\
+            +if(empty(DlgValue("Satis")),""," (nur offene)")
+header2 PerText()
+header3 if(\
+  empty(DlgValue("IdJnl")),\
+  "",\
+  " (nur Journal "+DlgValue("IdJnl")+")"\
+)
+
+area { oHst(), oPar(), oGen(), oVen(), oFin(), oFnl() }
+order 1 // ORD_HST_PARDATE
+
+ValidateRecord {|| empty(HST->IdCtr).or.ParExist(HST->IdPar) }
+
+filter {|| !empty(HST->IdCtr)}
+#if !empty(DlgValue("Match"))
+  filter cblock("left(HST->Match,"+ntrim(len(trim(DlgValue("Match"))))\
+         +")=='"+trim(DlgValue("Match"))+"'")
+#endif
+#if !empty(DlgValue("IdJnl"))
+  filter cblock("HST->IdJnl=='"+DlgValue("IdJnl")+"'")
+#endif
+#if !empty(DlgValue("IdCtrList"))
+  filter cblock("HST->IdCtr$'"+DlgValue("IdCtrList")+"'")
+#endif
+#if !empty(DlgValue("Satis"))
+  filter {||empty(HST->Satis)}
+#endif
+filter {|| ChkPeriode(HST->Periode) <= 0 }
+
+detail {|| ChkPeriode(HST->Periode)==0}
+
+#if !empty(DlgValue("IdPar1"))
+  start DlgValue("IdPar1")
+#endif
+#if !empty(DlgValue("IdPar2"))
+  while {|| HST->IdPar<=DlgValue("IdPar2") }
+#endif
+
+OnNoValue {|| Confirm(\
+  MsgIdJnlDoc() + " : Buchung " + HST->IdGen + \
+  " konnte keiner Kolonne zugewiesen werden !", \
+  MsgContinue() \
+)}
+
+// column header="Nr." width=LenIdPar() text={||HST->IdPar} when={|grp|IsFirst(1)}
+// column header="Name" width=30 text={||padr(ParName(),30)} when={|grp|IsFirst(1)}
+column header=utr("Date","Datum","Date") \
+       width=len(dtocf(UserDate())) \
+       text={||dtocf(HST->Date,"dd.mm.yy")}
+column header="Jnl" width=LenIdJnl() text={||HST->IdJnl}
+column header=utr("Doc.#","Dok.Nr","NøDoc") \
+       width=6 text={||HST->IdDoc}
+column header="Per." width=4 text={||HST->Periode}
+column header="Match" width=6+LenIdJnl() text={||HST->Match}
+column header=utr("Debit ","Debit ","D‚bit ") \
+       width=LenMntF()  text={|x|ntomf(x)} \
+       value={||HstMont(SetDevise())} \
+       when={|grp|HST->DC == "D"} \
+       xsum={|x,nTtl| if(nTtl==2,ntomf(x),SoldeD(x,ClnSum(1))) }
+column header=utr("Credit ","Kredit ","Cr‚dit ") \
+       width=LenMntF() text={|x|ntomf(x)} \
+       value={||HstMont(SetDevise())} \
+       when={|grp|HST->DC == "C"} \
+       xsum={|x,nTtl| if(nTtl==2,ntomf(x),SoldeC(ClnSum(-1),x)) }
+column header="*"     width=1            text={||HST->Satis}
+#if len(trim(DlgValue("IdCtrList")))!=LenIdCtr()
+  column header="Z"     width=LenIdCtr()   text={||HST->IdCtr}
+#endif
+column header="Bemerkung" width=40 \
+       text={||padr(HstParLibell(HST->IdJnl,HST->IdDoc,HST->Line),40)}
+
+//        Confirm("when "+trim1(ParName())+ntrim(nDtlCount)).and.
+//        Confirm("before "+ParName()).and.
+group key={|| HST->IdPar } \
+      text={|| NIL} \
+      when={|nCount,nDtlCount|\
+        nDtlCount>0.or.abs(RptValue(1,1,6)-RptValue(1,1,7))>DevTolerance(SetDevise())\
+      } \
+      after={|nCount,nDtlCount|.t.} \
+      align="L" \
+      before={|nCount,nDtlCount| \
+        PrintLine()\
+        .and.PrintLine(Tagged("B")+HST->IdPar + " : " + ParName(HST->IdPar)+Tagged("b"))\
+        .and.PrintTotal(1,1)\
+      }
+group text={|x|"alle"} align="L"
+
+total for={||ChkPeriode(HST->Periode)<0} \
+      text={||tr("Start balance","Beginnsaldo","Solde initial")} \
+      when={|nCount,nDtlCount|nCount>0}
+total for={||ChkPeriode(HST->Periode)==0} \
+      text={||tr("Total","Summe","Total")} \
+      when={|nCount,nDtlCount|nDtlCount>1}
+total text={||tr("Final balance","Endsaldo","Solde final")} \
+      when={|nCount,nDtlCount|nCount>0}
+

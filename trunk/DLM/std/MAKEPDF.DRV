@@ -1,0 +1,75 @@
+// text to pdf using makepdf.exe
+//
+// see documentation in
+// k:\collect\pdf\makepdf.zip
+// k:\collect\doc\pdf\pdfspec.pdf
+//   8.7.1 : Text State parameters and operators
+
+Name PDF-Datei
+
+OnSelect SetSpooler("AppShell('prn2pdf preview','Konvertierung nach PDF')")
+OnSelect p_SetPapHeight(11)
+OnSelect p_SetFinalFF(.f.)
+OnSelect p_SetCopies(1)
+
+OnJobBegin ToStream("<lines 100>")
+
+FormFeed  "\f"
+
+Font  5cpi  5 cpi2pt(5)/72  "[/F1 "+ntrim(cpi2pt( 5))+" Tf "+ntrim(cpi2pt( 5))+" TL] "
+Font 10cpi 10 cpi2pt(10)/72 "[/F1 "+ntrim(cpi2pt(10))+" Tf "+ntrim(cpi2pt(10))+" TL] "
+Font 12cpi 12 cpi2pt(12)/72 "[/F1 "+ntrim(cpi2pt(12))+" Tf "+ntrim(cpi2pt(12))+" TL] "
+Font 15cpi 15 cpi2pt(15)/72 "[/F1 "+ntrim(cpi2pt(15))+" Tf "+ntrim(cpi2pt(15))+" TL] "
+Font 17cpi 17 cpi2pt(17)/72 "[/F1 "+ntrim(cpi2pt(17))+" Tf "+ntrim(cpi2pt(17))+" TL] "
+Font 20cpi 20 cpi2pt(20)/72 "[/F1 "+ntrim(cpi2pt(20))+" Tf "+ntrim(cpi2pt(20))+" TL] "
+
+BoldOn   "[/F2 "+ntrim(cpi2pt(FntPitch()))+" Tf]  "
+BoldOff  "[/F1 "+ntrim(cpi2pt(FntPitch()))+" Tf]  "
+ItalOn   "[/F3 "+ntrim(cpi2pt(FntPitch()))+" Tf]  "
+ItalOff  "[/F1 "+ntrim(cpi2pt(FntPitch()))+" Tf]  "
+UnderOn   ""
+UnderOff  ""
+ShadowOn   ""
+ShadowOff  ""
+
+// convert "[" to "\["
+// convert "]" to "\]"
+convert "{" to "\{"
+convert "}" to "\}"
+convert "<" to "\<"
+convert ">" to "\>"
+convert "\" to "\\"
+                                      
+// Siehe auch DOS2WIN.CVT
+convert "⁄" to " "
+convert "ø" to " "
+convert "¿" to " "
+convert "Ÿ" to " "
+convert "ƒ" to "-"
+convert "≥" to "|"
+convert "Ñ" to "‰"
+convert "é" to "ƒ"
+convert "î" to "ˆ"
+convert "ô" to "÷"
+convert "Å" to "¸"
+convert "ö" to "‹"
+convert "·" to "ﬂ"
+convert "Ö" to "‡"
+convert "É" to "‚"
+convert "Ç" to "È"
+convert "à" to "Í"
+convert "ä" to "Ë"
+convert "å" to "Ó"
+convert "ì" to "Ù"
+convert "ñ" to "˚"
+convert "ó" to "˘"
+convert "â" to "Î"
+convert "á" to "Á"
+convert "Ò" to "±"
+convert "¯" to "∞"
+convert "˝" to " " // hoch 2
+convert "Û" to " " // 3/4
+convert "ı" to " " // Paragraph
+convert chr(255) to " "
+convert chr(141)+chr(10) to " "
+

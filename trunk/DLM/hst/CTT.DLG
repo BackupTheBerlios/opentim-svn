@@ -1,0 +1,14 @@
+// Kontrolliste MWSt
+field block={|x|SetPeriode(x)} \
+    caption="Periode von-bis " \
+    pick={|x|PickPerRange(x)}
+field block={|x|SetTplIni(x)} picture="@k@!" \
+    caption="Druckparametersatz " \
+    value=padr("LISTE",LenIdTpl()) \
+    pick={|x|PickTpl("INI",x)}
+field block={|x|SetPreview(x)} \
+    caption2=" Seitenvorschau " \
+    value="X" \
+    reader={|g|CbxReader(g)}
+
+after AppSaveMem()

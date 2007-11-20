@@ -1,0 +1,48 @@
+// Kontrollliste 2 Intrastat 
+header1 "Kontrollliste 2 Intrastat"
+header2 PerText()
+header3 if(DlgValue("DC")=="C","Eingang","Ausgang")
+// header3 JnlName(DlgValue("IdJnl"))
+area { oHsi(), oVen(), oPar() }
+order 2 //
+ValidateRecord {|| DocExist(HSI->IdJnl,HSI->IdDoc).and.ParExist(VEN->IdPar) }
+filter {|| ChkPeriode(HSI->Periode) == 0}
+filter {|| (VEN->DC==DlgValue("DC").and.val(VEN->Mont)>0).or.(VEN->DC!=DlgValue("DC").and.val(VEN->Mont)<0)}
+// start DlgValue("IdJnl")
+// while {||HSI->IdJnl==DlgValue("IdJnl")}
+group key={|| HSI->IdJnl+HSI->IdNat } text={|x|"Zwischensumme "+HSI->IdNat+" (alle Warengruppen)" } when={|x|x>0} 
+group key={|| HSI->IdJnl+HSI->IdNat+HSI->IdInt } text={|x|"Zwischensumme "+HSI->IdNat +" "+DbfPeek(oInt(),HSI->IdInt,"INT->Name","")} when={|x|x>0} 
+group text={|x|"Gesamt"}
+column header="Jnl" width=LenIdJnl() text={||HSI->IdJnl} when={|grp|IsFirst(1)}
+column header="Land" width=4 text={||NatIntra(HSI->IdNat)+" "} when={|grp|IsFirst(1)}
+column header="ZN" width=LenIdInt() text={||HSI->IdInt} when={|grp|IsFirst(2)}
+column header="Code" width=10 text={||DbfPeek(oInt(),HSI->IdInt,"INT->Code",space(10))} when={|grp|IsFirst(2)}
+column header="Bezeichnung" width=30 text={||padr(DbfPeek(oInt(),HSI->IdInt,"INT->Name",""),30)} when={|grp|IsFirst(2)}
+column header="Per." width=4 text={||HSI->Periode}
+       // when={|grp|IsFirst(1)}
+column header="Anz" width=LenQte() \
+                    value={||abs(qton(HSI->Qte))} \
+                    text={|x|ntoq(x,"0")} \
+                    xsum={|x|ntoq(x,"0")}
+column header="Kg" width=LenQte() \
+                   value={||abs(qton(HSI->QteStat))} \
+                   text={|x|ntoq(x,"0")} \
+                   xsum={|x|ntoq(x,"0")}
+column header="Wert "+SetDevise() width=LenMntF() \
+       value={||abs(val(HSI->Mont))} \
+       text={|x|ntomf(x)} \
+       xsum={|x| ntomf(x) }
+column header="FW" width=3 text={|x|VEN->IdDev}
+column header="Wert FW" width=LenMntF() \
+       value={||abs(val(HSI->MontDev))} \
+       text={|x|ntomf(x,DevDecPos(VEN->IdDev))}
+column header="Dok.Nr" width=6 text={||HSI->IdDoc} 
+column header="Jnl" width=3 text={||HSI->IdJnl}
+total for={||VEN->IdDev=="EUR"} text={||"Summen EUR"} when={|x|x>0}
+total for={||VEN->IdDev=="DM "} text={||"Summen DM"} when={|x|x>0}
+total for={||VEN->IdDev=="BF "} text={||"Summen BF"} when={|x|x>0}
+total for={||VEN->IdDev=="HFL"} text={||"Summen HFL"} when={|x|x>0}
+total for={||VEN->IdDev=="FF "} text={||"Summen FF"} when={|x|x>0}
+total for={||!VEN->IdDev$"EUR,FF ,HFL,BF ,DM "} \
+      text={||"Summen sonstige W„hrungen"} when={|x|x>0}
+total

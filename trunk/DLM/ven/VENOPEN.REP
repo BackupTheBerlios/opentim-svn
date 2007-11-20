@@ -1,0 +1,16 @@
+// Unregistrierte Dokumente
+header1 "Unregistrierte Fakturationsdokumente"
+area { oVen(), oPar() }
+index for="VEN->Etat!=DocStatClosed()" on="dtos(VEN->Date)"
+group text={|x|"alle"} align="L"
+OnNoValue {||.t.}
+// filter {|| !"H"$BIL->Attrib.and....}
+// start trim(DlgValue("IdGen1"))
+// while {|| empty(DlgValue("IdGen2")).or.HST->IdGen <= DlgValue("IdGen2") }
+column header="Datum" width=8 text={||dtoc(VEN->Date)}
+column header="Jnl" width=LenIdJnl() text={||VEN->IdJnl}
+column header="Dok.Nr." width=6 text={||VEN->IdDoc}
+column header="Partner" width=30 text={||padr(ParName(VEN->IdPar),30)}
+column header="Bemerkung" width=30 text={||padr(VEN->NB1,30)}
+column header="User" width=LenIdUsr() text={||VEN->Auteur} 
+total when={||.t.}

@@ -1,0 +1,7 @@
+//
+// VNLTRA.QRY - generated 05.05.2001
+// for VNL.DBF
+//
+window 11 80 11 0 
+column 6 =utr("Prd#","Art.Nr.","Nøart.") pict @K@!
+column 21 =utr("Description","Bezeichnung","D‚signation") pict @K@S70

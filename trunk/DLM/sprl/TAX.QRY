@@ -1,0 +1,16 @@
+//
+// TAX.QRY - generated 04.11.02
+// for TAX.DBF
+//
+column 13 Seq pict @K@!
+column 4 =utr("C","Z","C") pict @K@!
+column 1 Id pict @K@!
+column 2 =utr("Description","Bezeichnung","Description") pict @k@s35
+column 15 Regimes pict @K@!@s7
+column 3 =utr("Rate","%-Satz","taux") pict @K@!
+column 8 Attr pict @K@!
+column 5 =utr("G.accnt","G-Kto","compte") pict @K@!
+column 6 Intra pict @K@!
+column 14 xlValid pict @k@s50
+mask TAX
+freeze 3

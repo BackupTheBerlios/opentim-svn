@@ -1,0 +1,12 @@
+//
+// MSG.QRY - generated 11/02/04
+// for MSG.DBF
+//
+column 3 Datum say ""
+column 12 Name pict @K@S25
+column 4 Titel pict @K@S38
+column 11 Maske pict @K@!
+column 10 IdPar pict @K@!
+column 1 IdUsr pict @K@!
+mask MSG
+order 2

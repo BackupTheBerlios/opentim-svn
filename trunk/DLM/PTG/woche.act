@@ -1,0 +1,4 @@
+DlgExec("WOCHE")
+// Confirm("Woche vom "+dtoc(getvar("Date")))
+fparse("WOCHE.PDS",".\TMP.PDS","[]",.t.,.t.,.f.,NIL,.f.)
+AppShell(AppPath()+"\timtools pds2pdf .\TMP.PDS",MnuItemName())

@@ -1,0 +1,130 @@
+// Bilanz
+// Variablen : range1 : erstes Steuerjahr
+//             range2 : erstes Steuerjahr
+initialize SetMntFormat("S12") // [set montant S10]
+header1 MnuItemName()
+header2 tr("Fiscal years ", "Steuerjahre ","Ann‚es fiscales") \
+        + trim(DlgValue("range1")) \
+        + tr(" and ", " und "," et ") + trim(DlgValue("range2"))
+
+header3 tr("Amounts in ","Betr„ge in ","Montants en ")+SetDevise()
+area { oGen(), oBil() }
+order 3 // GEN->IdBil+GEN->IdGen
+
+ValidateRecord {|| BilExist(GEN->IdBil) }
+ValidateRecord {|| !empty(BIL->DC) }
+ValidateRecord {|| SetPeriode(DlgValue("range1")) }
+ValidateRecord {|| DlgDefine("Mont1",DbfSum(\
+    {oHst(),oGen(),oPar(),oVen(),oFin()},\
+    "HstMont('"+DlgValue("IdDev")+"')*if(HST->DC=='"+BIL->DC+"',1,-1)",\
+    3,GEN->IdGen+PerStart(MemPer1),\
+    "HST->IdGen=='"+GEN->IdGen+"'.and.HST->Periode<='"+MemPer2+"'"\
+  )) \
+}
+ValidateRecord {|| SetPeriode(DlgValue("range2")) }
+ValidateRecord {|| DlgDefine("Mont2",DbfSum(\
+    {oHst(),oGen(),oPar(),oVen(),oFin()},\
+    "HstMont('"+DlgValue("IdDev")+"')*if(HST->DC=='"+BIL->DC+"',1,-1)",\
+    3,GEN->IdGen+PerStart(MemPer1),\
+    "HST->IdGen=='"+GEN->IdGen+"'.and.HST->Periode<='"+MemPer2+"'"\
+  )) \
+}
+// special for Estonia : amounts in balance are rounded to 1 EEK
+// ValidateRecord {||SetDevise()!="EEK".or.SetDecPos(0)}
+
+filter {|| !"H"$BIL->Attrib.and.!empty(BIL->DC) }
+filter {|| abs(DlgValue("Mont1"))>DevTolerance().or.abs(DlgValue("Mont2"))>DevTolerance() }
+// detail {||GenCtgMont("S"+BIL->DC,GEN->IdGen)!=0}
+// start trim(DlgValue("IdGen1"))
+// while {|| empty(DlgValue("IdGen2")).or.HST->IdGen <= DlgValue("IdGen2") }
+
+// group key={|| GEN->IdBil } \
+//      text={|| trim(BIL->Name) }
+// when={|nCount,nDtlCount|nDtlCount>0}
+// group key={|| left(GEN->IdBil,1) } \
+//      text={|| left(GEN->IdBil,1) }
+// group text={|x|"Gesamt"}
+
+
+group key={|| GEN->IdBil } \
+      header={||PrintLine().and.PrintLine(\
+        GEN->IdBil + " " + Tagged("B")+ trim(BIL->Name)+Tagged("b")\
+      ).and.PrintLine()} \
+  text={|| space(LenIdBil()+LenIdGen()+2)+tr("Total","Summe","Total") } \
+  when={|nCount,nDtlCount|nDtlCount>0} \
+  format="B"
+
+group key={|| left(GEN->IdBil,3) } \
+      header={||PrintLine().and.PrintLine(tagged("B")+left(GEN->IdBil,3)+" "\
+        +DbfPeek(\
+          oBil(),padr(left(GEN->IdBil,3),LenIdBil()),\
+          "trim(BIL->Name)",\
+          left(GEN->IdBil,3)\
+      )+tagged("b")).and.PrintLine()} \
+      text={|| left(GEN->IdBil,3)+" "+DbfPeek(\
+        oBil(),padr(left(GEN->IdBil,3),LenIdBil()),\
+        "trim(BIL->Name)",\
+        left(GEN->IdBil,3)\
+      ) } \
+      when={|nCount,nDtlCount|nDtlCount>0} \
+      after={||PrintLine()}
+
+group key={|| left(GEN->IdBil,2) } \
+      header={||PrintLine().and.PrintLine(tagged("B")\
+        +left(GEN->IdBil,2)+" "+DbfPeek(\
+        oBil(),padr(left(GEN->IdBil,2),LenIdBil()),\
+        "trim(BIL->Name)",\
+        left(GEN->IdBil,2)\
+      )+tagged("b")).and.RptTit2()} \
+      text={|| left(GEN->IdBil,2)+" "+DbfPeek(\
+        oBil(),padr(left(GEN->IdBil,2),LenIdBil()),\
+        "trim(BIL->Name)",\
+        left(GEN->IdBil,2)\
+      ) } \
+      when={|nCount,nDtlCount|nDtlCount>0} \
+      after={||RptTit2()}
+
+group key={|| left(GEN->IdBil,1) } \
+      header={||DbfPeek(\
+          oBil(),padr(left(GEN->IdBil,1),LenIdBil()),\
+          "(!'S'$BIL->Attrib.or.(p_eject()==NIL)).and.PrintLine(trim(BIL->Name))",.f.\
+      )} \
+      text={|| DbfPeek(\
+        oBil(),padr(left(GEN->IdBil,1),LenIdBil()),\
+        "trim(BIL->Name)",\
+        left(GEN->IdBil,1)\
+      ) } \
+      when={|nCount,nDtlCount|nDtlCount>0} \
+      after={||RptTit2()}
+
+//    header={||if(\
+          IsFirst(1).or.DbfPeek(\
+            oBil(),padr(left(GEN->IdBil,1),LenIdBil()),"'S'$BIL->Attrib",.f.\
+          ),PrintLine(),p_eject()==NIL\
+        )\
+        .and.PrintLine(DbfPeek(\
+          oBil(),padr(left(GEN->IdBil,1),LenIdBil()),\
+          "trim(BIL->Name)",\
+          left(GEN->IdBil,1)\
+      ))} \
+
+group text={|x|"Gesamt"} when={||.f.}
+
+
+
+column header=tr("Item","Art.","Code") width=LenIdBil() text={||space(LenIdBil())}
+column header=tr("Accnt","Konto","Compte") width=LenIdGen() \
+       text={||GEN->IdGen}
+column header=tr("Description","Bezeichnung","Description") width=40 \
+       text={||padr(GenName(NIL,TplLang()),40)}
+column header="D/C" width=3 text={||" "+BIL->DC+" "}
+column header=padl(trim(DlgValue("range1")),LenMntF()) \
+       width=LenMntF() \
+       value={||DlgValue("Mont1")} \
+       text={|x|ntomf(x)} \
+       xsum={|x| ntomf(x) }
+column header=padl(trim(DlgValue("range2")),LenMntF()) \
+       width=LenMntF() \
+       value={||DlgValue("Mont2")} \
+       text={|x|ntomf(x)} xsum={|x| ntomf(x) }
+total text={||""} when={||.t.}

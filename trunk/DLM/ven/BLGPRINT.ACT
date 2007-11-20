@@ -1,0 +1,5 @@
+// print a receipt
+// created 20021101 by LS
+// called from VENPRINT.ACT
+DlgExec("BLGPRINT")
+fprint("BLG.TPL","[]")

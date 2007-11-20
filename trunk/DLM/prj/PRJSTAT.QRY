@@ -1,0 +1,15 @@
+//
+// PRJ.QRY - generated 11.03.03
+// for PRJ.DBF
+//
+column 5 start say ""
+column 11 S pict @k@!
+column 2 Title pict @k@s50
+column 9 IdPar pict @k@!
+column 0 Partner block padr(ParName(PRJ->IdPar),10) skip .t.
+column 6 until say ""
+column 1 ID pict @K@!
+column 8 Type pict @K@!
+column 12 IdArt pict @k@!
+mask PRJ
+order 3

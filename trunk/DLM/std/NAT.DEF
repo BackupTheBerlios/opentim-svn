@@ -1,0 +1,9 @@
+// NAT.DEF
+ddPreCreate("DlgDefine('IdNat',space(len(NAT->IdNat)))")
+ddPreCreate("DlgDefine('Name',space(len(NAT->Name)))")
+ddPreCreate("DlgDefine('IdLng',space(len(NAT->IdLng)))")
+ddPreCreate("DlgExec('NATCREA')")
+ddOnCreate("(NAT->IdNat:=DlgValue('IdNat'))!=NIL")
+ddOnCreate("(NAT->Name:=DlgValue('Name'))!=NIL")
+ddOnCreate("(NAT->IdLng:=DlgValue('IdLng'))!=NIL")
+

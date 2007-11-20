@@ -1,0 +1,117 @@
+before SetMntFormat("S12")
+header1 trim1(LngExpr("DCL->Name"))
+// header1 tr("Cash Flow Statement",\
+//  "Kapitalflussrechnung",NIL,NIL,"Rahak„ibe aruanne")
+header2 tr("Fiscal years ", "Steuerjahre ","Ann‚es fiscales ",NIL,"Aruande perioodid ") \
+        + trim(DlgValue("range1")) \
+        + tr(" and ", " und "," et ", NIL, " ja ") + trim(DlgValue("range2")) \
+        + if(empty(getvar("range3")),"",\
+             tr(" and ", " und "," et ", NIL, " ja ") + trim(DlgValue("range3")))
+
+header3 tr("Amounts in ","Betr„ge in ","Montants en ",NIL,"Valuuta: ")+SetDevise()
+area { oDcf() }
+order 1
+start DCL->IdDcl
+while {||DCF->IdDcl==DCL->IdDcl}
+
+
+ValidateRecord {||setvar("values",\
+  DcfValues(getvar("range1"),getvar("range2"),getvar("range3")))}
+
+// ValidateRecord {||\
+  setvar("Mont1",0)\
+  .and.setvar("Mont2",0)\
+  .and.setvar("Mont3",0)\
+  .and.(empty(DCF->Type).or.DbfScan({oGen()},1,\
+    NIL,NIL,DcfGenFilter(),"ActExec('DCFCOMP')"))\
+  }
+
+// filter {|| !"H"$DCF->Attrib }
+// filter {|| empty(DCF->Type).or."A"$DCF->Attrib
+filter {|| "A"$DCF->Attrib\
+           .or.abs(getvara("values",1,0))>DevTolerance(SetDevise())\
+           .or.abs(getvara("values",2,0))>DevTolerance(SetDevise())\
+           .or.abs(getvara("values",3,0))>DevTolerance(SetDevise())\
+       }
+
+// filter {|| empty(DCF->Type).or."A"$DCF->Attrib\
+           .or.abs(DlgValue("Mont1"))>DevTolerance()\
+           .or.abs(DlgValue("Mont2"))>DevTolerance()\
+           .or.abs(DlgValue("Mont3"))>DevTolerance()\
+       }
+
+group key={||left(DCF->IdDcf,3) } \
+  text={|| \
+    +padr(left(DCF->IdDcf,3),LenIdDcf()+1)\
+    +DbfPeek(oDcf(),\
+      DCF->IdDcl+padr(left(DCF->IdDcf,3),LenIdDcf()),\
+      "trim(LngExpr('DCF->Name'))",\
+      "") \
+  } \
+  when={|nCount,nDtlCount|nDtlCount>1} \
+  afterTotals={||PrintLine()}\
+  before={||PrintLine()}\
+  format="B"
+
+group key={||left(DCF->IdDcf,2) } \
+  text={|| \
+    +padr(left(DCF->IdDcf,2),LenIdDcf()+1)\
+    +DbfPeek(oDcf(),\
+      DCF->IdDcl+padr(left(DCF->IdDcf,2),LenIdDcf()),\
+      "trim(LngExpr('DCF->Name'))",\
+      "") \
+  } \
+  when={|nCount,nDtlCount|nDtlCount>1} \
+  before={||PrintLine()}\
+  afterTotals={||PrintLine()}\
+  format="B"
+
+// space(LenIdDcf()+1)
+group key={||left(DCF->IdDcf,1) } \
+  text={|| \
+    padr(left(DCF->IdDcf,1),LenIdDcf()+1)\
+    +DbfPeek(oDcf(),\
+      DCF->IdDcl+padr(left(DCF->IdDcf,1),LenIdDcf()),\
+      "trim(LngExpr('DCF->Name',TplLang()))",\
+      "") \
+  } \
+  when={|nCount,nDtlCount|nDtlCount>1} \
+  before={||PrintLine()}\
+  after={||RptTit2()}\
+  afterTotals={||PrintLine()}\
+  format="B"
+
+// group text={|x|"Gesamt"} when={||.t.}
+
+column header=tr("Item","Art.","Code") width=LenIdDcf() \
+       text={||DCF->IdDcf}
+column header="Sel" width=LenIdBil() text={||DCF->IdBil}
+column header=tr("Description","Bezeichnung",\
+       "Description","Omschrijving") width=43 \
+       text={||padr(DcfName(NIL,TplLang()),43)}
+column header=padl(trim(DlgValue("range1")),LenMntF()) \
+       width=LenMntF() \
+       value={||getvara("values",1,0)} \
+       text={|x|ntomf(x)} \
+       xsum={|x| ntomf(x) }
+
+column header=padl(trim(DlgValue("range2")),LenMntF()) \
+       width=LenMntF() \
+       value={||getvara("values",2,0)} \
+       text={|x|ntomf(x)} \
+       xsum={|x| ntomf(x) }
+
+#if !empty(getvar("range3"))
+column header=padl(trim(DlgValue("range3")),LenMntF()) \
+       width=LenMntF() \
+       value={||getvara("values",3,0)} \
+       text={|x|ntomf(x)} \
+       xsum={|x| ntomf(x) }
+#endif
+
+
+// column header="Sel" width=4 text={||DCF->DclSel}
+// column header="Type" width=4 text={||DCF->Type+"  "}
+// column header="D/C" width=3 text={||" "+DCF->DC+" "}
+
+total text={||tr("Total","Summe","Total")+" "} when={||.t.}

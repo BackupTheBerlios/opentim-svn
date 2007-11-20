@@ -1,0 +1,11 @@
+// Sendmail.act
+p_SetPgAlign( "l")
+DrvLoad("TXTWIN")
+SetSpooler("ActExec('SENDMAIL')"))
+p_SetLMargin( 0)
+p_SetRMargin( 0)
+p_SetPapWidth( 8.27)
+p_SetPapHeight( 0)
+p_SetTMargin( 0)
+p_SetBMargin( 0.5)
+SetMntFormat( "S10")

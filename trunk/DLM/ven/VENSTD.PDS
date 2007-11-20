@@ -1,0 +1,53 @@
+from lino.sdoc.commands import *
+
+# stylesheet.Normal.fontSize=12
+
+[set montant S10]
+[=DrvLoad("TXTWIN")]
+[=SetDateFormat(tr("mmmm d, yyyy","d. mmmm yyyy","d mmmm yyyy"))]
+setTitle("[ven docname] [=tr("No.","Nr.","Nø")] [=VEN->IdDoc]")
+setFeeder('memo')
+
+chars = 6
+
+[=fparse("VENINTRO.PDS")]
+
+
+th = stylesheet.DataTable.child() #TableModel()
+[etc if 'T'$VEN->Attrib]
+th.addColumn(label="Pos",
+             width=3*chars,style=stylesheet.Number)
+[etc endif]
+[etc if .t.]
+th.addColumn(label="""[=tr("Description","Beschreibung","Description")]""",
+             style=stylesheet.Normal)
+[etc endif]
+[etc if 'Q'$VEN->Attrib]
+th.addColumn(label="[=tr("Qty","Menge","Qt‚")]",
+             width=8*chars,style=stylesheet.Number)
+[etc endif]
+[etc if 'L'$VEN->Attrib]
+th.addColumn(label="[=tr("delivery unit","Liefereinheit","unit‚ de livraison")]",
+             width=10*chars,style=stylesheet.Number)
+[etc endif]
+[etc if 'U'$VEN->Attrib]
+th.addColumn(label="[=tr("Unit pr.","Stckpreis","prix u.")]",
+             width=10*chars,style=stylesheet.Number)
+[etc endif]
+[etc if 'N'$VEN->Attrib]
+th.addColumn(label="[=tr("Price","Preis","Prix")]",
+             width=10*chars,style=stylesheet.Number)
+[etc endif]
+[etc if 'C'$VEN->Attrib]
+th.addColumn(label="[=tr("incl.VAT","inkl.MWSt","tvac")]",
+             width=10*chars,style=stylesheet.Number)
+[etc endif]
+
+
+beginTable(model=th)
+[ven vnllist "[=fparse('VENSTD2.PDS')]"]
+endTable()
+
+
+[=fparse("VENTOTAL.PDS")]
+[=fparse("VENBOTTM.PDS")]

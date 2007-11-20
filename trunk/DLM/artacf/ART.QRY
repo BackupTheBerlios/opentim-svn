@@ -1,0 +1,21 @@
+//
+// ART.QRY - generated 28.12.1999
+// for ART.DBF
+//
+column 34 Art.Nr pict @K@!
+column 5 Bezeichnung 1 pict @K@S20
+column 3 PG pict @K@!
+column 20 VK netto pict @K@!
+column 14 Kat pict @K@!
+column 24 VK brutto pict @K@!
+column 4 Bezeichnung F pict @K@S20
+column 10 Lagerwert pict @K@! attr C expr val(ART->PrixR)*qton(ART->Lager) say ntom(nSum)
+column 28 LE pict @K
+column 30 F pict !
+column 6 Bezeichnung NL pict @K@S20
+column 1 Gru pict @K@!
+column 12 Erstellt say ""
+column 27 Bemerkung pict @K@S37
+column 19 Attr pict @K@!
+column 40 Lager
+mask ART

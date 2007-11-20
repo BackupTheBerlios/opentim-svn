@@ -1,0 +1,27 @@
+// VEN2PRN.DLG
+before SetTplIni("VEN")
+before SetVar("VEN.AdrMargin",0)
+
+title utr("Print Document","Dokument drucken","Imprimer document")
+
+field block={||VEN->IdJnl} \
+      caption=utr("Document # ","Dokument Nr. ","Nø Document") \
+      when={||.f.} \
+      color="N/W" attrib="N"
+field block={||VEN->IdDoc} \
+      caption=" " \
+      when={||.f.} \
+      color="N/W"
+field block={||padr(ParName(VEN->IdPar),35)} \
+      caption=utr("Partner ","Partner ","Partenaire ") \
+      when={||.f.} \
+      color="N/W"
+
+field name="Copies" \
+      caption=utr("Copies ","Anzahl Exemplare ","Copies ") \
+      default=1 \
+      picture="999"
+
+#include "PREVIEW.DLG"
+
+after fprint("VENSTD"+JnlIdCtr(VEN->IdJnl)+".TPL")

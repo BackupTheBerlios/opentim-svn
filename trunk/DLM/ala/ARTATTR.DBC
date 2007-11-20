@@ -1,0 +1,13 @@
+// Artikelattribute
+T|Tempor„r-Artikel
+M|Modul (Artikel mit Komponenten)
+// D|Volumen nach Durchmesser rechnen
+S|ohne Lagerbestand
+H|Unsichtbar (hidden)
+// B|Memotext vor Bezeichnung drucken
+// A|Memotext nach Bezeichnung drucken
+R|Schreibgeschtzt (read-only)
+N|Seriennummer bei Wareneingang
+A|Referenz bei Wareneingang
+P|Preisangaben obligatorisch 
+F|Artikel nicht fakturieren

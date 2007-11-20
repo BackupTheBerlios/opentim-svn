@@ -1,0 +1,3 @@
+// Datenbank rekonstruieren
+AppReorg(.f.,NIL,.f.,.f.,.t.)
+AppNormEnd()

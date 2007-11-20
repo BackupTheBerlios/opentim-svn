@@ -1,0 +1,112 @@
+// VerwaltermenÅ
+
+|~Konfigurierung|~Journale                  |WinEdit(oJnl(),"Journale")
+|~Konfigurierung|~WÑhrungen                 |WinEdit(oDev(), "WÑhrungen")
+|~Konfigurierung|~Nationen (LÑnder)         |WinEdit(oNat(), "LÑnder")
+|~Konfigurierung|Druckmasken und ~Textblocks|TplConfig()
+|~Konfigurierung|~MWSt-Codes                |TaxEdit("MWSt-Codes")
+|~Konfigurierung|MWSt-~Regimes              |WinEdit(oReg(), "MWSt-Regimes")
+|~Konfigurierung|~Fakturierungsanweisungen  |WinEdit(oIfc(), "Fakturierungsanweisungen")
+|~Konfigurierung|~Buchungsanweisungen       |DbfEdit({oIpb(),oGen()}, "Buchungsanweisungen")
+|~Konfigurierung|Basis~preise               |WinEdit(oIpr(), "Basispreise")
+|~Konfigurierung|~ErmÑ·igungsanweisungen    |DbfEdit({oVnr()}, "ErmÑ·igungen")
+|~Konfigurierung|~Kostenanweisungen         |DbfEdit({oFrf()},MnuItemName())
+|~Konfigurierung|Zahlungs~differenzen       |WinEdit(oDif(), "Zahlungsdifferenzen")
+|~Konfigurierung|~Liefereinheiten           |WinEdit(oUnt(), "Liefereinheiten")
+|~Konfigurierung|~Zentralisierungsarten     |WinEdit(oCtr(), "Zentralisierungsarten")
+#if HasOption("VNA")
+|~Konfigurierung|Befriedi~gungstabelle      |WinEdit(oTrn(), "Befriedigungstabelle")
+#endif
+|~Konfigurierung||
+|~Konfigurierung|Allgemeine ~Parameter      |ParaGen()
+|~Konfigurierung|~Standardeinstellungen...  |DlgExec("PARAM")
+|~Konfigurierung|~Info-Texte                |TplEdit(TptLocate("TXT"),"Info-Texte")
+
+#if HasOption("ODS")
+|~Inventur|~Inventuren erfassen         |DocEdit("IVT","")
+|~Inventur|~LagerbestÑnde rekonstruieren|ActExec("STKRESET")
+|~Inventur|~Artikelliste Bildschirm     |ArtEdit("ARTIVT","Inventur","!'S'$ART->Attrib.and.!'H'$ART->Attrib")
+|~Inventur|~Drucken                     |RepPrint("ARTIVT01","ARTIVT","Inventur")
+#endif
+
+
+|~Editor|~dbc-Dateien               |DbcEdit("*.dbc",,"dbc-Dateien")
+|~Editor|~act-Dateien               |DbcEdit("*.act",,"act-Dateien")
+|~Editor|de~f-Dateien               |DbcEdit("*.def",,"def-Dateien")
+|~Editor|~rep-Dateien               |DbcEdit("*.rep",,"rep-Dateien")
+|~Editor|dl~g-Dateien               |DbcEdit("*.dlg",,"dlg-Dateien")
+// |~Editor|~hcl-Dateien               |DbcEdit("*.hcl",,"hcl-Dateien")
+// |~Editor|~ttl-Dateien               |DbcEdit("*.ttl",,"ttl-Dateien")
+|~Editor|~lst-Dateien               |DbcEdit("*.lst",,"Lst-Dateien")
+|~Editor|in~c-Dateien               |DbcEdit("*.inc",,"inc-Dateien")
+|~Editor||
+|~Editor|Dr~uckertreiber            |DbcEdit("*.drv",NIL,"Druckertreiber")
+|~Editor||
+|~Editor|TIM.I~NI                   |FileEdit(CfgProgramPath()+"\tim.ini")
+|~Editor|TIM.DB~I                   |FileEdit(DbPath()+"\tim.dbi")
+|~Editor|~NEWS.TXT                  |FileEdit(DbPath()+"\news.txt")
+// |~Editor|~changes.hlp               |FileEdit(DbPath()+"\changes.hlp")
+
+
+|~Datenbank|~Reorganisieren                |AppReorg()
+|~Datenbank|~Sammelhistorik rekonstruieren |Rebuild()
+|~Datenbank|~IntegritÑtstest               |TimTest()
+// |~Datenbank|~WÑhrungsbetrÑge prÅfen        |HstDevTest()
+|~Datenbank|~Journale abschlie·en          |JnlClose("EKR VKR")
+|~Datenbank||
+|~Datenbank|~Lettrierungen rekonstruieren  |ActExec("HSTSATIS")
+|~Datenbank|Jahres~abschlussbuchung        |FinAuto("REP","140000",.t.,"Jahresabschlussbuchung","600000","799999")
+|~Datenbank|~öbertragsbuchung              |FinAuto("REP","499000",.f.,"öbertragsbuchung","100000","599999")
+"E"$UsrAttrib()|~Datenbank|~Historik rekonstruieren       |ReClose("Historik rekonstruieren")
+"E"$UsrAttrib()|~Datenbank|Buchhaltung ~lîschen           |DlgExec("HSTDELE")
+|~Datenbank||
+// |~Datenbank|~LagerbestÑnde neu rechnen     |StkReset()
+// |~Datenbank|Lager ~valorisieren            |MvsValorise()
+// |~Datenbank|Import aus TIM ~2.10           |Upgrade()
+|~Datenbank|E~xport ANALBI                 |GenExport("Export ANALBI",DbPath()+"\BALGEN.TXT")
+// |~Datenbank|~Datenbank-Manager             |DbdEdit("Datenbank-Manager")
+|~Datenbank|~Benutzerliste                 |UsrEdit()
+|~Datenbank|Buchungs~perioden              |WinEdit(oPer(),"Buchungsperioden")
+|~Datenbank||
+|~Datenbank|Ba~ckup                        |ActExec("BACKUP")
+|~Datenbank|Res~tore                       |ActExec("RESTORE")
+|~Datenbank|Au~frÑumen                     |ActExec("DBCLEAN")
+
+|~Utilities|~Diagnosebericht               |ActExec("DIAG")
+"E"$UsrAttrib()|~Utilities|Artikelstammdaten ~lîschen     |DlgExec("ARTCLEAN")
+|~Utilities|LagerbestÑnde ~rekonstruieren  |ActExec("STKRESET")
+|~Utilities|Fakturation ~aufrÑumen         |JnlClean("LIE")
+"E"$UsrAttrib()|~Utilities|Export nach S~QL-Datenbank     |ActExec("TIM2SQL")
+"E"$UsrAttrib()|~Utilities|~Mengenfelder anpassen         |ActExec("QTEALIGN")
+"E"$UsrAttrib()|~Utilities|~VnaMatch initialisieren       |ActExec("VNAMATCH")
+"E"$UsrAttrib()|~Utilities|~Partner mit Memo exportieren  |ActExec("PAR2MEMO")
+// |~Datenbank|Journal KAS ~exportieren       |JnlExport("KAS")
+// |~Datenbank|Journal KAS ~importieren       |JnlImport("KAS")
+
+// |~Globallisten|MWSt.-Erk~lÑrung              |DbfEdit({oDcl()},"MWSt-ErklÑrung")
+// |~Globallisten|MWSt.-ErklÑrung ~testen       |DclList("MWSt-ErklÑrung")
+|~Globallisten|~Historik                     |DbfEdit(\
+  {oHst(),oPar(),oGen(),oVen(),oFin()},\
+  "Historik")
+|~Globallisten|~Sammelhistorik Partnerkonten |CtpEdit("Sammelhistorik Partnerkonten")
+|~Globallisten|S~ammelhistorik Generalkonten |CtgEdit("Sammelhistorik Generalkonten")
+|~Globallisten|Sammelhistorik ~MWSt          |CttEdit()
+|~Globallisten||
+|~Globallisten|~TPL.DBF                      |DbfEdit({oTpl()},"TPL.DBF")
+|~Globallisten|P~ostleitzahlen               |DbfEdit({oPlz()},"Postleitzahlen Globalsicht")
+|~Globallisten|~Korrespondenz                |MsgEdit()
+|~Globallisten|~Listeneditor-Ansichten       |WinEdit(oFlt(), "Listeneditor-Ansichten")
+
+|~Programm|~BenutzermenÅ                 |AppRefresh("")
+|~Programm|~DruckmenÅ                    |AppRefresh("PRINT")
+|~Programm|~VerwaltermenÅ                |AppRefresh("BOSS")
+|~Programm||
+|~Programm|Datenbank-~Check              |ActExec("DBCHECK")
+|~Programm|~Login                        |Relogin()
+|~Programm|Inf~o                         |AppAbout()
+|~Programm|~Passwort Ñndern              |UsrChangePwd()
+// |~Programm|~Wer ist in TIM?              |ShowLogList("Wer ist in TIM?")
+// |~Programm|Dlg~ValBrowse()               |DlgValBrowse("DlgValBrowse()")
+|~Programm||
+|~Programm|TIM be~enden          [Alt-F4]|AppNormEnd()
+

@@ -1,0 +1,36 @@
+// Intrastat-Erkl„rung Verkauf
+area { oHsi(), oInt(), oVen(), oPar(), oFin() }
+order 3 // ORD_HST_DOC
+ValidateRecord {|| IntExist(HSI->IdInt).and.DocExist(HSI->IdJnl,HSI->IdDoc) }
+// start ""
+// while {||.t.}
+// start "VKR"
+// while {||HSI->IdJnl=="VKR"}
+filter {|| ChkPeriode(HSI->Periode)==0}
+filter {|| (VEN->DC=="D".and.val(VEN->Mont)>0).or.(VEN->DC!="D".and.val(VEN->Mont)<0)}
+detail {||.f.}
+group key={||HSI->IdNat+HSI->IdInt+HSI->Region} \
+      when={||.t.} \
+      text={|x| \
+        strtran(str(RptCount(2),2)," ","0")+" " + \
+        padl(NatIntra(HSI->IdNat),2)+" "+"3"+" "+"1"+" "+\
+        strtran(trim(INT->Code),".")\
+      }
+group text={|x|NIL}
+column header="5" width=2 // Sequenznummer
+column header="6" width=2 // Mitgliedsstaat
+column header="7" width=1 // Verkehrszweig (immer "3" = Straáe)
+column header="8" width=1 // Art des Gesch„fts (immer "1" = Kauf/Verkauf)
+column header="9" width=8 // intrastat-code (ohne ".")
+column header="10" width=10 \
+       value={||abs(qton(HSI->QteStat))} \
+       xsum={|x|padl(ntoq(x,INT->QteForm),10)}
+column header="11" width=10 \
+       text={|x|padl(ntoq(x,"0"),10)} \
+       xsum={|x|padl(ntoq(x,"0"),10)} \
+       value={||abs(qton(HSI->Qte))}
+column header="12A" width=10 \
+       value={||abs(val(HSI->Mont))} \
+       xsum={|x| ntom(x) }
+column header="12B" width=10 value={||0} xsum={||padl(HSI->Region,10)}
+total text={||""} when={||.t.}

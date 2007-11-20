@@ -1,0 +1,47 @@
+// Finanzjournale
+before SetDevise(DevDefault(MemPer1))
+// before DlgDefault("IdDev",DevDefault(MemPer2))
+// before DlgDefault("BEF","X")
+// before DlgDefault("EUR","X")
+before DlgDefault("IdJnlFin",space(LenIdJnl()))
+field name="IdJnlFin" \
+    caption="Journal " \
+    picture="@k@!" \
+    pick={|x|DbfPick(\
+              {oJnl()},"Auswahl Journal","JNLPICK",\
+              x,\
+              "Alias=='FIN'.and.'G'$Attrib"\
+    )}
+#include "PERIODE.DLG"
+// field block={|x|SetPeriode(x)} \
+    picture="@k@!" \
+    caption="Periode von-bis " \
+    pick={|x|PickPerRange(x)}
+field name="subttl" \
+    caption2=" Zwischensummen pro Periode " \
+    value=" " \
+    reader={|g|CbxReader(g)}
+// field caption="W„hrung  " \
+      block={|x|SetDevise(x)}\
+      picture="@k@!"\
+      pick={|x|PickDev(x)}\
+      valid={||DevExist(SetDevise())}
+// field name="BEF" \
+    caption2=" Betr„ge in BEF" \
+    reader={|g|CbxReader(g)}
+// field name="EUR" \
+    caption2=" Betr„ge in EUR" \
+    reader={|g|CbxReader(g)}
+#include "PREVIEW.DLG"
+#include "ASPDF.DLG"
+
+//  field name="date1" \
+//      caption="Datum : vom " \
+//      value=ctod("") \
+//      attrib="N"
+//  field name="date2" \
+//      caption=" bis zum " \
+//      value=UserDate()
+after AppSaveMem()
+// after SetDevise(DlgValue("IdDev"))
+

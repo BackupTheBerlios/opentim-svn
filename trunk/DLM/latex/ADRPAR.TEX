@@ -1,0 +1,29 @@
+% adrpar.tex (to be included using fparse())
+[etc if .f.]
+\hline
+\textsf{\scriptsize\raggedright PAC Systems PGmbH --- Malmedyer Straáe 2 --- B-4700 Eupen}
+\\\
+\hline
+\\\
+\smallskip
+[etc endif]
+[=if(empty(PAR->Allo),'',trim(PAR->Allo)+"\\")]
+[=trim1(PAR->Vorname)+trim1(PAR->Firme)+"\\"]
+[=if(empty(PAR->Name2),NIL,trim(PAR->Name2)+"\\")]
+[=if(empty(DlgValue("co")),NIL,trim(DlgValue("co"))+"\\")]
+[=ParStreet()]\\\
+[=if(TplLang()=="F",upper(trim(ParCity())),trim(ParCity()))]
+[=if(PAR->Pays!=MemPays,"\par "+NatField(PAR->Pays,"trim(NAT->Name)"),"")]
+
+\bigskip
+
+[etc if .f.]
+[etc if !empty(PAR->Tel)]
+[=tr("Tel.","Tel.","T‚l.")]: [= trim(PAR->Tel)]
+[etc endif]
+[etc if !empty(PAR->Fax)]
+[=if(empty(PAR->Tel),""," - ")]
+Fax~: [=trim(PAR->Fax)]
+[etc endif]
+[etc endif]
+

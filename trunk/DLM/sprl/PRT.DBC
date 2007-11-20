@@ -1,0 +1,6 @@
+// Partnerarten
+// IdPrt Name DC IdReg FirstId LastId IdCtr IdQry IdQry_Pick
+P|Partner                |D|N|000000|999999|V|PRT|PICK
+// K|Kunden                 |D|N|000000|999999|V|PRT|PICK
+// L|Lieferanten            |C|A|000000|999999|E|PRT|PICK
+//  |(alle)                 |C|A|000000|999999|E|PRT|PICK2

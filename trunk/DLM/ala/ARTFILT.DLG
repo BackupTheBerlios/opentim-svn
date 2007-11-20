@@ -1,0 +1,41 @@
+// Artikel filtern
+before DlgDefault("IdPar",space(LenIdPar()))
+before DlgDefault("Match",space(20))
+before DlgDefault("Date1",ctod(""))
+before DlgDefault("Date2",ctod(""))
+// before DlgDefault("von",0)
+// before DlgDefault("bis",10000)
+title "Artikel filtern"
+field name="Match" \
+    caption="Match "
+    // caption2=" (auch Teile)"
+field name="IdPar" \
+    caption="Nur Lieferant " \
+    picture="@k@!" \
+    pick={|x|PickPar("",x,"nur Lieferant :")}\
+    valid={||ph_refresh()} \
+    postedit={|x|GetIdPar(x,"L")}\
+    attrib="N"
+field caption=" : " \
+      block={||padr(ParName(DlgValue("IdPar")),30)} \
+      when={||.f.} color="N/W"
+field name="Date1" \
+    caption="Letzte Preisaktualisierung : vom " \
+    attrib="N"
+field name="Date2" \
+    caption="bis zum "
+
+after DlgDefine("ArtFilter",".t.")
+// after empty(DlgValue("Match")).or.\
+  DlgPlus("ArtFilter",".and.'"+upper(trim(DlgValue("Match")))+"'$upper(ART->Match)")
+after empty(DlgValue("Match")).or.\
+  DlgPlus("ArtFilter",\
+    ".and.upper(left(ART->Match,"+ntrim(len(trim(DlgValue("Match"))))\
+    +"))=='"+upper(trim(DlgValue("Match")))+"'")
+after empty(DlgValue("IdPar")).or.\
+  DlgPlus("ArtFilter",".and.ART->IdPar=='"+DlgValue("IdPar")+"'")
+after empty(DlgValue("Date1")).or.\
+  DlgPlus("ArtFilter",".and.dtos(ART->DatPrix)>='"+dtos(DlgValue("Date1"))+"'")
+// after empty(DlgValue("Date2")).or.\
+  DlgPlus("ArtFilter",".and.dtos(ART->DatPrix)>='"+dtos(DlgValue("Date2"))+"'")
+

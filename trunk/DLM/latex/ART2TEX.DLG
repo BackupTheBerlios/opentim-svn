@@ -1,0 +1,74 @@
+// ART2TEX.DLG
+before SetDlgTitle(trim(ART->Ref)+" : EAN-Etiketten drucken")
+
+// before ParExist(ODS->IdPar)
+
+before DlgDefault("AsFax"," ")
+before DlgDefault("Draft"," ")
+// before DlgDefault("Model","EAN")
+before DlgDefault("AsPdf"," ")
+
+before DlgDefine("Copies",1)
+before DlgDefine("psnup",1)
+
+before DlgDefault("EtiCount",4)
+
+field name="EmptyCells" \
+      caption="Vorher " \
+      caption2=" Etiketten leer lassen" \
+      picture="999" default=0 \
+      pick={|x|PickNum(x)}
+field name="EtiCount" \
+      caption="Anzahl:  " \
+      picture="999"
+
+field block={|x|SetPreview(x)} \
+    caption2=" Pr‚visualisation" \
+    value="X" \
+    reader={|g|CbxReader(g)}
+
+field name="ColCount" \
+      caption="Kolonnen " \
+      picture="999" default=5
+// field name="Model" \
+      caption="Modell " \
+      picture="@k@!"
+
+field name="AsPdf" \
+    caption2=" Format PDF au lieu de DVI" \
+    reader={|g|CbxReader(g)}
+
+field name="Scale" \
+      caption="   Strichgr”áe " \
+      caption2=" (80...200)" \
+      picture="9999" default=80
+field name="PageWidth" \
+      caption="Avery : Breite " \
+      caption2=" mm" \
+      picture="9999" default=85
+field name="PageHeight" \
+      caption="          H”he " \
+      caption2=" mm" \
+      picture="9999" default=110
+field name="Margin" \
+      caption="    Rand unten " \
+      caption2=" mm" \
+      picture="9999" default=12
+field name="Width" \
+      caption="    Zellbreite " \
+      caption2=" mm" \
+      picture="9999" default=39
+field name="Rotate" \
+      caption="        Rotate " \
+      caption2=" ø" \
+      picture="9999" default=270
+
+// field name="AsFax" \
+    caption2=" comme Fax (avec signature)" \
+    reader={|g|CbxReader(g)}
+
+// after SetTplLang(PAR->Langue)
+after DlgDefine("InFile","ARTEAN.TEX")
+after DlgDefine("OutFile","ARTEAN")
+after ActExec("TEXPARSE")
+after .f.

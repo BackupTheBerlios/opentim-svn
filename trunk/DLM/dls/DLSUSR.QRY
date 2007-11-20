@@ -1,0 +1,24 @@
+//
+// DLSUSR.QRY - generated 09.04.07
+// for DLS.DBF
+//
+column 2 Datum say ""
+column 0 WT block padr(jour(DLS->Date),2) skip .t.
+column 3 Von pict @K
+column 4 Bis pict @K
+column 15 Dauer pict @K
+column 6 Art block padr(DbfPeek(oDla(),DLS->IdDla,"DLA->Ref",""),10) pict @K@s8
+column 10 Partner block padr(ParName(DLS->IdPar),40) pict @K@s12
+column 7 S pict @K@!
+column 8 Bemerkung pict @k@s28
+column 16 Prj pict @K
+column 9 Z pict @K@!
+column 1 DL-Nr.
+column 5 User pict @K@!
+column 6 IdDla pict @K
+column 0 Art der DL block padr(DbfPeek(oDla(),DLS->IdDla,"DLA->Ref",""),10) pict @k@s10 skip .t.
+column 10 IdPar pict @K@!
+column 0 Bezeichnung block padr(ParName(DLS->IdPar),20) skip .t.
+mask DLS
+order 3
+help DLS

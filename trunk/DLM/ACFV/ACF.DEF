@@ -1,0 +1,10 @@
+// ACF.DEF
+ddAddField(\
+  "Remise","C",3,0,"","",\
+  NIL,NIL,NIL,\
+  {|x|PickNum(x)},{||.t.},\
+  {|x|GetNum(x)}\
+)
+ddOnCreate("(ACF->IdCtr:='V')!=NIL")
+
+ddFldSetPick("IdArt",{|x|PickArt(x)})

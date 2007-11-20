@@ -1,0 +1,8 @@
+##
+## axs.lnk (Advantage Database Server)
+## Wird reingelinkt in der lnk.bat, wenn set define=axs ist
+##
+FILE DBFNTXAX
+LIB AXSBCOMM.LIB # IPX communication
+LIB DBFAXS.LIB
+## these files must be linked BEFORE the CLIPPER.LIB

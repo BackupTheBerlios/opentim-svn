@@ -1,0 +1,46 @@
+//
+// C:\SOFT\RELEASE\TIM220\STD01D\ARTCTS.MSK - generated 28.01.97
+// for ART.DBF
+//
+
+box 10 0 14 79
+box 1 0 9 40
+box 1 41 6 62
+
+string 2 25 Art.Nr.
+string 3 2 D
+string 4 2 F
+string 5 2 N
+string 2 2 Bezeichnungÿ:
+string 2 43 Steuerkategorie
+string 7 2 Bemerkung
+string 5 43 Artikelgruppe
+string 3 43 Liefereinheit
+string 4 43 Mengenformat
+string 7 42 Attribute
+string 13 33 VK
+string 11 33 Preisgruppe
+string 10 1 ÿMemo-Text bearbeiten mit [F12]ÿ
+string 12 33 inkl.MWSt
+string 15 1 Partnerpreise bearbeiten mit [F2]
+string 9 42 Bestand
+string 14 33 SK-Preis
+
+
+get 34 2 33
+get 5 3 4 pict @K@S35
+get 4 4 4 pict @K@S35
+get 6 5 4 pict @K@S35
+get 27 8 2 pict @K@S37
+get 14 2 59
+get 28 3 58 pict @K
+get 30 4 60
+get 1 5 58
+get 19 7 53
+get 39 9 50
+get 3 10 60 pict @K@!
+get 10 11 43 pict @K@!
+get 20 12 43
+get 24 13 43 pict @K@!
+wait 3 30 2 50 12
+wait 5 78 16 1 3

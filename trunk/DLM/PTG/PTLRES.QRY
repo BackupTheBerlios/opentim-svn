@@ -1,0 +1,13 @@
+//
+// PTLRES.QRY - generated 15.05.03
+// for PTL.DBF
+//
+window 18 62 0 0 
+column 3 WT skip .t.
+column 4 Datum say ""
+column 12 T pict @K@!
+column 6 von pict @K@!
+column 7 bis pict @K@!
+column 10 Pause pict @K@!
+column 8 Dauer pict @K@! skip .t.
+column 9 Bemerkung pict @k@s15 skip .t.

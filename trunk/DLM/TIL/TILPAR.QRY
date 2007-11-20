@@ -1,0 +1,18 @@
+//
+// TILPAR.QRY - generated 02.04.03
+// for TIL.DBF
+//
+window 12 76 0 0 
+column 1 Nr
+column 2 Datum say ""
+column 6 Erste Rate say ""
+column 12 Betrag
+column 4 IdPar2 pict @K@!
+column 5 MatchList pict @k@s20
+column 7 Dist
+column 8 SubMont
+column 9 SubCount
+column 10 SkipMonth
+column 11 Bemerk
+mask TIL
+order 2

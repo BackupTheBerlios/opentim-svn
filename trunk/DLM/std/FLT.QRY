@@ -1,0 +1,9 @@
+//
+// C:\SOFT\RELEASE\TIM220\STD01D\FLT.QRY - generated 13.06.97
+// for FLT.DBF
+//
+column 1 Selektor pict @K@!
+column 4 Seq pict @K@!
+column 2 Bezeichnung pict @K@S30
+column 3 Ausdruck pict @K@S30
+column 5 View pict @K@!

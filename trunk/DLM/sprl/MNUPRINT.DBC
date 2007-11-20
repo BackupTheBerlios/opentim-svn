@@ -1,0 +1,78 @@
+// DruckmenÅ
+|~MWSt|~RechnungsbÅcher           |RepPrint("HSTVEN","HSTVEN","RechnungsbÅcher")
+// |~MWSt|Rechnungsbuch ~Einkauf     |RepPrint("HSTEKR","HSTVEN","Rechnungsbuch Einkauf")
+// |~MWSt|~Journale                  |HistJnl("Journale")
+|~MWSt|MWSt.-Erk~lÑrung           |ActExec("DCLTVA")
+// |~MWSt|MWSt.-Erk~lÑrung           |TplDlgPrint("LST","LST010","JNL->Alias=='VEN'.and.'G'$JNL->Attrib")
+// |~MWSt|~neue MWSt-ErklÑrung       |TplDlgPrint("LST","LST010","JNL->Alias=='VEN'.and.'G'$JNL->Attrib")
+|~MWSt|Kundenliste ~Intracom      |DlgExec("LSTTVAI")
+|~MWSt|Kundenliste ~MWSt          |DlgExec("LSTTVAA")
+|~MWSt|Kundenliste ~Deutschland   |DlgExec("LSTTVAD")
+// |~MWSt|Kundenliste ~Intracom (alt)|VenTvaListe(.f.,"V",".t.",0,"Kundenliste Intracom","TVA-I",NIL,NIL,NIL,"VEN->IdReg$'I'")
+// |~MWSt||
+// |~MWSt|Kundenliste ~MWSt.         |VenTvaListe(.t.,"V",".t.",5000,"Kundenliste MWSt","TVA-A",NIL,NIL,NIL,"VEN->IdReg$'CA'")
+// |~MWSt|Kontrollliste ~1           |VenTvaListe(.t.,"V",".t.",-5000,"Kontrolle 1 : Kunden < 5000",NIL,NIL,NIL,NIL,"VEN->IdReg$'CA'")
+// |~MWSt|Kontrollliste ~2           |VenTvaListe(.t.,"V",".t.",0,"Kontrolle 2 : Sonstige Kunden",NIL,NIL,NIL,NIL,"!VEN->IdReg$'CA'")
+
+|~Buchhaltung|K~assenbÅcher              |RepPrint("HSTFIN","HSTFIN","KassenbÅcher")
+|~Buchhaltung||
+|~Buchhaltung|Saldenliste ~Generalkonten |RepPrint("GENHST","GENHST","Saldenliste Generalkonten")
+// |~Buchhaltung|Saldenliste ~Generalkonten |BalGen("LISTE","Saldenliste Generalkonten")
+//
+|~Buchhaltung|Saldenliste ~Kunden        |DlgDefine("IdCtr","V").and.RepPrint("PARHST","PARHST","Saldenliste Kunden")
+|~Buchhaltung|Saldenliste ~Lieferanten   |DlgDefine("IdCtr","E").and.RepPrint("PARHST","PARHST","Saldenliste Lieferanten")
+|~Buchhaltung|öbersicht ~offene Posten   |RepPrint("PARHST02","PARHST02","öbersicht offene Posten")
+// |~Buchhaltung||
+// |~Buchhaltung|Saldenliste ~Kunden       a|BalPar("V","LISTE","Saldenliste Kunden")
+// |~Buchhaltung|Saldenliste ~Lieferanten  a|BalPar("E","LISTE","Saldenliste Lieferanten")
+|~Buchhaltung||
+|~Buchhaltung|Historik G~eneralkonten    |RepPrint("HSTGEN","HSTGEN","Historik Generalkonten")
+// |~Buchhaltung|Historik G~eneralkonten   a|HistGen( \
+  "LISTE","Historik Generalkonten",NIL, \
+  35 \
+)
+//
+|~Buchhaltung|Historik L~ieferanten      |DlgDefine("IdCtrList","E").and.RepPrint("HSTPAR","HSTPAR","Historik Partner")
+|~Buchhaltung|Historik K~unden           |DlgDefine("IdCtrList","V").and.RepPrint("HSTPAR","HSTPAR","Historik Partner")
+|~Buchhaltung|Historik ~Partner (alle)   |DlgDefine("IdCtrList","").and.RepPrint("HSTPAR","HSTPAR","Historik Partner")
+// |~Buchhaltung|Historik K~unden           |HistPar("V","LISTE","Historik Kunden")
+// |~Buchhaltung|Historik L~ieferanten      |HistPar("E","LISTE","Historik Lieferanten")
+|~Buchhaltung||
+|~Buchhaltung|Haupt~journal              |JnlCentral("LISTE",2,40," ")
+|~Buchhaltung|~andere Listen...          |TplDlgPrint("LST")
+|~Buchhaltung|Gesamt~historik            |RepPrint("HSTDATE","HSTDATE","Gesamthistorik")
+
+
+#if HasOption("ANA")
+|Anal~ytisch|~Historik                          |RepPrint("MVAANA01","MVAANA","Historik Analysekonten")
+|Anal~ytisch|~Saldenliste Analysekonten         |RepPrint("MVAANA02","MVAANA","Saldenliste Analysekonten")
+|Anal~ytisch|~Saldenliste General-/Analysekonten|RepPrint("GENMVA01","GENMVA01",MsgWorking())
+// |Anal~ytische|~Historik (alt)|HistAna("LISTE","Historik Analysekonten")
+#endif
+
+
+// |~Sonstige|Rechnungen im ~Batch        |VenBatch()
+|~Sonstige|~Partner nach Umsatz        |RepPrint("PAR002","PAR002","Partner nach Umsatz")
+|~Sonstige|~Renner/Penner-Liste        |RepPrint("ARTCTS01","ARTCTS01","Renner/Penner-Liste")
+
+|~Sonstige|~Unregistrierte Dokumente   |RepPrint("VENOPEN",NIL,"Unregistrierte Dokumente")
+|~Sonstige|~Auftragslage               |RepPrint("VENUSR","VENUSR",MsgWorking())
+|~Sonstige|~Produktionsplanung         |RepPrint("VENPPS","VENPPS",MsgWorking())
+|~Sonstige|~Fakturationsjournal        |RepPrint("VENJNL","VENJNL","Fakturationsjournal")
+|~Sonstige||
+// |~Sonstige|~Bilanz                     |RepPrint("BIL","GENBIL","Bilanz")
+|~Sonstige|~Bilanz                     |RepPrint("GENBIL","GENBIL","Bilanz")
+|~Sonstige|~G/V-Rechnung               |RepPrint("GENBIL2","GENBIL2","G/V-Rechnung")
+|~Sonstige|~Export nach Excel          |ActExec("GENBIL2")
+
+|~Programm|~BenutzermenÅ                 |AppRefresh("")
+|~Programm|~DruckmenÅ                    |AppRefresh("PRINT")
+|~Programm|~VerwaltermenÅ                |AppRefresh("BOSS")
+|~Programm||
+|~Programm|Datenbank-~Check              |ActExec("DBCHECK")
+|~Programm|~Login                        |Relogin()
+|~Programm|Inf~o                         |AppAbout()
+|~Programm|~Passwort Ñndern              |UsrChangePwd()
+|~Programm|Dlg~ValBrowse()               |DlgValBrowse("DlgValBrowse()")
+|~Programm||
+|~Programm|TIM be~enden          [Alt-F4]|AppNormEnd()

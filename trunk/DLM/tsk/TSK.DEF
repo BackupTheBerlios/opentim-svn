@@ -1,0 +1,12 @@
+// ddOnCreate("(TSK->Months:=1)!=NIL")
+ddPreCreate("setvar('a',CopyRec())")
+ddPreCreate("Confirm(utr('Define a new task?',\
+  'Neue Aufgabe definieren ? (J/N)',\
+  'D‚finir une nouvelle tƒche?'))")
+ddPreCreate('DlgDefine("id",DbfAutoInc(oTsk()))')
+ddOnCreate("PasteRec(getvar('a'))")
+ddOnCreate("(TSK->IdTsk:=DlgValue('id'))!=NIL")
+ddOnCreate("(TSK->IdUsr:=UserId())!=NIL")
+ddOnCreate("(TSK->LastDate:=ctod(''))!=NIL")
+ddOnCreate("(TSK->LastTime:='')!=NIL")
+ddPreEdit({||'E'$UsrAttrib().or.TSK->IdUsr==UserId()})

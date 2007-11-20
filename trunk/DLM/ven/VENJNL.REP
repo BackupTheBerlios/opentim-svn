@@ -1,0 +1,23 @@
+// Journal unbuchhalterisch
+header1 "Journal "+DlgValue("IdJnl")
+header2 "Betr„ge in "+SetDevise()
+area { oVen(), oPar() }
+order 1
+group text={|x|"alle"} align="L"
+OnNoValue {||.t.}
+// filter {|| !"H"$BIL->Attrib.and....}
+// start trim(DlgValue("IdGen1"))
+// while {|| empty(DlgValue("IdGen2")).or.HST->IdGen <= DlgValue("IdGen2") }
+column header="Datum" width=8 text={||dtocf(VEN->Date,"dd.mm.yy")}
+// column header="Jnl" width=LenIdJnl() text={||VEN->IdJnl}
+column header="Dok.Nr." width=6 text={||VEN->IdDoc}
+column header="Partner" width=30 text={||padr(ParName(VEN->IdPar),30)}
+column header="Bemerkung" width=30 text={||padr(VEN->NB1,30)}
+column header="Betrag" width=LenMntF() \
+       value={||if(\
+         VEN->IdDev==SetDevise(),\
+         val(VEN->MontR),\
+         Db2Dev(SetDevise(),VEN->Periode,VenDev2Db(val(VEN->MontR)))\
+       )} \
+       text={|x|ntomf(x)}
+total when={||.t.}

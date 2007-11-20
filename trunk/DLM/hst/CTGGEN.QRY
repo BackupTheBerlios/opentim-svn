@@ -1,0 +1,9 @@
+//
+// CTGGEN.QRY - generated 12.01.06
+// for CTG.DBF
+//
+window 16 45 4 2 
+column 2 Per. pict @K@!
+column 3 Debit pict @K@!
+column 4 Kredit
+column 5 Saldo

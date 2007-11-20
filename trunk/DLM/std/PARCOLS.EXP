@@ -1,0 +1,42 @@
+// [hidden] to be included from other filters
+
+FieldUpdate   Anrede   trim(PAR->Allo)
+#if type("PAR->Vorname")=="C"
+FieldUpdate   Vorname  trim(PAR->Vorname)
+#endif
+FieldUpdate   Name     trim(PAR->Firme)
+FieldUpdate   Name2    trim(PAR->Name2)
+#if type("PAR->Vorname")=="C"
+FieldUpdate   VornameName  trim1(PAR->Vorname)+trim(PAR->Firme)
+#endif
+FieldUpdate   ParName    trim(ParName())
+FieldUpdate   Strasse  trim(ParStreet())
+FieldUpdate   City    trim(ParCity())
+FieldUpdate   Tel     memotosql(trim(PAR->Tel))
+FieldUpdate   Fax     memotosql(trim(PAR->Fax))
+#if type("PAR->GSM")=="C"
+  FieldUpdate   GSM     memotosql(trim(PAR->GSM))
+#endif
+#if type("PAR->Email")=="C"
+  FieldUpdate   email    memotosql(trim(PAR->email))
+#endif
+FieldUpdate   MWSt    trim(PAR->NoTva)
+//
+FieldUpdate   Land    trim(PAR->Pays)
+FieldUpdate   PLZ     trim(PAR->CP)
+FieldUpdate   Ort     trim(PlzName(PAR->Pays,PAR->CP))
+FieldUpdate   ID      PAR->IdPar
+FieldUpdate   Partnerart PAR->IdPrt
+FieldUpdate   Zahlart trim(PAR->IdMfc)
+FieldUpdate   Code1   trim(PAR->Code1)
+FieldUpdate   Code2   trim(PAR->Code2)
+FieldUpdate   Code3   trim(PAR->Code3)
+FieldUpdate   NB1     trim(PAR->NB1)
+FieldUpdate   NB2     trim(PAR->NB2)
+FieldUpdate   Sprache     trim(PAR->Langue)
+FieldUpdate   PG     trim(PAR->IdPgp)
+FieldUpdate   Waehrung  trim(PAR->IdDev)
+FieldUpdate   Regime    trim(PAR->IdReg)
+#if type("PAR->IdGen")=="C"
+  FieldUpdate   Kto      trim(PAR->IdGen)
+#endif

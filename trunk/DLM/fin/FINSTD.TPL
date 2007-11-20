@@ -1,0 +1,15 @@
+[=p_SetWidth(76)]
+[set montant S10]
+[=SetDateFormat(tr("dd.mm.yy","dd.mm.yy","dd/mm/yy"))]
+[tab define " Ä "]
+[=p_addColumn(3,"TR","Pos","[=FNL->Line]")]
+[=p_addColumn(LenIdGen(),"BR","IdGen","[=if(empty(FNL->IdCtr),FNL->IdCpt,'')]")]
+[=p_addColumn(LenIdPar(),"BR","IdPar","[=if(empty(FNL->IdCtr),'',FNL->IdCpt)]")]
+[=p_addColumn(0,"TL",\
+  tr("Description","Beschreibung","Description"),"[=FNL->Libell]")]
+[=p_addColumn(LenMntF(),"BR",tr("Amount","Betrag","Montant"),"[=FNL->Mont]")]
+[=p_addColumn(3,"BR","D/C","[=FNL->DC]")]
+[tab begin]
+[ven vnllist "[tab exec]"]
+[tab end]
+

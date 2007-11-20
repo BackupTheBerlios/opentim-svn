@@ -1,0 +1,3 @@
+// ARTSEEK.ACT
+!empty(DlgValue("ArtSearch"))
+ddEditSearch(DlgValue("ArtFilter"))

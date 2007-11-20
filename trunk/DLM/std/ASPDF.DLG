@@ -1,0 +1,13 @@
+field caption2=utr(" generate PDF instead of printing",\
+        " PDF-Datei generieren statt zu drucken", \
+        " g‚n‚rer PDF au lieu d'imprimer")\
+      reader={|g|CbxReader(g)} \
+      default=iif(SetAsPDF(),"X"," ") \
+      block={|x|iif(x==NIL,iif(SetAsPdf(),"X"," "),\
+                    SetAsPdf(iif(empty(x),.f.,.t.)))}
+field name="PRN2PDF.out" \
+      caption="  "+utr("Temporary file ","Dateiname ","Fichier temporaire ") \
+      default=padr(".\temp.pdf",240) \
+      picture="@k@s35" \
+      when={||"E"$UsrAttrib()} \
+      color=iif("E"$UsrAttrib(),"W/N","N/W")

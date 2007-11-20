@@ -1,0 +1,10 @@
+// PARSEEK.DLG : Textsuche Partner
+before DlgDefault("ParSearch",space(30))
+title "Partner suchen"
+field name="ParSearch" caption="Suchtext" \
+                   picture="@k@!" 
+after DlgDefine("ParFilter","'"+eupper(trim(DlgValue("ParSearch")))+"'$eupper(\
+  PAR->Firme+' '+PAR->Name2+' '+PAR->Vorname+' '+PAR->Rue+' '+PAR->Memo\
+  +' '+PAR->Tel+' '+PAR->GSM\
+)")
+after !empty(DlgValue("ParSearch")).or.DlgDefine("ParFilter",".t.")

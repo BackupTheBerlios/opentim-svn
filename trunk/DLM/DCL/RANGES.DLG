@@ -1,0 +1,23 @@
+field name="range1" \
+    caption="Periodenbereich 1 " \
+    picture="@k@!" \
+    default=GetPeriode(str(year(UserDate())-1,4)) \
+    postedit={|x|GetPeriode(x)}
+field name="range2" \
+    caption="                2 " \
+    picture="@k@!" \
+    default=GetPeriode(str(year(UserDate())-2,4)) \
+    postedit={|x|GetPeriode(x)}
+field name="range3" \
+    caption="               (3 " \
+    caption2=")" \
+    picture="@k@!" \
+    default=GetPeriode("") \
+    postedit={|x|GetPeriode(x)}
+
+field caption=utr("Currency  ","W„hrung  ","Devise  ") \
+      block={|x|SetDevise(x)}\
+      picture="@k@!"\
+      pick={|x|PickDev(x)}\
+      valid={||DevExist(SetDevise())}
+

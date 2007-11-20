@@ -1,0 +1,18 @@
+// HTML-Katalog : graliste.htm
+OutputFile    "katalog.htm"
+NoTitles      on
+Delimiter     chr(13)+chr(10)
+Header        "<html><body><h1>Artikelgruppen</h1><table border width=100%>"
+FieldExport   Bezeichnung    "<tr><td>"+trim(GRA->Name1)+"</td>"
+FieldExport   Code           "<td><a href=" + trim(GRA->iGra) + ".HTM>" + trim(GRA->iGra) + "</a></td></tr>"
+Trailer       "</table><p align=right>(Stand " + dtocf(UserDate(),"dd. mmmm yyyy") + ")</p><hr noshade></body></html>"
+RecordAfter   DbfExport({oArt()},2,GRA->iGra,"ART->iGra==GRA->iGra","!'H'$ART->Attrib","ARTHTML.EXP")
+convert "ƒ" to "-"
+convert "≥" to "|"
+convert "Ñ" to "&auml;"
+convert "é" to "&Auml;"
+convert "Å" to "&uuml;"
+convert "ö" to "&Uuml;"
+convert "î" to "&ouml;"
+convert "ô" to "&Ouml;"
+convert "·" to "&szlig;"

@@ -1,0 +1,35 @@
+//
+// C:\SOFT\RELEASE\TIM220\STD220D\VENVKB.MSK - generated 15.12.97
+// for VEN.DBF
+//
+
+box 2 0 10 50
+box 2 51 10 79
+
+string 2 16 ÿPartnerÿ
+string 7 2 Bemerkung
+string 3 53 Status
+string 5 10 Datum
+string 5 22 Gltig bis
+string 5 2 Zahlart
+string 9 53 Gesamt
+string 2 2 ÿDokumentÿ
+string 8 2 1
+string 9 2 2
+string 5 53 Attribute [Alt-F7]
+
+get 1 3 2
+get 2 3 6
+get 3 3 13
+get 4 3 20 pict @S30
+get 14 6 2
+get 8 6 10
+get 9 6 22
+get 5 8 4 pict @K@S30
+get 10 9 4 pict @k@s30
+get 7 3 65
+get 24 3 67
+get 13 5 72 pict @K@!
+get 28 9 64
+get 6 9 68
+wait 11 78 11 1 1

@@ -1,0 +1,133 @@
+[PROJECT]
+    DEBUG         = no
+    VERSION       = 2.0
+    GUI           = yes
+    INCLUDE       = T:\DATA\LUC\PRG\TIM4
+    INCLUDE       = C:\ALASKA\XPPW32\INCLUDE
+    OBJ_DIR       = S:\OBJ\$CUST
+    LIB           = C:\ALASKA\XPPW32\LIB
+    POST_BUILD    = move tim4.exe S:\OBJ\$CUST
+    RC_COMPILE    = arc
+    RC_FLAGS      = /v
+    COMPILE       = xpp
+    COMPILE_FLAGS = /Q/ES/W/N/A /dCUST=$CUST
+    DEBUG_SAVE    = yes
+    LINKER        = alink
+    LINK_FLAGS    =
+    TIM4.XPJ
+
+
+[TIM4.XPJ]
+    TIM4.EXE
+
+[TIM4.EXE]
+    tim.arc
+    tim.prg
+    adl.prg
+    als.prg
+    admin.prg
+    archive.prg
+    coda.prg
+    create.prg
+    dcl.prg
+    delete.prg
+    edit.prg
+    evt.prg
+    fnlmeths.prg
+    haushalt.prg
+    imlmeths.prg
+    images.prg
+    imp.prg
+    int.prg
+    interbnk.prg
+    kvk.prg
+    licmeths.prg
+    listes1.prg
+    listes2.prg
+    litera.prg
+    lnk.prg
+    methods.prg
+    methods2.prg
+    msg.prg
+    mvimeths.prg
+    objects.prg
+    permeths.prg
+    pick.prg
+    pls.prg
+    pli.prg
+    prj.prg
+    pseudo.prg
+    r.prg
+    rapmeths.prg
+    sql.prg
+    tlg.prg
+    timdata1.prg
+    timdata2.prg
+    timdata3.prg
+    timdata4.prg
+    timfac.prg
+    timget.prg
+    timtest.prg
+    timprint.prg
+    tplmeths.prg
+    trameths.prg
+    unittest.prg
+    upgrade.prg
+    venmeths.prg
+    vnameths.prg
+    vnlmeths.prg
+    www.prg
+    pointage.prg
+    til.prg
+    naf.prg
+    kitz.prg
+    spz.prg
+    rfx.prg
+    nText.prg
+    RecEdit.prg
+    Time.prg
+    Montant.prg
+    trig.prg
+    tasks.prg
+    rptmeths.prg
+    etc.prg
+    login.prg
+    ddlayout.prg
+    report.prg
+    ErrSysXb.prg
+    ddSeek.prg
+    filter.prg
+    import.prg
+    aBrowse.prg
+    a2Browse.prg
+    protect.prg
+    calend.prg
+    woy.prg
+    AppInit.prg
+    ddMeths.prg
+    TxtEdit.prg
+    Stdio.prg
+    Windows.prg
+    getsysxb.prg
+    getsysx.prg
+    ddGet.prg
+    ddArea.prg
+    ddEdit.prg
+    dlg.prg
+    sMenu.prg
+    views.prg
+    Colors.prg
+    ostream.prg
+    tab.prg
+    drv.prg
+    mfileio.prg
+    dbcedit.prg
+    datanorm.prg
+    byt2hex.prg
+    byt2bit.prg
+    nooccur.prg
+    isbit.prg
+    appsysxb.prg
+    dbesys.prg
+    eupper.prg
+

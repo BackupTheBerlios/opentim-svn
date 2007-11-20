@@ -1,0 +1,15 @@
+//
+// ODLART.QRY - generated 31.03.99
+// for ODL.DBF
+//
+window 12 76 0 0 
+column 2 Dok.Nr
+column 0 Per. block DbfPeek(oOds(),ODL->IdJnl+IdDoc,"ODS->Periode",space(4)) skip .t.
+column 0 Datum block DbfPeek(oOds(),ODL->IdJnl+IdDoc,"ODS->Date",ctod("")) skip .t.
+column 0 Raum block DbfPeek(oOds(),ODL->IdJnl+ODL->IdDoc,"left(ODS->Remarq,20)",space(20))
+column 7 Menge
+column 11 Stckwert
+column 8 Gesamtwert pict @K@!
+column 3 Pos
+column 6 DC pict !
+order 2

@@ -1,0 +1,8 @@
+% ARTEAN.TEX
+% Template to be used by TIM. Author Luc Saffre. PAC Systems Eupen
+%
+[etc do fparse("EANETI1.TEX")]
+[etc do ForLoop(1,DlgValue("EtiCount"),\
+  {||fparse("ARTEAN2.TEX")}\
+)]
+\end{document}

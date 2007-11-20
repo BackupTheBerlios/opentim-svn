@@ -1,0 +1,13 @@
+//
+// F:\TIM\PAC\RAPPAR.QRY - generated 04.06.97
+// for RAP.DBF
+//
+window 18 70 0 0 
+column 1 Datum
+column 2 Maske pict @K@!
+column 5 DC
+column 6 Betrag BEF
+column 7 W„h pict @K@!
+column 8 Betrag FW
+column 10 Zinsen
+column 11 Kosten

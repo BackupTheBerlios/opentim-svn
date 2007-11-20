@@ -1,0 +1,73 @@
+// Liste der MWSt-pflichtigen Kunden
+before DlgDefault("Filename",padr(\
+  "A"+str(pnYear(MemPer1),4)+".TXT"\
+  ,12\
+))
+before SetDevise(DevDefault(MemPer1))
+before DlgDefine("MontMin",ntom(Dev2Db("EUR",MemPer1,250)))
+before SetTplIni("LISTE")
+// before DlgDefault("IdDev",DevDefault(MemPer2))
+title "Liste der MWSt-pflichtigen Kunden"
+field block={|x|GsbPeriode(x)} \
+    picture="@k@!" \
+    caption="Periode von-bis " \
+    pick={|x|PickPerRange(x)} \
+    valid={||\
+      DlgDefine("Filename",padr(\
+        "A"+str(pnYear(MemPer1),4)+".TXT"\
+      ,12))\
+      .and.DlgDefine("MontMin",ntom(Dev2Db("EUR",MemPer1,250)))\
+      .and.ph_refresh()\
+    }
+field caption="W„hrung  " \
+      block={|x|SetDevise(x)}\
+      picture="@k@!"\
+      pick={|x|PickDev(x)}\
+      valid={||DevExist(SetDevise())\
+        .and.DlgDefine("MontMin",\
+          ntom(Db2Dev(SetDevise(),MemPer1,val(DlgValue("MontMin"))))\
+        )\
+      }
+field caption="Mindestbetrag  " \
+      name="MontMin"\
+      picture="@k@!"\
+      pick={|x|PickNum(x)}\
+      postedit={|x|GetMont(x)}
+field caption="Ihre MWSt-Nummer " \
+    picture="@k@!"\
+    postedit={|x|GetNoTva(x,MemPays)}\
+    valid={||ValNoTva(MemNoTva)}\
+    block={|x|if(x==NIL,MemNoTva,MemNoTva:=x)}
+field name="DoFile" \
+      caption2=" Datei erstellen : " \
+      default=" " \
+      reader={|g|CbxReader(g)} \
+      attrib="N"
+field name="Filename" \
+      picture="@k@s30" \
+      when={||!empty(DlgValue("DoFile"))}
+
+#include "PREVIEW.DLG"
+
+// after SetDevise(DlgValue("IdDev"))
+after empty(DlgValue("DoFile")).or.!file(DbPath()+"\"+trim(DlgValue("Filename"))).or.Confirm(\
+  trim(DlgValue("Filename"))\
+  +" : bestehende Datei berschreiben (J/N) ?"\
+)
+after DoVenTvaListe(\
+  .t.,"V",SetDlgTitle(),val(DlgValue("MontMin")),\
+  ".t.","VEN->IdReg$'CA'",\
+  NIL,\
+  1,\
+  DlgValue("DoFile"),\
+  DbPath()+"\"+trim(DlgValue("Filename"))\
+)
+after empty(DlgValue("DoFile")).or.fprint("lsttvaa.lst","[]")
+after empty(DlgValue("DoFile")).or.Confirm(\
+  "Auch eine Kopie nach Diskette A: machen (J/N)")
+after empty(DlgValue("DoFile")).or.WildCopy(\
+  DbPath(),\
+  trim(DlgValue("Filename")),\
+  "A:"\
+)
+

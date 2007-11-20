@@ -1,0 +1,12 @@
+//
+// C:\SOFT\RELEASE\TIM220\STD220D\IPR.QRY - generated 27.01.98
+// for IPR.DBF
+//
+window 10 60 0 0 
+column 1 Seq
+column 2 Z pict @K@!
+column 3 A pict @K@!
+column 4 PG pict @K@!
+column 5 W„ pict @K@!
+column 6 Formel pict @k@s34
+column 7 Attr pict @K@!

@@ -1,0 +1,27 @@
+MnuAddTitle(utr("~Program","~Programm","~Programme"))
+#if SetDialog()
+  MnuAddItem(utr("~User menu           ","Ben~utzermenÅ        ","Menu ~utilisateur    "),{||AppRefresh()})
+  MnuAddItem(utr("~Reports menu        ","D~ruckmenÅ           ","Menu imp~ressions    "),{||AppRefresh("PRINT")})
+  MnuAddItem(utr("~Admin menu          ","Verw~altermenÅ       ","Menu ~administrateur "),{||AppRefresh("BOSS")})
+  MnuAddItem("E~xplorer menu       ",{||AppRefresh("EXPLORER",.t.)})
+  MnuAddSep()
+#endif
+#if SetDialog().and.HasArch()
+  MnuAddItem("~Select archive...   ",{||SelectArchive()})
+#endif
+#if SetDialog().and.PathExist(AppPath()+"\HOME")
+  MnuAddItem(utr("~Who's using TIM?","~Wer ist in TIM ?","Qui est dans ~TIM?"),{||ShowLogList(MnuItemName())})
+#endif
+#if SetDialog()
+  MnuAddItem(utr("Select ~Font",\
+                 "~Font auswÑhlen",\
+                 "SÇlectio~nner police"),\
+                 {||SelectFont()})
+  MnuAddItem(utr("~Database Check      ","~Datenbank-Check     ","Test base de ~donnÇes"),{||ActExec("DBCHECK")})
+  MnuAddItem("~Login               ",{||Relogin()})
+  MnuAddItem(utr("Ab~out               ","Inf~o                ","Ö prop~os            "),{||AppAbout()})
+  MnuAddItem(utr("Change ~password     ","~Password Ñndern     ","Modifer mot de ~passe"),{||UsrChangePwd()})
+  MnuAddSep()
+#endif
+  MnuAddItem(utr("~Exit TIM    [Alt-F4]","TIM be~enden [Alt-F4]","~Quitter TIM [Alt-F4]"),{||AppNormEnd()})
+

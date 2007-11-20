@@ -1,0 +1,20 @@
+// VNL.DEF
+ddAddField("Date","D",8,0,"@k@!",if(HasDlm("VNLDATE"),NIL,"H"))
+ddAddSpecial(\
+  {||VnlGetMemo()},\
+  MnuMemoedit(),\
+  -41\
+)
+ddAddSpecial(\
+  {||ddPaste()},\
+  NIL,\
+  -1\
+)
+ddPostDelete("VnlTotRefresh()")
+ddFldSetpick("Qte",{|x|Picknum(x)})
+!HasDlm("GENPRIX").or.ddOnPostEdit("\
+  VEN->Etat==DocStatClosed()\
+  .or.!empty(VNL->cMont)\
+  .or.VNL->Code!='G'\
+  .or.((VNL->PrixU:=GEN->PrixU)!=NIL.and.VnlSetBase())\
+")

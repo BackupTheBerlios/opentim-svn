@@ -1,0 +1,5 @@
+field name="Copies" \
+      value=1 \
+      caption=utr("Copies ","Anzahl Exemplare ","Copies ") \
+      picture="999"
+after p_setcopies(getvar("Copies"))

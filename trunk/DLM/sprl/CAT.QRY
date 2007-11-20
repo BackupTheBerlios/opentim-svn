@@ -1,0 +1,7 @@
+//
+// F:\SOFT\TEST\TIM300\CPAS\CAT.QRY - generated 04.09.95
+// for CAT.DBF
+//
+window 8 45 0 0 
+column 1 KÅrzel
+column 2 Bezeichnung

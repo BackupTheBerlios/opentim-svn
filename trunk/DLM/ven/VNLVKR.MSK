@@ -1,0 +1,29 @@
+//
+// .\HEINEN\VNLVKR.MSK - generated 19.09.95
+// for VNL.DBF
+//
+
+
+string 4 4 Dokument
+string 4 27 Position
+string 8 6 Objekt
+string 6 5 A-Konto
+string 15 3 Bemerkung
+string 10 50 Gesamt
+string 11 50 MWSt
+string 12 60 컴컴컴컴컴
+
+
+get 1 4 13
+get 2 4 17
+get 4 4 36
+get 10 6 13
+get 5 8 13
+get 6 8 15
+get 16 10 60
+get 13 11 56
+get 11 11 60
+get 14 13 60
+get 7 15 13
+get 23 6 30
+get 22 8 30

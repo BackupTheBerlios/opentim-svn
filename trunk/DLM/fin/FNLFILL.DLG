@@ -1,0 +1,121 @@
+// FNLFILL : Buchungsvorschl„ge
+
+title "Buchungsvorschl„ge"
+
+before DlgDefault("FNLFILL.IdJnl",padr(if(FIN->IdJnl=="REP","","EKR"),LenIdJnl()))
+before DlgDefault("IdPar",space(LenIdPar()))
+before DlgDefault("IdGen",space(LenIdGen()))
+before DlgDefault("IdCtr",padr(if(FIN->IdJnl=="REP","","E"),LenIdCtr()))
+before DlgDefault("Satis","X")
+before DlgDefault("Group",if(FIN->IdJnl=="REP"," ","X"))
+before DlgDefault("DcInvert","X")
+before DlgDefault("FNLFILL.DatEch",if(FIN->IdJnl=="REP",ctod(""),FIN->Date))
+before DlgDefault("Date",if(FIN->IdJnl=="REP",PerDate1(PerToggle()),ctod("")))
+
+field name="FNLFILL.DatEch" \
+    caption="Zahlungsziel bis zum "
+field name="IdPar" \
+    caption="nur Partner " \
+    pick={|x| PickPar(NIL,x)}
+field name="IdGen" \
+    caption="nur Generalkonto " \
+    pick={|x| PickGen(NIL,x)}
+field name="IdCtr" \
+    caption="nur Zentralisierungsart " \
+    picture="@k@!" \
+    pick={|x| PickCtr(x)}
+field name="FNLFILL.IdJnl" \
+    caption="(nur Journal " \
+    caption2=")" \
+    picture="@k@!" \
+    pick={|x|DbfPick(\
+              {oJnl()},"Auswahl Journal","JNLPICK",\
+              x,\
+              "'G'$JNL->Attrib"\
+    )}
+field name="Date" \
+    caption="(nur Buchungen bis zum " \
+    caption2=")"
+// field block={|x|SetPeriode(x)} \
+    picture="@k@!" \
+    caption="Periode von-bis " \
+    pick={|x|PickPerRange(x)}
+field name="Satis" \
+      reader={|x|CbxReader(x)} \
+      caption2=" nur offene Buchungen"
+field name="Group" \
+      reader={|x|CbxReader(x)} \
+      caption2=" Buchungen pro Match gruppieren"
+field name="DcInvert" \
+      reader={|x|CbxReader(x)} \
+      caption2=" Buchungsrichtung invertieren"
+
+
+after MsgDisplay(MsgWorking())
+// after DlgDefine("HstFilter","ChkPeriode(HST->Periode)==0")
+after DlgDefine("HstFilter",".t.")
+// after empty(DlgValue("FNLFILL.IdJnl")).or.DlgPlus("HstFilter",\
+        ".and.HST->IdJnl=='"+DlgValue("FNLFILL.IdJnl")+"'"\
+      )
+after empty(DlgValue("Satis")).or.DlgPlus("HstFilter",\
+        ".and.HST->Satis==' '"\
+      )
+after empty(DlgValue("IdPar")).or.DlgPlus("HstFilter",\
+        ".and.HST->IdPar=='"+DlgValue("IdPar")+"'"\
+      )
+after empty(DlgValue("IdGen")).or.DlgPlus("HstFilter",\
+        ".and.HST->IdGen='"+trim(DlgValue("IdGen"))+"'"\
+      )
+after DlgPlus("HstFilter",\
+  if(empty(DlgValue("IdCtr")),\
+    ".and.!empty(HST->IdCtr)",\
+    ".and.HST->IdCtr=='"+DlgValue("IdCtr")+"'"\
+  )\
+)
+after empty(DlgValue("FNLFILL.DatEch")).or.DlgPlus("HstFilter",\
+        ".and.dtos(HstDate2())<='"+dtos(DlgValue("FNLFILL.DatEch"))+"'"\
+      )
+after empty(DlgValue("Date")).or.DlgPlus("HstFilter",\
+        ".and.dtos(HST->Date)<='"+dtos(DlgValue("Date"))+"'"\
+      )
+
+after DlgDefine("xcTagLine",if(\
+  empty(DlgValue("FNLFILL.IdJnl")),'HST->IdJnl+',''\
+)+'HST->IdDoc')
+// after DlgPlus("xcTagLine",'+" "+left(dtoc(HST->Date),5')
+after DlgPlus("xcTagLine",'+" "+dtocf(HstDate2(),"dd.mm.yy")')
+after DlgPlus("xcTagLine",'+" "+padr(ParName(HST->IdPar),18)')
+after DlgPlus("xcTagLine",'+" "+right(HST->Match,6)')
+after DlgPlus("xcTagLine",'+" "+padr(HstDocName(HST->IdJnl,HST->IdDoc,HST->Line),16)')
+after DlgPlus("xcTagLine",'+" "+HST->Mont')
+after DlgPlus("xcTagLine",'+" "+HST->DC')
+
+after SetMnuDone()
+
+after empty(DlgValue("FNLFILL.IdJnl")).or.FnlHstFill(\
+  5, \
+  DlgValue("FNLFILL.IdJnl"), \
+  "HST->IdJnl=='"+DlgValue("FNLFILL.IdJnl")+"'", \
+  DlgValue("HstFilter"), \
+  DlgValue("xcTagLine"), \
+  DlgValue("DcInvert")=="X",\
+  DlgValue("Group")=="X",\
+  2000 \
+)
+
+// HST8.NTX : siehe HST.DEF
+after !empty(DlgValue("FNLFILL.IdJnl")).or.FnlHstFill(\
+  8, \
+  if(empty(DlgValue("IdPar")),"",DlgValue("IdPar")), \
+  if(empty(DlgValue("IdPar")),".t.","HST->IdPar=='"+DlgValue("IdPar")+"'"), \
+  DlgValue("HstFilter"), \
+  DlgValue("xcTagLine"), \
+  DlgValue("DcInvert")=="X",\
+  DlgValue("Group")=="X",\
+  2000 \
+)
+// after !empty(DlgValue("FNLFILL.IdJnl")).or.Warning(\
+  "Journal : muss angegeben sein !"\
+)
+
+

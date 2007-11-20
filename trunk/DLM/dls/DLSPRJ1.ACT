@@ -1,0 +1,13 @@
+// Confirm(dtoc(ForValue()))
+DbfScan({oPrj()},1,NIL,NIL,"empty(PRJ->Parent)",{|| \
+  setvar(alltrim(PRJ->IdPrj),0)\
+  })
+setvar("isTop",{||empty(PRJ->Parent)})
+DbfScan({oDls(),oPrj()},2,dtos(ForValue()),NIL,\
+  "!empty(DLS->IdPrj).and.DLS->IdUsr==UserId()",{||\
+  PrjExist(DLS->IdPrj)\
+  .and.setvar("IdPrj",\
+    PRJ->(OnContainer(getvar("isTop"),"alltrim(PRJ->IdPrj)")))\
+  .and.getvar("IdPrj")!=NIL\
+  .and.DlgPlus(getvar("IdPrj"),t2hours(DLS->Dauer))})
+

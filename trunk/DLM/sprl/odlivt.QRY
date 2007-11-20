@@ -1,0 +1,12 @@
+//
+// ODLINV.QRY - generated 04.01.2000
+// for ODL.DBF
+//
+window 18 78 4 0 
+column 4 Art.Nr pict @K@!
+column 10 Menge pict @K@!
+column 5 Bezeichnung pict @k@s30 skip .t. say "(Summe)"
+column 0 Lfr. block ArtField(ODL->IdArt,{||ART->IdPar}) skip .t.
+column 11 Stckwert skip .t.
+column 8 Gesamtwert pict @K@! skip .t. expr val(Mont) say ntom(nSum)
+column 3 Pos skip .t.

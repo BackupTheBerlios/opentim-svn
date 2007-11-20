@@ -1,0 +1,11 @@
+First Name[=chr(9)]\
+Last Name[=chr(9)]\
+Display Name[=chr(9)]\
+Nickname[=chr(9)]\
+Primary Email[=chr(9)]\
+Home Phone
+[=DbfScan(\
+  {oPar(),oPlz(),oNat()},1,NIL,NIL,\
+  "!empty(PAR->email)",\
+  "ActExec('PAR2MOZ2')"\
+)]

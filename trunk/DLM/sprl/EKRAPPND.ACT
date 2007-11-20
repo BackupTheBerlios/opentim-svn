@@ -1,0 +1,10 @@
+// EKRAPPND
+Confirm("Rechnung Bankkosten erstellen",MsgSure())
+DlgDefine("IdPar",PickPar("L","Lieferant auzsw„hlen"))
+!empty(DlgValue("IdPar")).or.!SetMsg("Abbruch")
+VenAppend(\
+  "EKR",NIL,\
+  FIN->Date,NIL,NIL,\
+  DlgValue("IdPar"),NIL,\
+  .f.,.t.,.f.\
+)

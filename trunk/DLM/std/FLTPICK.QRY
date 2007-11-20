@@ -1,0 +1,10 @@
+//
+// C:\SOFT\RELEASE\TIM300\220D\FLTPICK.QRY - generated 24.06.98
+// for FLT.DBF
+//
+window 12 76 0 0 
+column 2 Bezeichnung pict @k@S40
+column 3 Filter pict @k@S30
+column 5 Qry pict @K@!
+column 4 Seq pict @K@!
+column 6 Dlg pict @K@!

@@ -1,0 +1,103 @@
+header1 "Arbeitszeiten "+DlgValue("IdRes")
+header3 dtocf(DlgValue("Date1"))+" bis "+dtocf(DlgValue("Date2"))
+area { oPtl(),oRes() }
+order 1 // IdJnl+Periode+IdDoc (siehe HST.DEF)
+start DlgValue("IdRes")
+while cblock('PTL->IdRes==DlgValue("IdRes").and.dtos(PTL->Date)<="' \
+      +dtos(getvar("Date2"))+'"')
+
+ValidateRecord {|| ResExist(PTL->IdRes)}
+
+detail {||PTL->Date>=getvar("Date1")}
+
+oneach {|| \
+  DlgPlus("Saldo",qton(PTL->Qte)*if(trim(PTL->Type)=="S",0,1)),\
+  if(IsFirst(3,.f.),DlgPlus("Saldo",-8),.t.)\
+}
+
+
+// OnNoValue {|| Confirm(MsgIdJnlDoc() + \
+  utr(" : booking "," : Buchung ","l'imputation") \
+  + HST->IdGen + " (" + trim(HST->IdTax)\
+  + utr(\
+    ") does not fit into any columnˇ!", \
+    ") konnte keiner Kolonne zugewiesen werdenˇ!", \
+    ") n'est attribuÇe Ö aucune colonne !"), \
+  MsgContinue() \
+)}
+
+column header=utr("Date","Datum","Date") \
+       width=8 text={||padr(Jour(PTL->Date),2)+" "+dtocf(PTL->Date,"dd.mm")} \
+       when={|grp|IsFirst(3)}
+column header="von" \
+       width=LenQte() \
+       text={||PTL->Qte1}
+column header="bis" \
+       width=LenQte() \
+       text={||PTL->Qte2}
+column header="Pause" \
+       width=LenQte() \
+       text={||PTL->QteP}
+column header="Typ"\
+       width=3\
+       text={||padr(PTL->Type,3)}
+column header="Bemerkung"\
+       width=15\
+       text={||padr(PTL->Remarq,15)}
+column header="ö-Saldo"\
+       width=8\
+       text={||ntoq(getvar("Saldo"),":")}
+
+#exec setvar("b",{|nValue|ntoq(nValue,":")})
+#exec DbcLoop("PTLTYPE.DBC",{|x|RptAddColumn(\
+        {x[2]},\
+        LenQte(),\
+        cblock("PTL->Type=='"+x[1]+"'"),\
+        cblock("qton1(PTL->Qte)"),\
+        getvar("b")\
+      )})
+
+// column header="öber" \
+       width=8 \
+       value={|x|getvar("Soll")} \
+       text={|x|ntoq(x,":",8)} \
+       xsum={|x|ntoq(x,":",8)}
+
+// IsFirst(1) means : is this the first entry of this week
+
+group key={|| PTL->IdRes+str(ft_woy(PTL->Date),2) } \
+      text={||"Woche "+ntrim(ft_woy(PTL->Date))+" : ö-Std Anfang " \
+        +  ltrim(ntoq(DlgValue("Saldo1"),":",10)) \
+        + " Ende "+ ltrim(ntoq(DlgValue("Saldo"),":",10)) \
+        } \
+      header={||setvar("Saldo1",getvar("Saldo"))} \
+      before={||PrintLine()} \
+      after={||RptTit3()}
+
+group key={|| PTL->IdRes } \
+      text={||trim(RES->Nom1)} \
+      header={|nCount| DlgDefine("Saldo",qton(RES->Saldo))} \
+      after={|nCount| PrintLine() }
+      // before={|nCount| PrintTotal(1,2).and.RptTit2() }
+
+
+// group 3 is only used by IsFirst() if more thanone entry per day
+group key={|| PTL->IdRes+dtos(PTL->Date) }
+      // text={||""}
+// group text={||""}
+// group key={|| month(PTL->Date) } \
+      text={||"Monat "+ntrim(month(PTL->Date))}
+
+// total for=cblock("dtos(PTL->Date) < '"+dtos(getvar("Date1"))+"'") \
+      when={||RptGroup()!=1} \
+      text={||utr("","öbertrag vom ","Report du ")\
+            +dtocf(getvar("Date1")-1)}
+// total for=cblock("dtos(PTL->Date) >= '"+dtos(getvar("Date1"))+"'") \
+      when={||RptGroup()!=1} \
+      text={||utr("","Summe","Somme")+" "+dtocf(DlgValue("Date1"))+" bis "+dtocf(DlgValue("Date2"))}
+// total text={||utr("","zu Åbertragen","Ö reporter")} \
+      when={||RptGroup()!=1}\
+
+total text={||""}\
+      when={||RptGroup()==1}
+

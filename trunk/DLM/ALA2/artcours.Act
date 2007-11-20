@@ -1,0 +1,35 @@
+// EK BEF anpassen nach WechselkursÑnderung
+Confirm(\
+  "EK BEF fÅr alle Artikel anpassen nach Wechselkurs-énderung",\
+  MsgSure()\
+)
+DbfScan(\
+  {oArt(), oGra()},\
+  1,\
+  NIL,\
+  ".t.",\
+  "!empty(ART->PrixRDev).and.!empty(ART->IdDev)",\
+  'TryRecLock({||\
+    ART->PrixR:=ntom(\
+      val(ART->PrixRDev)*val(DevCours(ART->IdDev)),ArtPuDecPos()\
+    ),\
+    .t.\
+  })'\
+)
+Warning("Alle EK-Preise BEF wurden aktualisiert",NIL,NIL,.t.,"Fertig")
+// DbfScan(aArea,nOrder,cStart,xlWhile,xlFilter,xlEval)
+// aArea : ein array von Tabellen, die geîffnet werden sollen. Das erste
+//         Element ist die primÑre Workarea (die, in der der loop
+//         stattfindet)
+// nOrder : index order
+// cStart : wo der Loop beginnen soll ("softseek cStart")
+// xlWhile : wenn diese Bedingung .f. zurÅck gibt, wird der Loop
+//           beendet
+// xlFilter : Records, die dieser Bedingung nicht entsprechen, werden
+//            ignoriert.
+// xlEval : das, was auf jedem Record ausgefÅhrt wird. Dieser Ausdruck
+//          muss .t. zurÅckgeben, ansonsten wird der Loop abgebrochen.
+//          Falls Daten verÑndert werden, muss der Record vorher
+//          blockiert werden. Siehe TryRecLock()
+// TryRecLock(bToDo) : blockiert den Record, fÅhrt <bToDo> aus und lîst
+//                     den Lock wieder

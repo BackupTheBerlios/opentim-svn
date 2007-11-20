@@ -1,0 +1,15 @@
+//
+// VNLEKRA.QRY - generated 12.03.03
+// for VNL.DBF
+//
+window 11 80 11 0 
+column 6 =utr("Prd#","Art.Nr.","Nøart.") pict @K@!
+column 21 =utr("Description","Bezeichnung","D‚signation") pict @K@S24
+column 16 =utr("price","Netto","htva")
+column 8 =utr("Qty","Menge","Qt‚") pict @K@!
+column 9 Stckpreis pict @K@! skip empty(VNL->Qte)
+column 13 M pict @K@! skip .t.
+column 11 =utr("VAT","MWSt","TVA") pict @K@! skip .t.
+column 14 =utr("inclTax","Brutto","TVAC") skip .t.
+column 5 V pict ! skip .t.
+column 10 Match pict @K@! skip .t.

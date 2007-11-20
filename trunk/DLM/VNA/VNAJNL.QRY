@@ -1,0 +1,23 @@
+//
+// F:\TIM\DATA\VNAJNL.QRY - generated 03.10.96
+// for VNA.DBF
+//
+column 2 Dok.Nr.
+column 3 Art.Nr
+column 4 IdPar
+column 5 DC
+column 6 Qte
+column 7 QteUs
+column 8 PrixU
+column 9 _Debit
+column 10 _Credit
+column 11 Periode pict @K@!
+column 12 Date
+column 13 NB1
+column 15 Match
+column 16 _ObjName
+column 17 _ParName
+column 18 _NB1orArt pict @K@S28
+column 20 Satis
+column 21 Code pict @K@!
+column 22 QteForm

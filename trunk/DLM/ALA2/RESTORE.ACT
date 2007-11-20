@@ -1,0 +1,10 @@
+// RESTORE.ACT
+Confirm(\
+  "Sicherheitskopie "+CfgDatabase()+" und RTF von Diskette zurÅckspielen.",\
+  MsgSure(), "N" \
+)
+Confirm(\
+  "Bestehende Daten werden unwiderruflich Åberschrieben !",\
+  MsgSure(), "N" \
+)
+AppNormEnd("dbrest " + CfgDataBase()+" RTF")

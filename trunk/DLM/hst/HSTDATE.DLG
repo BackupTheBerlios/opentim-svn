@@ -1,0 +1,6 @@
+// Gesamthistorik
+
+#include "PERIODE.DLG"
+#include "PREVIEW.DLG"
+
+after AppSaveMem()

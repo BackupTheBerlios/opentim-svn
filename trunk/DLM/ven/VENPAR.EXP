@@ -1,0 +1,29 @@
+// Dokumente mit Partner (txt tab-delimited)
+
+OutputFile    "VEN.TXT"
+RecordBefore ParExist(VEN->IdPar)
+Delimiter     chr(9)
+FieldUpdate   IdJnl        '"'+VEN->IdJnl+'"'
+FieldUpdate   IdDoc        '"'+VEN->IdDoc+'"'
+FieldUpdate   Datum1       '"'+dtocf(VEN->Date)+'"'
+FieldUpdate   Datum2       '"'+dtocf(VEN->DatEch)+'"'
+FieldUpdate   Betrag       komma(trim(VEN->Mont))
+FieldUpdate   W„           '"'+trim(VEN->IdDev)+'"'
+FieldUpdate   Regime        '"'+VEN->IdReg+'"'
+FieldUpdate   Memo         '"'+strtran(strtran(strtran(VEN->Memo,chr(141),' '),'"',' '),crlf()," ")+'"'
+FieldUpdate   NB1        '"'+VEN->NB1+'"'
+FieldUpdate   NB2        '"'+VEN->NB2+'"'
+FieldUpdate   User        '"'+VEN->Auteur+'"'
+FieldUpdate   IdPar        '"'+VEN->IdPar+'"'
+
+FieldUpdate   Anrede       '"'+trim(PAR->Allo)+'"'
+FieldUpdate   Vorname      '"'+trim(PAR->Vorname)+'"'
+FieldUpdate   Name         '"'+trim(PAR->Firme)+'"'
+FieldUpdate   Straáe       '"'+trim(ParStreet())+'"'
+FieldUpdate   Land         '"'+trim(PAR->Pays)+'"'
+FieldUpdate   PLZ          '"'+trim(PAR->CP)+'"'
+FieldUpdate   Ort          '"'+trim(PlzName(PAR->Pays,PAR->CP))+'"'
+
+convert {|x|dos2latin1(x)}
+// #include "DOS2WIN.CVT"
+OnSuccess AppShell("excel.bat "+i_OutputFile(),NIL,.f.)

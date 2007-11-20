@@ -1,0 +1,3 @@
+LIBRARY eidtools.Dll 
+EXPORTS 
+    GET_EID = _GET_EID

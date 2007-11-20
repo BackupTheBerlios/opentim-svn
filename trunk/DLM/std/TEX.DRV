@@ -1,0 +1,72 @@
+// to be used with fparse() only
+// FormFeed  chr(13)+chr(10)+"\clearpage "+chr(13)+chr(10)
+
+Font 10cpi 10 12/72 ""
+
+// BoldOn   "\textbf{"
+// BoldOff  "}"
+BoldOn   "\emph{"
+BoldOff  "}"
+ItalOn   "\emph{"
+ItalOff  "}"
+UnderOn   "\emph{"
+UnderOff  "}"
+
+
+// convert "\" to "\backslash "
+
+convert '"' to "''"
+convert '$' to "\$"
+convert '#' to "\#"
+convert '&' to "\&"
+convert '%' to "\%"
+convert '_' to "\_"
+// convert '{' to "\{"
+// convert '}' to "\}"
+convert chr(141) to " "
+
+// Siehe auch DOS2WIN.CVT
+
+convert "Ñ" to '{\"a}'
+convert "é" to '{\"A}'
+convert "Å" to '{\"u}'
+convert "ö" to '{\"U}'
+convert "î" to '{\"o}'
+convert "ô" to '{\"O}'
+convert "â" to '{\"e}'
+convert "ã" to '{\"\i}'
+
+convert "·" to "{\ss}"
+
+convert "Ö" to "{\`a}"
+convert "ä" to "{\`e}"
+convert "ó" to "{\`u}"
+convert "ç" to "{\`\i}"
+convert "ï" to "{\`o}"
+
+convert "ñ" to "{\^u}"
+convert "ì" to "{\^o}"
+convert "à" to "{\^e}"
+convert "å" to "{\^\i}"
+convert "É" to "{\^a}"
+
+convert "Ç" to "{\'e}"
+convert "¢" to "{\'o}"
+convert "£" to "{\'u}"
+convert "†" to "{\'a}"
+convert "°" to "{\'\i}"
+
+convert "á" to "{\c c}"
+
+convert "Ò" to "{$\pm$}"
+convert "ƒ" to "{$-$}"
+convert "≥" to "{$|$}"
+
+convert "<" to "\textless "
+convert ">" to "\textgreater "
+// convert "~" to "\textasciitilde "
+// convert chr(94) to "\textasciicircum "
+convert "˘" to "\textperiodcentered "
+convert "ù" to "\0{}"
+
+

@@ -1,0 +1,41 @@
+// STKRESET.ACT - Lagerbestand auf Null setzen.
+DlgExec("STKRESET")
+Confirm(\
+  "Dieser Vorgang ist unwiderruflich !",\
+  MsgSure(),"N"\
+)
+
+MsgDisplay("Teil 1 : " + MsgWorking())
+DlgDefine("b",{||ART->Lager := "",.t.})
+
+empty(DlgValue("Stock")).or.DbfScan(\
+  {oArt()},1,"",".t.",".t.",\
+  {||TryRecLock(DlgValue('b'))}\
+)
+MsgDisplay("Teil 2 : " + MsgWorking())
+empty(DlgValue("Stock")).or.StkReset(DlgValue("Date"),"")
+
+RETURN SetMsg("StkReset"+MsgDone()) if empty(DlgValue("VnaSatis"))
+
+DlgDefine("b",{||\
+  ART->Auftrag:=ntoq(DbfSum(\
+    {oVna()},"qton(VNA->QteUs)",\
+    3,ART->IdArt,"VNA->IdArt==ART->IdArt",\
+    "VNA->Satis==' '.and.VNA->IdJnl=='AUF'"\
+  ),ART->QteForm),\
+  ART->Bestellt:=ntoq(DbfSum(\
+    {oVna()},"qton(VNA->QteUs)",\
+    3,ART->IdArt,"VNA->IdArt==ART->IdArt",\
+    "VNA->Satis==' '.and.VNA->IdJnl=='BST'"\
+  ),ART->QteForm),\
+  .t.\
+})
+
+MsgDisplay("Teil 3 : " + MsgWorking())
+DbfScan(\
+  {oArt()},1,"",".t.",".t.",\
+  {||TryRecLock(DlgValue('b'))}\
+)
+
+RETURN SetMsg("StkReset"+MsgDone())
+

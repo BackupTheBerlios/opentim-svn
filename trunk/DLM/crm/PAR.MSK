@@ -1,0 +1,67 @@
+//
+// generated 19.09.07
+// for PAR.FOX
+//
+
+box 1 0 13 79
+box 1 58 4 79
+box 4 51 10 79
+
+string 2 59 ID
+string 4 2 Familienname
+string 8 2 Straáe
+string 10 2 Tel
+string 11 2 Fax
+string 9 52 Sprache
+string 7 2 PLZ/Ort
+string 3 2 Vorname
+string 3 59 Attribute
+string 2 2 Anrede
+string 6 9 z.Hd.
+string 9 64 Geschlecht
+string 11 25 EMail
+string 5 52 Geb.
+string 5 67 Alter
+string 6 52 Reg.
+string 8 52 Bank
+string 12 2 GSM
+string 21 43 [F6] is member of :
+string 12 25 URL
+string 30 41 [F4,f] : refs from this
+string 30 1 [F4,t] : refs to this
+string 7 52 TVA
+string 21 1 [Sh-F6] is contact for :
+
+get 32 2 15
+get 44 3 15
+get 3 4 15 pict @k@s35
+get 4 5 15 pict @k@s35
+get 8 7 11 pict @K@!
+get 6 7 15 pict @K@!
+get 31 7 24 pict @K@S26
+get 5 8 15 pict @k@s23
+get 39 8 39
+get 40 8 44
+get 9 10 6 pict @k@s19
+get 10 11 6
+get 49 12 6
+get 1 2 62 pict @K@!
+get 7 2 69 pict @K@!
+get 28 2 71
+get 19 3 69 pict @K@!
+get 43 5 58
+get 0 5 73 block ActExec("PARAGE")
+get 46 6 64
+get 29 7 59 pict @K@!
+get 12 7 61 pict @K@!
+get 11 8 59 pict @k@s26
+get 21 9 61 pict @K@!
+get 47 9 75 pict @k@!
+get 48 11 31 pict @k@s48
+get 50 12 31 pict @k@s48
+get 37 14 1 pict 41x7
+wait 8 36 22 43 24
+wait 7 36 14 43 4
+wait 5 38 31 1 60
+wait 5 38 31 41 61
+wait 8 40 22 1 34

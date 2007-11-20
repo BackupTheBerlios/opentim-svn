@@ -1,0 +1,12 @@
+// FNL.DEF
+ddAddSpecial(\
+  {||DlgExec("FNLFILL")},\
+  "~Buchungsvorschl„ge...     [F6]",\
+  -5\
+)
+// ddAddSpecial(\
+  {||ActExec("FNLEKR")},\
+  "~Rechnung Bankkosten   [Alt-F6]",\
+  -35\
+)
+ddAddSpecial({||ddPaste()},NIL,-1)

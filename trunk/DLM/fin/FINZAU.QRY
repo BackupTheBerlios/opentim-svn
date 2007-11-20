@@ -1,0 +1,13 @@
+//
+// FINZAU.QRY - generated 21.12.99
+// for FIN.DBF
+//
+window 18 76 0 0 
+column 2 Dok.Nr
+column 3 =utr("Date","Datum","Date") say ""
+column 4 =utr("Remark","Bemerkung","Remarque") pict @K@S20
+column 10 Summe pict @K@!
+column 8 Per. pict @K@!
+column 7 St pict !
+column 5 Status say ""
+mask FINZAU

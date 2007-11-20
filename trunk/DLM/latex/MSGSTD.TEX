@@ -1,0 +1,200 @@
+% MSGSTD.TEX
+% Template to be used by TIM. Author Luc Saffre. PAC Systems Eupen
+%
+% \special{header=bb1.ps}
+%
+% This template expects the following document types
+% VEN->IdJnl    Document type
+% ------------  ---------------
+% OFF,VKA       Angebot
+% CDV,VKB       Bestellschein
+% VEN,VNA,VKR   Rechnung
+%
+[etc do SetDateFormat(if(TplLang()=="D","d. mmmm yyyy","d mmmm yyyy"))]
+[set montant S10]
+[etc do DlgDefine("GraphicsType",\
+  if(DlgValue("AsPdf")=="X","jpg","eps")\
+)]
+
+\documentclass[a4paper]{report}
+
+\setlength{\oddsidemargin}{1cm}
+\setlength{\textwidth}{15.5cm}
+
+% input encoding
+\usepackage[cp850]{inputenc}
+% N.B.: Windows : ansinew
+%       Linux   : latin1
+
+% use EC fonts instead of CM fonts
+% \usepackage[T1]{fontenc}
+
+% \usepackage{lastpage}
+% requires that latex runs twice for each document...
+% ... which would be disturbing...
+
+% include EPS files
+% \usepackage{epsfig}
+% not needed if graphicx....
+
+% extensions for tabular environment :
+\usepackage{array}
+\usepackage{tabularx}
+\renewcommand{\tabularxcolumn}[1]{p{#1}}
+
+% use graphics :
+[etc if DlgValue("AsPdf")=="X"]
+\usepackage[pdftex]{graphicx}
+[etc else]
+\usepackage[dvips]{graphicx}
+[etc endif]
+
+%
+% vertical page layout
+%
+\setlength{\voffset}{-1in}  % header starts at (2.54 - 2 = 0.54) cm
+\setlength{\textheight}{235mm}
+\setlength{\topmargin}{2mm}
+\setlength{\headheight}{30mm}
+\setlength{\headsep}{10mm}
+
+%
+% header and footer definition
+% N.B. Weil der header Åberbreit ist und ganz links anfangen soll, und
+% weil man in fancyhdr diese Parameter nur fÅr header und footer
+% zugleich definieren kann, muss ich ein paar Tricks anwenden, damit der
+% footer nicht auch so breit wie der header ist...
+%
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\setlength{\headwidth}{19cm}
+\lhead{
+\hspace{-3cm}
+\parbox{\headwidth}{\center{
+\includegraphics[height=25mm]{\
+ [=strtran(DbPath(),"\","/")]/head\
+   [=if(DlgValue("AsFax")=="X","bw","")].\
+   [=DlgValue("GraphicsType")]\
+}}}
+}
+\chead{}
+\rhead{}
+\lfoot{
+\parbox{\textwidth}{
+\footnotesize
+\hfill
+[=if(TplLang()=="D","Seite","Page")] \thepage
+}
+%\bigskip
+%\parbox{\textwidth}{
+%\textsf{\scriptsize
+%PAC~Systems
+%\hfill --- \hfill
+%MWSt.: BE-443.493.896
+%\hfill --- \hfill
+%KBC: 731-1164521-11
+%\hfill --- \hfill
+%BBL: 348-0144521-55
+%\hfill --- \hfill
+%BBL~Kîln: 315-00103-08 (BLZ: 370~104~00)
+%}}
+}
+\cfoot{}
+% \rfoot{\footnotesize [=if(TplLang()=="D","Seite","Page")] \thepage}
+\rfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\renewcommand{\footrule}{
+\vspace{\footruleskip}
+\rule{\textwidth}{\footrulewidth}\\\
+}
+
+%
+% other settings
+%
+\setcounter{secnumdepth}{3}
+\renewcommand{\thesubsubsection}{
+\arabic{subsection}.\arabic{subsubsection}
+}
+\renewcommand{\thesubsection}{\arabic{subsection}.}
+\newcommand{\PreserveBackSlash}[1]{\let\temp=\\#1\let\\=\temp}
+
+% \renewcommand{\familydefault}{cmss}
+\renewcommand{\familydefault}{cmr}
+
+\newenvironment{memo}%
+{\begin{list}{}{%
+  \setlength{\leftmargin}{2mm}%
+  \setlength{\rightmargin}{2mm}%
+  \setlength{\topsep}{0mm}%
+  }\item[]\ignorespaces}%
+{\unskip\end{list}}
+
+
+
+%
+\begin{document}    
+
+\setlength{\parskip}{0.5\baselineskip}
+\setlength{\parindent}{0pt}
+
+\hspace{-3cm}
+\parbox[t]{8cm}{
+[etc do fparse("myadr.tex")]
+}
+\hfill
+\parbox[t]{9.5cm}{
+[etc do fparse("adrpar.tex")]
+}
+
+\smallskip
+
+\begin{flushright}
+Eupen, [=if(TplLang()=="F","le","den")] [=dtocf(MSG->Date)]
+\end{flushright}
+
+\bigskip
+
+[=if(\
+  empty(DlgValue("Anrede")),\
+  if(TplLang()=="D","Sehr geehrter Kunde,","Cher client,"),\
+  trim(DlgValue("Anrede"))\
+)]
+
+
+\nopagebreak[3]
+
+[etc if !empty(MSG->Texte)]
+
+\nopagebreak
+
+[etc if left(MSG->Texte,4)$"#TeX"]
+  [etc do ToStream(substr(MSG->Texte,5))]
+[etc else]
+  [etc do ToStream(Memo2Tex(MSG->Texte))]
+[etc endif]
+
+[etc endif]
+
+\nopagebreak
+\setlength{\parskip}{0pt} \setlength{\parindent}{0pt}
+
+  \bigskip\nopagebreak
+  [=if(TplLang()=="F","Salutations distinguÇes,","Mit freundlichen GrÅ·en")]
+  \par\nopagebreak
+  [etc if DlgValue("AsFax")=="X".and.file(DbPath()+"\"+trim(UserId())+"."+DlgValue("GraphicsType"))]
+  \includegraphics[height=2cm]{\
+  [=strtran(DbPath(),"\","/")]\
+  /[=lower(trim(UserId()))].[=DlgValue("GraphicsType")]\
+  }
+  [etc else]
+  \vspace{2cm}
+  [etc endif]
+
+  \nopagebreak
+
+  [=trim(UsrName(UserId()))+"\\"]
+  [=trim(Fonction(UserId(),TplLang()))]
+
+\end{document}
+

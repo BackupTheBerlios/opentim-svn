@@ -1,0 +1,89 @@
+// Benutzerdefinierte Partnerstammdaten
+ddAddField("Vorname","C",20,0)
+ddAddField("email","C",250,0)
+ddAddField("GSM","C",LenTel(),0)
+
+// ddAddField("IdBic","C",LenIdBic(),0,"@k@!",\
+  if(HasDlm("IBAN"),"","H"),NIL,NIL,\
+  {|g|ValIdBic(PAR->IdBic,PAR->Pays)},\
+  {|x|PickBic(x,PAR->Pays)})
+// ddAddField("IBAN","C",LenIBAN(),0,"@k@!",\
+  if(HasDlm("IBAN"),"","H"),NIL,NIL,\
+  {|g|ValIBAN(PAR->IdBic,PAR->IBAN)})
+
+ddAddIndex("upper(PAR->NoTva)","Nø TVA","!empty(PAR->NoTva)")
+ddAddIndex("PAR->IdPrt+dtos(PAR->MvpDate)","MvpDate","!empty(PAR->MvpDate)")
+
+#if HasDlm("VEN")
+ddAddSpecial(\
+  {||DbfEdit(\
+    {oVen(),oPar(),oPlz()},\
+    trim(ParName()) + " : Fakturationsdokumente","VENPAR",\
+    NIL,\
+    NIL,\
+    PAR->IdPar,\
+    "VEN->IdPar",\
+    NIL,\
+    "VenCreate('" + PAR->IdPar + "')"\
+  )},\
+  "~Fakturationsdokumente     [F5]",\
+  -4 \
+)
+#endif
+
+#if HasDlm("ART")
+ddAddSpecial(\
+  {||DbfEdit(\
+    {oArt(),oPar(),oPlz()},\
+    "Artikel pro Lieferant : " + trim(ParName()) ,\
+    "ARTPAR",NIL,NIL,PAR->IdPar\
+  )}, \
+  "Artikel pro Lieferant     [F2]",\
+  -1\
+)
+#endif
+
+
+
+ddAddSpecial(\
+  {||DlgExec("PARSEEK").and.ActExec("PARSEEK")},\
+  "~Textsuche...          [Alt-F8]",\
+  -37\
+)
+
+#if HasDlm("CHRON").or.HasDlm("MSG")
+ddAddSpecial(\
+  {||DbfEdit(\
+    {oMsg(),oPar(),oPrj()},\
+    ltrim(PAR->IdPar)+ " : Korrespondenz","MSGPAR",\
+    NIL,\
+    NIL,\
+    PAR->IdPar,\
+    "MSG->IdPar",\
+    NIL\
+  )},\
+  "~Korrespondenz          [Sh-F8]",\
+  -17 \
+)
+#endif
+
+
+
+// ddAddSpecial({||ParRename()}, MsgMnuRename(), -31 )
+ddAddSpecial({||ActExec("PARNEWID")}, MsgMnuRename(), -31 )
+
+ddAddSpecial(\
+{||OpenMail(trim(PAR->email))},\
+   "E-~Mail starten         [Alt-M]",\
+   306\
+)
+
+
+ddFldSetWhen("IdDev",".t.")
+
+// seit 19990210 :
+ddOnPostEdit("(PAR->DatCrea:=UserDate())!=NIL")
+
+ddFldSetSize("Compte1",LenBqe(),0)
+ddFldSetSize("Compte2",LenBqe(),0)
+ddFldSetSize("Compte3",LenBqe(),0)

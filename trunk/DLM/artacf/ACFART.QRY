@@ -1,0 +1,15 @@
+//
+// C:\SOFT\RELEASE\TIM220\STD01D\ACFART.QRY - generated 02.12.96
+// for ACF.DBF
+//
+window 10 80 12 0 
+column 3 IdPar pict @K@!
+column 9 Lieferant pict @K@S17 skip .t.
+column 10 W„ pict @K@! skip .t.
+column 7 Preis pict @K@!
+column 5 Ref. Lieferant pict @K@S15
+column 11 VglPreis skip .t.
+column 6 Datum skip .t.
+column 4 Bemerkung pict @K@S20 skip .t.
+column 2 Seq pict @K@! skip .t.
+column 12 Z pict @K@! skip .t.

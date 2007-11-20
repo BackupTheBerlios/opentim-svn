@@ -1,0 +1,2 @@
+// PRESTO.INI
+CustData TRM

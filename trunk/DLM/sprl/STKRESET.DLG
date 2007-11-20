@@ -1,0 +1,16 @@
+// STKRESET.DLG
+title "Lagerbest„nde rekonstruieren"
+before DlgDefault("Date",ntod(year(UserDate()),1,1))
+before DlgDefault("VnaSatis",if(HasOption("VNA")," "," "))
+before DlgDefault("Stock"," ")
+field name="Stock" \
+     caption2=" Lagerbestand" \
+     reader={|g|CbxReader(g)}
+field name="Date" \
+    caption="  (Datum der letzten Inventur : " \
+    caption2=")"
+#if HasOption("VNA")
+field name="VnaSatis" \
+     caption2=" offene Auftr„ge und Bestellungen" \
+     reader={|g|CbxReader(g)}
+#endif

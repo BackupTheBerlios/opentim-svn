@@ -1,0 +1,6 @@
+#static
+RETURN val(ART->Prix1) if VNL->IdArt!="MAIN  "
+RETURN val(DlgValue("OldUntPreis")) if DlgValue("OldUntJahr")==DlgValue("UntJahr")
+RETURN 0 if empty(DlgValue("Index1"))
+RETURN 0 if empty(DlgValue("Index2"))
+RETURN val(DlgValue("OldUntPreis")) * val(DlgValue("Index2")) / val(DlgValue("Index1"))

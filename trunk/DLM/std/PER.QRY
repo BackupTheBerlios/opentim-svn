@@ -1,0 +1,8 @@
+//
+// C:\SOFT\RELEASE\TIM220\STD01D\PER.QRY - generated 10.01.97
+// for PER.DBF
+//
+column 1 Per. pict @K@!
+column 4 Bezeichnung
+column 2 Beginn pict @K@!
+column 3 Ende

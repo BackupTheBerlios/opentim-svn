@@ -1,0 +1,8 @@
+% ODSEAN2.TEX called from ODSEAN.TEX for each ODS where !empty(ART->EAN)
+[etc do DlgPlus("CellCount",1)]
+\small
+[=ART->Name1] \newline
+R‚f. [=ART->IdArt] \newline
+\barheight=7mm
+\EAN [=ART->EAN]
+[=if(DlgValue("CellCount") % DlgValue("ColCount")==0,"\\","&")]

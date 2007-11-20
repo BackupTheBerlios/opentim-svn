@@ -1,0 +1,60 @@
+% Quelle : CTAN://macros/generic/ean
+
+% Wenn ein \ISBN vor einem \EAN steht,
+% dann wird zusätzlich die ISBN-Nummer über dem Barcode gedruckt. Aber
+% erst, wenn auch tatsächlich ein \EAN benutzt wird. Das
+% \ISBN alleine druckt nichts. Es ist also eher ein Parameter für den
+% folgenden \EAN
+
+% Was tun die ``-'' im Barcode?
+
+% *Muss* man das \X definieren? Ja. Das \X definiert die Breite des
+% Strichmoduls.
+%
+%                   \X=n         \font... scaled n
+% ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄ
+% Standard = 100% ³ \X=0.330mm ³ 1000
+%                 ³            ³
+%  oder, wenn ich eine Variable <Scale> habe, die zwischen 80 und 200
+%  sein kann:
+% \X=0.33*<Scale>/100
+% \font\ocrb=ocrb9 scaled <Scale>*10
+
+\documentclass[ngerman]{article}
+\begin{document}
+
+\input ean13
+
+% \X=0.396mm               % the module size is 120% of standard
+
+%% font used to print the number below bars
+\font\ocrb=ocrb9 scaled 400
+
+%% re-load ISBN font to the new size
+% \font\ocrbsmall=ocrb7 scaled 400
+
+
+%% bar correction (?)
+%% \bcorr=0.015mm 
+
+\ISBN 80-901950-0-4
+%% the bigskip does not insert any space 
+\bigskip 
+
+% \X=0.132mm               % the module size is 40% of standard
+\barheight=7mm                  % this must be after \ISBN call
+\EAN 978-80-901950-0-4          % produces barcode with ISBN
+
+                                % \ISBN 80-901950-0-8
+
+%\EAN 978-80-901950-0-4 % Typesetting System TeX
+
+\vskip1cm
+
+\input ean8
+
+\EAN 8591-2342
+\EAN 8-5-912342
+
+\end{document}
+

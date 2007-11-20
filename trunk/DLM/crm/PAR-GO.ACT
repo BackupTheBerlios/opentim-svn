@@ -1,0 +1,6 @@
+
+#static
+DlgDefine("IdMsg","")
+DlgDefine("IdPrj","")
+DlgDefine("IdArt","")
+DlgDefine("IdPar",PAR->IdPar)

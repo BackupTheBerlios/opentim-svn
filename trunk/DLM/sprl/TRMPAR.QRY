@@ -1,0 +1,18 @@
+//
+// TRMPAR.QRY - generated 28.02.02
+// for TRM.DBF
+//
+window 18 76 0 0 
+column 1 WT pict @k@s2
+column 2 Date say ""
+column 3 Debut pict @K@!
+column 4 Fin pict @K@!
+column 16 Duree pict @K expr qton(Duree) say ntoq(nSum,":")
+column 5 Texte pict @K@S15
+column 6 User pict @K@!
+column 7 Attr pict @K@!
+column 8 Art.Nr pict @K@!
+column 18 Etat pict @K@!
+column 15 _Tarif pict @k@s15
+column 19 _Etat
+mask TRM

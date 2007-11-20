@@ -1,0 +1,15 @@
+//
+// .\HEINEN\MVA.QRY - generated 17.01.96
+// for MVA.DBF
+//
+column 1 IdAna pict @K@!
+column 11 IdGen
+column 3 IdDoc pict @K@!
+column 5 Date
+column 14 Partner pict @S25
+column 12 Debit pict @K@!
+column 13 Kredit pict @K@!
+column 2 IdJnl pict @K@!
+column 8 Periode
+column 6 Bezeichnung
+column 7 Bemerkung

@@ -1,0 +1,21 @@
+//
+// C:\SOFT\RELEASE\TIM220\STD01D\HSTJNL.QRY - generated 19.08.1997
+// for HST.DBF
+//
+column 4 Dok.Nr. pict @K@!
+column 2 =utr("IdPar","P-Kto","CptPar")
+column 6 =utr("Date","Datum","Date")
+column 7 Name pict @k@s20 expr 1 say "Summ"
+column 8 =utr("Remark","Bemerkung","Remarque") pict @k@s10
+column 11 =utr("Amount","Betrag","Montant")
+column 19 offen
+column 12 =utr("Amnt FC","Betrag FW","MontDev")
+column 10 DC
+column 9 Periode
+column 13 Match pict @K@!
+column 5 Pos
+column 14 *
+column 15 Z
+column 16 % pict @K@!
+column 1 =utr("Accnt","Konto","Compte")
+

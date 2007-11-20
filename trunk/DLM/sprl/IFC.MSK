@@ -1,0 +1,29 @@
+//
+// C:\SOFT\RELEASE\TIM220\220D\IFC.MSK - generated 06.05.98
+// for IFC.DBF
+//
+
+
+string 2 2 Nr
+string 2 67 Maske
+string 2 49 Attribute
+string 2 9 Z-Art
+string 2 17 Zahlart
+string 2 29 Jnl
+string 2 38 Frist
+string 4 1 Text {ven memo_ifc} :
+string 5 1 D
+string 10 1 F
+string 15 1 N
+
+get 1 2 5 pict @K@!
+get 4 2 15 pict @K@!
+get 9 2 25 pict @K@!
+get 3 2 33 pict @K@!
+get 7 2 44 pict @K@!
+get 5 2 59 pict @K@!@S6
+get 8 2 73 pict @K@!
+get 10 5 3 pict 76x4
+get 11 10 3 pict 76x4
+get 12 15 3 pict 76x4
+

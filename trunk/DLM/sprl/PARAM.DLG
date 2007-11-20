@@ -1,0 +1,32 @@
+// PARAM.DLG : paramŠtres g‚n‚raux
+// field name="i" \
+//     caption="Druckparametersatz " \
+//     value=padr("LISTE",LenIdTpl()) \
+//     picture="@k@!" \
+//     pick={|x|PickTpl("INI",x)}
+// before DlgDefine("FacIdDoc",DbfPeek(oJnl(),"FAC","IdDoc",space(6)))
+// before DlgDefine("OrdIdDoc",DbfPeek(oJnl(),"ORD","IdDoc",space(6)))
+title "Standardeinstellungen"
+// field name="OrdIdDoc" \
+    caption=padr("Nø dernier ordre",25) \
+    block=DlgBlock("OrdIdDoc")\
+    postedit={|x|GetIdDoc(x)}
+// field name="FacIdDoc" \
+    caption=padr("Nø derniŠre facture",25) \
+    block=DlgBlock("FacIdDoc")\
+    postedit={|x|GetIdDoc(x)}
+field caption=padr("Druckeranschluss",25) \
+      picture="@k@!"\
+      pick={|x|PickPort(x)} \
+      block={|x|if(x==NIL,padr(MemLpt,4),MemLpt:=x)}
+field caption=padr("Druckertreiber",25) \
+      picture="@k@!"\
+      pick={|x|PickDrv(x)}\
+      block={|x|if(x==NIL,padr(MemDrv,8),MemDrv:=trim(x))}
+// field caption=padr("Imprimer ",25) \
+    picture="@k 999"\
+    caption2=" lignes par page"\
+    block={|x|if(x==NIL,MemLpp,MemLpp:=x)}
+// after DbfSetField(oJnl(),"FAC","IdDoc",DlgValue("FacIdDoc"))
+// after DbfSetField(oJnl(),"ORD","IdDoc",DlgValue("OrdIdDoc"))
+after AppSaveMem()

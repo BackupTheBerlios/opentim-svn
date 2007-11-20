@@ -1,0 +1,22 @@
+% GENLIST.TEX
+% Template to be used by TIM. Author Luc Saffre. PAC Systems Eupen
+%
+
+\documentclass{article}        % Your input file must contain these two lines 
+\begin{document}               % plus the \end{document} command at the end.
+
+\section*{Kontenplan}        % This command makes a section title.
+
+\begin{tabular}{lll}
+
+Kontonummer & Bezeichnung & Description \\\
+
+[etc do DbfScan(\
+  {oGen()},1,\
+  NIL,NIL,NIL,\
+  "fparse(AppPath()+'\tpl\gen.tex')"\
+)]
+
+\end{tabular}
+
+\end{document}                 % The input file ends with this command.

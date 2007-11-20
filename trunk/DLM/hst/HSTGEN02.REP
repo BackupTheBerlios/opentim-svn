@@ -1,0 +1,83 @@
+// Saldenliste Generalkonten (via HST)
+// Variablen : IdGen1 : Konto1
+//             IdGen2 : Konto2
+//             Periodenbereich
+initialize SetSolde("2").and.SetMntFormat("S10")
+header1 "Saldenliste Generalkonten"
+header2 PerText()
+// header3 "..."
+area { oHst(), oPar(), oGen(), oVen(), oFin() }
+order 3 // HST->IdGen+HST->Periode+dtos(HST->Date)
+// ValidateRecord {|| DocExist(HST->IdJnl,HST->IdDoc) }
+// ValidateRecord {|| GenExist(HST->IdGen) }
+ValidateRecord {|| MsgDisplay(HST->IdGen) }
+filter {|| ChkPeriode(HST->Periode)<=0}
+detail {|| .f.}
+start trim(DlgValue("IdGen1"))
+#if !empty(DlgValue("IdGen2"))
+  while cblock("HST->IdGen<='"+DlgValue("IdGen2")+"'")
+#endif
+
+group key={|| HST->IdGen } \
+      when={|n|n>0} \
+      text={|| HST->IdGen + " " + padr(GenName(HST->IdGen),30)} \
+      after={|n|n>0}
+group key={|| left(HST->IdGen,4) } \
+      when={||.t.} \
+      format="B" \
+      after={||GenExist(padr(left(HST->IdGen,4),LenIdGen()))}  \
+      text={|| space(LenIdGen()+1)+left(HST->IdGen,4) + " " + \
+               padr(GenName(padr(left(HST->IdGen,4),LenIdGen())),30)\
+      }
+group key={|| left(HST->IdGen,3) } \
+      when={||.t.} \
+      format="B" \
+      after={||GenExist(padr(left(HST->IdGen,3),LenIdGen()))}  \
+      text={|| space(LenIdGen()+1)+left(HST->IdGen,3) + " " + \
+               padr(GenName(padr(left(HST->IdGen,3),LenIdGen())),30)\
+      }
+group key={|| left(HST->IdGen,2) } \
+      when={||.t.} \
+      format="B" \
+      after={||GenExist(padr(left(HST->IdGen,2),LenIdGen()))}  \
+      text={|| space(LenIdGen()+1)+left(HST->IdGen,2) + " " + \
+               padr(GenName(padr(left(HST->IdGen,2),LenIdGen())),30)\
+      }
+group key={|| left(HST->IdGen,1) } \
+      when={||.t.} \
+      format="B" \
+      after={||GenExist(padr(left(HST->IdGen,1),LenIdGen()))}  \
+      text={|| space(LenIdGen()+1)+left(HST->IdGen,1) + " " + \
+               padr(GenName(padr(left(HST->IdGen,1),LenIdGen())),30)\
+      }
+group text={|x|"Gesamt"} \
+      format="B"
+
+column header="Konto" width=LenIdGen()
+column header="Bezeichnung" width=30
+
+column header=padc("Beginnsaldo",LenSolde())+";"+\
+              pads("Debit","Kredit",LenSolde()) \
+       width=LenSolde() \
+       when={||ChkPeriode(HST->Periode)<0} \
+       value={||DcVal("D")} \
+       xsum={|x| DcSolde("D",x) }
+column header="Debit" width=LenMont() \
+       value={||val(HST->Mont)} \
+       when={||HST->DC=="D".and.ChkPeriode(HST->Periode)==0} \
+       xsum={|x| ntomf(x) }
+column header="Kredit" \
+       width=LenMont() \
+       value={||val(HST->Mont)} \
+       when={||HST->DC=="C".and.ChkPeriode(HST->Periode)==0} \
+       xsum={|x| ntomf(x) }
+column header=padc("Beginnsaldo",LenSolde())+";"+\
+              pads("Debit","Kredit",LenSolde())\
+       width=LenSolde() \
+       when={||ChkPeriode(HST->Periode)<=0} \
+       value={||DcVal("D")} \
+       xsum={|x| DcSolde("D",x) }
+
+// total text={|nCount|if(nCount>1,PrintLine(),.t.),""} when={||.t.}
+total text={||""} when={|n|n>0}
+

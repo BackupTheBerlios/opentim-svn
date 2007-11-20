@@ -1,0 +1,81 @@
+// ADR.DEF
+ddAddIndex(\
+  "ADR->Type+padr(upper(trim(ADR->Name)+trim(ADR->Vorname)),40)",\
+  "Standardfilter",\
+  NIL,\
+  {|x|upper(x)}\
+)
+ddAddField("Name","C",40,0)
+ddAddField("Vorname","C",40,0)
+ddAddField("Anrede","C",40,0,NIL,NIL,\
+  NIL,NIL,NIL,\
+  {|x|PickAlc(x)}\
+)
+ddAddField("Name2","C",40,0)
+ddAddField("Rue","C",40,0,NIL,NIL,\
+  NIL,NIL,NIL,\
+  {|x|PickStreet(ADR->Pays,ADR->CP,x)}\
+)
+ddAddField("RueNum","C",4,0,NIL,NIL,\
+  NIL,NIL,NIL, \
+  NIL, NIL, {|x|GetNum(x)}\
+)
+ddAddField("RueBte","C",6,0)
+ddAddField("Pays","C",3,0,"@k@!",NIL,\
+  NIL,NIL,{||ParPlzValidate()},\
+  {|x|PickNat(x)}\
+)
+ddAddField("CP","C",8,0,"@k@!",NIL,\
+  NIL,NIL,{||ParPlzValidate()},\
+  {|x|PickPlz(ADR->Pays,x)}\
+)
+ddAddField("Tel","C",18,0,NIL,NIL,\
+  NIL,NIL,NIL, \
+  NIL,NIL, {|x|TelPostEdit(x,ADR->Pays,ADR->CP)}\
+)
+ddAddField("Fax","C",18,0,NIL,NIL,\
+  NIL,NIL,NIL, \
+  NIL,NIL,{|x|TelPostEdit(x,ADR->Pays,ADR->CP)}\
+)
+ddAddField("GSM","C",18,0)
+ddAddField("email","C",40,0)
+ddAddField("Kontonr","C",14,0,NIL,NIL,\
+  NIL,NIL,NIL,\
+  NIL,NIL,{|x|BqePostEdit(x,ADR->Pays)}\
+)
+ddAddField("Attrib","C",10,0,"@k@!",NIL,\
+  NIL,NIL,NIL,\
+  {|x|PickDbcAttrib("ADRATTR.DBC",x,"Adress-Attribute")}\
+)
+ddAddField("IdLng","C",1,0,"@k@!",NIL,\
+  NIL,NIL,{||empty(ADR->IdLng)\
+  .or.LngLocate(ADR->IdLng)!=NIL\
+  .or.!SetMsg("Sprache muss D oder F sein !")},\
+  {|x|PickLng(x)}\
+)
+ddAddField("DatCrea","D",8,0)
+ddAddField("Memo","M",10,0)
+ddAddField("IdUsr","C",8,0)
+ddAddField("Type","C",3,0,"@k@!",NIL,\
+  NIL,NIL,NIL,\
+  {|x|PickDbcCode("ADRTYPE.DBC",x,"Dienst")}\
+)
+
+ddOnPostEdit("\
+  !empty(ADR->Name).or.!SetMsg('Name : darf nicht leer sein !')\
+")
+ddOnPostEdit("(ADR->DatCrea:=UserDate())!=NIL")
+
+ddPreCreate("DlgDefine('IdAdr',DbfNextId(oAdr(),'0',len(ADR->IdAdr)))")
+ddPreCreate("DlgDefine('AdrType',ADR->Type)")
+ddPreCreate("Confirm('Neue Adresse erstellen (J/N) ?')")
+
+ddOnCreate("(ADR->IdAdr:=DlgValue('IdAdr'))!=NIL")
+ddOnCreate("(ADR->Type:=DlgValue('AdrType'))!=NIL")
+ddOnCreate("(ADR->DatCrea:=UserDate())!=NIL")
+ddOnCreate("(ADR->IdLng:='D')!=NIL")
+ddOnCreate("(ADR->IdUsr:=UserId())!=NIL")
+
+
+ddAddSpecial({||DlgExec("ADRSEEK").and.ActExec("ADRSEEK")},"Suchen... [F8]",-7)
+

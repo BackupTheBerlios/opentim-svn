@@ -1,0 +1,13 @@
+//
+// FINAMO.QRY - generated 31.10.98
+// for FIN.DBF
+//
+column 2 Dok.Nr
+column 3 =utr("Date","Datum","Date") say ""
+column 9 Alter     ;     Saldo pict @K@!
+column 10 Neuer     ;     Saldo pict @K@!
+column 4 =utr("Remark","Bemerkung","Remarque") pict @K@S20
+column 8 Per. pict @K@!
+column 7 St pict !
+column 5 Status
+mask FINAMO

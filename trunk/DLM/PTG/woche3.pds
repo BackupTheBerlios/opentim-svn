@@ -1,0 +1,4 @@
+p("""[=timetrim(VEN->Time1)+"-"+timetrim(VEN->Time2)\
+    +" "+trim1(VEN->VnaMatch)]""")
+p("""[=trim1(ParName(VEN->IdPar),", ")+trim1(VEN->NB1)]""")
+p("""[=trim1(VEN->NB2,", ")+trim1(VEN->NB3,", ")+trim1(VEN->NB4,", ")]""")

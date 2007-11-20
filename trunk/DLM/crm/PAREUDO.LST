@@ -1,0 +1,5 @@
+[=DbfScan(\
+  {oPar(),oPlz(),oNat()},1,NIL,NIL,\
+  "!empty(PAR->email)",\
+  "ActExec('PAREUDO2')"\
+)]

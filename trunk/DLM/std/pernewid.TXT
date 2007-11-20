@@ -1,0 +1,38 @@
+Buchungsperioden umbenennen
+
+Die Buchungsperioden Januar bis Juni 1999, die bisher "9901" bis "9906"
+hieáen, sollen umbenannt werden nach "9813" bis "9818".
+Auáerdem "A001" umbenennen nach "9913"
+
+Vorgehensweise :
+
+0. Vorher eine Sicherheitskopie machen !
+
+1. Ihre Version muss vom 25.11.1999 oder sp„ter sein. 
+
+2. Kopieren Sie die Dateien pernewid.dbc und pernewid.act in Ihr
+   Datenbankverzeichnis.
+
+3. Starten Sie TIM aus der DOS-Eingabeaufforderung mit folgendem Befehl:
+
+   tim data/exec:pernewid
+
+   Best„tigen Sie die Frage, ob TIM die Buchungsperioden umbenennen
+   soll.
+
+4. In der Datei TIM.DBI mssen noch folgende Eintr„ge hinzugefgt
+   werden.
+
+   PerShift 6
+   NoCheckIdDoc *
+
+   "PerShift" besagt, um wieviele Monate das Rechnungsjahr verschoben
+   ist.
+
+   "NoCheckIdDoc" besagt, fr welche Journale der standardm„áige Test
+   "Ungltige Dokumentnummer fr Periode xxxx" NICHT gemacht werden
+   soll. Wenn ein Sternchen da steht, dann heiát das, dass er NIE
+   gemacht werden soll, also komplett abgeschaltet wird. (Dadurch muss
+   man also zu Beginn des neuen Steuerjahres selber dran denken, evtl.
+   wieder mit Dokumentnummer 1 zu beginnen.
+

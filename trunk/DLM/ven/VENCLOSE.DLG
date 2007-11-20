@@ -1,0 +1,65 @@
+// VENCLOSE.DLG
+// Siehe VENCLOSE.ACT und "OnVenClose" in der TIM.INI
+// field block={|x|SetTplIni(x)} \
+//     caption="Druckparametersatz " \
+//     value=padr("LISTE",LenIdTpl()) \
+//     picture="@k@!" \
+//     pick={|x|PickTpl("INI",x)}
+title "Cl“turer "+MsgIdJnlDoc()
+field name="MontR" \
+    caption=padr("Brut HTVA",17) \
+    value=VEN->MontR \
+    when={||.f.} \
+    color="N/W" \
+    block=fieldblock("MontR")
+field name="remise" \
+    caption="Remise  " \
+    value=VEN->Remise \
+    picture="@k@!" \
+    postedit={|x|GetNum(x)}\
+    block=fieldblock("Remise") \
+    valid={||VenVnlUpdate().and.ph_Refresh()} \
+    attrib="N"
+field name="mont" \
+    caption=" %  = " \
+    when={||.f.} \
+    color="N/W" \
+    block={||ntom(val(VEN->Mont)-val(VEN->MontT)-val(VEN->MontR))}
+field name="mont2" \
+    caption="Total net htva   " \
+    when={||.f.} \
+    color="N/W" \
+    block={||ntom(val(VEN->Mont)-val(VEN->MontT))}
+field name="MontT" \
+    caption=padr("TVA "+RegText(VEN->IdReg),17) \
+    value=VEN->MontT \
+    when={||.f.} \
+    color="N/W" \
+    block=fieldblock("MontT")
+field name="Mont" \
+    caption="Total TVAC       " \
+    value=VEN->Mont \
+    when={||.f.} \
+    color="N/W" \
+    block=fieldblock("Mont")
+field name="spc" \
+    caption="" \
+    when={||.f.} \
+    value=""
+field name="IdMfc" \
+    caption="Mode de paiement " \
+    value=VEN->IdMfc \
+    picture="@k@!" \
+    block=fieldblock("IdMfc") \
+    pick={||PickIfc(VEN->IdMfc,VEN->IdJnl,MsgIdJnlDoc())} \
+    valid={||VenMfcValidate()}
+field name="DatEch" \
+    caption="Valable jusqu'au " \
+    value=VEN->DatEch \
+    block=fieldblock("DatEch") \
+    valid={||ph_refresh()}
+// field block={|x|SetPreview(x)} \
+//     caption2=" Seitenvorschau " \
+//     value="X" \
+//     reader={|g|CbxReader(g)}
+

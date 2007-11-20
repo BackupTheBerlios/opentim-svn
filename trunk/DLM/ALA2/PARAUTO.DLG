@@ -1,0 +1,46 @@
+// PARAUTO.DLG
+// called from PARAUTO.ACT
+title "Unterhaltsrechnung ausstellen"
+before DlgDefault("Date",UserDate())
+before DlgDefine("Wartung",PAR->Wartung)
+before DlgDefine("OldUntPreis",PAR->UntPreis)
+before DlgDefine("OldUntJahr",PAR->UntJahr)
+before DlgDefine("IdPar1",PAR->IdPar2)
+before DlgDefine("IdPar2",PAR->IdPar)
+field name="Date" \
+    caption="Datum Rechnung "
+field name="Wartung" \
+    caption="Datum Wartung "
+field name="UntJahr" \
+    caption="Jahr "
+field name="IdPar2" \
+      caption="Baustelle :           " \
+      picture="@k@!"\
+      when={||.f.}\
+      pick={|x|PickPar("P",x,"Baustelle")}\
+      attrib="N"
+field caption=" : " \
+      when={||.f.} \
+      color="N/W" \
+      block={||padr(DbfPeek(oPar(),DlgValue("IdPar2"),"ParName()",""),30)}
+field name="IdPar1" \
+      caption="Fakturationsadresse : " \
+      picture="@k@!"\
+      pick={|x|PickPar("P",x,"Fakturationsadresse")}\
+      attrib="N"
+field caption=" : " \
+      when={||.f.} \
+      color="N/W" \
+      block={||padr(DbfPeek(oPar(),DlgValue("IdPar1"),"ParName()",""),30)}
+field name="Index1" \
+    caption="Index Vorjahr " \
+    postedit={|x|GetNum(x,2,0)}
+field name="Index2" \
+    caption="Index dieses Jahr " \
+    postedit={|x|GetNum(x,2,0)}
+// field caption="W„hrung  " \
+      name="IdDev"\
+      picture="@k@!"\
+      pick={|x|PickDev(x)}\
+      valid={||DevExist(DlgValue("IdDev"))}
+

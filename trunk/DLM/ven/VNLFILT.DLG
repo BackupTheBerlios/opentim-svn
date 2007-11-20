@@ -1,0 +1,89 @@
+// VNLFILT.DLG
+title "Fakturierung pro Artikel : Filter setzen"
+// field name=""
+before DlgDefault("VNLFILT.IdPar",space(LenIdPar()))
+before DlgDefault("Date1",ctod(""))
+before DlgDefault("Date2",ctod(""))
+before DlgDefault("VNLFILT.IdJnl",space(LenIdJnl()))
+// before DlgDefault("nk"," ")
+// before DlgDefault("nl"," ")
+// before DlgDefault("nm"," ")
+// field name="nk" \
+    caption2=" nur Kunden" \
+    reader={|g|CbxReader(g)}
+// field name="nl" \
+    caption2=" nur Lieferanten" \
+    reader={|g|CbxReader(g)}
+// field name="nm" \
+    caption2=" nur Mitarbeiter" \
+    reader={|g|CbxReader(g)}
+
+field name="VNLFILT.IdJnl" \
+    caption="Journal " \
+    picture="@k@!" \
+    pick={|x|DbfPick(\
+              {oJnl()},\
+              utr("Select Journal","Auswahl Journal","Choix journal"),\
+              "JNLPICK",\
+              x,\
+              "Alias=='VEN'"\
+    )}
+field name="VNLFILT.IdPar" \
+    caption="Nur Partner " \
+    picture="@k@!" \
+    pick={|x|PickPar(NIL,x)} \
+    postedit={|x|GetIdPar(x)}
+field block={|x|SetPeriode(x)} \
+    picture="@k@!" \
+    caption=utr("Period from-until ","Periode von-bis ","P‚riodes de-… ") \
+    valid={||ph_refresh()} \
+    pick={|x|PickPerRange(x)}
+
+
+field name="Date1" \
+    caption="Datum : vom " \
+    attrib="N"
+field name="Date2" \
+    caption=" bis zum "
+
+// field name="IdNat" \
+    caption="Nur aus folgendem Land/PLZ " \
+    picture="@k@!" \
+    pick={|x|PickNat(x,"Nur aus folgendem Land :",1)} \
+    attrib="N"
+// field name="IdPlz" \
+    caption=" " \
+    picture="@k@!" \
+    pick={|x|PickPlz(DlgValue("IdNat"),x)}
+// field name="IdPrt" \
+    caption="Nur Partnerart " \
+    picture="@k@!" \
+    valid={||ph_refresh()}\
+    pick={|x|PickPrt(NIL,"Partnerart",x)} attrib="N"
+// field block={||padr(PrtName(DlgValue("IdPrt")),30)} \
+      when={||.f.} color="N/W"
+after DlgDefine("VnlFilter",\
+  "ChkPeriode(VenField(VNL->IdJnl+VNL->IdDoc,{||VEN->Periode}))==0"\
+)
+after empty(DlgValue("VNLFILT.IdJnl")).or.\
+  DlgPlus("VnlFilter",".and.VNL->IdJnl=='"+DlgValue("VNLFILT.IdJnl")+"'")
+// after empty(DlgValue("IdPlz")).or.\
+  DlgPlus("ParFilter",".and.PAR->CP=='"+DlgValue("IdPlz")+"'")
+// after empty(DlgValue("nk")).or.\
+  DlgPlus("ParFilter",".and.'K'$PAR->Attrib")
+// after empty(DlgValue("nl")).or.\
+  DlgPlus("ParFilter",".and.'L'$PAR->Attrib")
+// after empty(DlgValue("nm")).or.\
+  DlgPlus("ParFilter",".and.'M'$PAR->Attrib")
+after (empty(getvar("Date1"))\
+      .and.empty(getvar("Date2")).and.empty(getvar("VNLFILT.IdPar")))\
+      .or.DlgPlus("VnlFilter",".and.DocExist(VNL->IdJnl,VNL->IdDoc)")
+after empty(DlgValue("Date1")).or.\
+  DlgPlus("VnlFilter",".and.dtos(VEN->Date)>='"+dtos(DlgValue("Date1"))+"'")
+after empty(DlgValue("Date2")).or.\
+  DlgPlus("VnlFilter",".and.dtos(VEN->Date)<='"+dtos(DlgValue("Date2"))+"'")
+after empty(DlgValue("VNLFILT.IdPar")).or.\
+  DlgPlus("VnlFilter",".and.VEN->IdPar=='"+DlgValue("VNLFILT.IdPar")+"'")
+
+// after empty(DlgValue("IdPrt")).or.
+

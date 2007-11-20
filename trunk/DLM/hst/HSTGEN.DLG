@@ -1,0 +1,44 @@
+// Historik Generalkonten
+before SetDevise(DevDefault(MemPer1))
+before DlgDefault("HSTGEN.IdGen1",space(LenIdGen()))
+before DlgDefault("HSTGEN.IdGen2",space(LenIdGen()))
+before DlgDefault("HSTGEN.IdJnl",space(LenIdJnl()))
+before DlgDefault("HSTGEN.HstFilter","")
+// before DlgDefault("HSTGEN.SumByJnl"," ")
+
+#include "PERIODE.DLG"
+
+#include "PREVIEW.DLG"
+
+field block={||""}
+
+field name="HSTGEN.IdGen1" \
+    caption=utr("only accounts from ","nur Konten von ","comptes de ") \
+    pick={|x|PickGen(NIL,x)} \
+    attrib="N"
+field name="HSTGEN.IdGen2" \
+    caption=utr(" until "," bis "," … ") \
+    pick={|x|PickGen(NIL,x)}
+
+field name="HSTGEN.IdJnl" \
+    caption=utr("only transactions in journal ","nur Buchungen im Journal ","seulement journal ") \
+    picture="@k@!" \
+    pick={|x|DbfPick(\
+              {oJnl()},\
+              if(MemLang1=="D","Auswahl Journal","Choix journal"),\
+              "JNLPICK",\
+              x,\
+              "'G'$JNL->Attrib"\
+    )}
+
+field name="HSTGEN.SumByJnl"\
+    caption2=utr(" also sum by journal"," auch Summen pro Journal"," ventiler ‚galement par journal") \
+    default=" " \
+    reader={|g|CbxReader(g)}
+
+#include "ASPDF.DLG"
+#include "TOCSV.DLG"
+
+//after empty(DlgValue("HSTGEN.IdJnl"))\
+// .or.DlgDefine("HstFilter","HST->IdJnl=='" + DlgValue("IdJnl") + "'")
+after AppSaveMem()

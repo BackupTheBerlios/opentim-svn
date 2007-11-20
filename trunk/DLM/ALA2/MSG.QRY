@@ -1,0 +1,13 @@
+//
+// MSG.QRY - generated 20.02.03
+// for MSG.DBF
+//
+column 3 Datum say ""
+column 12 Name pict @K@S25
+column 4 Kurzbeschreibung pict @K@S24
+column 13 Ref. pict @k@!
+column 11 Maske pict @K@!
+column 10 ID pict @K@!
+column 1 IdUsr pict @K@!
+mask MSG
+order 2

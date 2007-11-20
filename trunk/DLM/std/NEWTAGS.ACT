@@ -1,0 +1,18 @@
+// newtags.act
+Confirm("NEWTAGS.ACT : changes all {...} to [...] !",MsgSure())
+SendConsole("NEWTAGS.ACT : Prozedur gestartet.")
+DlgDefine("b",{||TplStrTran('{','[').and.TplStrTran('}',']')})
+DbfScan(\
+  {oTpl()},1,NIL,NIL,".t.",\
+  "TryRecLock(DlgValue('b'))"\
+)
+DbfScan(\
+  {oTax()},1,NIL,NIL,NIL,\
+  "TryRecLock(DlgValue('b'))"\
+)
+DbfScan(\
+  {oIfc()},1,NIL,NIL,NIL,\
+  "TryRecLock(DlgValue('b'))"\
+)
+SendConsole("NEWTAGS.ACT : Prozedur beendet.")
+Warning("Vorgang beendet !")

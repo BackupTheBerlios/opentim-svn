@@ -1,0 +1,35 @@
+// RTF-Text
+// 20040130 : Ein "Å" kam seit umstellung auf dos2latin1() als ¸ raus.
+Initialize     ""
+Reset          ""
+FormFeed       ""
+// FormFeed       chr(12)
+// LineFeed       "\par"+chr(13)+chr(10)
+Font 10cpi 10 12/72 ""
+Font 12cpi 12 12/72 ""
+Font 15cpi 15 12/72 ""
+Font 17cpi 17 12/72 ""
+Font 20cpi 20 12/72 ""
+BoldOn  "\b "
+BoldOff "\b0 "
+UnderOn  "\ul "
+UnderOff "\ul0 "
+// UnderOn  "{\ul "
+// UnderOff "\ul0"
+ItalOn  "\i "
+ItalOff "\i0 "
+convert {|x|dos2latin1(x)}
+convert "≥" to "\'b3"
+// convert chr(252) to "\'b3"
+// convert chr(237) to "\'f8"
+// convert chr(253) to "\'b2"
+// #include "DOS2WIN.CVT"
+convert chr(141) to " "
+convert chr(255) to " "
+// ^ : start-of-line marker
+convert "^- " to "\fi-160\li160\tl160 - \tab "
+// convert chr(13)+chr(10) to "\par "
+convert chr(13)+chr(10) to "\line "
+// convert chr(13)+chr(10)+"- " to '\par \fi-160\li160\tl160 {{\field{\*\fldinst SYMBOL 108 \\f "Wingdings" \\s 10}{\fldrslt\f14\fs20}}} \tab '
+// convert chr(13)+chr(10)+"- " to '\par \fi-160\li160\tl160 {{\field{\*\fldinst SYMBOL 108 \\f "Wingdings" \\s 10}{\fldrslt\f14\fs10}}} \tab '
+

@@ -1,0 +1,33 @@
+//
+// PAR5.QRY - generated 09.06.1999
+// for PAR.DBF
+//
+column 43 GebDat
+column 33 Name (Anrede) pict @K@S25
+column 41 Straáe, Nr. pict @k@s28
+column 47 Sex pict @k@!
+column 9 Telefon
+column 19 Attr pict @K@!@s4
+column 1 Nr. pict @K@!
+column 8 Land pict @K@!
+column 6 PLZ pict @K@!
+column 31 Ort pict @K@S15
+column 29 R pict @K@!
+column 12 MWSt. pict @K@!
+column 32 Anrede
+column 3 Name 1
+column 4 Name 2
+column 10 Fax
+column 11 Bank (1)
+column 38 Bank (2)
+column 21 Spr. pict @K@!
+column 20 ZA pict @K@!
+column 36 W„ pict @K@!
+column 28 Erstellt am say ""
+column 7 A pict @K@!
+column 2 G-Kto
+column 14 PG pict @K@!
+mask PAR
+order 5
+help PAR
+keyvalue ""

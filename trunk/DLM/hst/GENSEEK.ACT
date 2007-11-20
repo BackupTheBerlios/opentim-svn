@@ -1,0 +1,3 @@
+// GENSEEK.ACT
+!empty(DlgValue("GenSearch"))
+ddEditSearch(DlgValue("GenFilter"))

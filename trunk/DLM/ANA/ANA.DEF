@@ -1,0 +1,12 @@
+// Anpassungen ANA.DBF
+ddAddSpecial({||AnaRename()}, MsgMnuRename(), -31 )
+ddAddSpecial(\
+  {||DbfEdit(\
+    {oHst(),oPar(),oAna(),oGen()},\
+    MnuItemName()+" : " + trim(AnaName()) ,\
+    "HSTANA",NIL,NIL,ANA->IdAna\
+  )}, \
+  "~Historik                 [F9]",\
+  -8\
+)
+

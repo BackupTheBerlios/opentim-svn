@@ -1,0 +1,3 @@
+setvar("Date",PickDate(getvar("Date")))
+RETURN setvar("Date",UserDate()) if getvar("Date") == NIL
+ddQryReset("DLSDAY")

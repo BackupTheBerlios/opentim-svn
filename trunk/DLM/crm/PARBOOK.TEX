@@ -1,0 +1,39 @@
+% PARBOOK.TEX
+% Template to be parsed by TIM. Author Luc Saffre. PAC Systems Eupen
+%
+
+\documentclass[ngerman,12pt,twoside,a5paper]{tinybook}
+
+% input encoding
+\usepackage[cp850]{inputenc}
+% N.B.: Windows : ansinew
+%       Linux   : latin1
+
+\usepackage[french,english,estonian,ngerman]{babel}
+
+\renewcommand{\familydefault}{cmss}
+% \renewcommand{\familydefault}{cmr}
+
+\setlength{\parskip}{0pt} % .2\baselineskip}
+\setlength{\parindent}{0pt}
+
+\begin{document}
+\selectlanguage{ngerman}
+
+{\huge Adressbuch} \hfill Stand: \today
+
+von Luc Saffre, GÅlcherstra·e 63, 4700 Eupen,
+Tel.~003287.56.06.49,
+EMail:~luc.saffre@gmx.net
+
+\bigskip
+
+% \clearpage
+
+[etc do DbfScan(\
+  {oPar(),oPlz(),oNat()},\
+  2,"",NIL,\
+  DlgValue("ParFilter"),\
+  "mparse('PARBOOK2.TEX')"\
+  )]
+\end{document}

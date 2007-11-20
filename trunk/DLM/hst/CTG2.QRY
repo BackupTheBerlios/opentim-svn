@@ -1,0 +1,12 @@
+//
+// C:\SOFT\RELEASE\TIM220\STD01D\CTG2.QRY - generated 18.11.96
+// for CTG.DBF
+//
+column 2 Per. pict @K@!
+column 1 Konto pict @K@!
+column 6 Bezeichnung
+column 3 Debit pict @K@!
+column 4 Kredit
+column 5 Saldo
+order 2
+help CTG

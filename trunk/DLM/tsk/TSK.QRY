@@ -1,0 +1,22 @@
+//
+// TSK.QRY - generated 22/02/07
+// for TSK.DBF
+//
+column 3 Date say ""
+column 13 Texte pict @k@s25
+column 10 Client block padr(ParName(TSK->IdPar),40) pict @K@s20
+column 5 @J
+column 6 @S
+column 7 @M
+column 8 @A
+column 9 Type pict @K@!
+column 1 Nø
+column 11 Jnl pict @K@!
+column 12 IdDoc
+column 2 User pict @K@!
+column 4 Time
+column 15 LastDate say ""
+column 16 LastTime
+column 14 Error pict @k@s30
+mask TSK
+order 2

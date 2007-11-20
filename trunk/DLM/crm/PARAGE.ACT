@@ -1,0 +1,5 @@
+// PARAGE.ACT
+#static
+RETURN space(6) if empty(stod(PAR->GebDat))
+RETURN padl(ntrim(int((UserDate()-stod(PAR->GebDat))/365))+"j"+\
+       ntrim(int(((UserDate()-stod(PAR->GebDat)) % 365)/30.42)),5)+"m"

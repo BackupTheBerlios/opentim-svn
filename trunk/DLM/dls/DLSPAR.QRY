@@ -1,0 +1,19 @@
+//
+// DLSPAR.QRY - generated 27.05.07
+// for DLS.DBF
+//
+window 16 76 0 0 
+column 0 WT block padr(jour(DLS->Date),2) skip .t.
+column 2 Datum say ""
+column 15 Dauer block " "+DLS->Dauer expr qton(DLS->Dauer) say h2time(nSum,6)
+column 6 Art der DL block padr(DbfPeek(oDla(),DLS->IdDla,"DLA->Ref",""),40) pict @k@s8 skip .t.
+column 16 Prj
+column 8 Bemerkung pict @k@s30
+column 7 S pict @K@!
+column 9 Z pict @K@!
+column 1 DL-Nr. skip .t.
+column 5 User pict @K@! skip .t.
+column 0 Benutzer block padr(ParName(DLS->IdPar),10) skip .t.
+column 10 Partner pict @K
+mask DLS
+order 4

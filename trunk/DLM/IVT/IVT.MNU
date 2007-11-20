@@ -1,0 +1,18 @@
+#if HasOption("ODS")
+MnuAddTitle(utr("~Inventur","~Inventur","~Inventaire"))
+MnuAddItem(utr("~Inventuren erfassen",\
+              "~Inventuren erfassen",\
+              "~Encodage"\
+          ),{||DocEdit("IVT",MnuItemName())})
+MnuAddItem(utr("~Lagerbest„nde rekonstruieren",\
+              "~Lagerbest„nde rekonstruieren",\
+              "~Reconstruire compteurs de stock")\
+              ,{||ActExec("STKRESET")})
+MnuAddItem(utr("~Artikelliste Bildschirm",\
+              "~Artikelliste Bildschirm",\
+              "Inventaire … l'~‚cran"),\
+              {||ArtEdit("ARTIVT",MnuItemName(),\
+              "!empty(ART->Lager+ART->Bestellt+ART->Auftrag)")})
+MnuAddItem(utr("~Print","~Drucken","~Imprimer"),\
+  {||RepPrint("ARTIVT01","ARTIVT",MnuItemName())})
+#endif

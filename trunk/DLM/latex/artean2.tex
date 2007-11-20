@@ -1,0 +1,11 @@
+% ARTEAN2.TEX prints 1 etiquette for current article
+[etc do DlgPlus("CellCount",1)]
+\etiquette{
+[=if(DlgValue("AsPdf")=="X","\small","\tiny")]
+[=if(DlgValue("AsPdf")=="X","\textbf{",NIL)][=ART->Name1] \newline
+R‚f. [=trim(ART->Ref)] \newline
+[=if(DlgValue("AsPdf")=="X","}",NIL)]
+\barheight=7mm
+\EAN [=strtran(trim(ART->EAN),".","")]
+}
+[=if(DlgValue("CellCount") % DlgValue("ColCount")==0,"\etirowsep","\etisep")]

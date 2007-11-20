@@ -1,0 +1,25 @@
+// Maskenbefehlsbereiche
+login|Benutzerangaben
+etc|sonstige Maskenbefehle
+par|Partner
+prj|Projekte
+art|Artikel
+gra|Artikelgruppen
+msg|Korrespondenz
+ven|Fakturationsdokumente
+// ods|O.D.s de stock
+vnl|Fakturationsdokumente (Inhalt)
+fin|Kassendokumente
+trm|Agenda-EintrÑge
+set|Druckereinstellungen
+hst|Historik Buchhaltung
+ctg|Sammelhistorik Generalkonten
+ctp|Sammelhistorik Partnerkonten
+cts|Sammelhistorik Lagerhistorik
+tab|Tabellenbefehle
+tim|globale TIM-Befehle
+// iml|Inhalt Buchungsdokumente DEF_IMP
+// imp|Buchungsdokumente        DEF_IMP
+// mvi|Historik Buchungen       DEF_IMP
+// dtl|StÅcklisteneintrÑge      DEF_HOLZ
+// cls|...                      DEF_HOLZ

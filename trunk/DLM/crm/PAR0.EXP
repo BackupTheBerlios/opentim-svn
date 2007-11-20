@@ -1,0 +1,29 @@
+// Serienbriefdatei mit "chr(11)" in Adresse
+OutputFile    "c:\temp\par.txt"
+Delimiter     chr(9)
+FieldUpdate   Name        trim1(PAR->Allo)+trim1(PAR->Vorname)+trim(PAR->Name)
+FieldUpdate   Adresse     if(empty(Name2),"",trim(PAR->Name2)+chr(11))+if(empty(Name3),"","zu Hd. "+trim(PAR->Name3)+chr(11))+trim(ParStreet())
+FieldUpdate   City        ParCity()
+FieldUpdate   Briefanrede if(empty(Name4),"Sehr geehrte Damen und Herren,",trim(PAR->Name4))
+FieldUpdate   Tel         trim(PAR->Tel)
+FieldUpdate   Fax         trim(PAR->Fax)
+// Siehe auch DOS2WIN.CVT
+convert "„" to "ä"
+convert "" to "Ä"
+convert "”" to "ö"
+convert "™" to "Ö"
+convert "" to "ü"
+convert "š" to "Ü"
+convert "á" to "ß"
+convert "…" to "à"
+convert "ƒ" to "â"
+convert "‚" to "é"
+convert "ˆ" to "ê"
+convert "Š" to "è"
+convert "Œ" to "î"
+convert "“" to "ô"
+convert "–" to "û"
+convert "—" to "ù"
+convert "‰" to "ë"
+convert "‡" to "ç"
+convert "ñ" to "±"

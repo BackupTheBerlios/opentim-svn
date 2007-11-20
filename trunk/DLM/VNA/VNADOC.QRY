@@ -1,0 +1,26 @@
+//
+// VNADOC.QRY - generated 11/10/1999
+// for VNA.DBF
+//
+window 15 76 0 0 
+column 3 NøArt pict @K@!
+column 4 NøCli
+column 5 DC
+column 6 Qte
+column 7 QteUs
+column 8 PrixU
+column 9 Attrib pict @K@!
+column 12 Date say ""
+column 13 NB1
+column 14 _ArtRef
+column 15 Match
+column 16 _ObjName
+column 17 _ParName
+column 18 _NB1orArt pict @K@S28
+column 19 Memo
+column 20 Satis
+column 21 Code pict @K@!
+column 22 QteForm
+column 23 IdInt
+column 24 QteStat
+order 1

@@ -1,0 +1,32 @@
+// PLS.DEF
+ddAddField("MasterDoc","C",200,0,\
+  "@k@s30","",\
+  NIL,NIL,\
+  {||empty(PLS->MasterDoc)\
+     .or.FileExist(trim(PAR->MasterDoc))\
+     .or.Confirm(SetMsg(),MsgSure())\
+  },{|x|PickFile(x,"*.odt")},{||.t.},\
+  NIL)
+
+ddPreCreate('setvar("CopyBuf",CopyRec())')
+ddPreCreate('DlgExec("PLSCREA")')
+ddOnCreate('empty(getvar("DoCopy")).or.PasteRec(getvar("CopyBuf"))')
+ddOnCreate('(PLS->IdPls:=getvar("IdPls"))!=NIL')
+ddOnCreate('(PLS->Name:=getvar("Name"))!=NIL')
+ddOnCreate('empty(getvar("DoCopy")).or.PlsFillFrom(getvar("CopyFrom"))')
+ddAddSpecial(\
+  {||PlsPickAttrib()}, \
+  "~Attribute                     ",\
+  -36\
+)
+ddAddSpecial(\
+  {||ActExec("PLSEXEC")}, \
+  "E~x‚cuter                      ",\
+  NIL\
+)
+ddAddSpecial(\
+  {||PlsRename()}, \
+  MsgMnuRename(),\
+  -31\
+)
+

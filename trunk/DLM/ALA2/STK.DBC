@@ -1,0 +1,6 @@
+// Lagerbestandsz„hler
+Lager|Q|C|IdJnl$"LEG;ABZ;IVT;LAG"|
+// Auftrag  |C|IdJnl=="VKB" .or.(IdJnl=="VKL".and.!empty(Match))
+// Bestellt |D|IdJnl=="EKB" .or.(IdJnl=="EKL".and.!empty(Match))
+// Lieferscheine Verkauf debitieren das Lager
+// Bestellscheine Verkauf "kreditieren" das Lager

@@ -1,0 +1,9 @@
+//
+// DLPDLS.QRY - generated 22.09.05
+// for DLP.DBF
+//
+window 11 37 2 42 
+column 2 Nr. pict @K@!
+column 0 Name block padr(ParName(DLP->IdPar),25) skip .t.
+column 3 Seq pict @K@! skip .t.
+order 1

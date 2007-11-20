@@ -1,0 +1,12 @@
+//
+// PTL.QRY - generated 15.02.03
+// for PTL.DBF
+//
+column 6 von pict @K@!
+column 7 bis pict @K@!
+column 10 Pause pict @K@!
+column 8 Dauer pict @K@!
+column 11 IdRes pict @K@!
+column 12 Attrib pict @K@!
+column 9 Remarq
+order 2

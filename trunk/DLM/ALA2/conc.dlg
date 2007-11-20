@@ -1,0 +1,25 @@
+// Suite … votre demande...
+before DlgDefault("Date",ctod(""))
+before DlgDefault("VD","V")
+before DlgDefault("RF","R")
+before DlgDefine("IdLng",PAR->Langue)
+title "Concerne...:"
+field name="RF" \
+    caption="Concerne: ... " \
+    caption2=" (R‚novation/Fourniture)"\
+    picture="!"\
+    valid={||DlgValue("RF")$"RF".or.!SetMsg("R oder F eingeben !")}
+field block={||trim(PAR->NB2)} when={||.f.} color="N/W"
+field name="VD" \
+    caption="suite …... " \
+    caption2=" (notre Visite/votre Demande)"\
+    picture="!"\
+    valid={||DlgValue("VD")$"VD".or.!SetMsg("V oder D eingeben !")}
+field name="Date" \
+    caption="... du "
+field name="IdLng" \
+    caption="Langue " \
+    caption2=" (D/F/N)"\
+    picture="!"\
+    valid={||DlgValue("IdLng")$"DFN".or.!SetMsg("D, F oder Neingeben !")}
+after SetTplLang(DlgValue("IdLng"))

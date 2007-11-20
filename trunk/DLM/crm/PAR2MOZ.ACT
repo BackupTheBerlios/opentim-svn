@@ -1,0 +1,7 @@
+// creates an Eudora "server address book"
+// add the following into your eudora.ini
+// [Settings]
+// ExtraNicknameDirs=t:\data\aliases
+// then run tim /exec:pareudo
+DrvLoad("TXTWIN")
+fparse("PAR2MOZ.LST","t:\data\aliases\par2moz.txt","[]")

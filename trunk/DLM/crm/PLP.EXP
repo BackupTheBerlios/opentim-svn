@@ -1,0 +1,8 @@
+// PLP-Partner nach Excel exportieren
+
+OutputFile    "PLP.TXT"
+Delimiter     chr(9)
+LineValidate  ParExist(PLP->IdPar2)
+#include "PARCOLS.EXP"
+#include "DOS2WIN.CVT"
+OnSuccess AppShell("excel.bat "+i_OutputFile(),NIL,.f.)

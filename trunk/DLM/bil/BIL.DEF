@@ -1,0 +1,4 @@
+// Anpassungen BIL.DBF
+ddAddSpecial({||ActExec("BILNEWID")}, MsgMnuRename(), -31 )
+ddAddField("Num","C",5,0)
+ddAddField("Code","C",10,0)

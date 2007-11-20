@@ -1,0 +1,12 @@
+//
+// VNLEKR.QRY - generated 21.05.06
+// for VNL.DBF
+//
+window 11 80 11 0 
+column 6 =utr("Accnt","Konto","Compte") pict @K@!
+column 21 =utr("Description","Bezeichnung","D‚signation") pict @K@S32
+column 13 M pict @K@! skip !empty(VNL->IdTax)
+column 14 =utr("inclTax","Brutto","TVAC")
+column 16 =utr("price","Netto","htva") skip !empty(VNL->cMont)
+column 11 =utr("VAT","MWSt","TVA") pict @K@! skip .t.
+mask VNL

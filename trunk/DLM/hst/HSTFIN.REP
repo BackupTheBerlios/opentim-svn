@@ -1,0 +1,104 @@
+// Kassen- und Finanzbcher drucken
+// Dokumentation : siehe HSTJNL.TXT
+header1 "Journal "+DlgValue("IdJnlFin") + " : " + trim(JnlName(DlgValue("IdJnlFin")))
+header2 PerText(cblock("JNL->IdJnl=='"+DlgValue("IdJnlFin")+"'"))
+// header3 "Betr„ge in "+SetDevise()
+area { oHst(), oPar(), oGen(), oFin(), oVen() }
+order 6 // IdJnl+Periode+IdDoc (siehe HST.DEF)
+start DlgValue("IdJnlFin")+trim(MemPer1)
+while {|| HST->IdJnl==DlgValue("IdJnlFin").and.ChkPeriode(HST->Periode)<=0}
+ValidateRecord {|| DocExist(HST->IdJnl,HST->IdDoc)}
+ValidateRecord {|| GenExist(HST->IdGen)}
+ValidateRecord {|| empty(HST->IdCtr).or.ParExist(HST->IdPar)}
+#if MemLang1=="D"
+  OnNoValue {|| Confirm(MsgIdJnlDoc() + \
+    " : Buchung " + HST->IdGen + \
+    " konnte keiner Kolonne zugewiesen werden !", \
+    MsgContinue() \
+  )}
+#endif
+#if MemLang1!="D"
+  OnNoValue {|| Confirm(MsgIdJnlDoc() + \
+    " : l'imputation " + HST->IdGen + \
+    " n'est attribu‚e … aucune colonne !", \
+    MsgContinue() \
+  )}
+#endif
+group key={|| HST->IdJnl + HST->Periode + HST->IdDoc }
+group key={|| HST->IdJnl + HST->Periode } \
+      text={|x|"Periode "+HST->Periode } \
+      after={||DlgValue("subttl")=="X".and.MemPer1!=MemPer2}
+group text={|x|if(MemLang1=="D","Gesamt","Total")}
+column header=if(MemLang1=="D","Dok.Nr","NøDoc") width=6 text={||HST->IdDoc} when={|grp|IsFirst(1)}
+column header=if(MemLang1=="D","Datum","Date") width=8 text={||dtocf(HST->Date,"dd.mm.yy")} \
+       when={|grp|IsFirst(1)}
+column header=if(MemLang1=="D","Per.","P‚r.") width=4 text={||HST->Periode} \
+       when={|grp|IsFirst(1)}
+column header=if(MemLang1=="D","Konto","Compte") width=LenIdCtr()+1+LenCompte() \
+       text={||if(\
+         empty(HST->IdCtr),\
+         padr("G",LenIdCtr())+" "+padr(HST->IdGen,LenCompte()),\
+         HST->IdCtr+" "+padr(HST->IdPar,LenCompte())\
+       )}
+column header=if(MemLang1=="D","Bezeichnung","Libell‚") width=20 text={||padr(HstCptName(),20)}
+
+column header=utr("Debit ","Debit ","D‚bit ")+SetDevise() \
+       width=LenMntF() \
+       when={||HST->DC=="D"} \
+       value={||HstDcMont("D",SetDevise())} \
+       text={|x|ntomf(x)} \
+       xsum={|x| ntomf(x)}
+column header=utr("Credit ","Kredit ","Cr‚dit ")+SetDevise() \
+       width=LenMntF() \
+       when={||HST->DC=="C"} \
+       value={||HstDcMont("C",SetDevise())} \
+       text={|x|ntomf(x)} \
+       xsum={|x| ntomf(x)}
+
+#if JnlIdDev(DlgValue("IdJnlFin"))!=SetDevise()
+  column header=if(MemLang1=="D","Betrag ","Montant ")\
+                +JnlIdDev(DlgValue("IdJnlFin")) \
+         width=LenMntF() \
+         value={||HstDcMont(\
+           JnlDc(DlgValue("IdJnlFin")),\
+           JnlIdDev(DlgValue("IdJnlFin"))\
+         )} \
+         text={|x|ntomf(x,DevDecPos(JnlIdDev(DlgValue("IdJnlFin"))))} \
+         xsum={|x| ntomf(x,DevDecPos(JnlIdDev(DlgValue("IdJnlFin")))) }
+#endif
+// #if DlgValue("EUR")=="X".or.JnlIdDev(DlgValue("IdJnlFin"))=="EUR"
+//   column header="Debit EUR" width=LenMntF() \
+//          when={||HST->DC=="D"} \
+//          value={||HstDcMont("D","EUR")} \
+//          text={|x|ntomf(x,2)} \
+//          xsum={|x| ntomf(x,2) }
+//   column header="Kredit EUR" width=LenMntF() \
+//          when={||HST->DC=="C"} \
+//          value={||HstDcMont("C","EUR")} \
+//          text={|x|ntomf(x,2)} \
+//          xsum={|x| ntomf(x,2) }
+// #endif
+column header=if(MemLang1=="D","Kommentar","Remarque") width=20 \
+       text={||padr(HstDocName(IdJnl,IdDoc,Line),20)}
+column header="Match" width=9 \
+       text={||if(\
+         HST->Match==HST->IdJnl+HST->IdDoc,\
+         space(len(HST->Match)),\
+         HST->Match\
+       )}
+column header="*" width=1 \
+       text={||HST->Satis}
+#if !empty(JnlIdGen(DlgValue("IdJnlFin")))
+  column header="Salden" \
+         width=LenMntF() \
+         text={|x|if(\
+           HstIsLast(),\
+           FIN->Mont2,\
+           if(IsFirst(1),FIN->Mont1,space(LenMont()))  \
+         )}
+#endif
+// total for={||VEN->DC=="D"} text={||"RECHNUNGEN"}
+// total for={||VEN->DC=="C"} text={||"GUTSCHRIFTEN"}
+total text={||""}
+
+

@@ -1,0 +1,32 @@
+//
+// C:\SOFT\RELEASE\TIM220\STD01D\PARVNA.QRY - generated 04.12.96
+// for PAR.DBF
+//
+column 33 Name (Anrede) pict @K@S30
+column 41 Straáe, Nr.
+column 9 Telefon
+column 8 Land pict @K@!
+column 6 PLZ pict @K@!
+column 1 Nr. pict @K@!
+column 31 Ort pict @K@S15
+column 29 R pict @K@!
+column 12 MWSt. pict @K@!
+column 32 Anrede
+column 3 Name 1
+column 4 Name 2
+column 10 Fax
+column 11 Bank (1)
+column 38 Bank (2)
+column 21 Spr. pict @K@!
+column 20 ZA pict @K@!
+column 36 W„ pict @K@!
+column 24 Beruf pict @K@!
+column 25 Frei 1 pict @K@!
+column 26 Frei 2 pict @K@!
+column 27 Frei 3 pict @K@!
+column 28 Erstellt am
+column 7 Grp pict @K@!
+column 19 Attr pict @K@!
+column 2 G-Kto
+mask PARVNA
+order 2

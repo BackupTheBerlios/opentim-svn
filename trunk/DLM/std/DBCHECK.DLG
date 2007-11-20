@@ -1,0 +1,52 @@
+// DBCHECK.DLG : AppReorg(), Rebuild() und TimTest()
+title utr("Database check","Datenbank-Check","Test de la base de donn‚es")
+#if IndExist("DBCHECK")
+field caption=FileFirstLine(DbPath()+"\DBCHECK.IND")
+#endif
+field name="AppIndex" \
+      caption2=utr(" Rebuild index files"," Indexdateien rekonstruieren",\
+                   " reconstruire fichiers index") \
+      value=if(IndExist("INDEX").and.!SetSecureRebuild(),"X"," ") \
+      reader={|g|CbxReader(g)}
+field name="AppRebuild" \
+      caption2=utr(" Compact database"," Datenbank kompaktieren",\
+                   " Compacter la base de donn‚es") \
+      value=if(IndExist("INDEX").and.SetSecureRebuild(),"X"," ") \
+      reader={|g|CbxReader(g)}
+field name="Rebuild" \
+      caption2=utr(" Rebuild summary tables",\
+                   " Sammelhistorik rekonstruieren",\
+                   " Reconstruire historiques mensuels") \
+      value=if(IndExist("REBUILD").and.!SetQuickRebuild(),"X"," ") \
+      reader={|g|CbxReader(g)}
+field name="TimTest" \
+      caption2=utr(" Test data integrity"," Integrit„tstest",\
+                   " Test d'int‚grit‚") \
+      value=if(UserDate()-IndDate("TIMTEST")>5.and.!SetQuickRebuild(),"X"," ") \
+      reader={|g|CbxReader(g)}
+field caption=utr(\
+    "  (the previous test ",\
+    "  (Der letzte Integrit„tstest ",\
+    "  (le dernier test ",\
+  )\
+  +if(\
+    IndExist("TIMTEST"),\
+    utr("was run ","wurde vor ","date depuis ")\
+    +ntrim(UserDate()-IndDate("TIMTEST")) \
+    +utr(" days ago."," Tagen gemacht."," jours."),\
+    utr("failed.","war unvollst„ndig.","‚tait incomplet.")\
+  )+")"
+#include "PREVIEW.DLG"
+// field block={|x|SetTplIni(x)}  picture="@k@!" \
+    caption=utr("Druckparametersatz ","ParamŠtres d'imprimante ") \
+    value=padr("LISTE",LenIdTpl()) \
+    pick={|x|PickTpl("INI",x)}
+// field block={|x|SetPreview(x)} \
+    caption2=if(MemLang1=="D"," Seitenvorschau "," pr‚visualisation") \
+    value="X" \
+    reader={|g|CbxReader(g)}
+field name="AppQuit" \
+      caption2=utr(" Exit TIM when done"," anschlieáend TIM beenden"," quitter ensuite TIM") \
+      value=if(SetSecureRebuild(),"X"," ") \
+      reader={|g|CbxReader(g)}
+

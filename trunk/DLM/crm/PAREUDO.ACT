@@ -1,0 +1,8 @@
+// creates an Eudora "server address book"
+// add the following into your eudora.ini
+// [Settings]
+// ExtraNicknameDirs=t:\data\aliases
+// then run tim /exec:pareudo
+!file("t:\data\aliases\tim.toc").or.FileDelete("t:\data\aliases\tim.toc")
+DrvLoad("TXTWIN")
+fparse("PAREUDO.LST","t:\data\aliases\tim.txt","[]")

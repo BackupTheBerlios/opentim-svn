@@ -1,0 +1,13 @@
+//
+// MSGPAR.QRY - generated 27.01.03
+// for MSG.DBF
+//
+window 18 78 0 0 
+column 3 Datum say ""
+column 4 Titel pict @K@S41
+column 13 Kat. pict @K
+column 5 Nr pict @k@! say ""
+column 1 Autor pict @K@!
+column 0 Lvl block str(MsgLevel(),4,0) skip .t.
+mask MSG
+order 3

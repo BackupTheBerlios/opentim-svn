@@ -1,0 +1,16 @@
+//
+// GENPICKI.QRY - generated 11.10.04
+// for GEN.DBF
+//
+window 18 74 0 0 
+column 5 =utr("Accnt","Konto","Compte")
+column 6 =utr("Description","Bezeichnung","Description")+" "+MemLang1 pict @K@S25
+column 7 =utr("Description","Bezeichnung","Description")+" "+MemLang2 pict @K@S25
+column 9 Z pict @K@!
+column 2 Mws pict @K@!
+column 11 Ko pict @K@!
+column 4 Attrib pict @K@!
+column 12 W„ pict @K@!
+column 16 Match pict @K@s20
+mask GEN
+order 1

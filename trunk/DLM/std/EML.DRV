@@ -1,0 +1,1 @@
+convert {|x|dos2latin1(x)}

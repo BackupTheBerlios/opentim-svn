@@ -1,0 +1,48 @@
+// Analytische Historik filtern
+before DlgDefault("von",0)
+before DlgDefault("bis",10000)
+before DlgDefault("IdJnl",space(LenIdJnl()))
+before DlgDefault("IdPar",space(LenIdPar()))
+before DlgDefault("IdGen",space(LenIdGen()))
+before DlgDefault("IdCtr",space(LenIdCtr()))
+before DlgDefault("Satis"," ")
+title "Analysehistorik filtern"
+field name="IdPar" \
+    caption="nur Partner " \
+    pick={|x| PickPar(NIL,x)}
+field name="IdGen" \
+    caption="nur Generalkonto " \
+    pick={|x| PickGen(NIL,x)} postedit={|x|GetIdGen(x)}
+// field name="IdCtr" \
+    caption="nur Zentralisierungsart " \
+    picture="@k@!" \
+    pick={|x| PickCtr(x)}
+field name="IdJnl" \
+    caption="nur Journal " \
+    picture="@k@!" \
+    pick={|x|DbfPick(\
+              {oJnl()},"Auswahl Journal","JNLPICK",\
+              x,\
+              "'G'$JNL->Attrib"\
+    )}
+field block={|x|SetPeriode(x)} \
+    caption="Periode von-bis " \
+    pick={|x|PickPerRange(x)}
+// field name="Satis" reader={|x|CbxReader(x)} caption2=" nur offene Buchungen"
+after DlgDefine("MvaFilter","ChkPeriode(MVA->Periode)==0")
+after empty(DlgValue("IdJnl")).or.DlgPlus("MvaFilter",\
+        ".and.MVA->IdJnl=='"+DlgValue("IdJnl")+"'"\
+      )
+// after empty(DlgValue("Satis")).or.DlgPlus("MvaFilter",\
+        ".and.MVA->Satis==' '"\
+      )
+after empty(DlgValue("IdPar")).or.DlgPlus("MvaFilter",\
+        ".and.VenExpr(MVA->IdJnl+MVA->IdDoc,'VEN->IdPar')=='"+DlgValue("IdPar")+"'"\
+      )
+after empty(DlgValue("IdGen")).or.DlgPlus("MvaFilter",\
+        ".and.MVA->IdGen='"+trim(DlgValue("IdGen"))+"'"\
+      )
+// after empty(DlgValue("IdCtr")).or.DlgPlus("MvaFilter",\
+        ".and.MVA->IdCtr=='"+DlgValue("IdCtr")+"'"\
+      )
+

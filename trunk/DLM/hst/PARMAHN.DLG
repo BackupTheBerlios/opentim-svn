@@ -1,0 +1,40 @@
+before SetTplIni("MAHN")
+before empty(PAR->IdDev).or.SetDevise(PAR->IdDev)
+// field block={|x|SetPeriode(x)} \
+    picture="@k@!" \
+    caption=utr("Period from-until ","Periode von-bis ","P‚riodes de-… ") \
+    valid={||ph_refresh()} \
+    pick={|x|PickPerRange(x)}
+field caption="W„hrung  " \
+      block={|x|SetDevise(x)}\
+      picture="@k@!"\
+      pick={|x|PickDev(x)}\
+      valid={||DevExist(SetDevise())}
+field name="Kosten" \
+      postedit={|x|GetMont(x)} \
+      caption="Kosten " \
+      default=space(LenMont())
+field name="Termin" \
+      caption="Zahlungstermin " \
+      default=UserDate()+10
+field caption="Einleitender Text:"
+field name="Intro" \
+      picture="30x4" \
+      default=repl(crlf(),4) \
+      reader={|g|MemoReader(g)}
+
+field caption=""
+
+field name="IstLetzte" \
+    caption2=" letzte Mahnung" \
+    value=" " \
+    reader={|g|CbxReader(g)}
+// field name="HstVenCols" \
+      caption="Rechnungsbuch-Optionen  " \
+      picture="@k@!"\
+      pick={|x|PickDbcAttr("HSTVEN.DBC",x)}
+
+#include "PREVIEW.DLG"
+
+after fprint("PARMAHN.TPL","[]")
+after .f.

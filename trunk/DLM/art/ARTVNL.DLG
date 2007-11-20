@@ -1,0 +1,29 @@
+// Renner/Penner-Liste
+title "Export Renner/Penner-Liste"
+before DlgDefault("IdJnl","VKR")
+before DlgDefault("IdPar1",space(LenIdPar()))
+before DlgDefault("IdPar2",space(LenIdPar()))
+field name="IdJnl" \
+    caption="Journal " \
+    picture="@k@!" \
+    pick={|x|DbfPick(\
+              {oJnl()},"Auswahl Journal","JNLPICK",\
+              x,\
+              "Alias=='VEN'"\
+    )}
+field name="IdPar1" \
+    caption="nur Partner von " \
+    pick={|x| PickPar(CtrPrtList(JnlIdCtr(getvar("IdJnl"))),x)} \
+    postedit={|x|GetIdPar(x)} \
+    attrib="N"
+field name="IdPar2" \
+    caption=" bis " \
+    pick={|x| PickPar(CtrPrtList(JnlIdCtr(getvar("IdJnl"))),x)} \
+    postedit={|x|GetIdPar(x)}
+field block={|x|SetPeriode(x)} \
+    caption="Periode von-bis " \
+    pick={|x|PickPerRange(x)}
+
+// #include "PREVIEW.DLG"
+
+after AppSaveMem()

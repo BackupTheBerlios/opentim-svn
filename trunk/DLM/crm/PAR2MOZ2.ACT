@@ -1,0 +1,8 @@
+#static
+toStream(DrvCvtString(trim(PAR->Vorname)))
+toStream(chr(9)+DrvCvtString(trim(PAR->Firme)))
+toStream(chr(9)+DrvCvtString(trim1(PAR->Vorname)+trim(PAR->Firme)))
+toStream(chr(9)+DrvCvtString(trim1(PAR->Vorname)+trim(PAR->Firme)))
+toStream(chr(9)+DrvCvtString(trim(PAR->Email)))
+toStream(chr(9)+DrvCvtString(trim(PAR->Tel)))
+toStream(chr(13)+chr(10))

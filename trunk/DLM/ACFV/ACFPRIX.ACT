@@ -1,0 +1,3 @@
+// ACFPRIX.ART - VK-Preis in EUR abzglich ACF->Remise
+#static
+RETURN val(ART->Prix1)*(100-val(ACF->Remise))/100

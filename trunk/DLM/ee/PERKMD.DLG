@@ -1,0 +1,28 @@
+// MWSt-Erkl„rung
+title if(MemLang1=="D","MWSt-Erkl„rung","D‚claration TVA")
+// field block={|x|SetPeriode(x)} \
+    picture="@k@!" \
+    caption=if(MemLang1=="D","Periode von-bis ","P‚riode de-… ") \
+    pick={|x|PickPerRange(x)}
+#include "PERIODE.DLG"
+#include "PREVIEW.DLG"
+#include "ASPDF.DLG"
+
+// field block={|x|SetTplIni(x)}  picture="@k@!" \
+    caption=if(MemLang1=="D",\
+      "Druckparametersatz ",\
+      "ParamŠtres imprimante "\
+    ) \
+    value=padr("DCLTVA",LenIdTpl()) \
+    pick={|x|PickTpl("INI",x)}
+// field block={|x|SetPreview(x)} \
+    caption2=if(MemLang1=="D",\
+      " Seitenvorschau",\
+      " Pr‚visualisation"\
+    )\
+    value="X" \
+    reader={|g|CbxReader(g)}
+
+after SetMntFormat("S12")
+// after Confirm("Die W„hrung ist : "+SetDevise())
+after AppSaveMem()

@@ -1,0 +1,19 @@
+// RAPAUTOS.ACT
+// called from RAPAUTO.ACT on each PAR
+#static
+#if MemLang1 == "D"
+  DlgDefine("Decide",\
+    Decide("JNQ",ParName()+' : Mahnung erstellen (Ja,Nein,Quit) ?')\
+  )
+#endif
+#if MemLang1 == "F"
+  DlgDefine("Decide",\
+    Decide("ONQ",ParName()+' : imprimer rappel (Oui,Non,Quitter) ?')\
+  )
+#endif
+RETURN .t. if DlgValue("Decide")=="N"
+RETURN .f. if DlgValue("Decide")=="Q"
+RETURN RapGenerate(\
+  DlgValue('Date'),PAR->IdPar,\
+  DlgValue("Detail")=="X"\
+)

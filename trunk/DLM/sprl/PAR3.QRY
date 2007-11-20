@@ -1,0 +1,33 @@
+//
+// C:\SOFT\RELEASE\TIM220\STD220D\PAR3.QRY - generated 18.02.98
+// for PAR.DBF
+//
+column 8 Land pict @K@!
+column 6 PLZ pict @K@!
+column 31 Ort pict @K@S15
+column 7 P pict @K@!
+column 41 Straáe, Nr. pict @k@s20
+column 33 Name +Anrede pict @k@S20
+column 19 Attr pict @K@!
+column 9 Telefon
+column 12 MWSt. pict @K@!
+column 1 Ref. pict @K@!
+column 32 Anrede pict @K
+column 3 Name 1 pict @K
+column 4 Name 2 pict @K
+column 10 Fax
+column 11 Bank (1)
+column 38 Bank (2)
+column 29 R pict @K@!
+column 21 Spr. pict @K@!
+column 20 ZA pict @K@!
+column 36 W„ pict @K@!
+column 28 Erstellt am
+column 5 Straáe pict @K@S40
+column 39 Nr. pict @K@!
+column 40 Box
+mask ="PAR"+PAR->IdPrt
+order 3
+help PAR
+keyvalue ""
+title "Stammdaten Partner : sortiert nach Adresse"

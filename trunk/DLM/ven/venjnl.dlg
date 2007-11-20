@@ -1,0 +1,30 @@
+// Journal
+// before DlgDefault("IdDev",DevDefault(MemPer2))
+before DlgDefault("D"," ")
+before DlgDefault("N"," ")
+before DlgDefault("IdJnl",space(LenIdJnl()))
+field name="IdJnl" \
+    caption="Journal " \
+    picture="@k@!" \
+    pick={|x|DbfPick(\
+              {oJnl()},\
+              if(MemLang1=="D","Auswahl Journal","Choix journal"),\
+              "JNLPICK",\
+              x,\
+              "Alias=='VEN'.and.'G'$Attrib"\
+    )}
+field block={|x|SetPeriode(x)} \
+    picture="@k@!" \
+    caption=if(MemLang1=="D","Periode von-bis ","P‚riodes de-… ") \
+    valid={||ph_refresh()} \
+    pick={|x|PickPerRange(x)}
+field caption="W„hrung  " \
+      block={|x|SetDevise(x)}\
+      picture="@k@!"\
+      pick={|x|PickDev(x)}\
+      valid={||DevExist(SetDevise())}
+
+#include "PREVIEW.DLG"
+
+after AppSaveMem()
+

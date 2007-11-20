@@ -1,0 +1,14 @@
+title "Detailed Cash Flow Statement"
+
+#include "RANGES.DLG"
+
+#include "LANG.DLG"
+
+// field name="ForAll" \
+    caption2=utr(" for all records"," fÅr alle Datenzeilen"," pour toutes les lignes") \
+    default="X" \
+    reader={|g|CbxReader(g)}
+      
+
+#include "PREVIEW.DLG"
+

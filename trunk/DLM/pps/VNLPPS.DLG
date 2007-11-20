@@ -1,0 +1,49 @@
+// VNL001.DLG : Arbeitszettel
+before DbfPeek(oPar(),"",".t.",.t.)
+before DlgDefault("VnaMatch",space(9))
+before DlgDefault("IdPar",space(LenIdPar()))
+field name="IdJnl" \
+    caption="Journal " \
+    default=space(LenIdJnl())\
+    picture="@k@!" \
+    pick={|x|DbfPick(\
+              {oJnl()},\
+              utr("Select Journal","Auswahl Journal","Choix journal"),\
+              "JNLPICK",\
+              x,\
+              "Alias=='VEN'"\
+    )}
+field name="Date1" \
+      default=ctod("")\
+      caption="Arbeiten vom " \
+      attrib="N"
+field name="Date2" \
+      default=ctod("")\
+      caption=" bis zum "
+field name="IdPar" \
+      caption="Arbeiter " \
+      picture="@k@!"\
+      pick={|x|PickPar("P",x,"Arbeiter")}\
+      attrib="N" \
+      valid={||ph_refresh()}
+field caption=" : " \
+      when={||.f.} \
+      color="N/W" \
+      block={||padr(ParName(DlgValue("IdPar")),30)}
+field name="VnaMatch" \
+      default=space(9)\
+      caption="Referenz  " \
+      picture="@k@!" \
+      pick={|x| DbfPick( \
+        {oVen(),oPar(),oPlz()},\
+        "Auftr„ge : ",\
+        "VENPICK",x,\
+        ".t.",\
+        "AUF","VEN->IdJnl","VEN->VnaMatch"\
+      )}
+// field name="ttl" \
+    caption2=" mit Zwischensummen" \
+    value="X" \
+    reader={|g|CbxReader(g)}
+#include "PREVIEW.DLG"
+

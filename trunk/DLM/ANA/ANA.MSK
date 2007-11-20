@@ -1,0 +1,13 @@
+//
+// C:\SOFT\TEST\TIM300\HEINEN\ANA.MSK - generated 10.10.95
+// for ANA.DBF
+//
+
+
+string 2 1 A-Konto
+
+
+get 1 2 9
+get 2 2 17
+get 3 2 49
+wait 17 78 4 0 9

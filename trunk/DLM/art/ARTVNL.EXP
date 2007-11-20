@@ -1,0 +1,46 @@
+// Artikel mit Umsatz nach Excel exportieren
+
+#exec DlgExec("ARTVNL")
+
+#include "ART.EXP"
+
+#exec setvar("VnlFilter","VNL->IdJnl=='"+getvar("IdJnl")+"'.and.DocExist(VNL->IdJnl,VNL->IdDoc)")
+#exec DlgPlus("VnlFilter",".and.ChkPeriode(VEN->Periode)==0")
+#exec empty(getvar("IdPar1")).or.DlgPlus("VnlFilter",\
+  ".and.VEN->IdPar>='"+getvar("IdPar1")+"'")
+#exec empty(getvar("IdPar2")).or.DlgPlus("VnlFilter",\
+  ".and.VEN->IdPar<='"+getvar("IdPar2")+"'")
+
+Header getvar("IdJnl") + " " + PerText() + " Partners " + getvar("IdPar1")+"..."+getvar("IdPar2")
+
+RecordBefore DlgDefine("Umsatz",0)
+RecordBefore DlgDefine("Menge",0)
+RecordBefore DlgDefine("Anz",0)
+
+#exec DlgDefine("OnVnl",{||\
+  DlgPlus('Umsatz',VenMont2Dev(SetDevise(),val(VNL->cMont))*if(VenIsNc(),-1,1))\
+  .and.DlgPlus('Menge',qton1(VNL->Qte)*if(VenIsNc(),-1,1))\
+  .and.DlgPlus('Anz',val(VNL->Anz)*if(VenIsNc(),-1,1))\
+})
+
+// RecordBefore wird unabh„ngig vom Lead-Filter ddSetFilter() auf jedem Record
+// ausgefhrt. Ist ja eigentlich gedacht, um den Filter vorzubereiten.
+// "!xparse(ddSetFilter())" : 
+// Artikel-Filter ist normalerweise relativ schnell, aber durch die VNL
+// zu laufen ist besonders lahm...
+RecordBefore !xparse(ddSetFilter()).or.DbfScan(\
+  {oVnl(),oVen()},\
+  2,\
+  ART->IdArt,\
+  "VNL->IdArt=='"+ART->IdArt+"'",\
+  getvar("VnlFilter"),\
+  DlgValue('OnVnl'),NIL,.f.\
+)
+
+
+FieldUpdate   Umsatz   komma(ltrim(ntom(getvar("Umsatz"))))
+FieldUpdate   Menge    komma(ltrim(ntom(getvar("Menge"))))
+FieldUpdate   Ums/M    if(getvar("Menge")==0,"",komma(ltrim(ntom(getvar("Umsatz")/getvar("Menge")))))
+FieldUpdate   Anz      komma(ltrim(ntom(getvar("Anz"))))
+FieldUpdate   Ums/A    if(getvar("Anz")==0,"",komma(ltrim(ntom(getvar("Umsatz")/getvar("Anz")))))
+

@@ -1,0 +1,13 @@
+//
+// C:\SOFT\RELEASE\TIM220\STD01D\TPL.MSK - generated 05.11.96
+// for TPL.DBF
+//
+
+
+
+
+get 1 2 2 pict @K@!
+get 2 2 6 pict @K@!
+get 3 2 15 pict @K
+get 7 2 57 pict @K@!
+wait 16 76 4 2 12

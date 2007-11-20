@@ -1,0 +1,35 @@
+// Testen, ob t2min() ordentlich funktioniert
+
+TstEqual( t2min("  1:00"),  60)
+TstEqual( t2min(" -1:00"), -60)
+TstEqual( t2min(" -1:25"), -85)
+TstEqual( t2min("  1:15"),  75)
+TstEqual( t2min("  0:15"),  15)
+TstEqual( t2min(" -0:15"), -15)
+
+TstEqual( min2t(  60), "1:00")
+TstEqual( min2t( -60), "-1:00")
+TstEqual( min2t( -85), "-1:25")
+TstEqual( min2t(  75), "1:15")
+TstEqual( min2t(  15), "0:15")
+TstEqual( min2t( -15), "-0:15")
+TstEqual( min2t(  -5), "-0:05")
+
+TstEqual( t2hours("  1:15"),  1.25)
+TstEqual( t2hours("  0:15"),  0.25)
+TstEqual( t2hours(" -0:15"), -0.25)
+TstEqual( t2hours(" -1:15"), -1.25)
+
+TstEqual( downint(0.9), 0)
+TstEqual( downint(-0.9), -1)
+TstEqual( downint(1.1), 1)
+TstEqual( downint(-1.1), -2)
+TstEqual( downint(-2), -2)
+
+TstEqual(min2t(-240),"-4:00")
+TstEqual(downint(-240), -240)
+TstEqual(t2min("-4:00"), -240)
+TstEqual(ntoq(-4,":")," -4:00")
+TstEqual(qton("-4:00"), -4)
+TstEqual(t2min(ntoq(qton("4:00")-8,":")), -240)
+TstEqual(min2t(downint(t2min(ntoq(qton("4:00")-8,":")))), "-4:00")

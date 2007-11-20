@@ -1,0 +1,25 @@
+//
+// HSTDATE.QRY - generated 02.06.05
+// for HST.DBF
+//
+column 9 Periode
+column 6 =utr("Date","Datum","Date") say ""
+column 1 =utr("Accnt","Konto","Compte")
+column 7 Bezeichnung Konto pict @k@s26
+column 2 =utr("IdPar","P-Kto","CptPar")
+column 3 Jnl pict @K@!
+column 17 Debit
+column 18 Credit
+column 4 IdDoc pict @K@!
+column 16 Tax pict @K@!
+column 13 Match pict @K@!
+column 8 =utr("Remark","Bemerkung","Remarque") pict @k@s20
+column 5 Pos
+column 10 DC
+column 11 =utr("Amount","Betrag","Montant")
+column 12 =utr("Amnt FC","Betrag FW","MontDev")
+column 14 *
+column 15 Z
+column 9 Periode
+order 9
+help HST

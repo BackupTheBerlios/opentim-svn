@@ -1,0 +1,11 @@
+//
+// MSGPAR.QRY - generated 29.01.2003
+// for MSG.DBF
+//
+window 15 70 0 0 
+column 3 Datum say ""
+column 4 Kurzbeschreibung
+column 11 Maske pict @K@!
+column 1 Autor pict @K@!
+mask MSG
+order 3

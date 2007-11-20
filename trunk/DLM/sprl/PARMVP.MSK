@@ -1,0 +1,14 @@
+//
+// F:\SOFT\TEST\TIM300\HEINEN\PARMVP.MSK - generated 09.10.95
+// for PAR.DBF
+//
+
+
+string 2 56 Tel.
+string 2 1 Partner
+
+
+get 1 2 9
+get 33 2 16
+get 9 2 61
+wait 17 78 4 0 9

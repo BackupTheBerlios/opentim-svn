@@ -1,0 +1,35 @@
+// Canon LBP-8B (Versuch)
+// Copyright P.A.C. Systems Eupen
+//
+Name         Canon LBP-8
+Initialize   "c;('$2)' 1[3y"
+// Initialize   "c;('$2[3y"
+// ESC ;    : D‚but mode de commande ISO
+// ESC c    : R‚initialisation machine    (p. 14-86)
+// ESC [3y  : Choix du type "Courier"     (p. 14-92)
+// (S. 14-91 u. 14-65 !!!)
+// ESC ('!1 : (?) Prim„r-Grafiksatz IBM860 w„hlen
+// ESC )'!1 : Sekund„r-Grafik-Satz IBM860 w„hlen
+// ESC+"[120 C" : taille des caract. en 1/720"
+// choix unit‚ taille : p. 14-86
+Reset        ""
+FormFeed     chr(12)
+Font 6cpi  6     12/72  "[3 K"
+Font 10cpi 10    12/72  "[0 K"
+Font 12cpi 12    12/72  "[1 K"
+Font 15cpi 15    12/72  "[2 K"
+BoldOn     chr(27)+"[?1m"   // p. 14-92
+BoldOff    chr(27)+"[?22m"
+ItalOn     chr(27)+"[3m"
+ItalOff    chr(27)+"[23m"
+UnderOn    chr(27)+"[4m"
+UnderOff   chr(27)+"[24m"
+Option P Portrait             "[0%r"
+Option L Landscape            "[1%r"
+Option 6 6LinesPerInch        "[0 L"
+Option 8 8LinesPerInch        "[4 L"
+Option A LowerCass            ""
+Option B MPTray               ""
+Option C 500Cass              ""
+Option D FontCourier          ""
+Option E FontLetterGothic     ""

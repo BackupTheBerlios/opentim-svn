@@ -1,0 +1,7 @@
+//
+// F:\SOFT\TEST\TIM300\STD01D\PRF.QRY - generated 30.08.95
+// for PRF.DBF
+//
+window 16 60 0 0 
+column 1 KÅrzel
+column 2 Bezeichnung

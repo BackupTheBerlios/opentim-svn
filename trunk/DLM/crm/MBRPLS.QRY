@@ -1,0 +1,12 @@
+//
+// MBRPLS.QRY - generated 01/12/05
+// for MBR.DBF
+//
+window 36 80 2 0 
+column 2 Empf„nger block padr(trim1(ParName(MBR->IdPar),", ")+ParAddress(),120) pict @k@s35 skip .t. expr 1 say "("+ntrim(nSum)+" Mitglieder)"
+column 9 zuH„nden block padr(ParName(MBR->IdPar2),40) pict @k@s25
+column 7 Bemerkung pict @k@s14 skip .t.
+column 6 Attr pict @K@! skip .t.
+column 11 Date skip .t. say ""
+column 10 User pict @K@! skip .t.
+column 3 Pos pict @K@! skip .t.

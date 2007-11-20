@@ -1,0 +1,24 @@
+//
+// generated 21.08.07
+// for FIN.FOX
+//
+
+box 1 0 5 52
+box 1 53 5 79
+
+string 2 2 =utr("Doc.#","Dokument","Id Doc")
+string 2 55 Ausf.Datum
+string 4 55 Summe
+string 3 38 Status
+string 2 39 Periode
+string 3 2 Mitteilung
+
+get 1 2 12
+get 2 2 16
+get 8 2 47 pict @K@!
+get 3 2 68
+get 10 4 68
+get 7 4 38 pict !
+get 5 4 40
+get 4 4 2
+wait 15 78 6 0 0

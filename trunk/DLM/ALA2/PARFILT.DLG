@@ -1,0 +1,79 @@
+// PARFILT.DLG
+title "Stammdaten Partner : Filter setzen"
+// field name=""
+before DlgDefault("Attrib",space(3))
+before DlgDefault("IdNat",space(3))
+before DlgDefault("IdPlz",space(8))
+before DlgDefault("Wart1",ctod(""))
+before DlgDefault("Wart2",ctod(""))
+// before DlgDefault("IdPrt",PAR->IdPrt)
+before DlgDefault("nk"," ")
+before DlgDefault("nl"," ")
+before DlgDefault("nm"," ")
+before DlgDefault("IdUsr",space(LenIdUsr()))
+field name="nk" \
+    caption2=" nur Kunden" \
+    reader={|g|CbxReader(g)}
+field name="nl" \
+    caption2=" nur Lieferanten" \
+    reader={|g|CbxReader(g)}
+field name="nm" \
+    caption2=" nur Mitarbeiter" \
+    reader={|g|CbxReader(g)}
+
+field name="Wart1" \
+    caption="N„chste Wartung : vom " \
+    attrib="N"
+field name="Wart2" \
+    caption="bis zum "
+
+field name="Attrib" \
+    caption="Nur folgende weitere Attribute " \
+    picture="@k@!" \
+    pick={|x|PickPra(x)}
+
+field name="IdNat" \
+    caption="Nur aus folgendem Land/PLZ " \
+    picture="@k@!" \
+    pick={|x|PickNat(x,"Nur aus folgendem Land :")} \
+    attrib="N"
+field name="IdPlz" \
+    caption=" " \
+    picture="@k@!" \
+    pick={|x|PickPlz(DlgValue("IdNat"),x)}
+// field name="IdPrt" \
+    caption="Nur Partnerart " \
+    picture="@k@!" \
+    valid={||ph_refresh()}\
+    pick={|x|PickPrt(NIL,"Partnerart",x)} attrib="N"
+// field block={||padr(PrtName(DlgValue("IdPrt")),30)} \
+      when={||.f.} color="N/W"
+
+field name="IdUsr" \
+    caption="Nur von Vertreter " \
+    picture="@k@!"
+
+
+after DlgDefine("ParFilter",".t.")
+after empty(DlgValue("IdUsr")).or.\
+  DlgPlus("ParFilter",".and.PAR->IdUsr=='"+DlgValue("IdUsr")+"'")
+after empty(DlgValue("IdNat")).or.\
+  DlgPlus("ParFilter",".and.PAR->Pays=='"+DlgValue("IdNat")+"'")
+after empty(DlgValue("IdPlz")).or.\
+  DlgPlus("ParFilter",".and.left(PAR->CP,\
+    "+ntrim(len(trim(DlgValue("IdPlz"))))+")=='"+trim(DlgValue("IdPlz"))+"'")
+after empty(DlgValue("nk")).or.\
+  DlgPlus("ParFilter",".and.'K'$PAR->Attrib")
+after empty(DlgValue("nl")).or.\
+  DlgPlus("ParFilter",".and.'L'$PAR->Attrib")
+after empty(DlgValue("nm")).or.\
+  DlgPlus("ParFilter",".and.'M'$PAR->Attrib")
+after empty(DlgValue("Wart1")).or.\
+  DlgPlus("ParFilter",".and.dtos(PAR->Wartung)>='"+dtos(DlgValue("Wart1"))+"'")
+after empty(DlgValue("Wart2")).or.\
+  DlgPlus("ParFilter",".and.dtos(PAR->Wartung)<='"+dtos(DlgValue("Wart2"))+"'")
+after empty(DlgValue("Attrib")).or.\
+  DlgPlus("ParFilter",".and.'"+trim(DlgValue("Attrib"))+"'$PAR->Attrib")
+
+// after empty(DlgValue("IdPrt")).or.
+

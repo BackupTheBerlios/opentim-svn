@@ -1,0 +1,235 @@
+// DCLTVA.ACT : MWSt-ErklÑrung drucken
+DlgDefault("61",0) // rÇgulations TVA en faveur de l'Etat
+DlgDefault("62",0) // rÇgulations TVA en faveur du dÇclarant
+DlgDefault("91",0) // Anzahlung
+WrnJnlOpen({||JNL->Alias=="VEN".and."G"$JNL->Attrib})
+!IndExist("REBUILD").or.(\
+  Confirm(if(MemLang1=="F",\
+    "Il faut d'abord reconstruire l'historique mensuel",\
+    "Die Sammelhistorik muss zuerst rekonstruiert werden"\
+  ),MsgContinue()).and.Rebuild(.f.,SetTplIni(),SetPreview())\
+)
+DlgExec("DCLTVA")
+MemPer1==MemPer2.or.pnQuarter(MemPer1)==pnQuarter(MemPer2)\
+  .or.!Warning(if(MemLang1=="D",\
+    "Der Periodenbereich muss innerhalb eines Quartals liegen !",\
+    "Les pÇriodes doivent se trouver dans le màme trimestre !"\
+))
+
+DlgDefine("p1",if(MemPer1==MemPer2,"",ntrim(pnQuarter(MemPer1))))
+DlgDefine("p2",if(MemPer1==MemPer2,"",ntrim(pnYear(MemPer1))))
+DlgDefine("p3",if(MemPer1!=MemPer2,"",ntrim(pnMonth(MemPer1))))
+DlgDefine("p4",if(MemPer1!=MemPer2,"",ntrim(pnYear(MemPer1))))
+MsgDisplay(MsgWorking())
+DlgDefine("00",CttBase('DC=="D".and.IdCtr=="V".and.IdCtf!="**".and.IdTax$"0  "'))
+DlgDefine("01",CttBase('DC=="D".and.IdCtr=="V".and.IdCtf!="**".and.IdTax$"6  ,06 "'))
+DlgDefine("02",CttBase('DC=="D".and.IdCtr=="V".and.IdCtf!="**".and.IdTax$"12 "'))
+DlgDefine("03",CttBase('DC=="D".and.IdCtr=="V".and.IdCtf!="**".and.IdTax$"20 ,21 "'))
+DlgDefine("45",CttBase('DC=="D".and.IdCtr=="V".and.IdTax$"C  "'))
+DlgDefine("46",CttBase('DC=="D".and.IdCtr=="V".and.IdTax$"IM ,IM6"'))
+DlgDefine("47",CttBase('\
+  DC=="D".and.IdCtr=="V".and.IdTax$"IS ,X  ,7  ,15 ,16 ,19 ,L  ,D0 "\
+'))
+// 48 : notes de crÇdit vente [et corrections nÇgatives] relatives aux
+// opÇrations inscrites en grille 46
+DlgDefine("48",-CttBase('\
+  DC=="C".and.IdCtr=="V".and.IdTax$"IM ,IM6"\
+'))
+// 49 : notes de crÇdit vente [et corrections nÇgatives] relatives aux
+// autres opÇrations du cadre II
+DlgDefine("49",-CttBase('\
+  DC=="C".and.IdCtr=="V".and.!IdTax$"IM ,IM6,15 ,16 ,19 ,L  ,07 ,A  ,B  "\
+'))
+
+// 54 : taxe due sur les ventes (grilles 01, 02 et 03)
+// 20030309 : MWSt DE darf *nicht* drin sein
+DlgDefine("54",CttTaxe('\
+  DC=="D".and.IdCtr=="V".and.IdTax$"0  ,6  ,06 ,12 ,20 ,21 "\
+'))
+// 55 : taxe due sur les achats intracom de marchandises (grille 86)
+//      ! mais sans prendre les notes de crÇdit 
+DlgDefine("55",CttTaxe('\
+  DC=="C".and.IdCtr$"EA".and.IdCtf!="**".and.IdTax$"IM ,IM6,NIM"\
+'))
+
+// 56 : taxe due sur les opÇrations de la grille 87 (sauf celles dont la
+// taxe vient en 57)
+DlgDefine("56",CttTaxe('\
+  DC=="C".and.IdCtr$"EA".and.IdCtf!="**".and.\
+  IdTax$"C  ,NC ,C04,C06,C12,IS ,NIS"\
+'))
+// 57 : taxe due sur importations hors-UE avec report de perception Ö
+// l'intÇrieur du pays.
+DlgDefine("57",CttTaxe('\
+  DC=="C".and.IdCtr$"EA".and.IdCtf!="**".and.IdTax$"X  "\
+'))
+
+// 59 : taxe dÇductible sur les factures achat
+// NOTE : donc les codes TVA qui commencent avec C,I ou D sont
+//        considÇrÇs comme dÇductibles
+DlgDefine("59",CttTaxe('\
+  IdCtr$"EA".and.DC=="C".and.IdCtf!="**".and.\
+  left(IdTax,1)$"CDI"\
+'))
+#if empty(DlgValue("IdGenTva"))
+  DlgDefine("59bis",0)
+#endif
+#if !empty(DlgValue("IdGenTva"))
+  DlgDefine("59bis",DbfSum(\
+    {oHst()},"val(Mont)*if(HST->DC=='D',1,-1)",\
+    3,DlgValue("IdGenTva"),"IdGen=='"+DlgValue("IdGenTva")+"'",\
+    "ChkPeriode(HST->Periode)==0.and.!HST->IdJnl$'OPD,DIV'"\
+  ))
+  DlgPlus("59",DlgValue("59bis"))
+#endif
+// NB : 59bis sera utilisÇ plus tard pour dÇcider s'il faut imprimer un
+// historique du compte IdGenTva
+
+// 63 : taxe sur les notes de crÇdit achat
+// sauf - les NC achat avec taxe non dÇductible (logique)
+//      - les NC achat intracommunautaires (pas logique)
+//      - les NC achat co-contractant (pas logique)
+// 20040311 :
+// in 63 wird die MWSt der 16% deutsche Kunden mit einbezogen: falsch
+DlgDefine("63",-CttTaxe('\
+  IdCtr$"EA".and.IdCtf!="**".and.DC=="D"\
+  .and.left(IdTax,1)!="N"\
+  .and.left(IdTax,1)!="I"\
+  .and.left(IdTax,1)!="C"\
+  .and.!IdTax$"15 ,16 ,19 ,L  ,07 "\
+'))
+//      - les NC achat dÇclarÇes Ö l'Çtranger
+//  .and.!IdTax$"15 ,16 ,07 "\
+
+// 64 : taxe sur les notes de crÇdit vente
+// 20030309 : sans compter les NCV Ö l'Çtranger
+DlgDefine("64",\
+  -CttTaxe('IdCtr=="V".and.DC=="C".and.!IdTax$"15 ,16 ,19 ,L  ,07 ,A  ,B  "')\
+)
+DlgDefine("65",0)
+DlgDefine("66",0)
+
+DlgDefine("81",\
+  CttBase('IdCtr$"EA".and.IdCtf=="81"')+\
+  CttTaxe('IdCtr$"EA".and.IdCtf=="81".and.left(IdTax,1)=="N"')\
+)
+DlgDefine("82",\
+  CttBase('IdCtr$"EA".and.IdCtf=="82"')+\
+  CttTaxe('IdCtr$"EA".and.IdCtf=="82".and.left(IdTax,1)=="N"')\
+)
+DlgDefine("83",\
+  CttBase('IdCtr$"EA".and.IdCtf=="83"')+\
+  CttTaxe('IdCtr$"EA".and.IdCtf=="83".and.left(IdTax,1)=="N"')\
+)
+// montants de base sur les NCA intracommunautaires
+DlgDefine("84",\
+  -CttBase('\
+    IdCtr$"EA".and.IdCtf!="**".and.DC=="D"\
+    .and.IdTax$"IM ,IM6,IM0,IS "\
+    ')\
+)
+DlgDefine("85",\
+  -CttBase('\
+    IdCtr$"EA".and.IdCtf!="**".and.DC=="D"\
+    .and.!IdTax$"IM ,IM6,IM0,IS "\
+  ')\
+)
+// montants de base sur les factures et NC achat intracommunautaires
+DlgDefine("86",\
+  CttBase('\
+    IdCtr$"EA".and.IdCtf!="**".and.IdTax$"IM ,IM6,IM0,NIM"\
+  ')\
+)
+DlgDefine("87",\
+  CttBase('\
+    IdCtr$"EA".and.IdCtf!="**".and.DC=="C"\
+    .and.IdTax$"C  ,NC ,C04,C06,C12,E88,IS ,NIS"\
+  ')\
+)
+// DlgDefine("88",\
+  CttBase('\
+    IdCtr$"EA".and.IdCtf!="**".and.IdTax$"IS ,NIS"\
+  ')\
+)
+
+DlgDefine("XX",\
+  DlgValue("54")+DlgValue("55")+\
+  DlgValue("56")+DlgValue("57")+DlgValue("61")+\
+  DlgValue("63")\
+)
+DlgDefine("YY",\
+  DlgValue("59")+DlgValue("62")+\
+  DlgValue("64")\
+)
+DlgDefine("71",DlgValue("XX")-DlgValue("YY"))
+DlgValue("71")>0.or. DlgDefine("71",0)
+
+DlgDefine("72",DlgValue("YY")-DlgValue("XX"))
+DlgValue("72")>0.or. DlgDefine("72",0)
+
+DlgDefine("ctrl",val(strtran(substr(MemNoTva,4),".")))
+DlgPlus("ctrl",val(strtran(substr(DlgValue("NoTvaComptable"),4),".")))
+
+DlgValue("00")==0.or.DlgPlus("ctrl",val(str(DlgValue("00")*if(SetDevise()=="EUR",100,1),15,0)+"00"))
+DlgValue("01")==0.or.DlgPlus("ctrl",val(str(DlgValue("01")*if(SetDevise()=="EUR",100,1),15,0)+"01"))
+DlgValue("02")==0.or.DlgPlus("ctrl",val(str(DlgValue("02")*if(SetDevise()=="EUR",100,1),15,0)+"02"))
+DlgValue("03")==0.or.DlgPlus("ctrl",val(str(DlgValue("03")*if(SetDevise()=="EUR",100,1),15,0)+"03"))
+
+DlgValue("45")==0.or.DlgPlus("ctrl",val(str(DlgValue("45")*if(SetDevise()=="EUR",100,1),15,0)+"45"))
+DlgValue("46")==0.or.DlgPlus("ctrl",val(str(DlgValue("46")*if(SetDevise()=="EUR",100,1),15,0)+"46"))
+DlgValue("47")==0.or.DlgPlus("ctrl",val(str(DlgValue("47")*if(SetDevise()=="EUR",100,1),15,0)+"47"))
+DlgValue("48")==0.or.DlgPlus("ctrl",val(str(DlgValue("48")*if(SetDevise()=="EUR",100,1),15,0)+"48"))
+DlgValue("49")==0.or.DlgPlus("ctrl",val(str(DlgValue("49")*if(SetDevise()=="EUR",100,1),15,0)+"49"))
+
+DlgValue("81")==0.or.DlgPlus("ctrl",val(str(DlgValue("81")*if(SetDevise()=="EUR",100,1),15,0)+"81"))
+DlgValue("82")==0.or.DlgPlus("ctrl",val(str(DlgValue("82")*if(SetDevise()=="EUR",100,1),15,0)+"82"))
+DlgValue("83")==0.or.DlgPlus("ctrl",val(str(DlgValue("83")*if(SetDevise()=="EUR",100,1),15,0)+"83"))
+DlgValue("84")==0.or.DlgPlus("ctrl",val(str(DlgValue("84")*if(SetDevise()=="EUR",100,1),15,0)+"84"))
+DlgValue("85")==0.or.DlgPlus("ctrl",val(str(DlgValue("85")*if(SetDevise()=="EUR",100,1),15,0)+"85"))
+DlgValue("86")==0.or.DlgPlus("ctrl",val(str(DlgValue("86")*if(SetDevise()=="EUR",100,1),15,0)+"86"))
+DlgValue("87")==0.or.DlgPlus("ctrl",val(str(DlgValue("87")*if(SetDevise()=="EUR",100,1),15,0)+"87"))
+
+DlgValue("54")==0.or.DlgPlus("ctrl",val(str(DlgValue("54")*if(SetDevise()=="EUR",100,1),15,0)+"54"))
+DlgValue("55")==0.or.DlgPlus("ctrl",val(str(DlgValue("55")*if(SetDevise()=="EUR",100,1),15,0)+"55"))
+DlgValue("56")==0.or.DlgPlus("ctrl",val(str(DlgValue("56")*if(SetDevise()=="EUR",100,1),15,0)+"56"))
+DlgValue("57")==0.or.DlgPlus("ctrl",val(str(DlgValue("57")*if(SetDevise()=="EUR",100,1),15,0)+"57"))
+
+DlgValue("61")==0.or.DlgPlus("ctrl",val(str(DlgValue("61")*if(SetDevise()=="EUR",100,1),15,0)+"61"))
+DlgValue("63")==0.or.DlgPlus("ctrl",val(str(DlgValue("63")*if(SetDevise()=="EUR",100,1),15,0)+"63"))
+DlgValue("65")==0.or.DlgPlus("ctrl",val(str(DlgValue("65")*if(SetDevise()=="EUR",100,1),15,0)+"65"))
+
+DlgValue("59")==0.or.DlgPlus("ctrl",val(str(DlgValue("59")*if(SetDevise()=="EUR",100,1),15,0)+"59"))
+DlgValue("62")==0.or.DlgPlus("ctrl",val(str(DlgValue("62")*if(SetDevise()=="EUR",100,1),15,0)+"62"))
+DlgValue("64")==0.or.DlgPlus("ctrl",val(str(DlgValue("64")*if(SetDevise()=="EUR",100,1),15,0)+"64"))
+DlgValue("66")==0.or.DlgPlus("ctrl",val(str(DlgValue("66")*if(SetDevise()=="EUR",100,1),15,0)+"66"))
+
+DlgValue("71")==0.or.DlgPlus("ctrl",val(str(DlgValue("71")*if(SetDevise()=="EUR",100,1),15,0)+"71"))
+DlgValue("72")==0.or.DlgPlus("ctrl",val(str(DlgValue("72")*if(SetDevise()=="EUR",100,1),15,0)+"72"))
+DlgValue("91")==0.or.DlgPlus("ctrl",val(str(DlgValue("91")*if(SetDevise()=="EUR",100,1),15,0)+"91"))
+
+// Confirm("ctrl="+ntrim(DlgValue("ctrl")))
+
+if(DlgValue("AsRtf")=="X",\
+  ActExec("FPARSE",{ "dcltva","rtf", "tmp","rtf"} ),\
+  fprint("dcltva.lst","{}"))
+#if MemLang1 == "D"
+  DlgValue("59bis")==0.or.Warning(\
+    "Drucken Sie auch eine Historik des Generalkontos " \
+    + DlgValue("IdGenTva") + "," + chr(13)+chr(10) \
+    + "dessen Saldo (" \
+    + ntrim(DlgValue("59bis")) \
+    + ") im Raster 59 hinzugefÅgt wurde.",\
+    NIL,NIL,NIL,"Hinweis" \
+  )
+#endif
+#if MemLang1 == "F"
+  DlgValue("59bis")==0.or.Warning(\
+    "Imprimez Çgalement l'historique du compte " \
+    + DlgValue("IdGenTva") + "," + chr(13)+chr(10) \
+    + "dont le solde (" \
+    + ntrim(DlgValue("59bis")) \
+    + ") a ÇtÇ ajoutÇ dans la grille 59.",\
+    NIL,NIL,NIL,"Remarque" \
+  )
+#endif
+

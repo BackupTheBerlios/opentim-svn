@@ -1,0 +1,26 @@
+//
+// C:\SOFT\TEST\TIM300\HEINEN\FNLDEV.MSK - generated 27.11.95
+// for FNL.DBF
+//
+
+
+string 4 3 Dokument
+string 4 24 Op.
+string 6 6 Konto
+string 8 6 Match
+string 13 2 Bemerkung
+string 10 17 Debit
+string 10 27 Kredit
+
+
+get 1 4 12
+get 2 4 16
+get 3 4 28
+get 6 6 12
+get 7 6 14
+get 14 8 12
+get 8 6 23
+get 12 11 12
+get 13 11 23
+get 9 13 12
+wait 0 0 0 0 0

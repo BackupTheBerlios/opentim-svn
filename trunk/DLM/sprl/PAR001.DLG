@@ -1,0 +1,11 @@
+// offene Bestellungen
+field name="Date" \
+    caption="Lieferung vom " \
+    value=ctod("")
+field name="IdPar" \
+    caption="nur Lieferant " \
+    value=space(LenIdPar()) \
+    pick={|x| PickPar("L",x)}
+
+#include "PREVIEW.DLG"
+

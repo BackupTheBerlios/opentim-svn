@@ -1,0 +1,19 @@
+// Dokument aus anderer Datenbank importieren
+InputFile AppPath()+"\TEMP\FNL.TXT"
+// SeekKey is NIL
+Delimiter chr(9)
+NoTitles on
+FieldUpdate FNL->IdCtr   i_fields[1]
+FieldUpdate FNL->IdCpt   i_fields[2]
+FieldUpdate FNL->Libell  i_fields[3]
+FieldUpdate FNL->Match   i_fields[4]
+FieldUpdate FNL->Line    i_fields[5]
+FieldUpdate FNL->DC      i_fields[6]
+FieldUpdate FNL->Mont    i_fields[7]
+FieldUpdate FNL->MontDev i_fields[8]
+FieldUpdate FNL->IdDev   i_fields[9]
+FieldUpdate FNL->Date    stod(i_fields[10])
+#if HasOption("ANA")
+  FieldUpdate FNL->IdAna i_fields[11]
+#endif
+

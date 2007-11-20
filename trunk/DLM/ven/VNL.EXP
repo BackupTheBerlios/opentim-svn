@@ -1,0 +1,44 @@
+// Fakturationsdaten nach Excel exportieren
+
+OutputFile    "VNL.TXT"
+Delimiter     chr(9)
+#include "DOS2WIN.CVT"
+OnSuccess AppShell("excel.bat "+i_OutputFile(),NIL,.f.)
+
+RecordBefore DocExist(VNL->IdJnl,VNL->IdDoc)
+
+
+FieldUpdate   IdJnl     VNL->IdJnl
+FieldUpdate   IdDoc     VNL->IdDoc
+FieldUpdate   Line      VNL->Line
+FieldUpdate   Code      VNL->Code
+FieldUpdate   IdArt     VNL->IdArt
+FieldUpdate   Beschreib VNL->Desig
+FieldUpdate   Qte      komma(alltrim(VNL->Qte))
+#if type("VNL->Anz")=="C"
+FieldUpdate   Anz    komma(alltrim(VNL->Anz))
+#endif
+#if type("VNL->H")=="C"
+FieldUpdate   H    komma(alltrim(VNL->H))
+#endif
+#if type("VNL->L")=="C"
+FieldUpdate   L    komma(alltrim(VNL->L))
+#endif
+FieldUpdate   PU       komma(alltrim(VNL->PrixU))
+FieldUpdate   HTVA     komma(alltrim(VNL->cMont))
+FieldUpdate   MTVA     komma(alltrim(VNL->MontT))
+
+FieldUpdate   IdPar    VEN->IdPar
+FieldUpdate   IdPar2   VEN->IdPar2
+FieldUpdate   Date     dtocf(VEN->Date,"yyyy-mm-dd")
+FieldUpdate   Regime    trim(VEN->IdReg)
+FieldUpdate   Zahlart trim(VEN->IdMfc)
+FieldUpdate   Z-Ziel   dtocf(VEN->DatEch,"yyyy-mm-dd")
+FieldUpdate   W„hrung  trim(VEN->IdDev)
+
+// RecordBefore ParExist(VEN->IdPar)
+// FieldUpdate   ParName    trim(ParName())
+// FieldUpdate   Land    trim(PAR->Pays)
+// FieldUpdate   PLZ     trim(PAR->CP)
+
+

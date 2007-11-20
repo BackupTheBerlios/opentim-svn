@@ -1,0 +1,7 @@
+MnuAddTitle("~Arbeitszeit")
+MnuAddItem("~Kalender",{||TrmEdit()})
+MnuAddItem("~Wochenplan drucken",{||ActExec("WOCHE")})
+MnuAddSep()
+MnuAddItem("~Ressourcen",{||ResEdit()})
+MnuAddItem("~Auswertung drucken",{|| RepPrint("PTLRES","PTLRES",MnuItemName())})
+

@@ -1,0 +1,19 @@
+//
+// HSTDOC.QRY - generated 20.10.06
+// for HST.DBF
+//
+window 15 80 0 0 
+column 1 =utr("Accnt","Konto","Compte")
+column 7 Bezeichnung
+column 17 Debit
+column 18 =utr("Credit","Kredit","Cr‚dit")
+column 14 *
+column 12 =utr("Amnt FC","Betrag FW","MontDev")
+column 22 FW pict @K@! skip .t.
+column 0 Ko block GenField(HST->IdGen,{||GEN->IdClj})
+column 9 Per.
+column 13 Match pict @K@!
+column 15 Z
+column 5 Pos
+column 16 %MW pict @K@!
+help 

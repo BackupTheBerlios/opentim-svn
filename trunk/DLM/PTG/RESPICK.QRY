@@ -1,0 +1,11 @@
+//
+// RESPICK.QRY - generated 22.03.03
+// for RES.DBF
+//
+window 15 60 0 0 
+column 1 Code pict @K@!
+column 2 Name 1
+column 3 Name 2
+column 4 Name 3
+column 5 Woche pict @K@!
+column 6 Monat pict @K@!

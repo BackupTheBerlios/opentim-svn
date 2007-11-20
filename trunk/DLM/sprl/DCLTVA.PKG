@@ -1,0 +1,181 @@
+DCLTVA.PKG (c) PAC Systems Eupen 1999
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+³ INHALTSVERZEICHNIS ³
+ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+  1. Allgemeine Dokumentation
+  2. Bekannte Probleme
+  2. nderungsprotokoll
+
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+³ 1. ALLGEMEINE DOKUMENTATION  ³
+ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+Dies ist die Datei DCLTVA.PKG, die alle technischen Notizen zur
+Konfiguration der MWSt-Erkl„rung seit Januar 1999 enth„lt. Folgende
+Dateien geh”ren zum Paket "DCLTVA" :
+- DCLTVA.PKG : die vorliegende Datei
+- DCLTVA.ACT : Ruft Dialog auf, errechnet die Werte, ruft fparse()
+- DCLTVA.DLG : Dialogdatei
+- DCLTVA.LST : Formular fr Grundw„hrung BEF, Sprache FR
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+³ Diese Dateien sollten bei KEINEM BENUTZER manuell ver„ndert werden!  ³
+ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+Verschiedene Regeln :
+- MWSt-Codes, die mit einem "N" beginnen, gelten als nicht abziehbare
+  MWSt.
+
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+³ 2. BEKANNTE PROBLEME ³
+ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+- Das Dokument der automatischen Erkl„rung DCLTVA.LST wird nicht auf
+  allen Druckern zufriedenstellend gedruckt. Auf einem HP Laserjet 4
+  sind die senkrechten Linien unterbrochen.
+- Wenn man MWSt-Erkl„rungen von vor 1999 im nachhinein nochmals
+  ausdruckt, k”nnen durch die nderung vom 19990319 Unterschiede kommen.
+  Falls ein neuer Ausdruck alter MWSt-Erkl„rungen mit dem alten Formular
+  n”tig ist, mssen gewisse Formeln angepasst werden.
+
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+³ 3. NDERUNGSPROTOKOLL ³
+ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+19990319
+- Die Felder 61 und 62 sind "R‚gulations" und werden also nicht von TIM
+  errechnet, sondern vom Benutzer eingegeben. Idem fr Feld 91
+  (Anzahlungen). Das Feld 61 wurde bei einigen frhen Versionen
+  f„lschlicherweise berechnet.
+- Bei Gutschriften in einem eigenen Journal wurde die Summe im Fach
+  85 zum Feld 82 hinzugez„hlt statt abgezogen.
+- Die Felder
+   48 + 49 (Basis Gutschriften Verkauf)
+   84 + 85 (Basis Gutschriften Einkauf)
+        63 (Steuer Gutschriften Einkauf)
+        64 (Steuer Gutschriften Verkauf)
+  enthalten Summen aus Gutschriften. Die mssen natrlich als positive
+  Zahlen da stehen. Deshalb wird hier (seit heute) immer -CttTaxe() bzw.
+  -CttBase() genommen. Bisher war es + oder -, je nachdem, ob
+  man die Gutschriften in einem eigenen Journal hatte oder nicht.
+- DCLTVA.LST druckt jetzt auch den Monat bzw. das Quartal.
+- DCLTVA.DLG macht jetzt eine Warnung, wenn der Periodenbereich sich
+  ber mehr als ein Quartal erstreckt.
+- DCLTVA.DLG nimmt jetzt standardm„áig den Druckparametersatz DCLTVA.
+  Wenn im Druckparametersatz LISTE n„mlich "set special 6" gemacht
+  wurde, dann...
+
+19990421
+- Rename DCLTVA.TXT DCLTVA.PKG
+
+19990423
+- DCLTVA.ACT. Zum Berechnen der abzugsf„higen MWSt in Bankjournalen wird
+  jetzt nicht mehr CTG, sondern HST benutzt, und Buchungen in den
+  Journalen DIV und OPD werden rausgefiltert.
+
+19990504
+- DCLTVA.ACT funktioniert jetzt auch in einer franz”sischen Datenbank
+  (Test IdCtr$"EA" statt IdCtr=="E")
+- Das Generalkonto der abzugsf„higen MWSt in Bankjournalen muss jetzt in
+  einer Variablen namens "IdGenTva" (vorher nur "IdGen") stehen.
+- Der Defaultwert fr IdGenTva wurde von 411010 auf 411040 ver„ndert.
+- Um den Defaultwert fr IdGenTva zu „ndern, sollte nicht die DCLTVA.DLG
+  ver„ndert werden, sondern ein OnLogin-Event in der tim.dbi des Kunden.
+- DCLTVA.DLG jetzt zweisprachig (schaut auf MemLang1)
+
+19990507
+- In der Standarddatenbank wurde ein neuer MWSt-Code Einkauf "IM6"
+  erstellt. "IM " berechnet 21% MWSt, IM6 nur 6%. Die DCLTVA.ACT wurde
+  entsprechend angepasst.
+
+19990526
+- Im Feld 55 wurden Gutschriften nicht abgezogen. Mssen aber.
+
+19990527
+- DCLTVA.LST : Jetzt braucht man keine Vignette mehr aufzukleben,
+  sondern auf der MWSt-Erkl„rung werden die Angaben aus
+  Konfigurierung|Allgemeine Parameter gedruckt. Dies war vor allem
+  notwendig bei Kunden mit mehreren Firmen.
+- "Long"-Format optional. Dieses Feature ist jetzt zwar reingebaut, wird
+  aber voraussichtlich nicht benutzt. Es ist nur n”tig, wenn der Drucker
+  keinen verringerten Zeilenabstand (8 statt 6 Zeilen pro Zoll)
+  untersttzt. Im Druckparametersatz DCLTVA sollte immer "set special 8"
+  drinstehen.
+- Laut Information des MWSt-Amts werden die automatischen MWSt-Formulare
+  momentan noch nicht eingescannt, sondern weiterhin manuell abgetippt.
+  Wenn das Format nicht korrekt ist, melden die Leute sich telefonisch
+  beim MWSt-Pflichtigen, um ihn darauf aufmerksam zu machen, dass er
+  evtl. sp„ter sein Format „ndern werden muss, weil es nicht den
+  Auflagen entspricht. Kleine nderungen am Layout entsprechend den
+  ersten Erfahrungen.
+- Das "Total de contr“le" muss obligatorisch ebenfalls die MWSt-Nummer
+  des Buchhalters enthalten, und wenn der assujetti seine BH selber
+  macht, dann darf dieses Feld nicht leer sein, sondern muss seine
+  eigene Nummer ein zweites Mal enthalten. Das hatte ich noch nicht
+  gewusst. DCLTVA.LST, DCLTVA.ACT und DCLTVA.DLG angepasst.
+- Der Druckparametersatz DCLTVA sollte nicht "set pagealign r" machen,
+  denn dann funktioniert set apswidth nicht immer einwandfrei.
+  Hintergrund: Wenn set pagealign r gesetzt ist, wird n„mlich
+  automatisch bei jedem set apswidth auch der linke Seitenrand
+  ver„ndert. So kam es, dass das erste set apswidth 124 zwar auf 16.67
+  cpi schaltet, aber beim zweiten set apswidth 124 wurde
+  berraschenderweise auf 20 cpi geschaltet.
+
+19990714
+- Offene Frage : soll die nicht-abzugsf„hige MWSt in den Feldern 81 bis
+  83 mit angegeben werden? Rudi sagt, dass sie raus muss. Aber wieso war
+  sie dann bisher immer drin und niemand hat sich beklagt?
+
+19991020
+- Das Total de Contr“le war nicht richtig, weil auch die Nummern der
+  leeren Felder mit summiert wurden.
+
+19991222
+- Innergemeinschaftliche Gutschriften mssen in den Rastern 84 und 86
+  (Basisbetr„ge) stehen, aber *nicht* in den Rastern, die die MWSt
+  von innergemeinschaftlichen *Rechnungen* enthalten. Deshalb ist der
+  MWSt-Code "0" nicht richtig.
+  Ab heute kann man diese Gutschriften normal mit IM buchen, die
+  MWSt-Erkl„rung erkennt selber, dass es eine Gutschrift ist.
+  Die betroffenen Felder sind :
+    55 : TVA sur achats intracom
+    63 : TVA … reverser suite aux NCA
+    84 und 86 : keine nderung
+- Deshalb : diverse nderungen in der DCLTVA.ACT :
+  - Feld 55 nimmt jetzt nur noch Rechnungen
+  - Feld 63 betrachtet I-MWSt-Codes jetzt wie nicht abziehbare.
+- Bei Installation beachten : VNL.DEF muss aktualisiert werden.
+- Eine weitere nderung : Feld 59 hat jetzt keine lange Liste von IdTax
+  mehr, sondern schaut ob left(IdTax,1) $ "CID"
+- Wenn das Generalkonto "Abziehbare MWSt. Bankkosten" bewegt wurde, dann
+  kommt ein Hinweis, dass der Benutzer die Historik dieses Kontos
+  ausdrucken soll. Zu kl„ren : mssten die betreffenden Bankkosten
+  (Basisbetrag) dann nicht auch in der MWSt-Erkl„rung erscheinen? (Tun
+  sie n„mlich nicht)
+
+19991228
+- DCLTVA.LST : "cerifi‚e" ersetzt durch "certifi‚e"
+
+20000111
+- Code "NC " (non d‚ductible co-contractant) wird jetzt ebenfalls wie
+  Code "C  " behandelt.
+
+20000117
+- Standardwert fr IdGenTva ist jetzt space(LenIdGen()). Eigentlich
+  ist das System nicht super, weil dann ja nur die MWSt, aber nicht
+  die entsprechenden Bankkosten in der MWSt-Erkl„rung erscheinen.
+  Mit der FNLEKR.ACT kann man ja eine EKR "on the fly" w„hrend der
+  Eingabe eines Kontoauszugs erfassen.
+- DCLTVA.ACT startet jetzt automatisch Rebuild(), wenn eine REBUILD.IND
+  existiert. Dadurch wird gew„hrleistet, dass die MWSt-Erkl„rung nur
+  rauskommmt, wenn die Sammelhistorik in Ordnung ist.
+- Feld 55 wurde seit 19991222 nicht korrekt berechnet. Nahm nur die
+  Gutschriften (DC=="D") statt nur die Rechnungen (DC=="C").
+
+20000201
+- {set montant S12} statt Z12 in DCLTVA.LST Laut einer Information des
+  MWSt-Amts.
+
+2001-01-12
+- EUROS und FRANCS BELGES
+
+2001-03-01
+- Layout : Rahmen um "Op‚rations du"
+- Bugs wenn SetDevise()=="EUR" : "0" statt "1" im cadre r‚serv‚ …
+  l'administration. Kontrollsumme wusste nichts von den Kommas.
+

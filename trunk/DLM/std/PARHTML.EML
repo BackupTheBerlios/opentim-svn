@@ -1,0 +1,11 @@
+[=fparse("_HTML.EML")]
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<TITLE>[=getvar("Subject")]</TITLE>
+</HEAD>
+<BODY>
+<p>
+[="Mit freundlichen Gráen"]
+</BODY>
+</HTML>

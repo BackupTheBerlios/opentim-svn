@@ -1,0 +1,13 @@
+//
+// MVAVEN.QRY - generated 28.10.1999
+// for MVA.DBF
+//
+window 10 76 3 1 
+column 1 A-Kto pict @K@!
+column 6 Bezeichnung pict @k@s20 skip .t.
+column 4 Bemerkung pict @k@s15
+column 11 G-Kto skip .t.
+column 9 DC pict @K@!
+column 10 Betrag pict @K@!
+column 15 Pos. pict @K@! skip .t.
+column 8 Periode

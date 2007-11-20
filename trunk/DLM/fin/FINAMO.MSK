@@ -1,0 +1,24 @@
+//
+// C:\SOFT\TEST\TIM300\LUC\FINAMO.MSK - generated 31.10.98
+// for FIN.DBF
+//
+
+box 1 0 5 52
+box 1 53 5 79
+
+string 2 2 =utr("Doc.#","Dokument","Id Doc")
+string 2 23 =utr("Date","Datum","Date")
+string 2 55 Alter Saldo
+string 4 55 Neuer Saldo
+string 4 31 Status
+string 2 39 Periode
+
+get 1 2 12
+get 2 2 16
+get 3 2 29
+get 8 2 47
+get 7 4 38
+get 9 2 68
+get 10 4 68
+get 5 4 40
+wait 15 78 6 0 0

@@ -1,0 +1,17 @@
+//
+// MVAANA.QRY - generated 22.03.1999
+// for MVA.DBF
+//
+window 17 78 0 0 
+column 5 Datum say ""
+column 2 Jnl pict @K@!
+column 3 Dok.Nr. pict @K@!
+column 14 Partner pict @S25
+column 12 Debit pict @K@!
+column 13 Kredit pict @K@!
+column 11 G-Kto
+column 8 Per.
+column 7 Bemerkung Dokument
+column 4 Bemerkung Buchung
+column 15 Line pict @K@!
+help MVA

@@ -1,0 +1,10 @@
+//
+// C:\SOFT\RELEASE\TIM300\STD01D\AGS.QRY - generated 12.04.96
+// for AGS.DBF
+//
+column 1 C pict @K@!
+column 2 Bezeichnung
+column 3 Attr pict @K@!
+column 4 User pict @K@!
+column 5 N„ pict @K@!
+column 6 Maske pict @K@!

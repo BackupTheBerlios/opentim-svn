@@ -1,0 +1,11 @@
+//
+// DEV.QRY - generated 14.01.02
+// for DEV.DBF
+//
+window 15 70 0 0 
+column 1 ID pict @K@!
+column 2 Bezeichnung
+column 4 Dez.-;Stellen say ""
+column 3 Wechsel-;kurs BEF pict @K@!
+column 6 Wechsel-;kurs EUR
+column 5 Delta

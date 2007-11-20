@@ -1,0 +1,71 @@
+// VENFILT.DLG
+title "Fakturationsdokumente : Filter setzen"
+// field name=""
+before DlgDefault("IdJnl",space(LenIdJnl()))
+before DlgDefault("IdPrj",space(LenIdPrj()))
+before DlgDefault("IdPar",space(LenIdPar()))
+before DlgDefault("Date1",ctod(""))
+before DlgDefault("Date2",ctod(""))
+// before DlgDefault("nk"," ")
+// before DlgDefault("nl"," ")
+// before DlgDefault("nm"," ")
+// field name="nk" \
+    caption2=" nur Kunden" \
+    reader={|g|CbxReader(g)}
+// field name="nl" \
+    caption2=" nur Lieferanten" \
+    reader={|g|CbxReader(g)}
+// field name="nm" \
+    caption2=" nur Mitarbeiter" \
+    reader={|g|CbxReader(g)}
+
+field block={|x|GsbPeriode(x)} caption="Periode(n) "
+
+field name="IdJnl" \
+      caption="nur Journal : " \
+      picture="@k@!" \
+      pick={|x|PickIdJnl("VEN",x)}
+
+field name="IdPar" \
+      caption="nur Partner : " \
+      picture="@k@!" \
+      postedit={|x|GetIdPar(x)} \
+      pick={|x|PickPar(NIL,x)}
+
+#if type("VEN->IdPrj")!="U"
+field name="IdPrj" \
+      caption="nur Projekt : " \
+      picture="@k@!" \
+      pick={|x|PickPrj(x)}
+#endif
+field name="Date1" \
+    caption="Datum : vom " \
+    attrib="N"
+field name="Date2" \
+    caption=" bis zum "
+
+after DlgDefine("VenFilter",\
+  "ChkPeriode(VEN->Periode)==0"\
+)
+after empty(DlgValue("IdPrj")).or.\
+  DlgPlus("VenFilter",".and.VEN->IdPrj=='"+DlgValue("IdPrj")+"'")
+after empty(DlgValue("IdPar")).or.\
+  DlgPlus("VenFilter",".and.VEN->IdPar=='"+DlgValue("IdPar")+"'")
+after empty(DlgValue("IdJnl")).or.\
+  DlgPlus("VenFilter",".and.VEN->IdJnl=='"+DlgValue("IdJnl")+"'")
+
+// after empty(DlgValue("IdPlz")).or.\
+  DlgPlus("ParFilter",".and.PAR->CP=='"+DlgValue("IdPlz")+"'")
+// after empty(DlgValue("nk")).or.\
+  DlgPlus("ParFilter",".and.'K'$PAR->Attrib")
+// after empty(DlgValue("nl")).or.\
+  DlgPlus("ParFilter",".and.'L'$PAR->Attrib")
+// after empty(DlgValue("nm")).or.\
+  DlgPlus("ParFilter",".and.'M'$PAR->Attrib")
+after empty(DlgValue("Date1")).or.\
+  DlgPlus("VenFilter",".and.dtos(VEN->Date)>='"+dtos(DlgValue("Date1"))+"'")
+after empty(DlgValue("Date2")).or.\
+  DlgPlus("VenFilter",".and.dtos(VEN->Date)<='"+dtos(DlgValue("Date2"))+"'")
+
+// after empty(DlgValue("IdPrt")).or.
+

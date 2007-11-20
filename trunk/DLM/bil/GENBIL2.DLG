@@ -1,0 +1,22 @@
+// G/V-Rechnung
+#include "PERIODE.DLG"
+
+field caption=utr("items from  ","Posten von  ","Postes de  ") \
+      name="IdBil1" \
+      default=space(LenIdBil()) \
+      picture="@k@!"\
+      attrib="N" \
+      pick={|x|DbfPick({oBil()},"Bilanzposten","BILPICK",x)}
+field caption=utr(" until  "," bis  "," …  ") \
+      name="IdBil2" \
+      default=space(LenIdBil()) \
+      picture="@k@!"\
+      pick={|x|DbfPick({oBil()},"Bilanzposten","BILPICK",x)}
+
+field caption=utr("Language  ","Sprache  ","Langue  ") \
+      block={|x|SetTplLang(x)}\
+      picture="@k@!"\
+      pick={|x|PickLng(x)}
+
+#include "PREVIEW.DLG"
+

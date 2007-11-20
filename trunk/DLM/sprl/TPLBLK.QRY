@@ -1,0 +1,8 @@
+//
+// C:\TIM\pavonet\TPLBLK.QRY - generated 05.12.96
+// for TPL.DBF
+//
+window 18 52 0 0 
+column 2 Name pict @K@!
+column 3 Bezeichnung
+mask TPL

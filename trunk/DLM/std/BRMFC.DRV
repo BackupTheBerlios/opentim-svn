@@ -1,0 +1,30 @@
+Name         Brother MFC 9870
+Initialize   "E"+"(10U"+"&l80P"
+// (Reset) + (PC-8 (CP437) symbol set)
+Reset        "E"  // since 20031016
+FormFeed     chr(12)
+// certain fonts seem to work only with courier (not with lettergothic)
+// Font  5cpi  5    24/72  chr(27)+"(s0p5h5v0B"
+Font 10cpi 10    12/72  chr(27)+"(s0p10h0B"
+Font 12cpi 12    12/72  chr(27)+"(s0p12h0B"
+Font 15cpi 15    12/72  chr(27)+"(s0p15h0B"
+Font 17cpi 16.67 12/72  chr(27)+"(s0p16.67h0B"
+Font 20cpi 20    12/72  chr(27)+"(s0p20h20v0B"
+BoldOn     chr(27)+"(s3B"
+BoldOff    chr(27)+"(s0B"
+ItalOn     chr(27)+"(s1S"
+ItalOff    chr(27)+"(s0S"
+ShadowOn   chr(27)+"(s4B"
+ShadowOff  chr(27)+"(s1B"
+UnderOn    chr(27)+"&d0D"
+UnderOff   chr(27)+"&d@"
+Option P Portrait             "&l0O"
+Option L Landscape            "&l1O"
+Option 6 6LinesPerInch        "&l6D"
+Option 7 6.9LinesPerInch      "&l7C"
+Option 8 8LinesPerInch        "&l8D"
+Option A LowerCass            "&l1H"
+Option B MPTray               "&l2H"  // 20031230
+Option C 500Cass              "&l5H"
+Option D FontCourier          "(s4099T"
+Option E FontLetterGothic     "(s4102T"

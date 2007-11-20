@@ -1,0 +1,33 @@
+// FPARSE.ACT
+// argv[1] : input file name (without extension, path not needed)
+// argv[2] : input file format
+// argv[3] : output file name (with path)
+// argv[4] : output file format
+// len(argv)==4 .or. !Warning("fparse.act needs 4 parameters")
+
+// DlgDefine("cmd",'"c:\programme\microsoft office\office\winword.exe"')
+DlgDefine("cmd",'start')
+DlgPlus("cmd"," "+argv[3]+"."+argv[4])
+
+// getenv("OS")!="Windows_NT".or.DlgDefine("cmd","cmd /c "+DlgValue("cmd"))
+// das wird seit 20020119 in AppShell() automatisch gemacht
+
+MsgDisplay(MsgWorking())
+DrvLoad(argv[2])
+fparse(\
+  argv[1]+"."+argv[2],\
+  argv[3]+"."+argv[4],\
+  "[]",NIL,.t.\
+).or.!Warning(SetMsg())
+RETURN !Warning(\
+  argv[3]+"."+argv[4]\
+  +" wurde nicht erstellt."\
+) if ! file(argv[3]+"."+argv[4])
+
+
+// Confirm("AppShell('"+DlgValue("cmd")+"')",MsgSure())
+AppShell(DlgValue("cmd"))
+
+// RETURN AppShell('cmd /c "start '+argv[3]+"."+argv[4]+'"') if argv[4]=="HTM"
+// RETURN AppShell(AppPath()+"\viewhtm "+argv[3]+"."+argv[4]) if argv[4]=="HTM"
+// !Warning(argv[4]+" : unkonwn output file format")

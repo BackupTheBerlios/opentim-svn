@@ -1,0 +1,43 @@
+before SetDevise(DevDefault(MemPer1))
+before DlgDefault("HSTANA.IdAna1",space(LenIdAna()))
+before DlgDefault("HSTANA.IdAna2",space(LenIdAna()))
+before DlgDefault("HSTANA.IdJnl",space(LenIdJnl()))
+before DlgDefault("HSTANA.HstFilter","")
+// before DlgDefault("HSTANA.SumByJnl"," ")
+
+#include "PERIODE.DLG"
+
+#include "PREVIEW.DLG"
+
+field block={||""}
+
+field name="HSTANA.IdAna1" \
+    caption=utr("only accounts from ","nur Konten von ","comptes de ") \
+    pick={|x|PickAna(NIL,x)} \
+    attrib="N"
+field name="HSTANA.IdAna2" \
+    caption=utr(" until "," bis "," … ") \
+    pick={|x|PickAna(NIL,x)}
+
+field name="HSTANA.IdJnl" \
+    caption=utr("only transactions in journal ","nur Buchungen im Journal ","seulement journal ") \
+    picture="@k@!" \
+    pick={|x|DbfPick(\
+              {oJnl()},\
+              if(MemLang1=="D","Auswahl Journal","Choix journal"),\
+              "JNLPICK",\
+              x,\
+              "'G'$JNL->Attrib"\
+    )}
+
+field name="HSTANA.SumByJnl"\
+    caption2=utr(" also sum by journal"," auch Summen pro Journal"," ventiler ‚galement par journal") \
+    default=" " \
+    reader={|g|CbxReader(g)}
+
+#include "ASPDF.DLG"
+#include "TOCSV.DLG"
+
+//after empty(DlgValue("HSTANA.IdJnl"))\
+// .or.DlgDefine("HstFilter","HST->IdJnl=='" + DlgValue("IdJnl") + "'")
+after AppSaveMem()

@@ -1,0 +1,63 @@
+// Export Generalkonten mit Saldenliste nach Excel
+
+// #if getvar("ShowSaldo1") == "X"
+#exec DlgExec("GENHST")
+#exec setvar("Start",if(getvar("ShowSaldo1")=="X",\
+                     PerStart(MemPer1),\
+                     MemPer1))
+
+
+#exec DlgDefine("b",{||if(\
+  CTG->Periode<MemPer1,\
+  DlgPlus('Saldo1',Db2Dev(SetDevise(),CTG->Periode,val(CTG->Debit)-val(CTG->Credit))),\
+  DlgPlus('D',Db2Dev(SetDevise(),CTG->Periode,val(CTG->Debit)))\
+    .and.DlgPlus('C',Db2Dev(SetDevise(),CTG->Periode,val(CTG->Credit)))\
+)})
+
+RecordBefore DlgDefine("Saldo1",0)\
+        .and.DlgDefine("D",0)\
+        .and.DlgDefine("C",0)
+
+RecordBefore len(trim(GEN->IdGen))<LenIdGen().or.DbfScan(\
+  {oCtg()},\
+  1,\
+  GEN->IdGen+getvar("Start"),\
+  "CTG->IdGen=='"+GEN->IdGen+"'"\
+    +if(empty(MemPer2),"",".and.CTG->Periode<=MemPer2"),\
+  "right(CTG->Periode,1)!=chr(255)",\
+  DlgValue('b'),NIL,.f.\
+)
+
+OutputFile    "GEN.TXT"
+Delimiter     chr(9)
+FieldUpdate   IdGen        '"'+GEN->IdGen+'"'
+FieldUpdate   =LngName(MemLang1)        trim(GEN->Libell1)
+#if !empty(MemLang2)
+FieldUpdate   =LngName(MemLang2)        trim(GEN->Libell2)
+#if !empty(MemLang3)
+FieldUpdate   =LngName(MemLang3)        trim(GEN->Libell3)
+#if Has4Lang().and.!empty(MemLang4)
+  FieldUpdate   =LngName(MemLang4)        trim(GEN->Libell4)
+#endif
+#endif
+#endif
+
+FieldUpdate   OpeningBal   komma(ltrim(ntom(getvar("Saldo1"))))
+FieldUpdate   Debit        komma(ltrim(ntom(getvar("D"))))
+FieldUpdate   Credit       komma(ltrim(ntom(getvar("C"))))
+
+#if HasDlm("BIL")
+  FieldUpdate   IdBil        trim(GEN->IdBil)
+  FieldUpdate   BilName      trim(BilName(GEN->IdBil))
+#endif
+
+FieldUpdate   IdTax        trim(GEN->IdTax)
+FieldUpdate   IdCtr        trim(GEN->IdCtr)
+FieldUpdate   IdClj        trim(GEN->IdClj)
+FieldUpdate   IdCat        trim(GEN->IdCat)
+FieldUpdate   IdDev        trim(GEN->IdDev)
+FieldUpdate   Attrib       trim(GEN->Attrib)
+
+#include "DOS2WIN.CVT"
+
+OnSuccess AppShell("excel.bat "+i_OutputFile(),NIL,.f.)

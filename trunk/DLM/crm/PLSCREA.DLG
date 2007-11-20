@@ -1,0 +1,16 @@
+title "Partnerliste erstellen"
+
+before DlgDefine("IdPls",dtos(UserDate()))
+before DlgDefine("Name",padr("Neue Liste am " + dtoc(UserDate()),40))
+before DlgDefine("CopyFrom",PLS->IdPls)
+
+field name="IdPls" caption="Code        " picture="@k@!"
+field name="Name"  caption="Bezeichnung "
+field name="DoCopy" \
+      value=" " \
+      reader={|x|CbxReader(x)} \
+      caption2=" copier la liste courante"
+
+after !PlsExist(DlgValue("IdPls")).or.!Warning(DlgValue("IdPls")\
+ +" : Liste existiert bereits !")
+

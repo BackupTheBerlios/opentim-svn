@@ -1,0 +1,22 @@
+{set special P62}
+{set marginleft 0.5}
+{set marginright 0.5}
+{set paperwidth 8.27}
+{set paperheight 10.8}
+{set margintop 0.5}
+{set marginbottom 0.5}
+{set montant S10}
+{set solde 2}
+{set header INTRAH}
+{set footer INTRAF}
+{set font 12cpi}
+{etc do SetPageHeader({|| PrintHeader( \
+   MnuItemName(), \
+   PerText(cblock("JNL->Alias=='VEN'.and.'G'$JNL->Attrib")) \
+)})}
+{etc do SetPageHeader({||.t.})}
+{etc do SetDlgTitle(padr("INTRASTAT 19 : EINGANG",56)+" MA-1")}
+{etc do RepExec("HSIEKR")}
+{etc do p_eject(.f.)}
+{etc do SetDlgTitle(padr("INTRASTAT 29 : VERSENDUNG",56)+" MA-2")}
+{etc do RepExec("HSIVKR")}

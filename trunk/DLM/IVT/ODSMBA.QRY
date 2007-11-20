@@ -1,0 +1,12 @@
+//
+// ODSMBA.QRY - generated 27.07.2001
+// for ODS.DBF
+//
+column 1 Jnl
+column 2 IdDoc
+column 5 Datum say ""
+column 9 Periode pict @K@!
+column 7 Status
+column 6 Bemerkung
+column 10 Betrag pict @K@! expr Db2Dev(SetDevise(),ODS->Periode,val(ODS->Mont)) say ntom(nSum)
+mask ODS

@@ -1,0 +1,225 @@
+// BenutzermenÅ
+
+
+MnuAddTitle(utr("~Master","~Stammdaten","~SignalÇtique"))
+
+#if file(DbPath()+"\PRT.DBC")
+  DbcLoop("PRT.DBC",{|prt|\
+    MnuAddItem("~"+trim(prt[2]),cblock("PrtParEdit('"+prt[1]+"',NIL,MnuItemName())"))\
+  })
+#else
+  MnuAddItem(utr("~Partners","~Partner","~Partenaires"),{||PrtParEdit("P",NIL,MnuItemName()) })
+#endif
+#if HasDlm("CRM")
+MnuAddItem(utr("Partner ~Lists             ","Partner~listen             ","~Listes de partenaires     "),{||PlsEdit("Partnerlisten")})
+#endif
+#if HasDlm("ALA")
+MnuAddItem(    "Partnerliste fÅr ~Wartung  ",{||ParEdit("7",MnuItemName())})
+#endif
+#if file(DbPath()+"\LIC.DBF")
+MnuAddItem(    "Li~zenzen                  ",{||DbfEdit({oLic(),oPar(),oPlz()},MnuItemName())})
+MnuAddItem(    "Relea~ses                  ",{||DbfEdit({oRel(),oLic(),oPar(),oPlz()},MnuItemName())})
+#endif
+
+
+// MnuAddItem(tr("Partner nach ~ID           ","Partner nach ~ID           ","Partner nach ~ID           "),{||ParEdit(NIL,"Partner nach ID")})
+MnuAddSep()
+MnuAddItem(utr("~General Accounts          ","~Generalkonten             ","Comptes ~gÇnÇraux"),{||GenEdit()})
+#if HasDlm("ANA")
+MnuAddItem(utr("Anal~ytic Accounts","Anal~ysekonten","Comptes anal~ytiques"),{||AnaEdit()})
+#endif
+#if HasDlm("ART")
+MnuAddSep()
+MnuAddItem(utr("Product Gro~ups            ","Artikelgr~uppen            ","Gro~upes d'articles        "),{||GraEdit()})
+MnuAddItem(utr("Products by ~Id            ","~Artikel nach Nummer       ","~Articles par code id      "),{||ArtEdit()})
+MnuAddItem(utr("Products by ~Description   ","Artikel nach ~Bezeichnung  ","Articles par ~dÇsignation  "),{||ArtEdit("ART3","Artikel nach Bezeichnung")})
+MnuAddItem(utr("Delivery ~units            ","Liefer~einheiten           ","~UnitÇs de livraison       "),{||DbfEdit({oUnt()}, MnuItemName())})
+#endif
+#if HasDlm("VNLDATE")
+MnuAddItem(utr("~Text blocks               ","EinfÅge~texte              ","~Textes d'insertion        "),{||TplEdit(TptLocate("BLK"),MnuItemName())})
+#endif
+MnuAddSep()
+MnuAddItem(utr("~Cities                    ","Postleit~zahlen            ","Codes ~postaux             "),{||PlzEdit()})
+#if HasDlm("BIL")
+MnuAddItem(utr("~Balance entries           ","~Bilanzposten              ","Comptes de ~bilan          "),{||DbfEdit({oBil()},MnuItemName())})
+#endif
+#if HasDlm("DCL")
+MnuAddItem(\
+  utr("D~eclarations"),\
+  {||DbfEdit({oDcl()},MnuItemName())})
+// MnuAddItem(\
+  utr("Cash Flo~w Statement entries"),\
+  {||DbfEdit({oDcf()},MnuItemName())})
+#endif
+#if HasDlm("PRESTO")
+MnuAddItem(utr("Ta~rife Dienstleistungen   ","Ta~rife Dienstleistungen   ","Ta~rife Dienstleistungen   "),{||DbfEdit({oTac()},MnuItemName())})
+#endif
+
+#if HasDlm("VOC")
+MnuAddSep()
+MnuAddItem(   "Wortschatz /~Estnisch      ",{||DbfEdit({oVoc(),oArt()},"Wortschatz","VOCEE")})
+MnuAddItem(   "Wortschatz /~Deutsch       ",{||DbfEdit({oVoc(),oArt()},"Wortschatz","VOCDE")})
+MnuAddItem(   "Wortschatz /~Franáais      ",{||DbfEdit({oVoc(),oArt()},"Wortschatz","VOCFR")})
+MnuAddItem(   "Wortschatz /E~nglish       ",{||DbfEdit(\
+  {oVoc(),oArt()},MnuItemName(),"VOCEN")})
+#endif
+
+#if HasDlm("DLS")
+
+MnuAddTitle(utr("~Services","~Termine","~Services"))
+
+MnuAddItem("My service reports to~day",{||setvar("Date",UserDate()).and.DbfEdit(\
+  {oDls(),oPar(),oDla(),oPrj()},MnuItemName(),\
+  "DLSDAY",NIL,NIL,\
+  dtos(UserDate()),"dtos(DLS->Date)",NIL,NIL,NIL,2\
+)})
+
+MnuAddItem("~My service reports",{||DbfEdit(\
+  {oDls(),oPar(),oDla(),oPrj()},MnuItemName(),\
+  "DLSUSR",NIL,NIL,\
+  UserId(),"DLS->IdUsr",NIL,NIL,NIL,2\
+)})
+
+MnuAddItem("Alle ~Dienstleistungen",\
+  {||DbfEdit(\
+    {oDls(),oPar(),oDla(),oPrj()}, MnuItemName(),"DLS",\
+    NIL,NIL,NIL,NIL,NIL,NIL,NIL,2)})
+
+MnuAddItem("~Aufteilung /Projekt",\
+  {||RepPrint("DLSPRJ1","DLSPRJ1",MnuItemName())})
+
+MnuAddSep()
+MnuAddItem("My ~open tickets",{||DbfEdit(\
+  {oPin(),oPar(),oPrj()},MnuItemName(),\
+  "PINUSR",NIL,".t.",\
+  UserId()+" ","PIN->IdUsr+PIN->IdPns"\
+)})
+MnuAddItem("My ~scheduled tickets",{||DbfEdit(\
+  {oPin(),oPar(),oPrj()},MnuItemName(),\
+  "PINUSRS",NIL,".t.",\
+  UserId()+"S","PIN->IdUsr+PIN->IdPns"\
+)})
+MnuAddItem("My w~aiting tickets",{||DbfEdit(\
+  {oPin(),oPar(),oPrj()},MnuItemName(),\
+  "PINUSR",NIL,".t.",\
+  UserId()+"A","PIN->IdUsr+PIN->IdPns"\
+)})
+MnuAddItem("Tickets par ~utilisateur",{||ActExec("PINUSR")})
+// MnuAddItem("My ~tickets",{||DbfEdit(\
+  {oPin(),oPar(),oPrj()},MnuItemName(),\
+  "PINUSR",NIL,".t.",\
+  UserId(),"PIN->IdUsr"\
+)})
+MnuAddItem("Tickets par ~n¯",{||DbfEdit(\
+  {oPin(),oPar(),oPrj()},MnuItemName(),\
+  "PIN")})
+
+
+MnuAddSep()
+
+MnuAddItem("Dienstleistungs~arten",\
+  {||DbfEdit({oDla(),oArt()}, MnuItemName())})
+
+
+#endif
+
+#if HasDlm("BIBLIO")
+MnuAddTitle(utr("~Library","~Bibliothek","~Bibliothäque"))
+MnuAddItem("~BÅcher                  ",{||DtpObjEdit("B")})
+MnuAddItem("~Artikel                 ",{||DtpObjEdit("A")})
+MnuAddItem("E~xterne                 ",{||DtpObjEdit("X")})
+MnuAddSep()
+MnuAddItem("nach ~Rubrik             ",{||RubEdit()      })
+MnuAddItem("nach ~Verlag             ",{||GrpEdit()      })
+MnuAddItem("nach A~utor              ",{||AutEdit()      })
+MnuAddItem("alle nach ~Nummer        ",{||ObjEdit()      })
+MnuAddSep()
+MnuAddItem("~Stichworte              ",{||NtsEdit()      })
+#endif
+
+GrjAddMenu(utr("~Journals","~Journale","~Journaux"))
+
+MnuAddTitle(utr("~Tools","E~xtras","~Outils"))
+
+#if HasDlm("VNA")
+  MnuAddItem("Fakturierungs~vorschlÑge       ",{||JnlVnaEdit(MnuItemName()) })
+  MnuAddItem("~Automatik-Fakturierung        ",{||VnaAuto() })
+  MnuAddSep()
+#endif
+#if oTsk() != NIL
+  MnuAddItem(utr("Recurrent ~Tasks","~Zyklische Aufgaben","~TÉches rÇcurrentes"),\
+  {||DbfEdit({oTsk(),oPar()},MnuItemName())})
+  MnuAddSep()
+#endif
+#if HasDlm("MSG")
+  MnuAddItem("~Correspondance                ",{||MsgEdit() })
+  MnuAddSep()
+#endif
+#if HasDlm("PRJ")
+  MnuAddItem("Pro~jects                      ",{||DbfEdit(\
+    {oPrj(),oPar()},MnuItemName(),"PRJ") })
+  MnuAddItem("~Todo                          ",{||DbfEdit(\
+    {oPrj(),oPar()},MnuItemName(),"PRJSTAT",NIL,".t.",\
+    "T","PRJ->Status") \
+    })
+  MnuAddItem("~Done                          ",{||DbfEdit(\
+    {oPrj(),oPar()},MnuItemName(),"PRJSTAT",NIL,".t.",\
+    "D","PRJ->Status") \
+    })
+  MnuAddItem("~Waiting                       ",{||DbfEdit(\
+    {oPrj(),oPar()},MnuItemName(),"PRJSTAT",NIL,".t.",\
+    "W","PRJ->Status") \
+    })
+  // MnuAddItem("Pro~jects                      ",{||PrjEdit() })
+#endif
+
+#if HasDlm("PRESTO")
+  MnuAddItem("~Calendar                      ",{||TrmEdit() })
+  MnuAddSep()
+  MnuAddItem("~Wochenplan drucken",{||ActExec("WOCHE")})
+#endif
+#if HasDlm("FIN")
+  MnuAddItem(utr("~Search amount in GL history   ",\
+                 "~Betrag in Historik suchen     ",\
+                 "~Rechercher montant"),\
+    {||DbfEdit(\
+      {oHst(),oPar(),oGen(),oVen(),oFin()},\
+      MnuItemName(),"HSTMONT"\
+    )})
+#if file(DbPath()+"\PRT.DBC")
+    DbcLoop("PRT.DBC",{|prt|\
+      MnuAddItem(utr("Open transactions","Offene Posten","Postes ouverts")\
+                 +" ~"+trim(prt[2]),\
+                 cblock("PrtParEdit('"+prt[1]+"','MAHN',MnuItemName())"))\
+    })
+    // MnuAddItem(utr("Open transactions ~customers   ",\
+                   "Offene Posten ~Kunden          ",\
+                   "Clients ~dÇbiteurs"),\
+      {||PrtParEdit(utr("C","K","C"),"MAHN",MnuItemName())})
+    // MnuAddItem(utr("Open transactions ~suppliers   ",\
+                   "Offene Posten ~Lieferanten     ",\
+                   "Fournisseurs ~crÇditeurs"),\
+      {||PrtParEdit(utr("S","L","F"),"MAHN",MnuItemName())})
+#else
+    MnuAddItem(utr("Open transactions by ~partner  ",\
+                   "Offene Posten ~Partner         ",\
+                   "Offene Posten ~Partner         "),\
+      {||PrtParEdit("P","MAHN",MnuItemName())})
+#endif
+  MnuAddItem(utr("Open transactions by ~journal",\
+                 "Offene Posten pro ~Journal",\
+                 "Postes ouverts par ~Journal"),\
+    {||JnlHstEdit(MnuItemName())       })
+  // MnuAddItem("K~ontoauszÅge drucken          ",{||HstAuto("P")                                  })
+#endif
+
+#if HasDlm("WWW")
+FileExec("WWW.MNU")
+#endif
+
+#if HasDlm("PTG")
+FileExec("PTG.MNU")
+#endif
+
+
+FileExec("PROG.MNU")

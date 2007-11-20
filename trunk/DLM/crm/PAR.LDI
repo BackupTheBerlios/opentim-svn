@@ -1,0 +1,47 @@
+dn:: [=dos2base64("cn="+trim1(PAR->Vorname)+trim(PAR->Firme)+", ou=People, o="+CfgDatabase())]
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn:: [=dos2base64(trim1(PAR->Vorname)+trim(PAR->Firme))]
+sn:: [=dos2base64(trim(PAR->Firme))]
+[etc if !empty(PAR->Vorname)]
+givenname:: [=dos2base64(trim(PAR->Vorname))]
+[etc endif]
+xmozillausehtmlmail: FALSE
+[etc if !empty(PAR->Allo)]
+personalTitle:: [=dos2base64(trim(PAR->Allo))]
+[etc endif]
+locality:: [=dos2base64(trim(PlzName(PAR->Pays,PAR->CP)))]
+postalcode: [=trim(left(PAR->CP,7))]
+countryname:: [=dos2base64(trim(NatField(PAR->Pays,"NAT->Name")))]
+street:: [=dos2base64(trim(ParStreet()))]
+[etc if !empty(PAR->Tel)]
+telephoneNumber:: [=dos2base64(trim(PAR->Tel))]
+homephone:: [=dos2base64(trim(PAR->Tel))]
+xmozillaanyphone:: [=dos2base64(trim(PAR->Tel))]
+[etc endif]
+[etc if !empty(PAR->Fax)]
+facsimiletelephonenumber:: [=dos2base64(trim(PAR->Fax))]
+[etc endif]
+[etc if !empty(PAR->GSM)]
+cellphone:: [=dos2base64(trim(PAR->GSM))]
+[etc endif]
+[etc if !empty(PAR->URL)]
+homeurl: [=trim(PAR->URL)]
+[etc endif]
+[etc if !empty(PAR->Memo)]
+description:: [=dos2base64(hardcr(PAR->Memo))]
+[etc endif]
+[etc if !empty(PAR->Email)]
+mail: [=trim(PAR->Email)]
+[etc endif]
+[etc if .f.]
+
+ou: People
+sn: [=strtran(trim(PAR->Firme),",","\\,")]
+givenname: [=strtran(trim(PAR->Vorname),",","\\,")]
+preferredLanguage: [*lng2iso(PAR->Langue)]
+[etc endif]
+
+

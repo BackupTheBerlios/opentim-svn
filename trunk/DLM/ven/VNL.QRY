@@ -1,0 +1,15 @@
+//
+// .\HEINEN\VNL.QRY - generated 15.09.95
+// for VNL.DBF
+//
+window 11 80 11 0 
+column 5 V
+column 6 =utr("Accnt","Konto","Compte")
+column 10 =utr("Anal.","A-Konto","Anal.")
+column 21 =utr("Description","Bezeichnung","DÇsignation")
+column 8 =utr("Qty","Menge","QtÇ")
+column 9 StÅckpreis
+column 16 =utr("price","Netto","htva")
+column 13 M
+column 11 =utr("VAT","MWSt","TVA")
+mask VNL

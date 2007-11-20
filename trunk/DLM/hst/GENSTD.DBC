@@ -1,0 +1,4 @@
+// Beginnsaldo, Periode, Endsaldo
+S2|Beginnsaldo |ChkPeriode(Periode)<0
+DC|Periode     |ChkPeriode(Periode)=0
+S2|Endsaldo    |ChkPeriode(Periode)<=0

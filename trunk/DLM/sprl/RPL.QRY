@@ -1,0 +1,18 @@
+//
+// F:\TIM\PAC\RPL.QRY - generated 04.06.97
+// for RPL.DBF
+//
+column 3 IdPar
+column 9 Match
+column 1 Date
+column 2 Line
+column 4 Date1
+column 5 NB pict @k@s20
+column 6 Date2
+column 10 IdDgr pict @K@!
+column 8 Mont
+column 7 DC pict @K@!
+column 11 MontDev pict @K@!
+column 12 _MontD pict @K@!
+column 13 _MontC pict @K@!
+order 2

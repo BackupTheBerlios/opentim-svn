@@ -1,0 +1,2 @@
+ddAddIndex("upper(INT->Name)","Bezeichnung")
+ddAddIndex("upper(INT->Code)","Code")

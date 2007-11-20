@@ -1,0 +1,40 @@
+// Rechnungsbuchkolonnen 
+V|KU|Kunde
+V|00|Wert 0%
+V|01|Wert 6%
+V|02|Wert 12%
+V|03|Wert 21%
+V|46|Wert Intracom
+V|45|Wert Vertragspartner
+V|47|Wert Export
+V|54|geschuldete MWSt Belgien
+V|D1|Umsatz Deutschland 
+V|D2|geschuldete MWSt Deutschland 
+V|N1|Umsatz NL
+V|N2|geschuldete MWSt NL
+V|L1|Umsatz Luxemburg
+V|L2|geschuldete MWSt Luxemburg
+V|F1|Umsatz Frankreich
+V|F2|geschuldete MWSt Frankreich
+V|**|separat deklariert
+V|..|(Verteilung je nach MWSt-Code)
+
+E|LI|Lieferant
+E|81|Waren
+E|82|Kosten
+// E|NA|nicht abzugsf„hige MWSt.
+E|83|Investitionen
+E|**|nicht deklariert
+E|59|abziehbare MWSt
+E|55|abziehbare MWSt Intracom
+E|56|abziehbare MWSt Vertragspartner
+E|57|abziehbare MWSt Import
+E|D1|Kosten Deutschland
+E|D2|abziehbare MWSt Deutschland 
+E|N1|Kosten NL
+E|N2|abziehbare MWSt NL
+E|L1|Kosten Luxemburg
+E|L2|abziehbare MWSt Luxemburg
+E|F1|Kosten Frankreich
+E|F2|abziehbare MWSt Frankreich
+E|..|(Verteilung je nach MWSt-Code)

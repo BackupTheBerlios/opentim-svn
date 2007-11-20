@@ -1,0 +1,16 @@
+// IBM 9 pin
+Name IBM 9 pin
+Initialize ""
+Reset       ""
+FormFeed              chr(12)
+//
+Font 10cpi 10 12/72  chr(18)
+Font 12cpi 12 12/72  chr(27)+":"
+Font 15cpi 15 12/72  chr(27)+"g"
+Font 20cpi 20 12/72  chr(27)+chr(15)
+BoldOn                chr(27)+"E"
+BoldOff               chr(27)+"F"
+UnderOn               chr(27)+"-1"
+UnderOff              chr(27)+"-0"
+ItalOn                chr(27)+"%G"
+ItalOff               chr(27)+"%H"

@@ -1,0 +1,131 @@
+// Druckmen
+#if HasDlm("SPRL")
+MnuAddTitle(utr("~VAT","~MWSt","~TVA"))
+#endif
+#if HasDlm("SPRL").and.HasDlm("EE")
+MnuAddItem("~KMD overview              ",{||RepPrint("PERKMD","PERKMD","KMD overview")})
+#endif
+#if HasDlm("SPRL")
+MnuAddItem("~Rechnungsbcher           ",{|| RepPrint("HSTVEN","HSTVEN","Rechnungsbcher")})
+MnuAddItem("MWSt.-Erk~l„rung           ",{|| ActExec("DCLTVA") })
+MnuAddItem("Kundenliste ~Intracom      ",{|| DlgExec("LSTTVAI") })
+MnuAddItem("Kundenliste ~MWSt          ",{|| DlgExec("LSTTVAA") })
+MnuAddItem("Kundenliste ~Deutschland   ",{|| DlgExec("LSTTVAD") })
+#endif
+#if .f.
+MnuAddSep()
+MnuAddItem("Kundenliste ~MWSt.         ",{|| VenTvaListe(.t.,"V",".t.",5000,"Kundenliste MWSt","TVA-A",NIL,NIL,NIL,"VEN->IdReg$'CA'") })
+MnuAddItem("Kontrollliste ~1           ",{|| VenTvaListe(.t.,"V",".t.",-5000,"Kontrolle 1 : Kunden < 5000",NIL,NIL,NIL,NIL,"VEN->IdReg$'CA'") })
+MnuAddItem("Kontrollliste ~2           ",{|| VenTvaListe(.t.,"V",".t.",0,"Kontrolle 2 : Sonstige Kunden",NIL,NIL,NIL,NIL,"!VEN->IdReg$'CA'") })
+#endif
+
+MnuAddTitle(utr("~Accounting","~Buchhaltung","~Comptabilit‚"))
+#if HasDlm("SPRL")
+MnuAddItem( tr("Overview P/L","šbersicht G/V"),\
+            {||RepPrint("PERGEN","PERGEN",MnuItemName())})
+#endif
+MnuAddItem(utr("Financial ~journals        ","Finanz~journale            ","~Journaux financiers       "),{|| RepPrint("HSTFIN","HSTFIN","Kassenbcher") })
+MnuAddSep()
+MnuAddItem(utr("~General accounts balances ","Saldenliste ~Generalkonten ","Soldes comptes ~g‚n‚raux  "),{|| RepPrint("GENHST","GENHST",MnuItemName()) })
+//
+#if HasDlm("SPRL")
+  MnuAddItem("Saldenliste ~Kunden        ",{|| DlgDefine("IdCtr","V").and.RepPrint("PARHST","PARHST","Saldenliste Kunden") })
+  MnuAddItem("Saldenliste ~Lieferanten   ",{|| DlgDefine("IdCtr","E").and.RepPrint("PARHST","PARHST","Saldenliste Lieferanten") })
+  MnuAddItem(utr("~Unmatched transactions    ",\
+               "šbersicht ~offene Posten   ",\
+               "šbersicht ~offene Posten   "),\
+  {|| RepPrint("PARHST02","PARHST02","šbersicht offene Posten") })
+#endif
+#if HasDlm("FUND")
+  MnuAddItem(utr("~Partner account balances  ",\
+                 "Saldenliste ~Partner       ",\
+                 "Soldes comptes ~partic.    "),\
+    {|| setvar("IdCtr","").and.RepPrint("PARHST","PARHST",MnuItemName()) })
+#endif
+MnuAddSep()
+MnuAddItem(utr("G~eneral accounts history  ",\
+               "Historik G~eneralkonten    ",\
+               "Historique comptes g~‚n.   "),\
+               {|| RepPrint("HSTGEN","HSTGEN",MnuItemName()) })
+//
+#if HasDlm("SPRL")
+  MnuAddItem("Historik L~ieferanten      ",{|| setvar("IdCtrList","E").and.RepPrint("HSTPAR","HSTPAR","Historik Partner") })
+  MnuAddItem("Historik K~unden           ",{|| setvar("IdCtrList","V").and.RepPrint("HSTPAR","HSTPAR","Historik Partner") })
+#endif
+MnuAddItem(utr("P~artner account history   ",\
+               "Historik P~artnerkonten    ",\
+               "Historique comptes p~artic."),\
+  {|| setvar("IdCtrList","").and.RepPrint("HSTPAR","HSTPAR",MnuItemName()) })
+MnuAddSep()
+MnuAddItem("Haupt~journal              ",{|| JnlCentral("LISTE",2,40," ") })
+MnuAddItem("~andere Listen...          ",{|| TplDlgPrint("LST") })
+MnuAddItem("Gesamt~historik            ",{|| RepPrint("HSTDATE","HSTDATE","Gesamthistorik") })
+
+#if HasDLM("HSI")
+MnuAddTitle("~Intrastat")
+MnuAddItem("Intrastat-~Codes",{||DbfEdit({oInt()},MnuItemName())})
+MnuAddItem("Intrastat-~Historik",{||DbfEdit({oHsi(),oInt()},MnuItemName())})
+MnuAddItem("~Kontrollliste Intrastat",{||RepPrint("HSI001","HSI001",MnuItemName())})
+MnuAddItem("Kontrollliste ~2 Intrastat",{||RepPrint("HSI002","HSI001",MnuItemName())})
+// MnuAddItem("~Intrastat-Erklärung",{||TplDlgPrint("LST","LST007","JNL->Alias=='VEN'.and.'G'$JNL->Attrib")})
+MnuAddItem("~Intrastat-Erkl„rung",{||ActExec("DCLHSI")})
+#endif
+
+
+
+
+// #if HasOption("ANA")
+#if HasDlm("ANA")
+MnuAddTitle(utr("Anal~ytic","Anal~ytisch","Anal~ytique"))
+// MnuAddItem("~Historik                          ",{|| RepPrint("MVAANA01","MVAANA","Historik Analysekonten") })
+// MnuAddItem("~Saldenliste Analysekonten         ",{|| RepPrint("MVAANA02","MVAANA","Saldenliste Analysekonten") })
+MnuAddItem("~Saldenliste Analysekonten",{||\
+  RepPrint("ANAHST","ANAHST",MnuItemName()) })
+MnuAddItem("~Historik Analysekonten",{||\
+  RepPrint("HSTANA","HSTANA",MnuItemName()) })
+// MnuAddItem("~Saldenliste General-/Analysekonten",{|| RepPrint("GENMVA01","GENMVA01",MsgWorking()) })
+#endif
+
+
+MnuAddTitle(utr("~Other","~Sonstige","~Autres"))
+MnuAddItem("~Partner nach Umsatz        ",{|| RepPrint("PAR002","PAR002","Partner nach Umsatz") })
+MnuAddItem("~Renner/Penner-Liste        ",{|| RepPrint("ARTCTS01","ARTCTS01","Renner/Penner-Liste") })
+#if HasDlm("VEN")
+MnuAddItem("~Unregistrierte Dokumente   ",{|| RepPrint("VENOPEN",NIL,"Unregistrierte Dokumente") })
+MnuAddItem("Fakturations~journal        ",{|| RepPrint("VENJNL","VENJNL","Fakturationsjournal") })
+#endif
+#if HasDlm("PPS")
+MnuAddItem("~Auftragslage               ",{|| RepPrint("VENUSR","VENUSR",MnuItemName())})
+MnuAddItem("Produktionsplanung ~Grob    ",{|| RepPrint("VENPPS","VENPPS",MnuItemName())})
+MnuAddItem("Produktionsplanung ~Detail  ",{|| RepPrint("VNLPPS","VNLPPS",MnuItemName())})
+#endif
+#if HasDlm("BIL")
+MnuAddSep()
+// MnuAddItem("~Bilanz                     ",{|| RepPrint("BIL","GENBIL","Bilanz") })
+MnuAddItem(utr("~Balance","~Bilanz","~Balance"),{|| RepPrint("GENBIL","GENBIL",MnuItemName()) })
+MnuAddItem(utr("~P & L Statement","~G/V-Rechnung","~G/V-Rechnung"),{|| RepPrint("GENBIL2","GENBIL2",MnuItemName()) })
+MnuAddItem(utr("~Export to Excel","~Export nach Excel"),{|| ActExec("GENBIL2") })
+#endif
+#if HasDlm("DCL")
+MnuAddItem(utr(\
+  "Cash-~Flow Statement",\
+  "Kapital~flussrechnung",\
+  "~Flux de tr‚sorerie"),\
+  {|| RepPrint("DCL01","DCL01",MnuItemName()) })
+MnuAddItem(utr(\
+  "Cash ~History",\
+  "Kassen~historik",\
+  "~Historique tr‚sorerie"),\
+  {|| RepPrint("HSTDCL","HSTDCL",MnuItemName()) })
+#endif
+// #if HasDlm("ALA")
+// MnuAddItem("~Statistik Arbeitszettel    ",{|| RepPrint("VNL001","VNL001",MnuItemName()})
+// #endif
+#if HasDlm("PRESTO")
+MnuAddSep()
+MnuAddItem("~šbersicht Agenda           ",{||RepPrint("PARTRM","PARTRM",MsgWorking()) })
+MnuAddItem("~Detail Agenda              ",{||RepPrint("TRMPAR","TRMPAR","...")        })
+#endif
+MnuAddItem("Drucker-~Testseite          ",{|| ActExec("PRNTEST") })
+
+FileExec("PROG.MNU")

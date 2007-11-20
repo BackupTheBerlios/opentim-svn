@@ -1,0 +1,77 @@
+// TIMTEST.DLG
+
+title utr("Integrity test","Integrit„tstest","Test d'int‚grit‚")
+
+before DlgDefault("GenTest","X")
+before DlgDefault("ArtTest","X")
+before DlgDefault("OdlTest","X")
+before DlgDefault("LniTest","X")
+before DlgDefault("BudTest","X")
+before DlgDefault("MviTest","X")
+before DlgDefault("MviCtbTest","X")
+before DlgDefault("CtbBudTest","X")
+before DlgDefault("ImpImlTest","X")
+before DlgDefault("TraTest","X")
+before DlgDefault("VenTest","X")
+before DlgDefault("VnlTest","X")
+before DlgDefault("FinTest","X")
+before DlgDefault("FnlTest","X")
+before DlgDefault("ParTest","X")
+before DlgDefault("HstTest","X")
+before DlgDefault("SerTest","X")
+
+
+field name="GenTest"    reader={|x|CbxReader(x)} caption2=" GenTest"
+field name="ArtTest"    reader={|x|CbxReader(x)} caption2=" ArtTest"
+field name="VenTest"    reader={|x|CbxReader(x)} caption2=" VenTest"
+field name="VnlTest"    reader={|x|CbxReader(x)} caption2=" VnlTest"
+field name="FinTest"    reader={|x|CbxReader(x)} caption2=" FinTest"
+field name="FnlTest"    reader={|x|CbxReader(x)} caption2=" FnlTest"
+field name="ParTest"    reader={|x|CbxReader(x)} caption2=" ParTest"
+field name="HstTest"    reader={|x|CbxReader(x)} caption2=" HstTest"
+#if HasOption("IMP")
+field name="LniTest"    reader={|x|CbxReader(x)} caption2=" LniTest"
+field name="BudTest"    reader={|x|CbxReader(x)} caption2=" BudTest"
+field name="MviTest"    reader={|x|CbxReader(x)} caption2=" MviTest"
+field name="MviCtbTest" reader={|x|CbxReader(x)} caption2=" MviCtbTest"
+field name="CtbBudTest" reader={|x|CbxReader(x)} caption2=" CtbBudTest"
+field name="ImpImlTest" reader={|x|CbxReader(x)} caption2=" ImpImlTest"
+field name="TraTest"    reader={|x|CbxReader(x)} caption2=" TraTest"
+#endif
+#if HasOption("ODS")
+field name="OdlTest"    reader={|x|CbxReader(x)} caption2=" OdlTest"
+#endif
+#if HasOption("SER")
+field name="SerTest"    reader={|x|CbxReader(x)} caption2=" SerTest"
+#endif
+#if oSes() != NIL
+  field name="SesTest" reader={|x|CbxReader(x)} default="X" \
+        caption2=" Sitzungen"
+#endif
+#if oKtg() != NIL
+  field name="KtgTest" reader={|x|CbxReader(x)} default="X" \
+        caption2=" Kontingente"
+#endif
+#if oKrg() != NIL
+  field name="KrgTest" reader={|x|CbxReader(x)} default="X" \
+        caption2=" Rechnungen"
+#endif
+
+field caption=utr(\
+    "(the previous test ",\
+    "(Der letzte Integrit„tstest ",\
+    "(le dernier test ",\
+  )\
+  +if(\
+    IndExist("TIMTEST"),\
+    utr("was run ","wurde vor ","date depuis ")\
+    +ntrim(UserDate()-IndDate("TIMTEST")) \
+    +utr(" days ago."," Tagen gemacht."," jours."),\
+    utr("failed.","war unvollst„ndig.","‚tait incomplet.")\
+  )+")"
+
+after PrintAct(\
+   "TIMTEST",\
+   {||PrintHeader("Integrit„tstest")}, \
+   "LISTE","X",80\
+ )

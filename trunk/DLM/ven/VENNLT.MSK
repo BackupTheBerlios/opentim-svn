@@ -1,0 +1,24 @@
+//
+// t:\data\luc\release\tim4\dlm\VEN\VENNLT.MSK - generated 20.11.02
+// for VEN.DBF
+//
+
+box 2 0 6 79
+
+string 2 13 ÿPartnerÿ
+string 4 16 Subject
+string 3 53 Status
+string 4 2 Datum
+string 2 2 ÿDokumentÿ
+
+get 1 3 2
+get 2 3 6
+get 3 3 13
+get 4 3 20 pict @S30
+get 8 5 6
+get 5 5 16 pict @K@S50
+get 7 3 65
+get 24 3 67
+get 21 7 1 pict 78x7
+get 0 5 2 block padr(jour(VEN->Date,"D"),3)
+wait 7 78 15 1 1

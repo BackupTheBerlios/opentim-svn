@@ -1,0 +1,8 @@
+// šbersicht Gewinn/Verlust
+
+title MnuItemName()
+#include "PERIODE.DLG"
+#include "PREVIEW.DLG"
+
+after SetMntFormat("S12")
+after AppSaveMem()

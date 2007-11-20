@@ -1,0 +1,75 @@
+#
+# FILE LIB-BX.LNK - Blinker Linker Script (protected mode)
+#
+BLINKER EXECUTABLE CLIPPER F:95
+BLINKER MEMORY PACK 50
+#BLINKER PROCEDURE DEPTH 80
+#BEGINAREA
+#
+# Luc's LIB modules
+#
+FILE rptmeths
+FILE Etc
+FILE Login
+FILE ddLayout
+FILE report
+// 20071013 FILE ScrSave
+# Clipper SYS modules (somewhat modified...)
+FILE ErrSysLS
+FILE ddSeek
+FILE filter
+FILE import
+FILE aBrowse
+FILE a2Browse
+FILE Protect
+FILE Calend
+FILE woy
+#ENDAREA
+##
+## Nanfor OBJ patches (only exospace)
+##
+# FILE diskfunc
+# FILE alt
+##
+## Nanfor LIB patch (only exospace)
+##
+LIB LFN # new 20040731
+LIB LL  # new 20040731
+# LIB NANFORX, NANFOR
+LIB NANFOR
+LIB CPMI
+LIB s:\oslib\lib\oslib
+
+#FILE allkey
+#SEARCH s:\clip52e\dblfn\dblfn # memoread() doesn't work : "file is empty"
+FILE AppInit
+FILE ddMeths
+FILE TxtEdit
+FILE Stdio
+FILE Windows
+FILE ddGet
+FILE ddArea
+FILE ddEdit
+FILE dlg
+FILE sMenu
+FILE views
+FILE Colors
+FILE getsysph
+#FILE printer
+FILE ostream
+FILE tab
+FILE drv
+FILE mfileio
+FILE dbcedit
+FILE datanorm
+##
+## un-comment to link protected-mode .exe
+##
+BLINKER INCREMENTAL OFF
+BLINKER EXECUTABLE EXTENDED
+##
+##
+##
+SEARCH S:\BLINK\LIB\BLXCLP52
+@S:\BLINK\CLP\CL520MIN.LNK
+# blinker 5.1 @\SOFT\BLINK\CLP\LNK\CL520MIN.LNK

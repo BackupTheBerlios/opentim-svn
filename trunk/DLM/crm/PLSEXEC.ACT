@@ -1,0 +1,10 @@
+Confirm("Ex‚cuter la liste "+trim(PLS->IdPls),MsgSure())
+setvar("OutFile",AppPath()+"\temp\members.txt")
+DbfExport({oMbr(),oPar(),oNat(),oPlz()},1,\
+  PLS->IdPls,"MBR->IdPls=='"+PLS->IdPls+"'",NIL,"MBR.EXP",NIL,\
+  getvar("OutFile"))
+// Confirm("foo")
+AppShell(if(empty(PLS->MasterDoc),\
+  "excel.bat "+getvar("OutFile"),\
+  "start "+trim(PLS->MasterDoc)),NIL,.f.)
+

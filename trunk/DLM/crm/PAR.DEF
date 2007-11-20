@@ -1,0 +1,178 @@
+// par.def
+ddAddIndex("upper(PAR->NoTva)","Nø TVA","!empty(PAR->NoTva)")
+ddAddIndex("PAR->IdPrt+dtos(PAR->MvpDate)","MvpDate","!empty(PAR->MvpDate)")
+// ddAddIndex("upper(PAR->Tel)","Tel","!empty(PAR->Tel)",{|x|upper(x)})
+ddAddIndex("substr(PAR->GebDat,5)","Geburtstag","!empty(PAR->GebDat)")
+ddAddField("GebDat","C",8,0)
+ddAddField("Vorname","C",35,0)
+ddAddField("Name3","C",35,0)
+ddAddField("Name4","C",35,0)
+ddAddField("Sex","C",1,0,\
+  "@!","",\
+  NIL,NIL,\
+  {||empty(PAR->Sex)\
+     .or.!empty(DbcText("SEX.DBC",PAR->Sex))\
+     .or.!SetMsg("Sex: invalid data!")\
+  },{|x|PickDbcCode("SEX.DBC",x)},{||.t.},\
+  NIL)
+ddFldSetValidate("Pays","empty(NatField(PAR->Pays,'IdLng')).or.(PAR->Langue:=NatField(PAR->Pays,'IdLng'))!=NIL")
+ddFldSetValidate("Langue","empty(PAR->Langue).or.IsLangue(PAR->Langue)")
+ddAddField("email","C",250,0)
+ddAddField("GSM","C",LenTel(),0)
+ddAddField("URL","C",80,0)
+ddAddField("DatModi","D",8,0,NIL,NIL,NIL,NIL,NIL,NIL,{||.f.})
+ddAddField("Fahrt","C",LenQte(),0,"","",NIL,NIL,\
+  NIL,NIL,\
+  {||.t.},{|x|GetQte(x,":")}\
+)
+ddAddField("ZipCode","C",8,0,NIL,if(HasDlm("ZIP"),NIL,"H"))
+!HasDlm("ZIP").or.ddFldSetSize("CP",5,0)
+
+ddFldSetSize("Compte1",LenBqe(),0)
+// ddFldSetSize("Compte2",LenBqe(),0)
+// ddFldSetSize("Compte3",LenBqe(),0)
+
+
+// ddAddSpecial(\
+  {||ParVenEdit(PAR->IdPar)},\
+  "~Fakturationsdokumente  [F5]",\
+  -4\
+)
+ddAddSpecial(\
+  {||DbfEdit(\
+    {oVen(),oPar(),oPlz()},\
+    trim(ParName()) + " : Dokumente pro Partner","VENPAR",\
+    NIL,\
+    NIL,\
+    PAR->IdPar,\
+    "VEN->IdPar",\
+    NIL,\
+    "VenCreate('" + PAR->IdPar + "')"\
+  )},\
+  "~Dokumente pro Partner     [F5]",\
+  -4 \
+)
+
+
+ddAddSpecial({||ParRename()}, MsgMnuRename(), -31 )
+ddAddSpecial( \
+  {||ParMbrEdit(PAR->IdPar)},   \
+  "~Memberships...            [F6]" , \
+  -5\
+)
+ddAddSpecial(\
+  {||ParMbr2Edit(PAR->IdPar)},   \
+  "~Secondary memberships  [Sh-F6]",\
+  -15 \
+)
+
+// ddAddSpecial( \
+  {||ActExec("PARMBR01") },\
+  "~hinzufgen zu Liste...        " , \
+  NIL\
+)
+ddOnPostEdit("(PAR->DatModi:=UserDate())!=NIL")
+
+ddAddSpecial(\
+  {||DlgExec("PARSEEK").and.ActExec("PARSEEK")},\
+  "Textsuche...           [Alt-F8]",\
+  -37\
+)
+
+ddAddSpecial(\
+  {||ActExec("PAR-GO").and.DbfEdit(\
+    {oPrj(),oPar(),oPlz()},\
+    "Projets par client : " + trim(ParName()) ,\
+    "PRJPAR1",NIL,NIL,PAR->IdPar\
+  )}, \
+  "Pro~jets by partner            ",\
+  NIL\
+)
+
+// ddAddSpecial(\
+  {||DbfEdit(\
+    {oPlp(),oPar(),oPlz()},\
+    ltrim(PAR->IdPar)+ " : links","PLPPAR1",\
+    NIL,\
+    NIL,\
+    PAR->IdPar,\
+    "PLP->IdPar1",\
+    NIL\
+  )},\
+  "~Links                     [F6]",\
+  -5 \
+)
+// ddAddSpecial(\
+  {||DbfEdit(\
+    {oPlp(),oPar(),oPlz()},\
+    ltrim(PAR->IdPar)+ " : backlinks","PLPPAR2",\
+    NIL,\
+    NIL,\
+    PAR->IdPar,\
+    "PLP->IdPar2",\
+    NIL\
+  )},\
+  "~BackLinks              [Sh-F6]",\
+  -15 \
+)
+
+ddAddSpecial(\
+  {||ActExec("PARAUTO")}, \
+    "~livrer/facturer       [Alt-F6]",\
+      -35\
+)
+
+
+ddAddSpecial(\
+  {||OpenURL(PAR->url)},\
+  "~Webseite ”ffnen        [Alt-W]",\
+  273\
+)
+ddAddSpecial(\
+  {||OpenMail(trim(PAR->email),\
+    trim1(PAR->Allo)+trim1(PAR->Vorname)+trim(PAR->Firme),"Subject",\
+    "Mit freundlichen Gráen")},\
+  "E-~Mail starten         [Alt-M]",\
+  306\
+)
+ddAddSpecial(\
+  {||RfxEditFrom("PAR:"+alltrim(PAR->IdPar))},\
+  "References ~from               ",\
+  NIL\
+)
+ddAddSpecial(\
+  {||RfxEditTo("PAR:"+alltrim(PAR->IdPar))},\
+  "References ~to                 ",\
+  NIL\
+)
+
+#if HasDlm("CHRON").or.HasDlm("MSG")
+ddAddSpecial(\
+  {||DbfEdit(\
+    {oMsg(),oPar(),oPrj()},\
+    ltrim(PAR->IdPar)+ " : Korrespondenz","MSGPAR",\
+    NIL,\
+    NIL,\
+    PAR->IdPar,\
+    "MSG->IdPar",\
+    NIL\
+  )},\
+  "~Korrespondenz          [Sh-F8]",\
+  -17 \
+)
+#endif
+
+ddAddSpecial(\
+  {||Confirm("ParPlpEdit() is obsolete"),DbfEdit(\
+    {oPlp(),oPar(),oPlz()},\
+    trim(ParName())+ " : Kinder","PLPPAR1",\
+    NIL,\
+    NIL,\
+    PAR->IdPar,\
+    "PLP->IdPar1",\
+    NIL\
+  ).or.ParPlpPropagate(PAR->IdPar)},\
+  "~Beziehungen               [F2]",\
+  -1 \
+)
+

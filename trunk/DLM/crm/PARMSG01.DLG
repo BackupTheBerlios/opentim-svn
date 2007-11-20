@@ -1,0 +1,31 @@
+// PARMSG01.DLG
+
+before SetDlgTitle("šbersicht Problemmeldungen pro Partner")
+before DlgDefault("New1",FirstOfMonth(UserDate()))
+before DlgDefault("New2",LastOfMonth(UserDate()))
+
+before DlgDefine("IdPar",PAR->IdPar)
+
+field name="New1" caption="Datum : von " attrib="N"
+field name="New2" caption=" bis "
+
+field block={||PAR->IdPar+" "+padr(ParName(),40)} \
+      caption="Partner : " \
+      when={||.f.} color="N/W"
+
+field block={|x|SetPreview(x)} \
+    caption2=" Pr‚visualisation" \
+    value="X" \
+    reader={|g|CbxReader(g)}
+
+field block={|x|SetTplIni(x)} \
+    caption="Druckparametersatz " \
+    value=padr("LISTE",LenIdTpl()) \
+    picture="@k@!" \
+    pick={|x|PickTpl("INI",x)}
+
+after DlgDefine("MsgFilter",\
+  "inRange(MSG->Since,DlgValue('New1'),DlgValue('New2'))"\
+)
+after RepPrint("PARMSG01",NIL,SetDlgTitle(),SetTplIni(),SetPreview())
+after .f.

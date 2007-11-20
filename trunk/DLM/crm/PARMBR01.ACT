@@ -1,0 +1,14 @@
+// ParMbr01.act : alle sichtbaren Partner zu einer Liste hinzufÅgen
+DlgDefine("IdPls",PickPls(NIL,"hinzufÅgen zu Liste..."))
+RETURN .f. if DlgValue("IdPls") == NIL
+RETURN .f. if !Confirm(\
+  "Alle sichtbaren Partner werden in die Liste " \
+  +trim(DlgValue("IdPls")) + " eingetragen !", MsgSure() \
+)
+ParMbrCollect(\
+  DlgValue("IdPls"),\
+  ddSetFilter(),\
+  indexord(),\
+  ddKeyValue(),\
+  "ddCheckWhile()"\
+)

@@ -1,0 +1,25 @@
+//
+// VENMATCH.QRY - generated 14.11.2000
+// for VEN.DBF
+//
+window 10 70 0 0 
+column 8 =utr("Date","Datum","Date") say ""
+column 1 Jnl pict @K@!
+column 2 =utr("Doc.#","Dok.Nr","NøDoc") pict @K@!
+column 4 =utr("Customer","Kunde","Client") pict @K@S20
+column 6 =utr("Amount","Betrag","Montant") pict @K@!
+column 9 =utr("Term","Z-Ziel","Ech‚ance") say ""
+column 19 Per. pict @K@!
+column 28 =utr("Ccy","W„.","Dev") pict @K@!
+column 5 =utr("Remark 1","Bemerkung 1","Remarque 1") pict @K@S24
+column 7 St pict !
+column 14 ZA pict @K@!
+column 13 Attr pict @K@!
+column 11 Autor pict @K@!
+column 3 Part-Id pict @K@!
+column 29 W-Kurs pict @K@!
+// column 17 =utr("Amount","Betrag","Montant") GW
+column 10 =utr("Remark 2","Bemerkung 2","Remarque 2") pict @k@s30
+mask ="VEN"+JnlIdDbv(VEN->IdJnl)
+order 4
+help VEN

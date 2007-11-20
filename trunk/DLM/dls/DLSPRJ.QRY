@@ -1,0 +1,24 @@
+//
+// DLSPRJ.QRY - generated 09.03.07
+// for DLS.DBF
+//
+window 15 76 0 0 
+column 2 Datum say ""
+column 10 Partner block padr(ParName(DLS->IdPar),30) pict @K@s10 skip .t.
+column 8 Bemerkung pict @k@s26
+column 15 Dauer pict @K expr qton(DLS->Dauer) say ntoq(nSum,":",5)
+column 6 Art der DL block padr(DbfPeek(oDla(),DLS->IdDla,"DLA->Name1",""),19) pict @K skip .t.
+column 6 Art pict @K@!
+column 1 Nr.
+column 10 Akte pict @K
+column 7 S pict @K@!
+column 9 Zahlart pict @K@!
+column 13 Mont pict 03x30
+column 11 RgDatum
+column 12 RgNr
+column 5 User pict @K@!
+column 3 Von pict @K
+column 4 Bis pict @K
+column 16 IdPrj pict @K
+mask DLS
+order 6

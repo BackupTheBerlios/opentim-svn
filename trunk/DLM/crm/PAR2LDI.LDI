@@ -1,0 +1,9 @@
+version: 1
+dn: ou=People, o=[=CfgDataBase()]
+objectclass: top
+objectclass: organizationalUnit
+ou: People
+description: TIM Partners Address Book
+
+[=DbfScan({oPar(),oPlz(),oNat()},NIL,NIL,NIL,"!empty(PAR->Email)",\
+{||mparse("PAR.LDI")})]

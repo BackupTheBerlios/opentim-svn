@@ -1,0 +1,2 @@
+// PERNEWID.act : Buchungsperioden umbenennen
+PerRename("pernewid.dbc")

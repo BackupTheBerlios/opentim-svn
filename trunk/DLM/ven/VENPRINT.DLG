@@ -1,0 +1,35 @@
+// CMDPRINT.DLG : bon de commande fournisseur
+// field block={|x|SetPreview(x)} \
+//     caption="Druckparametersatz " \
+//     value=padr("LISTE",LenIdTpl()) \
+//     picture="@k@!" \
+//     pick={|x|PickTpl("INI",x)}
+before DlgDefault("Copies",1)
+title utr("Print Document","Dokument drucken","Imprimer document")
+field block={||VEN->IdJnl} \
+      caption=utr("Document # ","Dokument Nr. ","Nø Document") \
+      when={||.f.} \
+      color="N/W" attrib="N"
+field block={||VEN->IdDoc} \
+      caption=" " \
+      when={||.f.} \
+      color="N/W"
+field block={||padr(ParName(VEN->IdPar),35)} \
+      caption=utr("Partner ","Partner ","Partenaire ") \
+      when={||.f.} \
+      color="N/W"
+field name="Copies" \
+      caption=utr("Copies ","Anzahl Exemplare ","Copies ") \
+      picture="999"
+
+#include "PREVIEW.DLG"
+
+// field block={|x|SetPreview(x)} \
+      caption2=utr(" Preview"," Seitenvorschau "," pr‚visualisation") \
+      value="X" \
+      reader={|g|CbxReader(g)}
+
+// field block={|x|SetTplIni(x)} \
+      caption=utr(" Parameter set"," Druckparametersatz"," ParamŠtres") \
+      picture="@k@!" \
+      pick={|x|PickTpl("INI",x)}

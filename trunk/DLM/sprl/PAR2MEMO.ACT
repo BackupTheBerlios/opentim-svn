@@ -1,0 +1,5 @@
+// Par2Memo.act : Kundendaten mit Memofeldern in Dateien exportieren
+DbfScan(\
+  {oPar()},1,NIL,NIL,"!empty(PAR->Memo)",\
+  "fparse(DbPath()+'\PAR2MEMO.TXT',AppPath()+'\temp\'+PAR->IdPar+'.txt')"\
+)

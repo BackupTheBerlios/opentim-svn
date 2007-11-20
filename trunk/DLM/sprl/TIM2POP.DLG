@@ -1,0 +1,28 @@
+// TIM2POP.DLG : export to Popsy
+before DlgDefault("PopsyDossier","002")
+// before DlgDefault("PopsyExercice","1999-2000")
+title "Export vers Popsy"
+field name="PopsyDossier" \
+      caption="Dossier "
+// field name="PopsyExercice" \
+      caption="Exercice "
+field block={|x|SetPeriode(x)} \
+    picture="@k@!" \
+    caption="P‚riodes de-… " \
+    pick={|x|PickPerRange(x)}
+after PerExist(MemPer1).or.!Warning(SetMsg())
+after PerExist(MemPer2).or.!Warning(SetMsg())
+after DlgDefine("PopsyExercice",DbfPeek(oPer(),MemPer1,"PER->Ex",""))
+after AppSaveMem()
+after SetCmdTags("[","]")
+after DlgDefine("Okay",\
+  fparse(\
+    DbPath()+"\pex.tpl",\
+    AppPath()+"\temp\"+CfgDataBase()+".dat",NIL,NIL,.t.,.f.\
+  )\
+)
+after SetCmdTags("{","}")
+after DlgValue("Okay")\
+   .or.!Warning("Erreur lors de l'exportation !")
+after file(AppPath()+"\temp\"+CfgDataBase()+".dat")
+after AppShell("TIM2POP "+CfgDataBase())

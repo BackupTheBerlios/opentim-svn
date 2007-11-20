@@ -1,0 +1,16 @@
+//
+// F:\TIM\PAC\RAP.QRY - generated 15.07.98
+// for RAP.DBF
+//
+column 1 Date
+column 4 Nom pict @k@s20
+column 2 Masque pict @K@!
+column 6 Betrag expr if(DC=="D",val(mont),-val(mont)) say ntomf(nSum)
+column 5 DC
+column 7 W„h pict @K@!
+column 10 Zinsen
+column 11 Kosten
+column 8 Betrag FW
+column 3 IdPar pict @K@!
+column 0 bezahlt block ntom(val(RAP->Mont)-DbfSum({oRpl()},DlgValue("xnRplDebit"),1,RAP->IdPar+dtos(RAP->Date))) skip .t. expr val(RAP->Mont)-DbfSum({oRpl()},DlgValue("xnRplDebit"),1,RAP->IdPar+dtos(RAP->Date)) say ntomf(nSum)
+order 2

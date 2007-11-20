@@ -1,0 +1,36 @@
+#
+# FILE LIB.LNK - General Linker Script part for standard applications
+#
+#
+BEGINAREA
+#
+# Luc's LIB modules
+#
+FILE ..\lib\Stdio
+FILE ..\lib\Windows
+FILE ..\lib\Report
+FILE ..\lib\Printer
+FILE ..\lib\Config
+FILE ..\lib\Etc
+FILE ..\lib\Login
+FILE ..\lib\ddLayout
+FILE ..\lib\AppInit
+FILE ..\lib\Protect
+FILE ..\lib\RddSys
+# Clipper SYS modules (somewhat modified...)
+FILE ..\lib\oMenu
+FILE ..\lib\ErrorSys
+LIB NANFOR
+ENDAREA
+FILE ..\lib\ddGet
+FILE ..\lib\ddArea
+FILE ..\lib\ddMeths
+FILE ..\lib\ddEdit
+FILE ..\lib\ddSeek
+FILE ..\lib\ddFilter
+FILE ..\lib\Menu1
+FILE ..\lib\aBrowse
+FILE ..\lib\Colors
+FILE ..\lib\phRead
+FILE ..\lib\ph_mouse
+LIB DBFCDX

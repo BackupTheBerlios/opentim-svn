@@ -1,0 +1,10 @@
+title MnuItemName()
+field caption="Beginn : " \
+      name="Date" \
+      default=FirstOfWeek(UserDate())
+field caption="Anzahl Tage : " \
+      name="Days" \
+      default=7 picture="999"
+
+after setvar("Date2",getvar("Date")+getvar("Days")-1)
+

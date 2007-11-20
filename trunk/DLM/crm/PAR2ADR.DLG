@@ -1,0 +1,26 @@
+// PAR2ADR Export-Optionen
+before DlgDefault("NewLine"," ")
+before DlgDefault("AllInfo","X")
+before DlgDefault("NoEupen","X")
+title "Export-Optionen"
+// field name="IdPar" \
+    caption="nur Partner " \
+    pick={|x| PickPar(NIL,x)}
+// field name="IdJnl" \
+    caption="nur Journal " \
+    picture="@k@!" \
+    pick={|x|DbfPick(\
+              {oJnl()},"Auswahl Journal","JNLPICK",\
+              x,\
+              "'G'$JNL->Attrib"\
+    )}
+field name="NewLine" \
+      reader={|x|CbxReader(x)} \
+      caption2=" Zeilenwechsel nach jeder Adresse [NewLine]"
+field name="AllInfo" \
+      reader={|x|CbxReader(x)} \
+      caption2=" auch Name2,3 und Memo exportieren [AllInfo]"
+field name="NoEupen" \
+      reader={|x|CbxReader(x)} \
+      caption2=" 'Eupen' und 'Kettenis' ausblenden [NoEupen]"
+

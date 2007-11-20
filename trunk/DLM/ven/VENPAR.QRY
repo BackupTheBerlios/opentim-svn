@@ -1,0 +1,25 @@
+//
+// VENPAR.QRY - generated 09.02.06
+// for VEN.DBF
+//
+window 18 78 0 0 
+column 8 =utr("Date","Datum","Date") say ""
+column 1 Jnl pict @K@!
+column 2 =utr("Doc.#","Dok.Nr","NøDoc") pict @K@!
+column 7 S pict !
+column 5 =utr("Remark","Bemerkung","Remarque") pict @K@S24
+column 22 ÿ pict @K@!
+column 6 Gesamt pict @K@!
+column 9 =utr("Term","Z-Ziel","Ech‚ance") say ""
+column 19 Per. pict @K@!
+column 10 =utr("Remark 2","Bemerkung 2","Remarque 2") pict @k@s30
+column 11 Autor pict @K@!
+column 14 ZA pict @K@!
+column 13 Attrib pict @K@!
+column 29 W-Kurs pict @K@!
+column 12 Match pict @K@!
+column 32 Auftrag
+column 33 ok pict @k@s5
+column 31 IdPrj pict @K@!
+mask ="VEN"+JnlIdDbv(VEN->IdJnl)
+order 2

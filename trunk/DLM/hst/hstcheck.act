@@ -1,0 +1,7 @@
+Confirm('"MontDev ist leer" korrigieren',MsgSure())
+setvar("b",{||(HST->IdDev:="")!=NIL})
+DbfScan(\
+  {oHst()},1,NIL,NIL,\
+  "empty(HST->MontDev).and.!empty(HST->IdDev)",\
+  'tryreclock(getvar("b"))'\
+)

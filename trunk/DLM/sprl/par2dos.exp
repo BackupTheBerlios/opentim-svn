@@ -1,0 +1,37 @@
+// DOS-Textdatei
+OutputFile    "c:\mysql\data\test\PAR.TXT"
+Delimiter     chr(9)
+NoTitles ON
+
+FieldUpdate   IdPar   PAR->IdPar
+FieldUpdate   FName   trim(PAR->Vorname)
+FieldUpdate   Name    trim(PAR->Firme)
+FieldUpdate   Name2   trim(PAR->Name2)
+FieldUpdate   IdNat   trim(PAR->Pays)
+FieldUpdate   IdPlz   trim(PAR->CP)
+FieldUpdate   Straáe  trim(PAR->Rue)
+FieldUpdate   Nr      trim(PAR->RueNum)
+FieldUpdate   Box     trim(PAR->RueBte)
+FieldUpdate   Tel     trim(PAR->Tel)
+FieldUpdate   Fax     trim(PAR->Fax)
+FieldUpdate   IdDev   trim(PAR->IdDev)
+FieldUpdate   IdLng   trim(PAR->Langue)
+FieldUpdate   Attrib  trim(PAR->Attrib)
+
+
+FieldUpdate   Name1   trim(ParName())
+FieldUpdate   Name2   trim(PAR->Name2)
+FieldUpdate   City    trim(ParCity())
+FieldUpdate   MWSt    trim(PAR->NoTva)
+//
+FieldUpdate   Title   trim(PAR->Allo)
+FieldUpdate   Ort     trim(PlzName(PAR->Pays,PAR->CP))
+FieldUpdate   Partnerart PAR->IdPrt
+FieldUpdate   Zahlart trim(PAR->IdMfc)
+FieldUpdate   Code1   trim(PAR->Code1)
+FieldUpdate   Code2   trim(PAR->Code2)
+FieldUpdate   Code3   trim(PAR->Code3)
+FieldUpdate   NB1     trim(PAR->NB1)
+FieldUpdate   NB2     trim(PAR->NB2)
+FieldUpdate   Pgp     trim(PAR->IdPgp)
+FieldUpdate   Regime    trim(PAR->IdReg)

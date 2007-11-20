@@ -1,0 +1,16 @@
+before SetTplIni("PDF")
+title MnuItemName()
+field name="diag.Path" \
+      caption2=" Path" \
+      value="X" \
+      reader={|g|CbxReader(g)}
+field name="diag.Tables" \
+      caption2=" Tables" \
+      value="X" \
+      reader={|g|CbxReader(g)}
+field name="diag.Width" \
+      caption="Width " \
+      value=80 \
+      picture="999"
+#include "ASPDF.DLG"
+#include "PREVIEW.DLG"

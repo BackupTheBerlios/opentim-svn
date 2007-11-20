@@ -1,0 +1,23 @@
+// Textblocks
+// ID | IdQry | Name
+// VEN|STD|Druckmasken fr Fakturationsdokumente
+AUF|STD|Druckmasken fr Auftr„ge und Rechnungen 
+// VKR|STD|Druckmasken fr Verkaufsrechnungen
+EKR|STD|Druckmasken fr Einkaufsrechnungen
+PAR|STD|Druckmasken fr Partner
+ART|STD|Druckmasken fr Artikel
+GRA|STD|Druckmasken fr Artikelgruppen
+GEN|STD|Druckmasken fr Generalkonten
+FIN|STD|Druckmasken fr Finanzdokumente
+MSG|STD|Druckmasken fr Korrespondenz
+TRM|STD|Druckmasken fr Termine
+LIC|STD|Licenses         
+LST|LST|Allgemeine Listen
+INC|INI|Textblocks fr {etc include}
+BLK|INI|Einfgetexte fr [F4]
+HDR|INI|Kopf- und Fuázeilen {set header}
+INI|INI|Druckparameters„tze
+TXT|INI|Info-Texte
+#if HasDgr()
+RAP|STD|Mahnungstexte
+#endif

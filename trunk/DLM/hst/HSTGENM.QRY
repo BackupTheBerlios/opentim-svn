@@ -1,0 +1,20 @@
+//
+// C:\SOFT\RELEASE\TIM220\STD01D\HSTGENM.QRY - generated 19.08.97
+// for HST.DBF
+//
+window 15 80 0 0 
+column 13 Match pict @K@!
+column 6 =utr("Date","Datum","Date")
+column 3 Jnl pict @K@!
+column 4 Dok.Nr pict @K@!
+column 0 =utr("Remark","Bemerkung","Remarque") block if(HST->IdJnl$"VKR;EKR",DocPartner(IdJnl,IdDoc,Line),HstDocName(IdJnl,IdDoc,Line)) skip .t. expr HstDcMont("D",SetDevise()) say "Saldo D="+ntom(nSum)
+column 17 Debit expr if(HST->DC=="D",HstMont(SetDevise()),0) say ntom(nSum)
+column 18 =utr("Credit","Kredit","Cr‚dit") expr if(HST->DC=="C",HstMont(SetDevise()),0) say ntom(nSum)
+column 14 *
+column 12 =utr("Amnt FC","Betrag FW","MontDev")
+column 9 Per.
+column 5 Pos
+column 15 Z
+column 2 =utr("IdPar","P-Kto","CptPar")
+order 4
+help HSTGEN

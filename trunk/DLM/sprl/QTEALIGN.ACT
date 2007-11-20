@@ -1,0 +1,26 @@
+// QteAlign.act - Mengenfelder rechtsbndig setzen
+// Confirm("'"+padl("padl()",20)+"'",MsgSure())
+Confirm(\
+  "Mengenfelder rechtsbndig setzen (nach Anpassung LenQte)",\
+  MsgSure(),"N"\
+)
+DlgDefine("block",'(ART->Lager:=padl(alltrim(ART->Lager),LenQte()))!=NIL')
+DlgPlus("block",'.and.(ART->StkMin:=padl(alltrim(ART->StkMin),LenQte()))!=NIL')
+DbfScan(\
+  {oArt()},1,"",".t.",".t.",\
+  "TryRecLock(cblock(DlgValue('block')))"\
+)
+DlgDefine("block",'(FIELD->Qte:=padl(alltrim(FIELD->Qte),LenQte()))!=NIL')
+DbfScan(\
+  {oVnl()},1,"",".t.",".t.",\
+  "TryRecLock(cblock(DlgValue('block')))"\
+)
+// DbfScan(\
+  {oOdl()},1,"",".t.",".t.",\
+  "TryRecLock(cblock(DlgValue('block')))"\
+)
+// DbfScan(\
+  {oIvl()},1,"",".t.",".t.",\
+  "TryRecLock(cblock(DlgValue('block')))"\
+)
+SetMsg(MsgDone())

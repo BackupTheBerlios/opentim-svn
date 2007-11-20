@@ -1,0 +1,25 @@
+//
+// HSTANA.QRY - generated 22.10.2007
+// for HST.DBF
+//
+window 15 80 0 0 
+column 6 =utr("Date","Datum","Date") say ""
+column 3 Jnl pict @K@!
+column 4 Dok.Nr pict @K@!
+column 8 =utr("Remark","Bemerkung","Remarque") pict @k@s20 skip .t. expr if(PerIsActive(HST->Periode),HstDcMont("D",SetDevise()),0) say "Saldo D="+ntom(nSum)
+column 17 Debit expr if(HST->DC=="D".and.PerIsActive(HST->Periode),HstMont(SetDevise()),0) say ntom(nSum)
+column 18 =utr("Credit","Kredit","Cr‚dit") expr if(HST->DC=="C".and.PerIsActive(HST->Periode),HstMont(SetDevise()),0) say ntom(nSum)
+column 14 *
+column 13 Match pict @K@!
+column 12 =utr("Amnt FC","Betrag FW","MontDev")
+column 22 FW pict @K@!
+column 9 Per.
+column 0 =utr("Amount","Betrag","Montant")+".BEF" block ntom(HstMont("BEF"),0) skip .t. expr HstMont("BEF")*if(HST->DC=="D",1,-1)
+column 0 =utr("Amount","Betrag","Montant")+".DEM" block ntom(HstMont("DEM"),2) skip .t. expr HstMont("DEM")*if(HST->DC=="D",1,-1)
+column 5 Pos
+column 15 Z
+column 2 =utr("IdPar","P-Kto","CptPar")
+column 20 Partner
+column 21 =utr("Remark","Bemerkung","Remarque")
+column 16 MWS pict @K@!
+order 9

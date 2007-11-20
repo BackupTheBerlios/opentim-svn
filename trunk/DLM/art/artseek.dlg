@@ -1,0 +1,10 @@
+// ARTSEEK.DLG : Artikel suchen
+before DlgDefault("ArtSearch",space(30))
+title "Artikel suchen"
+field name="ArtSearch" caption="Suchtext" \
+                   picture="@k@!" 
+after DlgDefine("ArtFilter","'"+upper(trim(DlgValue("ArtSearch")))+"'$upper(\
+  ART->Name1+' '+ART->Name2+' '+ART->Memo1\
+)")
+after !empty(DlgValue("ArtSearch")).or.DlgDefine("ArtFilter",".t.")
+// after ActExec("ARTSEEK")

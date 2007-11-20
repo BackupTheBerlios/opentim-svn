@@ -1,0 +1,31 @@
+// Benutzerdefinierte Anpassungen VNA.DBF
+ddAddIndex("left(VNA->Match,9)+dtos(VNA->Date)+VNA->IdArt","par Match")
+ddAddIndex("VNA->IdJnl+dtos(VNA->Date)+VNA->IdArt","VNAJNL","empty(VNA->Satis)")
+
+
+// Bei uns darf jeder in der VNA arbeiten. Nicht nur Experten.
+ddPreEdit({||.t.})
+
+// ddPreCreate('DlgExec("VNACREA")')
+
+// Neue VNA-Records enthalten
+// ddOnCreate('(VNA->IdPar  := DlgValue("IdPar")) != NIL')
+// ddOnCreate('(VNA->IdArt  := DlgValue("IdArt")) != NIL')
+// ddOnCreate('(VNA->IdDoc  := DlgValue("IdDoc")) != NIL')
+// ddOnCreate('(VNA->NB1    := DlgValue("NB")) != NIL')
+// ddOnCreate('(VNA->Satis  := if(DlgValue("Satis")==" "," ","*")) != NIL')
+// ddOnCreate('(VNA->Date := UserDate()) != NIL')
+// ddOnCreate('(VNA->Periode := PerActive()) != NIL')
+// ddOnCreate('(VNA->IdUsr := UserId()) != NIL')
+// ddOnCreate('(VNA->QteBst := "") != NIL')
+// ddOnCreate('(VNA->QteLie := "") != NIL')
+// ddOnCreate('(VNA->DateBst := ctod("")) != NIL')
+// ddOnCreate('(VNA->DateLie := ctod("")) != NIL')
+// ddOnCreate('(VNA->KW1 := "") != NIL')
+// ddOnCreate('(VNA->KW2 := "") != NIL')
+// ddOnCreate('(VNA->Wunsch := "") != NIL')
+// ddOnCreate('(VNA->ABNr := "") != NIL')
+// ddOnCreate('(VNA->PrixU := "") != NIL')
+// ddOnCreate('(VNA->Qte := "") != NIL')
+// ddOnCreate('(VNA->QteUs := "") != NIL')
+

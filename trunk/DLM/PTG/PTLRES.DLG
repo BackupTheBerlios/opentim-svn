@@ -1,0 +1,28 @@
+// Arbeitszeiten pro Arbeiter
+before DlgDefault("Date1",FirstOfMonth(SkipMonth(UserDate(),-1)))
+before DlgDefault("Date2",LastOfMont(SkipMonth(UserDate(),-1)))
+before DlgDefault("IdRes",space(8))
+
+before SetTplIni("LISTE")
+field name="IdRes" \
+    caption="Ressource " \
+    picture="@k@!" \
+    valid={||\
+      ph_refresh()\
+    } \
+    pick={|x|PickRes(x)}
+field name="Date1" \
+    caption="Periode von " \
+    attrib="N"
+field name="Date2" \
+    caption=" bis "
+// field name="subttl" \
+    caption2=utr(" monthly sub-totals",\
+      " Zwischensummen pro Periode ", \
+      " Sous-totaux par p‚riode") \
+    value=" " \
+    reader={|g|CbxReader(g)}
+
+#include "PREVIEW.DLG"
+
+

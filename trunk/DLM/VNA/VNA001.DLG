@@ -1,0 +1,21 @@
+// offene Bestellungen
+field name="date1" \
+    caption="offene Bestellungen vom " \
+    value=ctod("") \
+    attrib="N"
+field name="date2" \
+    caption=" bis zum " \
+    value=UserDate()
+field name="ttl" \
+    caption2=" mit Zwischensummen" \
+    value="X" \
+    reader={|g|CbxReader(g)}
+field block={|x|SetTplIni(x)} picture="@k@!" \
+    caption="Druckparametersatz " \
+    value=padr("LISTE",LenIdTpl()) \
+    pick={|x|PickTpl("INI",x)}
+field block={|x|SetPreview(x)} \
+    caption2=" Seitenvorschau " \
+    value="X" \
+    reader={|g|CbxReader(g)}
+

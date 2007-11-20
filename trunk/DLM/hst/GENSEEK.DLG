@@ -1,0 +1,10 @@
+// GENSEEK.DLG : Artikel suchen
+before DlgDefault("GenSearch",space(30))
+title tr("Search General Acoount","Generalkonto suchen",\
+  "Recherche Compte g‚n‚ral")
+field name="GenSearch" caption="Suchtext" \
+                   picture="@k@!" 
+after DlgDefine("GenFilter","'"+upper(trim(getvar("GenSearch")))+"'$upper(\
+  GEN->Libell1+' '+GEN->Memo)")
+after !empty(getvar("GenSearch")).or.setvar("GenFilter",".t.")
+// after ActExec("ARTSEEK")

@@ -1,0 +1,51 @@
+// šbersicht offene Posten
+header1 "šbersicht offene Posten " // + CtrName(DlgValue("IdCtr"))
+header2 PerText()
+header3 ""
+area { oPar(), oPlz() }
+// index for="ParCtpSum(PAR->IdPar,'val(Umsatz)','"+DlgValue("IdCtr")+"')!=0" on="-ParCtpSum(PAR->IdPar,'val(Umsatz)','"+DlgValue("IdCtr")+"')"
+ValidateRecord {|| DlgDefine("01",DbfSum(\
+  {oHst()},\
+  'DcValue("D")',\
+  1,\
+  PAR->IdPar,\
+  "HST->IdPar=='"+PAR->IdPar+"'.and.ChkPeriode(HST->Periode)<=0",\
+  "empty(HST->Satis).and.(UserDate()-HstDate2())>30"\
+))}
+ValidateRecord {|| DlgDefine("02",DbfSum(\
+  {oHst()},\
+  'DcValue("D")',\
+  1,\
+  PAR->IdPar,\
+  "HST->IdPar=='"+PAR->IdPar+"'.and.ChkPeriode(HST->Periode)<=0",\
+  "empty(HST->Satis).and.InRange(UserDate()-HstDate2(),0,29)"\
+))}
+ValidateRecord {|| DlgDefine("03",DbfSum(\
+  {oHst()},\
+  'DcValue("D")',\
+  1,\
+  PAR->IdPar,\
+  "HST->IdPar=='"+PAR->IdPar+"'.and.ChkPeriode(HST->Periode)<=0",\
+  "empty(HST->Satis).and.(UserDate()-HstDate2())<0"\
+))}
+filter {||DlgValue("01")!=0 .or. DlgValue("02")!=0 .or. DlgValue("03")!=0 }
+group text={|x|"alle"} align="L"
+column header="Nr." width=LenIdPar() text={||PAR->IdPar}
+column header="Name" width=30 text={||padr(ParName(),30)}
+column header=">30" width=LenMntF() \
+       value={||DlgValue("01")} \
+       xsum={|x| ntomf(x) } \
+       text={|x|ntomf(x)}
+column header="0-30" width=LenMntF() \
+       value={||DlgValue("02")} \
+       xsum={|x| ntomf(x) } \
+       text={|x|ntomf(x)}
+column header="demn„chst" width=LenMntF() \
+       value={||DlgValue("03")} \
+       xsum={|x| ntomf(x) } \
+       text={|x|ntomf(x)}
+column header="Saldo" width=LenMntF() \
+       value={||DlgValue("01")+DlgValue("02")+DlgValue("03")} \
+       xsum={|x| ntomf(x) } \
+       text={|x|ntomf(x)}
+total when={||.t.} // text={||"Gesamt"}

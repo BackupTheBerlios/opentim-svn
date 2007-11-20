@@ -1,0 +1,77 @@
+// Produktionsplanung
+before DlgDefine("01",0)
+before DlgDefine("02",0)
+before DlgDefine("03",0)
+before DlgDefine("04",0)
+before DlgDefine("05",0)
+before DlgDefine("90",0)
+header1 "Produktionsplanung "
+#if !empty(DlgValue("Date1")).or.!empty(DlgValue("Date2"))
+  header3 "Liefertermine zwischen "\
+    +dtoc(DlgValue("Date1"))+" und "+dtoc(DlgValue("Date2"))
+#endif
+area { oVen(), oPar() }
+order 6
+group key={||ft_woy(VEN->DatEch)} \
+      text={|x|"KW "+ntrim(ft_woy(VEN->DatEch))} \
+      after={||RptTit3().and.PrintTotal(1,1).and.PrintLine()} \
+      when={||.t.} \
+      align="R"
+group text={|x|"alle"} align="L"
+OnNoValue {||Confirm(MsgIdJnlDoc()+" : welche Kolonne ?",MsgContinue())}
+start "AUF"
+while cblock("VEN->IdJnl=='AUF'")
+// filter cblock("!empty(VEN->Date)")
+#if !empty(DlgValue("Date1"))
+  filter cblock("dtos(VEN->DatEch)>='"+dtos(DlgValue("Date1"))+"'")
+#endif
+#if !empty(DlgValue("Date2"))
+  filter cblock("dtos(VEN->DatEch)<='"+dtos(DlgValue("Date2"))+"'")
+#endif
+filter {||DlgDefine("01",0)}
+filter {||DlgDefine("02",0)}
+filter {||DlgDefine("03",0)}
+filter {||DlgDefine("04",0)}
+filter {||DlgDefine("05",0)}
+filter {||DlgDefine("90",0)}
+filter {||DbfScan(\
+  {oVnl(),oArt()},1,VEN->IdJnl+VEN->IdDoc,\
+  "VNL->IdJnl+VNL->IdDoc=='"+VEN->IdJnl+VEN->IdDoc+"'",\
+  "ArtExist(VNL->IdArt).and.!empty(ART->idPPS)",\
+  "DlgPlus(ART->IdPps,qton(VNL->Qte))"\
+)}
+
+column header="Termin" width=3+len(dtoc(UserDate())) \
+       text={||left(Jour(VEN->DatEch),2)+" "+dtoc(VEN->DatEch)}
+// column header="Jnl" width=LenIdJnl() text={||VEN->IdJnl}
+column header="AUF-Nr" width=6 text={||VEN->IdDoc}
+column header="Partner" width=25 text={||padr(ParName(VEN->IdPar),25)}
+// column header="Kommission" width=20 text={||padr(VEN->NB1,20)}
+column header="Bauvorhaben" width=20 text={||padr(VEN->NB2,20)}
+// column header="User" width=LenIdUsr() text={||VEN->Auteur}
+column header=DbcText("PPS.DBC","01") \
+       width=LenQte() \
+       value={||DlgValue("01")}\
+       text={|x|ntoq(x,"0")}
+column header=DbcText("PPS.DBC","02") \
+       width=LenQte() \
+       value={||DlgValue("02")}\
+       text={|x|ntoq(x,"0")}
+column header=DbcText("PPS.DBC","03") \
+       width=LenQte() \
+       value={||DlgValue("03")}\
+       text={|x|ntoq(x,"0")}
+column header=DbcText("PPS.DBC","04") \
+       width=LenQte() \
+       value={||DlgValue("04")}\
+       text={|x|ntoq(x,"0")}
+column header=DbcText("PPS.DBC","05") \
+       width=LenQte() \
+       value={||DlgValue("05")}\
+       text={|x|ntoq(x,"0")}
+column header=DbcText("PPS.DBC","90") \
+       width=LenQte() \
+       value={||DlgValue("90")}\
+       text={|x|ntoq(x,"0")}
+total when={||.t.}
+

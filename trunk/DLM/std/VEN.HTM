@@ -1,0 +1,425 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Strict//EN">
+<html>
+[etc do setvar("DocTitle",JnlDocLib(VEN->IdJnl,VEN->IdDoc,VEN->DC)\
+  +tr(" No. "," Nr. "," N¯ "," nr. "," nr. ")+VEN->IdDoc)]
+[etc do SetDateFormat(if(TplLang()=="D","d. mmmm yyyy","d mmmm yyyy"))]
+[=DrvLoad("HTM")]
+[set montant S10]
+<head>
+<title>[=getvar("DocTitle")]</title>
+<style type="text/css">
+
+@page {
+  @top-left{
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 18pt;
+  font-weight: bolder;
+  content: "XHTML-Print: A Proposal --- August 25, 2000";
+  }
+}
+
+body {
+  font-family: "Verdana";
+}
+
+h1 {
+  border: solid 1pt black;
+  text-align: center;
+}
+
+p.Recipient, p.Subject {
+  font-weight: bold;
+}
+
+[=setvar("margin-left",if(TplLang()=="F","margin-left: 70mm;",""))]
+
+p.Recipient, p.Date, p.Signature {
+  [=getvar("margin-left")]
+}
+
+p.VnlDesig {
+  font-weight: bold;
+}
+p.VnlMemo {
+  font-weight: bold;
+}
+img.foto {
+  width:28mm;
+}
+p.photo {
+  width:28mm;
+}
+table.vnl {
+  width: 100%;
+  background-color:white;
+  margin: 2mm;
+}
+table.vnl th {
+  background-color:#bbbbbb;
+}
+table.tech td {
+  background-color:#eeeeee;
+}
+</style>
+</head>
+<body>
+
+[=DlgDefault("AsAuftrag"," ")]
+[=DlgDefault("co","")]
+
+[=fparse("ADRPAR.HTM")]
+
+[etc do setvar("GraphicsType","jpg")]
+[etc do setvar("ColHeader",.t.)]
+[etc do setvar("IsFacture",VEN->IdJnl$"VEN,VNA,VKR,VKG")]
+[etc do setvar("IsOffre",VEN->IdJnl$"VKA,OFF")]
+[etc do setvar("IsAuftrag",VEN->IdJnl$"CDV,VKB,AUF")]
+[etc if getvar("IsOffre").and.!empty(getvar("AsAuftrag"))]
+  [etc do setvar("IsOffre",.f.)]
+  [etc do setvar("IsAuftrag",.t.)]
+  [etc do setvar("DocTitle",tr(\
+    "Order confirmation",\
+    "Confirmation de commande",\
+    "AuftragsbestÑtigung"\
+  )+tr(" No. "," Nr. "," N¯ ")+VEN->IdDoc)]
+[etc endif]
+
+<p class="Date" style="[=getvar("margin-left")]">
+[=dtocf(VEN->Date,"dddd")], [=dtocf(VEN->Date)]
+</p>
+
+<p class="Subject" style="font-weight: bold;">
+[=tr("Subject:","Betreff:","RÇf:")] [=getvar("DocTitle")]
+</p>
+
+[etc if .f..and.getvar("AsFax")==" "]
+<p class="TellAndFax">
+[etc if !empty(PAR->Tel)] \
+[=tr("Tel.: ","Tel.: ","TÇl.: ")+trim(PAR->Tel)]
+[etc endif] \
+[etc if !empty(PAR->Fax)] \
+[=if(empty(PAR->Tel),""," --- ")] \
+Fax : [=trim(PAR->Fax)] \
+[etc endif] \
+</p>
+[etc endif]
+
+[etc if getvar("IsOffre")]
+[** Angebot]
+  <p>
+  [etc if empty(VEN->IdPar2)]
+  [=tr("Dear customer,","Sehr geehrter Kunde,","Cher client,")]
+  [etc else]
+  [=DbfPeek(oPar(),VEN->IdPar2,"\
+    if(PAR->Sex=='W',\
+      tr('Dear Mrs. ','Sehr geehrte Frau ','Chäre madame '),\
+      tr('Dear Mr. ','Sehr geehrter Herr ','Cher monsieur ')\
+    )+trim(PAR->Firme)+','\
+  ",.f.)]
+  [etc endif]
+  </p>
+[etc endif]
+
+<p>[=toHtmStream(DlmMemoRead(VEN->IdJnl+"1"+TplLang()+".TXT")).or..t.]</p>
+
+[etc if getvar("IsAuftrag")]
+  [=tr("",\
+  "Wir danken fÅr Ihre Bestellung und bitten um "\
+  +"schriftliche BestÑtigung Ihres Auftrags:",\
+  "Nous vous remercions de votre commande et vous "\
+  "prions de retourner la confirmation signÇe.")]
+[etc endif]
+
+[etc if !empty(VEN->Memo)]
+<p>[=toHtmStream(VEN->Memo)]</p>
+[etc endif]
+
+<p>[=toHtmStream(DlmMemoRead(VEN->IdJnl+"2"+TplLang()+".TXT")).or..t.]</p>
+
+[****** Salutations]
+
+[etc if getvar("IsOffre")]
+  <p>
+  [=setvar("fn",GetDlmPath(trim(VEN->Auteur)+"."+getvar("GraphicsType")))]
+  [etc if !empty(getvar("fn"))]
+  <p class="Signature" style="[=getvar("margin-left")]">
+  [=pic2html(getvar("fn"),'height=2cm')]
+  </p>
+  [etc endif]
+
+  <p class="Signature" style="[=getvar("margin-left")]">
+  [=trim(UsrName(VEN->Auteur))]
+  <br>[=trim(Fonction(VEN->Auteur,TplLang()))]
+  </p>
+
+[etc endif]
+
+
+
+[=setvar("ColSep",if(getvar("IsFacture"),"|",""))]
+[=setvar("TableActive",.f.)]
+[=setvar("ColAttr",trim(VEN->Attrib))]
+
+[=VenVnlList("[etc do fparse('_VEN2.HTM')]")]
+
+[etc if getvar("TableActive")]
+</table>
+[etc endif]
+
+[etc if "O"$VEN->Attrib.or.getvar("IsFacture")]
+[etc do setvar("PrintTVAC",.f.)]
+
+<table width="50%" align="right">
+
+[etc if !empty(VEN->Remise)]
+<tr>
+<td>[=tr("Total brutto: ",\
+         "Total brut: ",\
+         "Gesamt brutto: "\
+)]
+<td>
+[=ntomf(val(VEN->MontR))]
+</tr>
+<tr>
+<td>[=tr("Reduction ",\
+  "Remise ",\
+  "Rabatt "\
+)] [=ltrim(VEN->Remise)] %
+<td>
+[=ntomf(\
+  val(VEN->Mont)-val(VEN->MontT)-val(VEN->MontR)\
+)]<br>
+</tr>
+[etc endif]
+
+<tr>
+<td>[=tr("Total excl. V.A.T.",\
+  "Gesamt ohne MWSt.: ",\
+  "Total hors T.V.A.: ",\
+  "Total zonder BTW",\
+  "Kokku kÑibemaksuta"\
+)]
+<td>
+<td>[=ntomf(VenHtva(VEN->IdDev),DevDecPos(VEN->IdDev))]
+</tr>
+
+
+[**** 18 %]
+[etc if VenHtva(VEN->IdDev,"18 ")!=0]
+<tr>
+<td>[=tr("V.A.T.","MWSt.","T.V.A.","B.T.W.","KÑibemaks")] 18 %
+<td>[=ntomf(VenMtva(VEN->IdDev,"18 "),DevDecPos(VEN->IdDev))]
+</tr>
+[=setvar("PrintTVAC",.t.)]
+[etc endif]
+
+[**** 21 %]
+[etc if VenHtva(VEN->IdDev,"21 ")!=0]
+<tr>
+<td>[=tr("V.A.T.","MWSt.","T.V.A.","B.T.W.","KÑibemaks")] 21 %
+<td>[=ntomf(VenMtva(VEN->IdDev,"21 "),DevDecPos(VEN->IdDev))]
+</tr>
+[=setvar("PrintTVAC",.t.)]
+[etc endif]
+
+[**** 6 %]
+[etc if VenHtva(VEN->IdDev,"6  ")!=0]
+<tr>
+<td>[=tr("V.A.T.","MWSt.","T.V.A.","B.T.W.","KÑibemaks")] 6 %
+<td>[=ntomf(VenMtva(VEN->IdDev,"6  "),DevDecPos(VEN->IdDev))]
+</tr>
+[=setvar("PrintTVAC",.t.)]
+[etc endif]
+
+[etc if getvar("PrintTVAC")]
+<tr>
+<td>[=tr(\
+  "Total incl. VAT:",\
+  "Gesamt inkl. MWSt.:",\
+  "Total TVAC:",\
+  "Total BTW inbegrepen:",\
+  "Kokku kÑibemaksuga:",\
+)]
+<td>[=ntomf(VenHtva(VEN->IdDev)+VenMtva(VEN->IdDev),DevDecPos(VEN->IdDev))+"<br>"]
+</tr>
+[etc endif]
+
+</table>
+
+[etc endif]
+
+<p>
+
+[etc if VEN->IdReg=="I"]
+[=tr("", \
+  "Innergemeinschaftliche Warenlieferung.",\
+  "Livraisons intracommunautaire de marchandises"\
+)]
+[etc endif]
+
+[etc if VEN->IdReg=="C"]
+[=tr("",\
+  "MWSt. vom Vertragspartner zu entrichten.",\
+  "T.V.A. acquittÇe par le co-contractant."\
+)]
+[etc endif]
+
+[etc if VEN->IdReg=="X"]
+[=tr("",\
+  "MWSt-befreite Ausfuhr von Dienstleistungen.",\
+  "Exportation de prestations de services, sans T.V.A."\
+)]
+[etc endif]
+
+[etc if VEN->IdReg=="S"]
+[=tr("",\
+  "Innergemeinschaftliche Dienstleistungen.",\
+  "Prestations de services intracommunautaires.",\
+  "Intracommunity services.",\
+  "Intracommunautaire prestaties."\
+)]
+[etc if MemPays=="EE "]
+[="KM 0% vastavalt KMS ı 15 lg 4 p 1 (direktiiv art 21)."]
+[etc endif]
+[etc endif]
+
+</p>
+
+<p>
+[=tr("All prices in ","Alle Preise in ","Tous les prix en ",\
+  "Alle prijzen in ")+VEN->IdDev][=if(\
+"O"$VEN->Attrib,"",tr(" and without V.A.T.",\
+" und zuzÅglich MWSt",\
+" et hors T.V.A",\
+" en zonder BTW"\
+))].
+</p>
+
+[********* CDA]
+[etc if VEN->IdJnl$"CDA,EKB"]
+  [etc if TplLang()=="F"]
+  \nopagebreak
+  {\Large\textbf{Attention:}}
+  Si la marchandise n'est pas de stock~:
+  veuillez renvoyer ce fax  au 087.59.35.59
+  en spÇcifiant la date de livraison probable.
+  % \normalsize
+  \bigskip
+
+  \nopagebreak
+  Date de livraison probable: \unterschrift % fbox{\vspace{20mm}\hspace{3cm}}
+
+  [etc else]
+  \nopagebreak
+
+  {\Large\textbf{Wichtig:}} Wenn die Ware oder ein Teil der Ware
+  nicht ab Lager lieferbar sind, schicken Sie bitte diese Bestellung
+  mit voraussichtlichen Lieferfristen per Fax zurÅck an
+  0032.87.59.35.59
+  % \normalsize
+  \bigskip
+
+  \nopagebreak
+  Voraussichtliches Lieferdatum: \unterschrift % fbox{\vspace{20mm}\hspace{3cm}}
+
+  [etc endif]
+[etc endif]
+[****** Zahlungsbedingungen Angebote **********]
+[etc if !empty(VEN->IdMfc).and.getvar("IsOffre")]
+[=VenIfcMemo()]
+[etc endif]
+[****** Ihre MWSt-Nummer **********]
+[etc if getvar("IsFacture").and.!empty(PAR->NoTva)]
+
+  [=tr("Your V.A.T. ID:",\
+  "Ihre MWSt-Nr.:",\
+  "Votre n¯~TVA~:",\
+  "","Kliendi reg.nr.:")] [=trim(PAR->NoTva)].
+[etc endif]
+
+[****** Zahlungsbedingungen Rechnungen/Auftrag **********]
+[etc if !empty(VEN->IdMfc).and.(getvar("IsFacture").or.getvar("IsAuftrag"))]
+  [=tr("Payment conditions:",\
+    "Zahlungsbedingungen:",\
+    "Conditions de paiement:")]
+  [=trim(MfcName(VEN->IdMfc,TplLang()))].
+[etc endif]
+
+[*** BestÑtigung bei Barzahlung]
+[etc if getvar("IsFacture").and.VEN->IdMfc$"BAR"]
+\nopagebreak
+\begin{center}
+  \par\bigskip
+  \begin{tabularx}{14cm}{XX}
+  [etc if TplLang()=="F"]
+    Date~: \dotfill &     pour acquit~: \dotfill \\\
+  [etc else]
+    Datum: \dotfill  & Betrag dankend erhalten: \dotfill \\\
+  [etc endif]
+  \end{tabularx}
+  \par\bigskip
+\end{center}
+[etc endif]
+
+[*** "FÅr die Richtigkeit des Betrags von ..."]
+[etc if getvar("IsFacture").and."T"$PAR->Attrib]
+  \nopagebreak
+  \par
+  [=tr("",\
+    "FÅr die Richtigkeit des Betrags von",\
+    "CertifiÇ conforme pour le montant de")]
+  [=ntext(strtran(VEN->Mont,".00",""),TplLang(),.t.)]~[=VEN->IdDev] :
+  \unterschrift
+  \par % \bigskip
+[etc endif]
+[etc if getvar("IsFacture").and.!"T"$PAR->Attrib.and.VEN->IdDev=="EEK"]
+  \nopagebreak
+  \par
+  Arve koostas:
+  \unterschrift
+  \par \bigskip
+[etc endif]
+[** Bestellscheine]
+[etc if getvar("IsAuftrag")]
+\nopagebreak
+\begin{center}
+  \par
+  \begin{tabularx}{\textwidth}{X|X}
+  [etc if TplLang()=="F"]
+    Date~: \dotfill               &  Acompte~: \dotfill    \\\
+    \vspace{10mm} & \\\
+    pour commande~: \dotfill &  pour acquit~: \dotfill \\\
+  [etc else]
+    Datum der Bestellung : \dotfill  &   Anzahlung: \dotfill \\\
+    \vspace{10mm} & \\\
+    Unterschrift: \dotfill &   Betrag erhalten: \dotfill \\\
+  [etc endif]
+  \end{tabularx}
+\end{center}
+[etc endif]
+
+[**** Zahlungsziel / Angebot gÅltig bis]
+[etc if !empty(VEN->DatEch).and.VEN->DatEch != VEN->Date]
+  [etc if getvar("IsFacture").and.!VenIsNc()]
+    [=tr("Payment term:",\
+         "Zahlungsziel:",\
+         "Date d'ÇchÇance~:",\
+         "Te betalen tot:",\
+         "MaksetÑhtaeg:")]
+    [=dtocf(VEN->DatEch)].
+  [etc endif]
+  [etc if getvar("IsOffre")]
+    [=tr("",\
+      "Angebot gÅltig bis zum",\
+      "Offre valable jusqu'au")] [=dtocf(VEN->DatEch)].
+  [etc endif]
+[etc endif]
+
+[**** Anweisung zum öberweisen]
+[etc if getvar("IsFacture").and.!VenIsNc().and.!VEN->IdMfc$"BAR,DOM"]
+  [=tr("","Bei Zahlung bitte angeben:","RÇfÇrence paiement:")]
+  <b>[=VEN->IdDoc]</b>.
+[etc endif]
+
+</body>
+</html>

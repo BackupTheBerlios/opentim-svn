@@ -1,0 +1,10 @@
+//
+// PLZ.QRY - generated 20.08.1999
+// for PLZ.DBF
+//
+column 1 Lnd pict @K@!
+column 3 Ortschaft
+column 2 PLZ pict @K@!
+column 4 Fmt
+column 5 Vorwhl
+order 2

@@ -1,0 +1,5 @@
+// MSGATTR.ACT : Alt-F7 auf MSG
+DlgDefine("MsgAttr",PickDbcAttrib("MSGATTR.DBC",MSG->Attrib,"Attribute"))
+DlgValue("MsgAttr")!=NIL
+TryRecLock({||(MSG->Attrib:=DlgValue("MsgAttr"))!=NIL})
+ph_refresh()

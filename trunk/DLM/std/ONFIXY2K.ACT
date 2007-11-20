@@ -1,0 +1,4 @@
+Confirm(\
+  "IdDoc und Periode in VEN und FIN : left(x,1)ersetzen",\
+  MsgSure())
+OnFixY2kModif("A","0")

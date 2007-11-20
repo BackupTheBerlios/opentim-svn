@@ -1,0 +1,11 @@
+// VKA2AUF.ACT 
+// RETURN .f. if VEN->IdJnl!="VKA"
+RETURN !SetMsg("[Alt-F6] nicht m”glich fr Journal "+VEN->IdJnl) if \
+  GetDlmPath(VEN->IdJnl+"AUTO.DLG") == NIL
+DlgExec(VEN->IdJnl+"AUTO")
+// DlgDefine(\
+  "Match",\
+  DbfNextId(oVen(),trim(VEN->Match)+".",len(VEN->Match),3,"VEN->Match")\
+)
+// ParExist(VEN->IdPar)
+VenAppend(DlgValue("IdJnl"),SetDlgTitle(),DlgValue("Date"))

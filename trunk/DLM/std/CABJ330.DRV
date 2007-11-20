@@ -1,0 +1,47 @@
+// Canon BJ-330 (proprinter)
+// P.A.C. Systems Eupen Tel. 00 32 87 55 62 31
+//
+// SW-1, dip 1 und 2 sind beide ON -> IBM proprinter emulation ("mode 1")
+
+//
+// DÇsignation (max.30 caractäres)
+//
+Name Canon BJ-330 (proprinter)
+Initialize             chr(27)+"@"
+
+//
+// Reset : apräs chaque impression
+//
+Reset               chr(27)+"@"
+
+FormFeed               chr(12)
+
+//
+// FÅr jede verfÅgbare Schriftart steht ein "Font"-Eintrag
+//   Font <Name> <AnzahlCPI> <Steuerzeichen>
+//
+Font  10cpi  10 12/72     chr(18)
+Font  12cpi  12 12/72     chr(18)+chr(27)+":"
+Font  15cpi  15 12/72     chr(18)+chr(27)+"g"+chr(15)
+Font  17cpi  17 12/72     chr(18)+chr(15)
+// es gibt scheinbar auch noch 20 cpi...
+
+Option 6 LineSpacing6LPI chr(27) + "2"
+Option 8 LineSpacing8LPI chr(27) + "0"
+// Option R FontRoman       chr(27)+"k"+chr(0)
+// Option S FontSansSerif   chr(27)+"k"+chr(1)
+// Option C FontCourier     chr(27)+"k"+chr(2)
+// Option P FontPrestige    chr(27)+"k"+chr(3)
+// Option I FontScript      chr(27)+"k"+chr(4)
+// Option O FontOrator      chr(27)+"k"+chr(7)
+// Option Q FontOrator-S    chr(27)+"k"+chr(8)
+
+//
+//  Zeichenformatierungs-Steuerzeichen
+//
+BoldOn   chr(27)+"E"
+BoldOff  chr(27)+"F"
+ItalOn   chr(27)+"E"
+ItalOff  chr(27)+"F"
+UnderOn  chr(27)+"-"+chr(0)
+UnderOff chr(27)+"-"+chr(1)

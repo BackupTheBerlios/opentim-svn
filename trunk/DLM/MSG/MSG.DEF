@@ -1,0 +1,73 @@
+// MSG.DBF
+// ddAddIndex("MSG->IdArt+dtos(MSG->Date)","TAC")
+// ddAddIndex("MSG->Status+dtos(MSG->Date)+MSG->IdPdr","Status")
+//ddAddIndex("MSG->IdMsg","IdMsg",NIL,{|x|GetNum(padl(x,5))})
+//ddAddIndex("MsgOnTop("dtos(MSG-.Date)")+MSG->IdMsg2+dtos(MSG->Date)+MSG->IdMsg","Thread",NIL,{|x|GetNum(padl(x,5))})
+// ddAddIndex("MSG->IdPar+dtos(MSG->Date)+MSG->IdPdr","PDR",NIL,{|x|GetNum(padl(x,4))})
+// ddAddField("IdPdr","C",4,0,"","",NIL,NIL,NIL,{|x|PickNum(x)},{||.t.},{|x|GetNum(x)})
+// ddAddField("Answer","M",10,0)
+// ddAddField("Closed","D",8,0)
+// ddAddField("Type","C",5,0,"@k@!",NIL,\
+  NIL,NIL,{||ph_refresh()},\
+  {|x|PickDbcCode("MSGTYPE.DBC",x,"Kategorie")}\
+)
+// ddAddField("Attrib","C",4,0,"@k@!",NIL,\
+  NIL,NIL,NIL,\
+  {|x|PickDbcAttrib("MSGATTR.DBC",x,"Attribute")}\
+)
+//ddAddField("IdMsg2","C",5,0,"","",NIL,NIL,NIL,\
+  {|x|DbfPick(\
+   {oMsg(),oPar(),oTac()},\
+   "MSG ausw„hlen","MSGPICK",x,NIL,\
+   NIL,NIL,\
+   "MSG->IdMsg")},\
+  {||.t.},{|x|GetNum(x)}\
+)
+//ddAddField("IdMsg","C",5,0,"","",NIL,NIL,NIL,{|x|PickNum(x)},{||.f.},{|x|GetNum(x)})
+
+// ddPreEdit(\
+  {||empty(MSG->Closed)\
+  .or.!SetMsg('Diese PM ist abgeschlossen!')\
+  }\
+)
+
+ddFldSetSize("Titre",80,0)
+
+ddAddSpecial(\
+  {||DlgExec("MSGSEEK").and.ActExec("MSGSEEK")},\
+  "~Textsuche...          [Alt-F8]",\
+  -37\
+)
+
+// ddAddSpecial(\
+  {||ActExec("MSGATTR")},\
+  "~Attribute             [Alt-F7]",\
+  -36\
+)
+ddAddSpecial(\
+  {||OpenMail(\
+     trim(PAR->email),\
+     trim1(PAR->Allo)+trim1(PAR->Vorname)+trim(PAR->Firme),\
+     MSG->Titre,\
+     MSG->Texte\
+     )},\
+  "E-~Mail starten         [Alt-M]",\
+  306\
+)
+
+
+
+ddSetCreate(NIL)
+ddPreCreate('setvar("aBuf",CopyRec())')
+ddPreCreate('setvar("DoCopy",if(empty(MSG->Date),.f.,Confirm("Aktuellen Record kopieren (J/N) ?")))')
+ddOnCreate("(MSG->IdTxt:=MemTxtCor)!=NIL")
+ddOnCreate("!getvar('DoCopy').or.PasteRec(getvar('aBuf'))")
+ddOnCreate("(MSG->IdUsr:=UserId())!=NIL")
+ddOnCreate("(MSG->Date:=UserDate())!=NIL")
+ddOnCreate("!ntrim(indexord())$'34'.or.(MSG->IdPar:=ddKeyValue())!=NIL")
+
+// ddFldSetPostEdit("IdPrj",{|x|GetNum(x)})
+ddFldSetWhen("IdPar","!ntrim(indexord())$'34'")
+
+// ddFldSetWhen("Parent",".F.")
+

@@ -1,0 +1,31 @@
+// OKI OL-400
+// (c) P.A.C. Systems Eupen
+//
+Name                   OKI OL-400
+Initialize             "E"
+Reset ""
+FormFeed               chr(12)
+Font  10cpi  10   12/72  "(s0p10h12v3T"
+Font  12cpi  12   12/72  "(s0p12h10v3T"
+Font  16cpi  16.7 12/72  "(s0p16.66h8.5v0T"
+ItalOn  "(s1S"
+ItalOff "(s0S"
+UnderOn "&0D"
+UnderOff "&d@"
+BoldOn  "(s3B"
+BoldOff  "(s0B"
+Option P Portrait     "&l0O"
+Option L Landscape    "&l1O"
+Option 6 6lpi         "&l8C"
+Option 8 8lpi         "&l6C"
+Option A IBM-CP-437   "(2038Z"
+// Option B IBM-CP-850   "(19U"
+// Option F Font-LinePrinter  "(s0T"
+// Option G Font-Elite        "(s2T"
+// Option H Font-Courier      "(s3T"
+// Option I Font-Swiss        "(s4T"
+// Option J Font-LetterGothic "(s6T"
+// Option K Font-Prestige     "(s8T"
+// Option M Font-Presentation "(s11T"
+// Option N Font-OCR-B        "(s110T"
+// Option O Font-OCR-A        "(s104T"

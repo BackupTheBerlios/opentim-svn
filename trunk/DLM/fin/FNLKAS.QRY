@@ -1,0 +1,20 @@
+//
+// FNLKAS.QRY - generated 18.01.02
+// for FNL.DBF
+//
+window 16 80 6 0 
+column 4 Datum
+column 5 =utr("P-acc","P-Kto","Cpte.p") pict @K@!
+column 10 =utr("G-acc","G-Kto","Cpte.g") pict @K@! attr P
+column 6 =utr("Ctr","Ztr","Ctr") pict @K@! skip empty(FNL->IdCtr) attr P
+column 15 =utr("Remark","Bemerkung","Remarque") pict @K@S25
+column 13 =utr("Income","Einnahme","Entr‚e") pict @K@!
+column 12 =utr("Expense","Ausgabe","Sortie") pict @K@!
+column 14 Match pict @K@! skip .t.
+column 17 =utr("Amnt ccy","Betrag FW","Mont Dev") pict @K@! skip .t.
+column 21 FW pict @K@! skip .t.
+column 3 Op. pict @K@! skip .t.
+column 8 Konto skip .t.
+column 7 ID pict @K@! skip .t. attr P
+column 9 Bemerkung skip .t. attr P
+mask FNLDB

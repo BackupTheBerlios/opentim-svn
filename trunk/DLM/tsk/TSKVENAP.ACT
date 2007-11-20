@@ -1,0 +1,18 @@
+RETURN !SetMsg("Le journal du document … recopier manque.") if empty(TSK->IdJnl)
+RETURN !SetMsg("Le nø du document … recopier manque.") if empty(TSK->IdDoc)
+// setvar("NB1",NIL)
+DbfPeek(oPar(),TSK->IdPar,{||SetTplLang(PAR->Langue)},.f.).or.MsgParExist()
+setvar("NB1",trim(TSK->Name))
+empty(TSK->Name).or.setvar("NB1",strparse(trim(TSK->Name)))
+TSK->Months==0.or.DlgPlus("NB1"," "+dtocf(UserDate(),"mmmm yyyy"))
+TSK->Years==0.or.DlgPlus("NB1"," "+dtocf(UserDate(),"yyyy"))
+setvar("NB1",strparse(getvar("NB1")))
+setvar("b",{||\
+  VenAppend("VNA",\
+    "Cr‚er facture r‚currente "\
+    +utos(getvar("NB1"))+" pour "+trim(ParName())+"?",\
+    NIL,NIL,NIL,TSK->IdPar,NIL,NIL,NIL,NIL,NIL,getvar("NB1"),\
+    "VEN->Etat==DocStatClosed()\
+     .or.!SetMsg(MsgIdJnlDoc()+' nicht registriert')")\
+})
+DbfPeek(oVen(),TSK->IdJnl+TSK->IdDoc,getvar("b"),.f.)

@@ -1,0 +1,82 @@
+BLINKER INCREMENTAL OFF
+NOBELL
+OUTPUT TIM4
+#MAP S,A
+#
+# Some modules should no be overlayed (because performance...?)
+#
+FILE tim
+#
+# BEGINAREA ... ENDAREA : im protected mode soll das verboten sein...
+#
+FILE adl
+FILE als
+FILE admin
+FILE archive
+FILE coda
+FILE create
+FILE dcl
+FILE delete
+FILE edit
+FILE evt
+FILE fnlmeths
+FILE haushalt
+FILE imlmeths
+FILE images
+FILE imp
+FILE int
+FILE interbnk
+FILE kvk
+FILE licmeths
+FILE listes1
+FILE listes2
+FILE litera
+FILE lnk
+FILE methods
+FILE methods2
+FILE msg
+FILE mvimeths
+FILE objects
+FILE permeths
+FILE pick
+FILE pls
+FILE pli
+FILE prj
+FILE pseudo
+FILE r
+FILE rapmeths
+FILE sql
+FILE tlg
+FILE timdata1
+FILE timdata2
+FILE timdata3
+FILE timdata4
+FILE timfac
+FILE timget
+FILE timtest
+FILE timprint
+FILE tplmeths
+FILE trameths
+FILE unittest
+FILE upgrade
+FILE venmeths
+FILE vnameths
+FILE vnlmeths
+FILE www
+# FILE news
+FILE pointage
+FILE til
+FILE naf
+FILE kitz
+FILE spz
+FILE rfx
+# ******************** library files
+FILE nText
+FILE RecEdit
+FILE Time
+FILE Montant
+FILE trig
+FILE tasks
+FILE eupper
+FILE dbesys
+## the appropriate lib*.lnk file will now be appended (see lnk.bat)

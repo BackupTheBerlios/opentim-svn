@@ -1,0 +1,7 @@
+// GRA.DEF
+ddAddSpecial(\
+  {||GraPickAttrib()}, \
+  "~Attribute                     ",\
+  -36\
+)
+

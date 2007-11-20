@@ -1,0 +1,5 @@
+// activate from command line using "tim /exec:artb2e"
+DlgDefine("b",{||(PAR->IdPrt:="P")!=NIL})
+Confirm(MsgSure())
+DbfScan({oPar()},1,NIL,NIL,NIL,{||TryRecLock(DlgValue('b'))})
+SetMsg(MsgDone())

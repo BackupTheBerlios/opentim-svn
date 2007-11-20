@@ -1,0 +1,11 @@
+// ParNewId.dlg - called from ParNewId.act
+title "Bilanzposten umbenennen"
+field name="IdBil1" \
+    caption=tr("Old ID","Alte Nummer ","Ancien ID ")
+field name="IdBil2" \
+    caption=tr("New ID","Neue Nummer ","Nouvel ID ")
+
+// field name="Union" \
+    caption2=" union" \
+    reader={|g|CbxReader(g)}
+

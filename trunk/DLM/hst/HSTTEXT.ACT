@@ -1,0 +1,6 @@
+RETURN "Rechnung "+HST->IdDoc if "G"$JnlAttrib(HST->IdJnl).and.HST->DC=="D"
+RETURN "Gutschrift "+HST->IdDoc if "G"$JnlAttrib(HST->IdJnl).and.HST->DC=="C"
+RETURN trim(HstDocName(IdJnl,IdDoc,Line)) if empty(JnlIdGen(HST->IdJnl))
+RETURN "Ihre Zahlung" if HST->DC=="C"
+RETURN "Unsere Zahlung" if HST->DC=="D"
+RETURN HST->IdJnl+" "+HST->IdDoc

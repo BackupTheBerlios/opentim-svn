@@ -1,0 +1,21 @@
+//
+// C:\SOFT\RELEASE\TIM300\STD01D\GRA.MSK - generated 17.04.96
+// for GRA.DBF
+//
+
+
+string 2 2 Gruppe
+string 2 13 Bez. D
+string 3 18 F
+string 4 18 E
+string 2 62 Attribute
+string 4 62 Query
+
+
+get 1 2 9
+get 3 2 20
+get 4 3 20
+get 5 4 20
+get 6 2 74 pict @K@!
+get 7 4 73 pict @K@!
+wait 15 76 6 0 1

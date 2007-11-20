@@ -1,0 +1,152 @@
+[etc if !DlgValue("TableActive")]
+  <table class="vnl"
+   style="width: 100%; background-color:white; margin: 2mm;">
+  <tr>
+
+  [etc if type("ART->Bild")=="C"]
+  <th align="center" width="15%"
+      style="background-color:#bbbbbb;">
+  </th>
+  [etc endif]
+
+  [etc if "E"$DlgValue("ColAttr")]
+  <th align="left"
+      style="background-color:#bbbbbb;">
+  [=if(TplLang()=="D","Ihre Art.-Nr.","Votre N¯ art.")]</th>
+  [etc endif]
+
+  <th align="left"
+      style="background-color:#bbbbbb;">
+  [=tr("Description","Beschreibung","Description","Omschrijving","Nimetus")]
+  </th>
+
+  [etc if "Q"$DlgValue("ColAttr")]
+  <th align="right"
+      style="background-color:#bbbbbb;">
+  [=tr("Quantity","Menge","QuantitÇ","Hoev.","Kogus")]</th>
+  [etc endif]
+
+  [etc if "L"$DlgValue("ColAttr")]
+  <th align="left"
+      style="background-color:#bbbbbb;">
+  [=tr("unit","unitÇ","Einheit")]</th>
+  [etc endif]
+
+  [etc if "Q"$DlgValue("ColAttr").and."D"$DlgValue("ColAttr")]
+  <th align="right"
+      style="background-color:#bbbbbb;">
+  [=tr("Unit price","StÅckpreis","Prix unitaire","","ö-Hind")]</th>
+  [etc endif]
+
+  [etc if "D"$DlgValue("ColAttr")]
+  <th align="right"
+      style="background-color:#bbbbbb;">
+  [=if("Q"$getvar("ColAttr"),\
+    tr("Total","Gesamt","Total","","Maksumus"),\
+    tr("Price","Preis","Prix","","Hind"))]
+  <br/>[=if("C"$DlgValue("ColAttr"),\
+    tr("excl. tax","inkl. MWSt.","tvac"),\
+    tr("incl. tax","zzgl. MWSt.","htva"))]
+  </th>
+  [etc endif]
+
+  [etc if "I"$DlgValue("ColAttr")]
+  <th align="right"
+      style="background-color:#bbbbbb;">
+  [=tr("","Art.-Nr.","N¯ Art.")]</th>
+  [etc endif]
+
+  </tr>
+  [=setvar("TableActive",.t.)]
+[etc endif]
+
+[etc if ArtIsTotal(VNL->IdArt)]
+<hr>
+[etc endif]
+
+[******]
+<tr>
+
+[etc if type("ART->Bild")=="C"]
+[***************** Kolonne "Bild" *****]
+<td align="center" valign="top" width="15%">
+[etc if !empty(ART->Bild)]
+<p class="photo">[=pic2html(ART->Bild,"width=28mm")]</p>
+[etc endif]
+</td>
+[etc endif]
+
+[**************** Kolonne "ext.Art.Nr" *******]
+[etc if "E"$DlgValue("ColAttr")]
+<td align="left" valign="top">
+[=trim(ART->RefExt)]
+</td>
+[etc endif]
+
+[***************** Kolonne "Beschreibung" *****]
+<td align="left" valign="top">
+<p class="VnlDesig" style="font-weight: bold;">
+[=trim(if(empty(VNL->Desig),VnlObjName(TplLang()),trim(VNL->Desig)))]
+</p>
+[etc if !empty(VNL->Memo)]
+<p>[etc do toHtmStream(VNL->Memo)]</p>
+[etc endif]
+[etc if !"M"$VNL->Attrib.and.!empty(ART->Memo1)]
+<p>[etc do toHtmStream(ArtMemo())]</p>
+[etc endif]
+[etc if !"D"$DlgValue("ColAttr")]
+<p class="VnlDesig" style="font-weight: bold;">
+[=tr("Price","Preis","Prix")]:
+[etc if "C"$DlgValue("ColAttr")]
+[=ntomf(val(VNL->cMont)+val(MontT))]
+[etc else]
+[=ntomf(val(VNL->cMont))]
+[etc endif]
+&euro;
+[=if("C"$DlgValue("ColAttr"),\
+  tr("excl. tax","inkl. MWSt.","tvac"),\
+  tr("incl. tax","zzgl. MWSt.","htva"))]
+[etc if !empty(VNL->Qte)]
+([=komma(alltrim(VNL->Qte))+VnlUntName(TplLang())\
+  +" Ö "+ltrim(ntomf(val(VNL->PrixU)))])
+[etc endif]
+</p>
+[etc endif]
+</td>
+
+[**************** Kolonne "Menge" *******]
+[etc if "Q"$DlgValue("ColAttr")]
+<td align="right" valign="top">[=komma(VNL->Qte)]</td>
+[etc endif]
+
+[**************** Kolonne Liefereinheit *******]
+[etc if "L"$DlgValue("ColAttr")]
+<td align="left" valign="top">[=trim(UntName(ART->IdUnt,TplLang()))]</td>
+[etc endif]
+
+[**************** Kolonne "StÅckpreis" **]
+[etc if "Q"$DlgValue("ColAttr").and."D"$DlgValue("ColAttr")]
+<td align="right" valign="top">
+[=if("D"$VNL->Attrib,"",ntomf(val(VNL->PrixU)))]
+</td>
+[etc endif]
+
+[**************** Kolonne "Preis" **]
+[etc if "D"$DlgValue("ColAttr")]
+<td align="right" valign="top">
+[etc if "C"$DlgValue("ColAttr")]
+[=if("D"$VNL->Attrib,"",ntomf(val(VNL->cMont)+val(MontT)))]
+[etc else]
+[=if("D"$VNL->Attrib,"",ntomf(val(VNL->cMont)))]
+[etc endif]
+</td>
+[etc endif]
+
+
+[etc if "I"$DlgValue("ColAttr")]
+<td align="left" valign="top">
+[=VNL->IdArt]
+</td>
+[etc endif]
+
+</tr>

@@ -1,0 +1,54 @@
+// Saldenliste Analysekonten
+before SetDevise(DevDefault(MemPer1))
+before DlgDefault("IdAna1",space(LenIdAna()))
+before DlgDefault("IdAna2",space(LenIdAna()))
+before DlgDefault("TailIdAna"," ")
+
+#include "PERIODE.DLG"
+
+field name="ShowSaldo1" \
+    default="X"\
+    reader={|g|CbxReader(g)} \
+    caption2=utr(" show initial balances"," mit Beginnsalden", " soldes initiaux")
+
+
+
+// field block={|x|GsbPeriode(x)} \
+    picture="@k@!" \
+    caption="Periode von-bis " \
+    pick={|x|PickPerRange(x)}   \
+    valid={||ph_refresh()}
+
+field name="IdAna1" \
+    caption="(nur Konten von " \
+    pick={|x|PickAna(NIL,x)} \
+    attrib="N"
+field name="IdAna2" \
+    caption=" bis " \
+    pick={|x|PickAna(NIL,x)}
+
+// field caption="W„hrung  " \
+      block={|x|SetDevise(x)}\
+      picture="@k@!"\
+      pick={|x|PickDev(x)}\
+      valid={||DevExist(SetDevise())}
+
+field name="TailIdAna" \
+    caption="(nur Konten, die mit " \
+    caption2=" enden)"
+
+field caption=utr("Language  ","Sprache  ","Langue  ") \
+      block={|x|SetTplLang(x)}\
+      picture="@k@!"\
+      pick={|x|PickLng(x)}
+
+#include "PREVIEW.DLG"
+
+after SetSolde("2")
+after DlgDefine("HstFilter",".t.")
+after DlgDefine("AnaFilter",if(\
+  empty(DlgValue("TailIdAna")),\
+  "",\
+  "right(ANA->IdAna,1)=='" + trim(DlgValue("TailIdAna")) + "'"\
+))
+after AppSaveMem()

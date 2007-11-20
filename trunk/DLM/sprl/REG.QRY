@@ -1,0 +1,10 @@
+//
+// REG.QRY - generated 31.07.2001
+// for REG.DBF
+//
+window 16 70 0 0 
+column 1 R pict @K@!
+column 2 Bezeichnung
+column 3 MWSt pict @K@!
+column 4 Text pict @k@s20
+column 5 Attr. pict @K@!

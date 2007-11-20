@@ -1,0 +1,16 @@
+//
+// IFC.QRY - generated 07.02.2003
+// for IFC.DBF
+//
+window 18 76 0 0 
+column 1 Nr. pict @K@!
+column 4 Z pict @K@!
+column 9 ZA pict @K@!
+column 3 Jnl pict @K@!
+column 7 Frist pict @K@!
+column 5 Attrib pict @K@!@s8
+column 8 Maske pict @K@!
+column 6 R pict @K@!
+column 13 IdPar pict @K@!
+column 2 "Text" pict @k@s29
+mask IFC

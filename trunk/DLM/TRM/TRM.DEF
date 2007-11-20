@@ -1,0 +1,60 @@
+// TRM.DBF
+// ddAddIndex("TRM->IdArt+dtos(TRM->Date)+TRM->Debut","IdArt+Date",NIL,{|x|GetNum(padl(x,LenIdArt()))})
+// ddAddField("IdArt","C",LenIdArt(),0,"","",NIL,NIL,\
+  NIL,\
+  {|x|DbfPick(\
+   {oArt(),oPar()},\
+   "Artikel ausw„hlen","ARTPICK",x,NIL,\
+   NIL,NIL,\
+   "ART->IdArt")},\
+  {||.t.},{|x|GetNum(x)}\
+)
+ddAddField("Pause","C",LenQte(),0,"","",NIL,NIL,\
+  NIL,NIL,\
+  {||.t.},{|x|GetQte(x,":")}\
+)
+ddAddField("Fahrt","C",LenQte(),0,"","",NIL,NIL,\
+  NIL,NIL,\
+  {||.t.},{|x|GetQte(x,":")}\
+)
+ddAddField("Fact","C",1,0,\
+  "@k@!",NIL,\
+  NIL,NIL,\
+  {||.t.},{|x|PickDbcCode("TRMFACT.DBC",x)},{||.t.}\
+)
+ddAddField("Virtual","C",LenQte(),0,"","",NIL,NIL,\
+  NIL,NIL,\
+  {||.t.},{|x|GetQte(x,":")}\
+)
+
+// ddPreCreate("DlgDefine('IdPar',if(indexord()==2,(TRM->Duree:='  0:15')!=NIL")
+// ddOnCreate("(TRM->Duree:='  0:15')!=NIL")
+ddOnCreate("ActExec('TRMINIT')")
+
+ddFldSetSize("Texte",80,0)
+ddFldSetValidate("IdTac","\
+  !ParExist(TRM->IdPar).or.\
+  empty(TRM->IdTac).or.(\
+    TacExist(TRM->IdTac).and.(\
+      !'F'$TAC->Attrib.or.(TRM->Fahrt:=PAR->Fahrt)!=NIL\
+    ).and.ph_refresh()\
+  )\
+")
+
+RETURN .t.
+
+ddPreCreate('DlgDefine("aBuf",CopyRec())')
+ddPreCreate('DlgDefault("IdArt","")')
+ddPreCreate('DlgDefault("IdPar","")')
+ddPreCreate('DlgDefault("IdTac","")')
+ddSetCreate(NIL)
+ddOnCreate("!Confirm('Kopieren (J/N) ?',NIL,'N').or.PasteRec(DlgValue('aBuf'))")
+ddOnCreate("empty(DlgValue('IdPar')).or.(TRM->IdPar:=DlgValue('IdPar'))!=NIL")
+ddOnCreate("empty(DlgValue('IdTac')).or.(TRM->IdTac:=DlgValue('IdTac'))!=NIL")
+ddOnCreate("empty(DlgValue('IdArt')).or.(TRM->IdArt:=DlgValue('IdArt'))!=NIL")
+ddOnCreate("(TRM->Date:=UserDate())!=NIL")
+ddOnCreate("(TRM->Duree:='  0:15')!=NIL")
+ddOnCreate("(TRM->User:=UserId())!=NIL")
+ddOnCreate("!empty(TRM->IdTac).or.(TRM->IdTac:='TIM')!=NIL")
+// ddOnCreate("ddRefreshAll()")
+

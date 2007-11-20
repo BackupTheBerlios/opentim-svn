@@ -1,0 +1,40 @@
+// Canon BJ-200
+
+Name Canon BJ-200      // DÇsignation (max.30 caractäres)
+Initialize             chr(27)+"@"
+
+//
+// Reset : apräs chaque impression
+//
+Reset               chr(27)+"@"
+
+FormFeed               chr(12)
+
+//
+// FÅr jede verfÅgbare Schriftart steht ein "Font"-Eintrag
+//   Font <Name> <AnzahlCPI> <Steuerzeichen>
+//
+Font  10cpi  10  12/72   chr(18)+chr(27)+"1"
+Font  12cpi  12  12/72   chr(18)+chr(27)+"M"
+Font  15cpi  15  12/72   chr(18)+chr(27)+"g"
+Font  17cpi  17  12/72   chr(15)
+
+Option 6 LineSpacing6LPI chr(27) + "2"
+Option 8 LineSpacing8LPI chr(27) + "0"
+Option R FontRoman       chr(27)+"k"+chr(0)
+Option S FontSansSerif   chr(27)+"k"+chr(1)
+Option C FontCourier     chr(27)+"k"+chr(2)
+Option P FontPrestige    chr(27)+"k"+chr(3)
+Option I FontScript      chr(27)+"k"+chr(4)
+Option O FontOrator      chr(27)+"k"+chr(7)
+Option R FontOrator-S    chr(27)+"k"+chr(8)
+
+//
+//  Zeichenformatierungs-Steuerzeichen
+//
+BoldOn   chr(27)+"E"
+BoldOff  chr(27)+"F"
+ItalOn   chr(27)+"4"
+ItalOff  chr(27)+"5"
+UnderOn  chr(27)+"-"+chr(1)
+UnderOff chr(27)+"-"+chr(0)

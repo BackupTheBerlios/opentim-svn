@@ -1,0 +1,70 @@
+// Rechnungsbuch Einkauf/Verkauf
+before DlgDefine("HstVenCols",padr(CtrHstCols("V"),10))
+before SetTplIni(CtrTplIni("V"))
+field name="IdJnlVen" \
+    caption="Journal " \
+    default=space(LenIdJnl())\
+    picture="@k@!" \
+    valid={||\
+      SetTplIni(CtrTplIni(JnlIdCtr(DlgValue("IdJnlVen")))),\
+      DlgDefine("HstVenCols",\
+        padr(CtrHstCols(JnlIdCtr(DlgValue("IdJnlVen"))),10)\
+      ),\
+      ph_refresh()\
+    } \
+    pick={|x|DbfPick(\
+              {oJnl()},\
+              utr("Select Journal","Auswahl Journal","Choix journal"),\
+              "JNLPICK",\
+              x,\
+              "Alias=='VEN'.and.'G'$Attrib"\
+    )}
+field block={|x|SetPeriode(x)} \
+    picture="@k@!" \
+    caption=utr("Period from-until ","Periode von-bis ","P‚riodes de-… ") \
+    valid={||ph_refresh()} \
+    pick={|x|PickPerRange(x)}
+field caption="W„hrung  " \
+      block={|x|SetDevise(x)}\
+      picture="@k@!"\
+      pick={|x|PickDev(x)}\
+      valid={||DevExist(SetDevise())}
+field name="OnlyD" \
+      caption=utr("Only invoices Ausland ",\
+        "Nur ausl„ndische Rechnungen ",\
+        "Uniquement factures hors Belgique ") \
+      default=" "\
+      picture="@k@!"\
+      valid={||\
+        SetTplIni(if(empty(getvar("OnlyD")),\
+          CtrTplIni(JnlIdCtr(DlgValue("IdJnlVen"))),"LISTE")),\
+        ph_refresh()\
+      } \
+      pick={|x|PickDbcCode("AUSLAND.DBC",x)}
+// field name="OnlyN" \
+      default=" "\
+      valid={||\
+        SetTplIni(if(DlgValue("OnlyN")=="X","LISTE","LISTEX")),\
+        ph_refresh()\
+      } \
+      caption2=utr(" only invoices Netherlands",\
+        " nur niederl„ndische Rechnungen",\
+        " uniquement factures NL") \
+      reader={|g|CbxReader(g)}
+field name="subttl" \
+    caption2=utr(" monthly sub-totals",\
+      " Zwischensummen pro Periode ", \
+      " Sous-totaux par p‚riode") \
+    value=" " \
+    reader={|g|CbxReader(g)}
+field name="HstVenCols" \
+      caption="Rechnungsbuch-Optionen  " \
+      picture="@k@!"\
+      pick={|x|PickDbcAttr("HSTVEN.DBC",x)}
+
+#include "PREVIEW.DLG"
+#include "ASPDF.DLG"
+
+after DlgDefine("HstVenCols",trim(DlgValue("HstVenCols")))
+after AppSaveMem()
+

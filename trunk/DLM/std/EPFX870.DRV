@@ -1,0 +1,16 @@
+Name           Epson FX-870
+Initialize     chr(27)+chr(64)
+Reset          ""
+FormFeed       chr(12)
+Font 5cpi    5 12/72 chr(27)+chr(80)+chr(27)+chr(87)+"1"
+Font 10cpi  10 12/72 chr(27)+chr(87)+"0"+chr(27)+chr(80)
+Font 12cpi  12 12/72 chr(27)+chr(87)+"0"+chr(27)+chr(77)
+Font 15cpi  15 12/72 chr(27)+chr(87)+"0"+" "+chr(8)
+Font 17cpi  17 12/72 chr(27)+chr(87)+"0"+chr(27)+"P"+chr(15)
+Font 20cpi  20 12/72 chr(27)+chr(87)+"0"+chr(27)+"M"+chr(15)
+BoldOn   chr(27)+chr(71)
+BoldOff  chr(27)+chr(72)
+ItalOn   chr(27)+chr(52)
+ItalOff  chr(27)+chr(53)
+UnderOn  chr(27)+"-"+chr(1)
+UnderOff chr(27)+"-"+chr(0)

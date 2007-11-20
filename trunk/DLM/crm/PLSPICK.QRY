@@ -1,0 +1,10 @@
+//
+// PLSPICK.QRY - generated 01/12/05
+// for PLS.DBF
+//
+window 16 70 0 0 
+column 1 Code pict @K@!
+column 2 Bezeichnung
+column 3 Attrib pict @K@!
+column 5 A pict @K@!
+filter "PlsIsVisible(PLS->IdPls)"

@@ -1,0 +1,10 @@
+//
+// F:\TIM\PENNARTZ\INT3.QRY - generated 03.02.98
+// for INT.DBF
+//
+column 3 Code
+column 1 ZN
+column 2 Bezeichnung pict @k@s40
+column 5 Attr. pict @K@!
+order 3
+help INT

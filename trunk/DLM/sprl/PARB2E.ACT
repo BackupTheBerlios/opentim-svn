@@ -1,0 +1,10 @@
+// activate from command line using "tim /exec:artb2e"
+DlgDefine("NotEUR","USD,GBP,DKK,SFR")
+DlgDefine("b",{||(PAR->IdDev:="")!=NIL})
+Confirm( \
+  "Alle PAR->IdDev auf leer setzen (auáer "+DlgValue("NotEUR")+")",\
+  MsgSure())
+DbfScan({oPar()},1,NIL,NIL,\
+  "!PAR->IdDev$'"+DlgValue("NotEUR")+"'",\
+  {||TryRecLock(DlgValue('b'))})
+SetMsg(MsgDone())

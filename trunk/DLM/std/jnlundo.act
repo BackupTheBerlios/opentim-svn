@@ -1,0 +1,7 @@
+DlgDefine("b",{||(JNL->Periode:="")!=NIL})
+Confirm( \
+  "JNL->Periode auf Null setzen (nur erlaubt wenn technisch bedingt)",\
+  MsgSure())
+DbfScan({oJnl()},1,NIL,NIL,NIL,\
+  {||TryRecLock(DlgValue('b'))})
+SetMsg(MsgDone())

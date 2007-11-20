@@ -1,0 +1,10 @@
+// VNAMATCH.ACT - leere VEN->VnaMatch fllen
+Confirm(\
+  "Nur fr Luc!",\
+  MsgSure(),"N"\
+)
+DbfScan(\
+  {oVen()},1,"",".t.",".t.",\
+  "TryRecLock(cblock('"+'(VEN->VnaMatch:=VEN->IdJnl+VEN->IdDoc)!=NIL'+"'))"\
+)
+SetMsg(MsgDone())

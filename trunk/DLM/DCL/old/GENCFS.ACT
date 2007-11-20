@@ -1,0 +1,39 @@
+RETURN .t. if empty(GEN->IdCfs)
+CfsExist(GEN->IdCfs)
+!empty(CFS->DC)
+SetPeriode(DlgValue("range1"))
+setvar("I1",0)
+setvar("M1",0)
+DbfScan(\
+    {oHst(),oGen(),oPar(),oVen(),oFin()},\
+    3,\
+    GEN->IdGen+PerStart(MemPer1),\
+    "HST->IdGen=='"+GEN->IdGen+"'.and.HST->Periode<='"+MemPer2+"'",\
+    ".t.",\
+    "DlgPlus(\
+      if(HST->Periode<MemPer1,'I1','M1'),\
+      HstMont(DlgValue('IdDev'))*if(HST->DC==CFS->DC,1,-1))"\
+)
+
+SetPeriode(DlgValue("range2"))
+setvar("I2",0)
+setvar("M2",0)
+DbfScan(\
+    {oHst(),oGen(),oPar(),oVen(),oFin()},\
+    3,\
+    GEN->IdGen+PerStart(MemPer1),\
+    "HST->IdGen=='"+GEN->IdGen+"'.and.HST->Periode<='"+MemPer2+"'",\
+    ".t.",\
+    "DlgPlus(\
+      if(HST->Periode<MemPer1,'I2','M2'),\
+      HstMont(DlgValue('IdDev'))*if(HST->DC==CFS->DC,1,-1))"\
+)
+
+RETURN setvar("Mont1",getvar("I1")+getvar("M1"))\
+       .and.setvar("Mont2",getvar("I2")+getvar("M2")) \
+       if CFS->Type=="F "
+RETURN setvar("Mont1",getvar("M1")).and.setvar("Mont2",getvar("M2")) \
+       if CFS->Type=="M "
+RETURN setvar("Mont1",getvar("I1")).and.setvar("Mont2",getvar("I2")) \
+       if CFS->Type=="I "
+RETURN !SetMsg(CFS->Type+" : type not supported")

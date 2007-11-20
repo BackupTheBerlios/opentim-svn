@@ -1,0 +1,9 @@
+//
+// F:\TIM\PENNARTZ\INT2.QRY - generated 28.01.98
+// for INT.DBF
+//
+column 2 Bezeichnung
+column 1 ZN
+column 3 Code
+order 2
+help INT

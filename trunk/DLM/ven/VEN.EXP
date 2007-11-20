@@ -1,0 +1,7 @@
+// angezeigte Daten nach Excel exportieren
+
+OutputFile    alias()+".TXT"
+Delimiter     chr(9)
+#exec AddExpFlds(GetTable(alias()))
+#include "DOS2WIN.CVT"
+OnSuccess AppShell("excel.bat "+i_OutputFile(),NIL,.f.)

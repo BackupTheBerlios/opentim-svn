@@ -1,0 +1,8 @@
+// Standard-Export CTG.DBF
+OutputFile    "CTG.TXT"
+Delimiter     chr(9)
+FieldUpdate   Konto        CTG->IdGen
+FieldUpdate   Bezeichnung  trim(GenName(CTG->IdGen))
+FieldUpdate   Monat   CTG->Periode
+FieldUpdate   Debit   ltrim(CTG->Debit)
+FieldUpdate   Kredit  ltrim(CTG->Credit)

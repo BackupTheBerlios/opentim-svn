@@ -1,0 +1,41 @@
+// Fakturierungsvorschlag manuell erstellen
+title "Manuelle Bestellung"
+field name="IdPar" \
+      value=VNA->IdPar \
+      caption="    Kunde " \
+      picture="@k@!"\
+      pick={|x|PickPar("K",x,"Kunde")}\
+      attrib="N"
+field caption=" : " \
+      when={||.f.} \
+      color="N/W" \
+      block={||padr(ParName(DlgValue("IdPar")),30)}
+field name="IdPar2" \
+      value=VNA->IdPar2 \
+      caption="Lieferant " \
+      picture="@k@!"\
+      pick={|x|PickPar("L",x,"Lieferant")}\
+      attrib="N"
+field caption=" : " \
+      when={||.f.} \
+      color="N/W" \
+      block={||padr(ParName(DlgValue("IdPar2")),30)}
+field name="IdArt" \
+      value=VNA->IdArt \
+      caption="  Artikel " \
+      picture="@k@!"\
+      postedit={|x|GetIdArt(x)}\
+      pick={|x|PickArt(x)}\
+      attrib="N"
+field caption=" : " \
+      when={||.f.} \
+      color="N/W" \
+      block={||padr(ArtName(DlgValue("IdArt")),LenVnlName())}
+field name="NB1" \
+      caption="Bemerkung " \
+      value=VNA->NB1 
+field name="Satis" \
+    caption2=" nicht fakturieren" \
+    value=" " \
+    reader={|g|CbxReader(g)}
+

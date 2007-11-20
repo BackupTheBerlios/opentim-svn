@@ -1,0 +1,12 @@
+// offene Bestellungen
+field name="Date" \
+    caption="Lieferung vom " \
+    value=ctod("")
+field name="IdPar" \
+    caption="nur Lieferant " \
+    value=space(LenIdPar()) \
+    pick={|x| PickPar("L",x)}
+field block={|x|SetPreview(x)} \
+    caption2=" Seitenvorschau " \
+    value="X" \
+    reader={|g|CbxReader(g)}

@@ -1,0 +1,12 @@
+//
+// C:\SOFT\RELEASE\TIM300\STD01D\CTP.QRY - generated 10.06.96
+// for CTP.DBF
+//
+column 2 IdPar pict @K@!
+column 8 Partner pict @K@S20
+column 3 Periode pict @K@!
+column 4 Debit
+column 5 Kredit
+column 6 Saldo
+column 7 Umsatz
+column 9 PG

@@ -1,0 +1,60 @@
+// called from DCL01.REP on each GEN
+// AND    from DCFGEN.REP on each GEN
+RETURN .t. if empty(DCF->Type)
+setvar("I1",0)
+setvar("M1",0)
+SetPeriode(DlgValue("range1"))
+DbfScan(\
+  {oHst(),oGen(),oPar(),oVen(),oFin()},\
+  3,\
+  GEN->IdGen+PerStart(MemPer1),\
+  "HST->IdGen=='"+GEN->IdGen+"'.and.HST->Periode<='"+MemPer2+"'",\
+  ".t.",\
+  "DlgPlus(\
+    if(HST->Periode<MemPer1,'I1','M1'),eval(DcfHstValue()))",\
+  NIL,.f.\
+)
+
+setvar("I2",0)
+setvar("M2",0)
+SetPeriode(DlgValue("range2"))
+DbfScan(\
+    {oHst(),oGen(),oPar(),oVen(),oFin()},\
+    3,\
+    GEN->IdGen+PerStart(MemPer1),\
+    "HST->IdGen=='"+GEN->IdGen+"'.and.HST->Periode<='"+MemPer2+"'",\
+    ".t.",\
+    "DlgPlus(\
+      if(HST->Periode<MemPer1,'I2','M2'),\
+      eval(DcfHstValue()))",\
+  NIL,.f.\
+)
+
+setvar("I3",0)
+setvar("M3",0)
+empty(getvar("range3")).or.SetPeriode(DlgValue("range3"))
+empty(getvar("range3")).or.DbfScan(\
+    {oHst(),oGen(),oPar(),oVen(),oFin()},\
+    3,\
+    GEN->IdGen+PerStart(MemPer1),\
+    "HST->IdGen=='"+GEN->IdGen+"'.and.HST->Periode<='"+MemPer2+"'",\
+    ".t.",\
+    "DlgPlus(\
+      if(HST->Periode<MemPer1,'I3','M3'),\
+      eval(DcfHstValue()))",\
+  NIL,.f.\
+)
+
+RETURN DlgPlus("Mont1",getvar("I1")+getvar("M1"))\
+       .and.DlgPlus("Mont2",getvar("I2")+getvar("M2")) \
+       .and.DlgPlus("Mont3",getvar("I3")+getvar("M3")) \
+       if DCF->Type=="F "
+RETURN DlgPlus("Mont1",getvar("M1"))\
+       .and.DlgPlus("Mont2",getvar("M2")) \
+       .and.DlgPlus("Mont3",getvar("M3")) \
+       if DCF->Type$"M ,MX"
+RETURN DlgPlus("Mont1",getvar("I1"))\
+       .and.DlgPlus("Mont2",getvar("I2")) \
+       .and.DlgPlus("Mont3",getvar("I3")) \
+       if DCF->Type=="I "
+RETURN !Warning(DCF->Type+" : type not supported")

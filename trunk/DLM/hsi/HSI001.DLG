@@ -1,0 +1,36 @@
+// Kontrollliste (1+2) Intrastat
+before DlgDefault("DC","D")
+field name="DC" \
+      caption="D/C " \
+      picture="!" \
+      pick={|x|ArrayPick({\
+        "D Ausgang ", \
+        "C Eingang "  \
+      },"D/C",x,1)}
+field caption="Periode von-bis " \
+    block={|x|GsbPeriode(x)} \
+    pick={|x|PickPerRange(x)}
+// field name="IdJnl" \
+      caption="Journal " \
+      picture="@k@!" \
+      value="EKR" \
+      pick={|x|ArrayPick({\
+        "VKR Verkaufsrechnungen  ", \
+        "EKR Einkaufsrechnungen  "  \
+      },"Journal",x,LenIdJnl())}
+// field name="IdPar" \
+//     caption="nur Partner " \
+//     value=space(LenIdPar()) \
+//     pick={|x| PickPar(NIL,x)}
+// field name="ttl" \
+//     caption2=" mit Zwischensummen" \
+//     value="X" \
+//     reader={|g|CbxReader(g)}
+field block={|x|SetTplIni(x)} \
+    caption="Druckparametersatz " \
+    value=padr("LISTE",LenIdTpl()) \
+    pick={|x|PickTpl("INI",x)}
+field block={|x|SetPreview(x)} \
+    caption2=" Seitenvorschau " \
+    value="X" \
+    reader={|g|CbxReader(g)}

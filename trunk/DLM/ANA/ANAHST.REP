@@ -1,0 +1,128 @@
+// Saldenliste Generalkonten
+
+#exec setvar("Start",if(getvar("ShowSaldo1")=="X",\
+                     PerStart(MemPer1),\
+                     MemPer1))
+
+header1 MnuItemName()
+header2 PerText() + " ("+SetDevise()+")"
+header3 if(empty(DlgValue("AnaFilter")),"",DlgValue("AnaFilter"))
+area { oAna() }
+order 1
+
+#if !empty(DlgValue("IdAna1"))
+  start trim(DlgValue("IdAna1"))
+#endif
+#if !empty(DlgValue("IdAna2"))
+while cblock("left(ANA->IdAna,"\
+  +ntrim(len(trim(DlgValue("IdAna2"))))\
+  +")<='"+trim(DlgValue("IdAna2"))+"'"\
+)
+#endif
+#exec SetMntFormat("Z12")
+
+ValidateRecord {||MsgDisplay(ANA->IdAna+" "+AnaName())}
+ValidateRecord {||\
+  DlgDefine("Saldo1",0),\
+  DlgDefine("D",0),\
+  DlgDefine("C",0)\
+}
+
+#exec setvar("b",{||if(\
+  HST->Periode<MemPer1,\
+  DlgPlus('Saldo1',HstDcMont("D",SetDevise())),\
+  DlgPlus(HST->DC,HstMont(SetDevise()))\
+)})
+
+ValidateRecord {||\
+  len(trim(ANA->IdAna))<LenIdAna().or.DbfScan(\
+  {oHst(),oAna(),oGen(),oPar(),oVen(),oFin()},\
+  9,\
+  ANA->IdAna+getvar("Start"),\
+  "HST->IdAna=='"+ANA->IdAna+"'.and.HST->Periode<=MemPer2",\
+  getvar("HstFilter"),\
+  getvar('b'),NIL,.f.\
+)}
+
+#if !empty(DlgValue("AnaFilter"))
+  filter cblock(DlgValue("AnaFilter"))
+#endif
+filter {||len(trim(ANA->IdAna))==LenIdAna()}
+filter {|| \
+  DlgValue("D")!=0.or.DlgValue("C")!=0.or.DlgValue("Saldo1")!=0 \
+}
+
+#if LenIdAna() > 4
+group key={||left(ANA->IdAna,4)} \
+      when={||.t.} \
+      align="L" \
+      after={||DbfPeek(\
+        oAna(),padr(left(ANA->IdAna,4),LenIdAna()),"!'H'$ANA->Attrib",.f.\
+      )} \
+      text={||left(ANA->IdAna,4)+" "+DbfPeek(oAna(),padr(left(ANA->IdAna,4),LenIdAna()),"AnaName()","")}
+#endif
+group key={||left(ANA->IdAna,3)} \
+      when={||.t.} \
+      align="L" \
+      after={||DbfPeek(\
+        oAna(),padr(left(ANA->IdAna,3),LenIdAna()),"!'H'$ANA->Attrib",.f.\
+      )} \
+      text={||left(ANA->IdAna,3)+" "+DbfPeek(oAna(),padr(left(ANA->IdAna,3),LenIdAna()),"AnaName()","")}
+group key={||left(ANA->IdAna,2)} \
+      when={||.t.} \
+      align="L" format="B" \
+      after={||.f..or.DbfPeek(\
+        oAna(),padr(left(ANA->IdAna,2),LenIdAna()),"!'H'$ANA->Attrib",.f.\
+      )} \
+      text={||left(ANA->IdAna,2)+" "+DbfPeek(oAna(),padr(left(ANA->IdAna,2),LenIdAna()),"AnaName()","")}
+      // text={||left(ANA->IdAna,2)+" "+trim(AnaName())}
+group key={||left(ANA->IdAna,1)} \
+      when={||.t.} \
+      align="L" format="B" \
+      after={||.t.} \
+      text={||left(ANA->IdAna,1)+" "+DbfPeek(oAna(),padr(left(ANA->IdAna,1),LenIdAna()),"AnaName()","")}
+group text={|x|"TOTAL"} align="L" when={||.t.} after={||.t.}
+
+column header=tr("Accnt","Konto","Compte") \
+       width=LenIdAna() \
+       text={||ANA->IdAna}
+column header=tr("Description","Bezeichnung","Description") \
+       width=30 \
+       text={||padr(AnaName(NIL,TplLang()),30)}
+
+#if getvar("ShowSaldo1") == "X"
+column header=tr("Opening bal","Beginnsaldo","Solde init") \
+       width=LenSolde() \
+       value={||DlgValue("Saldo1")}  \
+       text={|x| DcSolde('D',x) } \
+       xsum={|x| DcSolde('D',x) }
+#endif
+
+column header="Debit" \
+       width=LenMntF() \
+       value={||DlgValue("D")}  \
+       text={|x|ntomf(x)} \
+       xsum={|x| ntomf(x) }
+column header=tr("Credit","Kredit","Cr‚dit") \
+       width=LenMntF() \
+       value={||DlgValue("C")}  \
+       text={|x|ntomf(x)} \
+       xsum={|x| ntomf(x) }
+
+column header=if(getvar("ShowSaldo1") == "X",\
+                 tr("final balance","Endsaldo","Solde final"), \
+                 tr("sum","Summe","Somme")) \
+       width=LenSolde() \
+       value={||\
+         DlgValue("Saldo1")+DlgValue("D")-DlgValue("C")\
+       }  \
+       text={|x| DcSolde('D',x) } \
+       xsum={|x| DcSolde('D',x) }
+
+total text={||""} \
+      when={|nCount|nCount<=1.or.RptTit3()} \
+      after={|nGroup|nGroup<=1.or.PrintLine()}
+
+// PreTotal {||RptTit2()}
+// PostTotal {||PrintLine()}
+

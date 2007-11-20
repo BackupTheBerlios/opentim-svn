@@ -1,0 +1,16 @@
+// ARTPRIX.ACT - Artikelpreise anpassen
+DlgExec("ARTPRIX")
+Confirm(\
+  "Dieser Vorgang ist unwiderruflich !",\
+  "Haben Sie ein Backup (J/N) ",\
+  "N"\
+)
+DbfScan(\
+  {oArt()},1,"",".t.",DlgValue("ArtFilter"),\
+  "TryRecLock(cblock('"\
+  +'(ART->Prix1:=ntom(val(ART->Prix1)*(100+DlgValue("ModP1"))/100))!=NIL,'\
+  +'(ART->PrixR:=ntom(val(ART->PrixR)*(100+DlgValue("ModPR"))/100))!=NIL,'\
+  +'ArtP1Validate()'\
+  +"'))"\
+)
+SetMsg("Artikelpreise anpassen: Vorgang beendet.")

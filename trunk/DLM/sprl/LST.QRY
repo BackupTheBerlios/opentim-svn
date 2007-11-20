@@ -1,0 +1,8 @@
+//
+// F:\SOFT\TEST\TIM300\STD01D\LST.QRY - generated 30.08.95
+// for LST.DBF
+//
+window 18 50 0 0 
+column 1 Code
+column 2 Bezeichnung
+column 3 Attr

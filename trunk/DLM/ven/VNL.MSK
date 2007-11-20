@@ -1,0 +1,30 @@
+//
+// C:\SOFT\TEST\TIM300\HEINEN\VNL.MSK - generated 22.09.95
+// for VNL.DBF
+//
+
+
+string 4 4 Dokument
+string 4 27 Position
+string 6 6 Objekt
+string 8 3 Bemerkung
+string 10 50 Gesamt
+string 11 50 MWSt
+string 12 60 컴컴컴컴컴
+string 10 7 Menge
+string 10 20 St갷kpreis
+
+
+get 1 4 13
+get 2 4 17
+get 4 4 36
+get 5 6 13
+get 6 6 15
+get 16 10 60
+get 13 11 55
+get 11 11 60
+get 14 13 60
+get 7 8 13
+get 22 6 27
+get 8 10 13
+get 9 10 31

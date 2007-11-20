@@ -1,0 +1,48 @@
+// Partnerbeziehungsarten
+
+// Das Beziehungsfenster meiner Akte
+// besagt, was der andere mir ist (nicht: was ich ihm bin).
+// Also "das ist mein Vater", nicht "ich bin sein Vater".
+
+// Wenn eine Gruppe sagt "das ist mein Vater", meint sie natrlich "Das
+// ist der, der bei mir als Vater fungiert"
+
+// Der Andere (IdPar2) bestimmt normalerweise das Geschlecht der Beziehung
+// Auáer wenn Code mit - endet : IdPar1 bestimmt Geschlecht
+
+// "als Vater" ist die Abkrzung von "das ist die Gruppe, in der ich als
+// Vater fungiere"
+
+
+// 0  |Verwandter     |0  |Verwandter   |Verwandte     |P
+01 |Vater/Mutter   |01R|Vater        |Mutter        |P|P
+01R|Kind           |01 |Sohn         |Tochter       |P|P
+02 |Onkel/Tante    |02R|Onkel        |Tante         |P|P
+02R|Nichte/Neffe   |02 |Neffe        |Nichte        |P|P
+03 |Stiefelternteil|03R|Stiefvater   |Stiefmutter   |P|P
+03R|Stiefkind      |03 |Stiefsohn    |Stieftochter  |P|P
+04 |Groáelternteil |04R|Groávater    |Groámutter    |P|P
+04R|Enkel          |04 |Enkel        |Enkelin       |P|P
+
+// 1  |Enge Beziehung |1  |          |                 |P
+10 |Ehepartner     |10 |Ehemann   |Ehefrau          |P|P
+11 |Partner        |10 |Partner   |Partnerin        |P|P
+12 |Freund         |11 |Freund    |Freundin         |P|P
+
+80-|Gruppe          |80 |Gruppe        |Gruppe              |P|O
+80 |Mitglied        |80-|Mitglied (m)  |Mitglied (w)        |O|P
+
+21 |Vater/Mutter    |21R|Vater        |Mutter        |F|P
+21R|als Vater/Mutter|21 |als Vater    |als Mutter    |P|F
+22 |Kind            |22R|Sohn         |Tochter       |F|P
+22R|als Kind        |22 |als Sohn     |als Tochter   |P|F
+
+
+81-|Firma           |80 |Firma         |Firma               |P|O
+81 |Angestellter    |80-|Angestellter  |Angestellte         |O|P
+
+
+60 |Mitglied        |60-|Mitglied (m)  |Mitglied (w)        |L|
+60-|Liste           |60 |Liste         |Liste               | |L
+
+

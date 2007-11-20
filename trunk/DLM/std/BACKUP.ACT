@@ -1,0 +1,6 @@
+// BACKUP.ACT : Sicherheitskopie der Datenbank
+Confirm(\
+  "Sicherheitskopie Ihrer Datenbank nach Diskette schreiben.",\
+  MsgSure() \
+)
+AppNormEnd("DBBACK " + CfgDataBase())

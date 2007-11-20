@@ -1,0 +1,7 @@
+// Partner nach Excel exportieren
+
+OutputFile    "PAR.TXT"
+Delimiter     chr(9)
+#include "PARCOLS.EXP"
+#include "DOS2WIN.CVT"
+OnSuccess AppShell("excel.bat "+i_OutputFile(),NIL,.f.)

@@ -1,0 +1,49 @@
+[* Begleitzettel Liste der MWSt-pflichtigen Kunden]
+[set montant Z12]
+[set apswidth 70]
+[set align c]
+J꼑rliche Liste der MWSt-pflichtigen Kunden
+컴컴컴컴컴컴컴컴컴컴
+DISKETTE MIT EINER EINZIGEN LISTE
+컴컴컴컴컴컴컴컴컴컴
+BEGLEITSCHREIBEN
+(in dreifacher Ausf갿rung anfertigen)
+컴컴컴컴컴컴컴컴컴컴
+
+[set align l]
+
+Name oder Bezeichnung und Anschrift des Steuerpflichtigen :
+
+       [=MemName1]
+       [=MemName2]
+       [=MemName3]
+
+Mehrwertsteuernummer : [=MemNoTva]
+
+Kontaktperson :
+
+Telefonnummer :
+
+Zeitraum, f걊 den die Liste ausgestellt worden ist :
+Jahr [=str(pnYear(MemPer1),4)]
+
+
+Anzahl der in der Liste angef갿rten Kundens꼝ze : [=ntrim(TvaParCount())]
+
+Gesamtbetrag (Steuern nicht einbegriffen) : [=ntomf(TvaBase())] [=SetDevise()]
+Gesamtbetrag der Steuern :                  [=ntomf(TvaTaxe())] [=SetDevise()]
+
+
+                                        F걊 die Richtigkeit :
+
+
+                                  (Datum)
+
+
+                           (Unterschrift)
+
+
+                   (Name und Eigenschaft)
+
+
+

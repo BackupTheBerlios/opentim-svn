@@ -1,0 +1,3 @@
+// PARSEEK
+!empty(DlgValue("ParSearch"))
+ddEditSearch(DlgValue("ParFilter"))

@@ -1,0 +1,9 @@
+// VENPPS.ACT
+DlgDefine("01",0)
+DbfScan(\
+  {oVnl(),oArt()},1,VEN->IdJnl+VEN->IdDoc,\
+  "VNL->IdJnl+VNL->IdDoc=='"+VEN->IdJnl+VEN->IdDoc+"'",\
+  "ArtExist(VNL->IdArt)",\
+  "DlgPlus('01',qton1(VNL->Qte)*if(VenIsNC(),-1,1))"\
+)
+

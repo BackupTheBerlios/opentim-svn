@@ -1,0 +1,6 @@
+// FINPRINT.ACT
+// called if JNL->IdTpt is empty
+//
+SetTplIni("LISTE")
+DlgExec("FINPRINT")
+fprint("FIN"+JnlIdGrj(FIN->IdJnl)+".TPL")

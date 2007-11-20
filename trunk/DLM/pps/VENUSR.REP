@@ -1,0 +1,75 @@
+// Auswertung /Vertreter
+before DlgDefine("Auftrag",0)
+// before DlgDefine("Kosten",0)
+before DlgDefine("Umsatz",0)
+before DlgDefine("Angebot",0)
+header1 "Auswertung "+trim(DlgValue("IdUsr"))
+header2 "Betr„ge in "+SetDevise()+if(DlgValue("Alle")=="X"," (alle)"," (nur offene)")
+#if !empty(DlgValue("Date1")).or.!empty(DlgValue("Date2"))
+header3 "Liefertermine zwischen "\
+  +dtoc(DlgValue("Date1"))+" und "+dtoc(DlgValue("Date2"))
+#endif
+area { oVen(), oPar() }
+order 1
+// group key={||ft_woy(VEN->DatEch)} \
+      text={|x|"KW "+ntrim(ft_woy(VEN->DatEch))} \
+      after={||RptTit3().and.PrintTotal(1,1).and.PrintLine()} \
+      when={||.t.} \
+      align="R"
+group text={|x|"alle"} align="L"
+OnNoValue {||Confirm(MsgIdJnlDoc()+" : welche Kolonne ?",MsgContinue())}
+start "AUF"
+while cblock("VEN->IdJnl=='AUF'")
+// filter cblock("!empty(VEN->Date)")
+#if !empty(DlgValue("IdUsr"))
+filter cblock("VEN->Auteur=='"+DlgValue("IdUsr")+"'")
+#endif
+#if !empty(DlgValue("Date1"))
+filter cblock("dtos(VEN->DatEch)>='"+dtos(DlgValue("Date1"))+"'")
+#endif
+#if !empty(DlgValue("Date2"))
+filter cblock("dtos(VEN->DatEch)<='"+dtos(DlgValue("Date2"))+"'")
+#endif
+filter {||ActExec("VENUSR")}
+#if empty(DlgValue("Alle"))
+filter {||DlgValue("Umsatz")<DlgValue("Auftrag")}
+#endif
+column header="Termin" width=len(dtoc(UserDate())) \
+       text={||dtoc(VEN->DatEch)}
+// column header="Jnl" width=LenIdJnl() text={||VEN->IdJnl}
+column header="AUF-Nr" width=6 text={||VEN->IdDoc}
+column header="Partner" width=25 text={||padr(ParName(VEN->IdPar),25)}
+column header="Kommission" width=20 text={||padr(VEN->NB1,20)}
+column header="Bauvorhaben" width=20 text={||padr(VEN->NB2,20)}
+// column header="User" width=LenIdUsr() text={||VEN->Auteur}
+column header="Angebot" width=LenMont() \
+       value={||DlgValue("Angebot")}\
+       text={|x|ntomf(x)}
+column header="Auftrag" width=LenMont() \
+       value={||DlgValue("Auftrag")}\
+       text={|x|ntomf(x)}
+// column header="Kosten" width=LenMont() \
+       value={||DlgValue("Kosten")}\
+       text={|x|ntomf(x)}
+column header="Umsatz" width=LenMont() \
+       value={||DlgValue("Umsatz")}\
+       text={|x|ntomf(x)}
+column header="offen" width=LenMont() \
+       value={||if(\
+         DlgValue("Auftrag")>DlgValue("Umsatz"),\
+         DlgValue("Auftrag")-DlgValue("Umsatz"),0)}\
+       text={|x|ntomf(x)}
+// column header="Marge" width=LenMont() \
+       value={||DlgValue("Umsatz")-DlgValue("Kosten")}\
+       text={|x|ntomf(x)}
+// column header="%" width=3 text={||VEN->Prov}
+// column header="Provision" width=LenMont() \
+       value={||(DlgValue("Umsatz")-DlgValue("Kosten"))*val(VEN->Prov)/100}\
+       text={|x|ntomf(x)}
+// column header="G/V" width=LenMont() \
+       when={||VEN->IdJnl$"VKR,ABZ,EKR,KOS,LIE"}\
+       value={||if(VEN->IdJnl$"VKR",1,-1)*DlgValue("HTVA")}\
+       text={|x|ntomf(x)}
+// value={||val(VenMontDb())}
+total when={||.t.}
+

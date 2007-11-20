@@ -1,0 +1,24 @@
+//
+// C:\SOFT\RELEASE\TIM300\300D\ARTPAR.QRY - generated 26.06.98
+// for ART.DBF
+//
+column 25 Bestellnr. pict @K
+column 5 Bezeichnung D pict @K@S30
+column 40 Lager
+column 3 PG pict @K@!
+column 10 EK netto pict @K@! attr C
+column 20 VK netto pict @K@!
+column 34 Art.Nr pict @K@!
+column 14 Kat pict @K@!
+column 24 VK brutto pict @K@!
+column 4 Bezeichnung F pict @K@S20
+column 30 Format pict !
+column 6 Bezeichnung NL pict @K@S20
+column 1 Gru pict @K@!
+column 12 Erstellt
+column 27 Bemerkung pict @K@S37
+column 28 LE pict @K
+column 19 Attr pict @K@!
+column 15 Z pict @K@!
+mask ART
+order 3

@@ -1,0 +1,10 @@
+//
+// INT.QRY - generated 19.08.99
+// for INT.DBF
+//
+column 1 ZN
+column 2 Bezeichnung pict @k@s40
+column 3 Code
+column 5 Attr. pict @K@!
+column 4 QteForm
+order 1

@@ -1,0 +1,7 @@
+Confirm(\
+  "Hiermit werden die MWSt-Nummern aller Partner neu formatiert.",\
+  MsgSure())
+setvar("b",{||\
+  (PAR->NoTva:=GetNoTva(PAR->NoTva,PAR->Pays))!=NIL\
+})
+DbfScan({oPar()},0,NIL,NIL,NIL,"TryRecLock(getvar('b'))")

@@ -1,0 +1,58 @@
+// Nachz„hlliste Inventur
+// initialize {set solde 2} {set montant S10}
+header1 "Artikelliste Inventur"
+#if !empty(MemPer1)
+header2 "EK/VK aus Periode " + PerText()
+#endif
+area { oArt(), oCts(), oGra(), oPar() }
+order 4
+
+group key={||ART->IdPar} \
+      when={|n|n>0} \
+      text={|x|ART->IdPar+" "+trim(ParName(ART->IdPar))} \
+      after={||PrintTotal(1,1).and.RptTit2().and.PrintLine()} \
+      align="R"
+group text={|x|"alle"} align="L"
+OnNoValue {||.t.}
+
+// ValidateRecord {|| BilExist(GEN->IdBil) }
+filter cblock(DlgValue("ArtFilter")) // {|| !"S"$ART->Attrib.and.!'H'$ART->Attrib}
+// start trim(DlgValue("IdGen1"))
+// while {|| empty(DlgValue("IdGen2")).or.HST->IdGen <= DlgValue("IdGen2") }
+
+column header="Liefr." width=LenIdPar() text={||ART->IdPar}
+column header="Grp" width=LenIdGra() text={||ART->iGra}
+column header="Nøart" width=LenIdArt() text={||ART->IdArt}
+column header="Beschreibung" width=30 text={||padr(ART->Name1,30)}
+// column header="Modell" width=20 text={||padr(ART->Modell,20)}
+// column header="Emb" width=10 text={||padr(ART->IdUnt,10)}
+column header="Lager" width=LenQte() \
+       text={|x|ART->Lager}
+column header="Wert" width=LenMntF() \
+       value={||val(ART->PrixR)*qton(ART->Lager)} \
+       text={|x|ntomf(x)}
+#if !empty(MemPer1)
+column header="EK" width=LenQte() \
+       text={||ntoq(ArtCtsSum(\
+         ART->IdArt,"CTS->IdJnl=='EKL'.and.ChkPeriode(CTS->Periode)==0",\
+         "val(CTS->Qte)"\
+       ),ART->QteForm)}
+column header="VK" width=LenQte() \
+       text={||ntoq(ArtCtsSum(\
+         ART->IdArt,"CTS->IdJnl=='VKR'.and.ChkPeriode(CTS->Periode)==0",\
+         "val(CTS->Qte)"\
+       ),ART->QteForm)}
+#endif
+// column header="" width=10 \
+       text={|x|space(10)}
+
+// column header="Cum.Ventes" \
+       width=LenMntF() \
+       value={||ArtCtsSum(\
+         ART->IdArt,\
+         "CTS->IdJnl=='VKR'.and.ChkPeriode(CTS->Periode)==0",\
+         "val(Mont)")\
+       } \
+       text={|x|ntomf(x)} \
+       xsum={|x| ntomf(x) }
+total when={||.t.}

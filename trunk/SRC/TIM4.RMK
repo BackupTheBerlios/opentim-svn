@@ -1,0 +1,149 @@
+//
+// tim4.rmk
+//
+
+makepath[.obj] := "s:\obj\$(CUST)"
+makepath[.exe] := "s:\obj\$(CUST)"
+makepath[.ind] := "s:\obj\$(CUST)"
+
+#ifdef DEBUG
+  OPT := $(OPT) /B
+#endif
+
+// #ifdef FINAL
+//   OPT := /L
+// #endif
+
+//      CLIPPER $@ /ES2/W/N/A/M $(OPT) /o$@
+
+//      harbour $* /Tc:\temp /i%HB_BIN_INCLUDE% /ES2/W/N/A/M $(OPT) /o$@
+// clipper $* /Tc:\temp /ES2/W/N/A/M $(OPT) /o$@
+.prg.obj:
+      call prg2obj $* /ES2/W/N/A/M $(OPT) /o$@
+      rem touch s:\obj\$(CUST)\link.ind
+      echo changed > s:\obj\$(CUST)\link.ind
+
+
+// makepath[.ch]  = "\data\luc\prg\tim4"
+// makepath[.prg] = "\data\luc\prg\tim4"
+
+
+// tasm -jIDEAL -ml -z -m
+// ph_mouse.obj : ph_mouse.asm
+//             tasm -jIDEAL -ml -z ph_mouse.asm
+
+// allkey.obj  : allkey.prg   tim4.ind
+abrowse.obj  : abrowse.prg   tim4.ind
+a2browse.obj  : a2browse.prg   tim4.ind
+appinit.obj  : appinit.prg   tim4.ind
+calend.obj   : calend.prg    tim4.ind
+colors.obj   : colors.prg    tim4.ind
+datanorm.obj : datanorm.prg  tim4.ind
+ddarea.obj   : ddarea.prg    tim4.ind
+ddedit.obj   : ddedit.prg    tim4.ind
+dbcedit.obj  : dbcedit.prg   tim4.ind
+ddget.obj    : ddget.prg     tim4.ind
+ddlayout.obj : ddlayout.prg  tim4.ind
+ddmeths.obj  : ddmeths.prg   tim4.ind
+ddseek.obj   : ddseek.prg    tim4.ind
+dlg.obj      : dlg.prg       tim4.ind
+diskfunc.obj : diskfunc.prg  tim4.ind
+drv.obj      : drv.prg       tim4.ind
+errsysls.obj : errsysls.prg  tim4.ind
+etc.obj      : etc.prg       tim4.ind
+filter.obj   : filter.prg    tim4.ind
+import.obj   : import.prg    tim4.ind
+login.obj    : login.prg     tim4.ind
+// 20071013 lsget.obj    : lsget.prg     tim4.ind
+mfileio.obj  : mfileio.prg   tim4.ind
+montant.obj  : montant.prg   tim4.ind
+ntext.obj    : ntext.prg     tim4.ind
+getsysph.obj : getsysph.prg    tim4.ind
+protect.obj  : protect.prg   tim4.ind
+recedit.obj  : recedit.prg   tim4.ind
+report.obj   : report.prg    tim4.ind
+rptmeths.obj : rptmeths.prg  tim4.ind
+// 20071013 scrsave.obj  : scrsave.prg   tim4.ind
+smenu.obj    : smenu.prg     tim4.ind
+stdio.obj    : stdio.prg     tim4.ind
+// 20071013 string.obj   : string.prg    tim4.ind
+tab.obj      : tab.prg       tim4.ind
+time.obj     : time.prg      tim4.ind
+// 20071013 tocmenu.obj  : tocmenu.prg   tim4.ind
+ostream.obj : ostream.prg  tim4.ind
+txtedit.obj  : txtedit.prg   tim4.ind
+unittest.obj : unittest.prg  tim4.ind
+views.obj    : views.prg     tim4.ind
+windows.obj  : windows.prg   tim4.ind
+woy.obj      : woy.prg       tim4.ind
+
+
+adl.obj      : adl.prg        tim4.ind
+als.obj      : als.prg        tim4.ind
+admin.obj    : admin.prg      tim4.ind
+archive.obj  : archive.prg    tim4.ind
+coda.obj     : coda.prg       tim4.ind
+create.obj   : create.prg     tim4.ind
+dcl.obj      : dcl.prg        tim4.ind
+delete.obj   : delete.prg     tim4.ind
+edit.obj     : edit.prg       tim4.ind
+evt.obj      : evt.prg        tim4.ind
+fnlmeths.obj : fnlmeths.prg   tim4.ind
+haushalt.obj : haushalt.prg   tim4.ind
+images.obj   : images.prg     tim4.ind
+imp.obj      : imp.prg        tim4.ind
+imlmeths.obj : imlmeths.prg   tim4.ind
+int.obj      : int.prg        tim4.ind
+interbnk.obj : interbnk.prg   tim4.ind
+kvk.obj      : kvk.prg        tim4.ind
+licmeths.obj : licmeths.prg   tim4.ind
+listes1.obj  : listes1.prg    tim4.ind
+listes2.obj  : listes2.prg    tim4.ind
+litera.obj   : litera.prg     tim4.ind
+lnk.obj      : lnk.prg        tim4.ind
+methods.obj  : methods.prg    tim4.ind
+methods2.obj : methods2.prg   tim4.ind
+msg.obj      : msg.prg        tim4.ind
+mvimeths.obj : mvimeths.prg   tim4.ind
+objects.obj  : objects.prg    tim4.ind
+permeths.obj : permeths.prg   tim4.ind
+pick.obj     : pick.prg       tim4.ind
+pls.obj      : pls.prg        tim4.ind
+pli.obj      : pli.prg        tim4.ind
+prj.obj      : prj.prg        tim4.ind
+pseudo.obj   : pseudo.prg     tim4.ind
+r.obj        : r.prg          tim4.ind
+rapmeths.obj : rapmeths.prg   tim4.ind
+sql.obj      : sql.prg        tim4.ind
+tlg.obj      : tlg.prg        tim4.ind
+tim.obj      : tim.prg        tim4.ind
+timdata1.obj : timdata1.prg   tim4.ind
+timdata2.obj : timdata2.prg   tim4.ind
+timdata3.obj : timdata3.prg   tim4.ind
+timdata4.obj : timdata4.prg   tim4.ind
+timfac.obj   : timfac.prg     tim4.ind
+timget.obj   : timget.prg     tim4.ind
+timprint.obj : timprint.prg   tim4.ind
+timtest.obj  : timtest.prg    tim4.ind
+tplmeths.obj : tplmeths.prg   tim4.ind
+trameths.obj : trameths.prg   tim4.ind
+upgrade.obj  : upgrade.prg    tim4.ind
+vnameths.obj : vnameths.prg   tim4.ind
+venmeths.obj : venmeths.prg   tim4.ind
+vnlmeths.obj : vnlmeths.prg   tim4.ind
+www.obj      : www.prg        tim4.ind
+naf.obj      : naf.prg        tim4.ind
+// news.obj     : news.prg       tim4.ind
+pointage.obj : pointage.prg   tim4.ind
+til.obj : til.prg   tim4.ind
+kitz.obj : kitz.prg   tim4.ind
+spz.obj : spz.prg   tim4.ind
+rfx.obj : rfx.prg   tim4.ind
+trig.obj : trig.prg   tim4.ind
+tasks.obj : tasks.prg   tim4.ind
+eupper.obj : eupper.prg   tim4.ind
+dbesys.obj : dbesys.prg   tim4.ind
+
+tim4.exe : tim4.lnk tim4.rmk link.ind
+    s:\obj\$(CUST)
+    s:\BLINK\bin\blinker @tim4.LNK @LIB-BX.LNK

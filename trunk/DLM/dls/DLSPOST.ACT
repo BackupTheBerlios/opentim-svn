@@ -1,0 +1,8 @@
+trim(DLS->Von)!="-".or.(DLS->Von:=time())!=NIL
+trim(DLS->Bis)!="-".or.(DLS->Bis:=time())!=NIL
+empty(DLS->Von).or.empty(DLS->Bis).or.(\
+  (DLS->Dauer:=TimeDiff(DLS->Von,DLS->Bis))!=NIL.and.ph_refresh())
+RETURN .t. if !empty(DLS->Etat)
+// setvar("Etat",PickDbcCode("DLSETAT.DBC"))
+// RETURN .t. if empty(getvar("Etat"))
+// (DLS->Etat:=getvar("Etat"))!=NIL

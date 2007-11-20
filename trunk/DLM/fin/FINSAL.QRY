@@ -1,0 +1,12 @@
+//
+// FINOPD.QRY - generated 31.10.2000
+// for FIN.DBF
+//
+window 18 70 0 0 
+column 2 =utr("DocId","Dok.Nr","NøDoc")
+column 3 =utr("Date","Datum","Date") say ""
+column 4 =utr("Remark","Bemerkung","Remarque") pict @K@S20
+column 8 Per. pict @K@!
+column 7 St pict !
+column 5 Status
+mask FINOPD

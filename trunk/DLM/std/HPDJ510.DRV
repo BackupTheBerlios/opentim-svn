@@ -1,0 +1,52 @@
+// HP DeskJet 510
+// P.A.C. Systems Eupen Tel. 00 32 87 55 62 31
+//
+//
+
+//
+// Bezeichnung (max.30 Zeichen)
+//
+Name HP DeskJet 510
+
+//
+// Initialize : wird zu Beginn jeder neuen Seite gesendet
+//
+Initialize ""
+
+//
+// Reset : wird am Ende eines Druckvorgangs gesendet
+//
+Reset                  chr(27)+"E"
+
+//
+// Formfeed : Steuerzeichen, das einen Seitenvorschub hervorruft
+//
+FormFeed               chr(12)
+// FormFeed               chr(27)+"&l0H"
+
+//
+// FÅr jede verfÅgbare Schriftart steht ein "Font"-Eintrag
+//   Font <Name> <AnzahlCPI> <Steuerzeichen>
+//
+Font  5cpi    5    12/72  chr(27)+"(s5H"
+Font  10cpi  10    12/72  chr(27)+"(s10H"
+Font  12cpi  12    12/72  chr(27)+"(s12H"
+Font  17cpi  16.67 12/72  chr(27)+"(s16.67H"
+Font  20cpi  20    12/72  chr(27)+"(s20H"
+
+//
+//  Zeichenformatierungs-Steuerzeichen
+//
+BoldOn   chr(27)+"(s3B"
+BoldOff  chr(27)+"(s0B"
+ItalOn   chr(27)+"(s1S"
+ItalOff  chr(27)+"(s0S"
+UnderOn  chr(27)+"&d1D"
+UnderOff chr(27)+"&d@"
+
+Option P Portrait             "&l0O"
+Option L Landscape            "&l1O"
+Option 6 6LinesPerInch        "&l6D"
+Option 7 6.9LinesPerInch      "&l7C"
+Option 8 8LinesPerInch        "&l8D"
+

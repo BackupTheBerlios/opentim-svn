@@ -1,0 +1,12 @@
+//
+// C:\SOFT\RELEASE\TIM220\STD220D\TPLLST.QRY - generated 09.02.98
+// for TPL.DBF
+//
+window 16 66 0 0 
+column 2 Name pict @K@!
+column 3 Bezeichnung
+column 7 Br. pict @K@!
+column 8 Ini pict @K@!
+column 9 Attrib pict @K@!
+column 10 IdDlg pict @K@!
+mask TPL

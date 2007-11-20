@@ -1,0 +1,35 @@
+// Lieferantenbestellschein lt. Auftrag
+// (Dialogdatei fÅr Druckmaske AUF BST)
+field name="Date" \
+    caption="Datum " \
+    value=UserDate()
+field name="IdPar" \
+    caption="Lieferant " \
+    value=space(LenIdPar()) \
+    picture="@k@!" \
+    pick={|x| PickPar("L",x)} \
+    postedit={|x|GetIdPar(x,"L")}
+field name="Text" \
+    caption="Text " \
+    value=space(1) \
+    picture="@k@!" \
+    pick={||DbcEdit("*.bst",DbPath(),"Text",.t.,.t.)}
+field name="Ref" \
+    caption="Bitte angeben " \
+    value=space(20)
+field name="Adr2" \
+    caption2=" Vertreteradresse " \
+    value=" " \
+    reader={|g|CbxReader(g)}
+// field block={|x|SetTplIni(x)} \
+//    caption="Druckparametersatz " \
+//    value=padr("LISTE",LenIdTpl()) \
+//    pick={|x|PickTpl("INI",x)}
+field block={|x|SetPreview(x)} \
+    caption2=" Seitenvorschau " \
+    value="X" \
+    reader={|g|CbxReader(g)}
+field name="Copies" \
+    caption="Anzahl Exemplare " \
+    value="  1" \
+    postedit={|x|GetNum(x,0,0)}

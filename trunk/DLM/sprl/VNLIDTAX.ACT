@@ -1,0 +1,2 @@
+RETURN "IM0" if JnlIdCtr(VEN->IdJnl)=="E".and.VenIsNC()
+RETURN "IM"

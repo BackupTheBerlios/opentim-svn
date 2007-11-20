@@ -1,0 +1,12 @@
+// begin std
+field block={|x|SetPreview(x)} \
+    caption2=utr(" Preview"," Seitenvorschau"," Pr‚visualisation") \
+    default=if("P"$UsrAttrib(),"X"," ") \
+    reader={|g|CbxReader(g)}
+field block={|x|SetRange(x)} \
+    caption=utr("Pages from-to ","Seiten von-bis ","Pages de-… ")
+field block={|x|SetTplIni(x)} picture="@k@!" \
+    caption=utr("Parameter set ","Druckparametersatz ","ParamŠtres d'imprimante ") \
+    pick={|x|PickTpl("INI",x)}
+// end std
+action key=-7 block={||TplValue("INI",SetTplIni(),cblock("TplMemoEdit()"))}

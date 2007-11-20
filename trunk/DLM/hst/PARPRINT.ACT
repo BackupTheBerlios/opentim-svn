@@ -1,0 +1,7 @@
+// PARPRINT.ACT
+// called if no entry "PAR" defined in TPT.DBC
+//
+SetTplIni("MAHN")
+SetTplLang(PAR->Langue)
+DlgExec("PARMAHN")
+fprint("PARMAHN.TPL")

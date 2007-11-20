@@ -1,0 +1,31 @@
+// ARTCLEAN.DLG : supprimer articles dans la base de donnÇes
+title "Artikel lîschen"
+field caption="Alle Artikel lîschen, die folgende Bedingung erfÅllen :"
+field name="Filter" \
+    value=padr(".t.",100) \
+    picture="@k@s55"
+field caption="N.B.: es werden nur unbenutzte Artikel gelîscht."
+field name="Confirm" \
+      caption2=" jeden Artikel einzeln bestÑtigen" \
+      value="X" \
+      reader={|g|CbxReader(g)}
+// field name="GRA" \
+//       caption2=" aussi les groupes & remises" \
+//       value="X" \
+//       reader={|g|CbxReader(g)}
+after Confirm("Diese Aktion ist unwiderruflich !",MsgSure(),"N")
+// ArtBatchDelete(xlArtFilter,cMsgWorking,lConfirm,cWarning,cMsgFinal)
+after ArtBatchDelete(\
+  DlgValue("Filter"),\
+  "Artikelstammdaten lîschen... [Escape] um abzubrechen...",\
+  DlgValue("Confirm")=="X",\
+  NIL," Artikel wurden gelîscht."\
+)
+// GraBatchDelete(xlArtFilter,cMsgWorking,lConfirm,cWarning,cMsgFinal)
+// after DlgValue("GRA")==" ".or.GraBatchDelete(\
+//   "left(iGra,1)=='" + DlgValue("IdCfn")+ "'",\
+//   "Suppression des groupes... [Escape] pour interrompre...",\
+//   DlgValue("Confirm")=="X",\
+//   NIL," groupes ont ÇtÇ supprimÇs."\
+// )
+

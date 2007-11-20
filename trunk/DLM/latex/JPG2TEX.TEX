@@ -1,0 +1,38 @@
+% used by jpg2tex.act
+\documentclass[a4paper,landscape]{article}
+\usepackage[pdftex]{graphicx}
+
+\setlength{\hoffset}{-1in}
+\setlength{\oddsidemargin}{10mm}
+\setlength{\textwidth}{27.7cm}
+
+\setlength{\voffset}{-1in}
+\setlength{\headheight}{0cm}
+\setlength{\headsep}{0cm}
+\setlength{\topmargin}{10mm}
+\setlength{\textheight}{19cm}
+\setlength{\footskip}{0cm}
+
+\pagestyle{empty}
+
+\newcommand{\foto}[1]{
+\par\includegraphics[width=115mm]{#1}
+\vfill
+}
+
+\begin{document}
+\twocolumn
+\begin{center}
+
+[etc do aeval(\
+  DlgValue("aFiles"),\
+  {|x|ToStream(\
+    "\foto{"\
+    +strtran(trim(DlgValue("JpgDir")),"\","/")\
+    +"/"+lower(x[1])+"}"+chr(13)+chr(10)\
+  )}\
+)]
+
+\end{center}
+
+\end{document}

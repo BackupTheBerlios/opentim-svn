@@ -1,0 +1,12 @@
+//
+// ODS.QRY - generated 23.11.1999
+// for ODS.DBF
+//
+column 1 Jnl
+column 2 IdDoc
+column 5 Datum say ""
+column 9 Periode pict @K@!
+column 7 Status say ""
+column 6 Bemerkung
+column 10 Betrag pict @K@!
+mask ODS

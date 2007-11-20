@@ -1,0 +1,11 @@
+// VEN REport
+//    value=padr("LISTEX",LenIdTpl()) \
+field block={|x|SetTplIni(x)} picture="@k@!" \
+    caption="Druckparametersatz " \
+    pick={|x|PickTpl("INI",x)}
+field block={|x|SetPreview(x)} \
+    caption2=" Seitenvorschau " \
+    value="X" \
+    reader={|g|CbxReader(g)}
+// after RepPrint("VNL002",NIL,"Inhalt "+MsgIdJnlDoc())
+// after .f.

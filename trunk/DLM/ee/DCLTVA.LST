@@ -1,0 +1,82 @@
+{* MWSt-Erkl„rung}
+{set montant S12}
+{set apswidth 124}
+{set special P8}
+{etc if MemPer1==MemPer2}
+{etc do DlgDefine("p1"," ")}
+{etc do DlgDefine("p2","    ")}
+{etc do DlgDefine("p3",right(MemPer1,2))}
+{etc do DlgDefine("p4",ntrim(pnYear(MemPer1)))}
+{etc else}
+{etc do DlgDefine("p1",ntrim(pnQuarter(MemPer1)))}
+{etc do DlgDefine("p2",ntrim(pnYear(MemPer1)))}
+{etc do DlgDefine("p3","  ")}
+{etc do DlgDefine("p4","    ")}
+{etc endif}
+
+
+
+Vorm KMD
+Maksumaksja:
+
+     {=padr(MemName1,40)}
+     {=padr(MemName2,40)}
+     {=padr(MemName3,40)}
+
+     {=padr(MemNoTva,40)}
+
+
+Periood: {=PerText()}
+
+KŽIBEDEKLARATSIOON
+
+1 18% m„„raga maksustatav k„ive (v.a. kasvava
+metsa raieoiguse ning metsamaterjali ja sellega
+seotud teenuste voorandamisel voi osutamisel
+teisele registreeritud maksukohustuslasele)   {=ntomf(DlgValue("1"))}
+
+
+1.1 sh. kinnisasjade ja nendega seotud tehingute,
+krediidi- ja finantseerimisasutuste teenuste ning
+investeeringukullaga tehtavate tehingute maksustatav
+k„ive                                         {=ntomf(DlgValue("1.1"))}
+
+1.2 Registreeritud maksukohustuslasele kasvava metsa
+raieoiguse ning metsamaterjali ja sellega seotud teenuste
+voorandamise voi osutamise maksustatav k„ive  {=ntomf(DlgValue("1.2"))}
+
+2 5% m„„raga maksustatav k„ive                {=ntomf(DlgValue("2"))}
+
+3 0% m„„raga maksustatav k„ive                {=ntomf(DlgValue("3"))}
+
+3.1 sh. kaupade eksport                       {=ntomf(DlgValue("3.1"))}
+
+4 Maksuvaba k„ive                             {=ntomf(DlgValue("4"))}
+
+5 K„ibemaks
+  (18% lahtrist 1 + 5% lahtrist 2) kokku      {=ntomf(DlgValue("5"))}
+
+6 Kokku sisendk„ibemaksusumma, mis on
+  seadusega lubatud maha arvata               {=ntomf(DlgValue("6"))}
+
+6.1 sh. tollile tasutud k„ibemaks kokku       {=ntomf(DlgValue("6.1"))}
+
+6.2 sh. teenuse importimisel tasumisele
+    kuuluv k„ibemaks                          {=ntomf(DlgValue("6.2"))}
+
+7   T„psustused ja teiselt registreeritud
+    maksukohustuslaselt kasvava metsa
+    raieoiguse ning metsamaterjali ja sellega
+    seotud teenuste ostmisel maksmisele kuuluv
+    k„ibemaks vastavalt ostuarvele            {=ntomf(DlgValue("7"))}
+
+8 T„psustused                                 {=ntomf(DlgValue("8"))}
+9 Tasumisele kuuluv k„ibemaks
+  (lahter 5 - lahter 6
+  + lahter 7 - lahter 8)                      ?
+
+10 Enammakstud k„ibemaks
+   (lahter 5 - lahter 6
+   + lahter 7 - lahter 8)                     ?
+
+

@@ -1,0 +1,18 @@
+// PARBOOK.DLG
+
+before SetDlgTitle("Adressbuch via LaTeX drucken")
+
+field block={|x|SetPreview(x)} \
+    caption2=" Seitenvorschau" \
+    value="X" \
+    reader={|g|CbxReader(g)}
+
+field name="Model" \
+      caption="Modell " \
+      picture="@k@!"
+
+field name="AsPdf" \
+    caption2=" Format PDF au lieu de DVI" \
+    reader={|g|CbxReader(g)}
+
+

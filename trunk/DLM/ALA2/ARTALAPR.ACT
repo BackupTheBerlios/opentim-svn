@@ -1,0 +1,14 @@
+// Modulpreise aktualisieren
+Confirm(\
+  "Die Preise aller Module werden aktualisiert",\
+  MsgSure()\
+)
+DbfScan(\
+  {oArt(), oGra()},\
+  1,\
+  NIL,\
+  ".t.",\
+  "'M'$ART->Attrib",\
+  'TryRecLock({||ActExec("ARTALAP2")})'\
+)
+Warning("Modulpreise wurden aktualisiert",NIL,NIL,.t.,"Fertig")

@@ -1,0 +1,11 @@
+ddAddField("Saldo","C",LenQte(),0,"","",NIL,NIL,NIL,{|x|PickNum(x)},{||.t.},{|x|GetQte(x,":")})
+// 1 : Sonntag... 7: Samstag
+ddAddField("Qte1","C",5,0,"","",NIL,NIL,NIL,{|x|PickNum(x)},{||.t.},{|x|GetQte(x,":")})
+ddAddField("Qte2","C",5,0,"","",NIL,NIL,NIL,{|x|PickNum(x)},{||.t.},{|x|GetQte(x,":")})
+ddAddField("Qte3","C",5,0,"","",NIL,NIL,NIL,{|x|PickNum(x)},{||.t.},{|x|GetQte(x,":")})
+ddAddField("Qte4","C",5,0,"","",NIL,NIL,NIL,{|x|PickNum(x)},{||.t.},{|x|GetQte(x,":")})
+ddAddField("Qte5","C",5,0,"","",NIL,NIL,NIL,{|x|PickNum(x)},{||.t.},{|x|GetQte(x,":")})
+ddAddField("Qte6","C",5,0,"","",NIL,NIL,NIL,{|x|PickNum(x)},{||.t.},{|x|GetQte(x,":")})
+ddAddField("Qte7","C",5,0,"","",NIL,NIL,NIL,{|x|PickNum(x)},{||.t.},{|x|GetQte(x,":")})
+ddAddField("QteD","C",5,0,"","",NIL,NIL,NIL,{|x|PickNum(x)},{||.t.},{|x|GetQte(x,":")})
+

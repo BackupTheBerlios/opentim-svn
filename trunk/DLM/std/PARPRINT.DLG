@@ -1,0 +1,16 @@
+// PARPRINT.DLG
+before SetDlgTitle("RTF-Druck Partner")
+before DlgDefine("InFile",padr(DbPath()+"\PAR001"+PAR->Langue,100))
+before DlgDefine("OutFile",padr(AppPath()+"\RTF\PAR\"+PAR->IdPar,100))
+field block={||PAR->IdPar+" "+padr(ParName(),40)} \
+      caption="Partner : " \
+      when={||.f.} color="N/W"
+field name="InFile" \
+      caption="Vorlage         " \
+      picture="@k@s40"
+field name="OutFile" \
+      caption="Tempor„re Datei " \
+      picture="@k@s40"
+after ActExec("FPARSE",{trim(getvar("InFile")),"RTF",\
+trim(getvar("OutFile")),"RTF"})
+after .f.

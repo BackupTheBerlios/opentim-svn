@@ -1,0 +1,12 @@
+//
+// PLPPAR2.QRY - generated 02.02.02
+// for PLP.DBF
+//
+window 20 60 0 1 
+column 1 from
+column 0 Name block padr(ParName(PLP->IdPar1),30) skip .t.
+column 4 Type pict @K@!
+column 3 Seq
+column 2 to
+order 2
+attrib W

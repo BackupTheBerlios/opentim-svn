@@ -1,0 +1,69 @@
+// Zwischendatei fr Adressbuch
+OutputFile    "c:\temp\par2adr.rtf"
+Confirm OFF
+NoTitles ON
+Header "{\rtf1\ansi\deff0{\fonttbl{\f0\fswiss Arial;}{\f1\froman Times New Roman;}}"
+Trailer "}"
+// {\colortbl\red0\green0\blue0;}
+Delimiter     ""
+
+#if empty(DlgValue("NewLine"))
+  FieldUpdate   Begin        if(\
+    empty(DlgValue("A")),\
+    "",\
+    if(\
+      DlgValue("A")==eupper(left(PAR->Firme,1))," {\endash} ","\par "\
+    )\
+  )
+  RecordAfter DlgDefine("A",eupper(left(PAR->Firme,1)))
+#endif
+
+
+FieldUpdate   Vorname trim1(PAR->Allo)\
+                      +trim1(PAR->Vorname)\
+                      +"{\b "+trim(PAR->Firme)+"}"
+
+#if !empty(DlgValue("AllInfo"))
+  FieldUpdate   Name2       trim1b(PAR->Name2,", ")
+  FieldUpdate   Name3       trim1b(PAR->Name3,", ")
+#endif
+FieldUpdate   Strasse     trim1b(ParStreet(),", ")
+FieldUpdate   City        if(\
+  left(PAR->CP,4)$"4700,4701".and.DlgValue("NoEupen")=="X","",\
+  trim1b(ParCity(),", ")\
+)
+FieldUpdate   Tel         if(empty(PAR->Tel),"",\
+  trim1b("Tel:"+if(left(PAR->Tel,4)=="087/",substr(PAR->Tel,5),PAR->Tel),", ")\
+)
+FieldUpdate   Fax         if(empty(PAR->Fax),"",\
+  trim1b("Fax:"+if(left(PAR->Fax,4)=="087/",substr(PAR->Fax,5),PAR->Fax),", ")\
+)
+#if !empty(DlgValue("AllInfo"))
+  FieldUpdate   Memo        trim1b(PAR->Memo,", ")
+#endif
+#if !empty(DlgValue("NewLine"))
+  FieldUpdate   Ende   "\par "
+#endif
+
+
+// Siehe auch DOS2WIN.CVT
+convert "„" to "ä"
+convert "" to "Ä"
+convert "”" to "ö"
+convert "™" to "Ö"
+convert "" to "ü"
+convert "š" to "Ü"
+convert "á" to "ß"
+convert "…" to "à"
+convert "ƒ" to "â"
+convert "‚" to "é"
+convert "ˆ" to "ê"
+convert "Š" to "è"
+convert "Œ" to "î"
+convert "“" to "ô"
+convert "–" to "û"
+convert "—" to "ù"
+convert "‰" to "ë"
+convert "‡" to "ç"
+convert "ñ" to "±"
+convert chr(141) to " "

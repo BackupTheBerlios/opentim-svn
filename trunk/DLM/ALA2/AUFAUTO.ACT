@@ -1,0 +1,10 @@
+// VKA2AUF.ACT 
+// RETURN .f. if VEN->IdJnl!="VKA"
+SetDlgTitle("Auftrag erstellen")
+DlgDefine(\
+  "Match",\
+  DbfNextId(oVen(),trim(VEN->Match)+".",len(VEN->Match),3,"VEN->Match")\
+)
+// ParExist(VEN->IdPar)
+DlgExec("AUFAUTO")
+VenAppend("AUF",SetDlgTitle(),DlgValue("Date"),DlgValue("Match"))

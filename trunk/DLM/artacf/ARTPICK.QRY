@@ -1,0 +1,21 @@
+//
+// ARTPICK.QRY - generated 09.04.03
+// for ART.DBF
+//
+window 18 74 0 0 
+column 5 Bezeichnung D pict @K@S34
+column 34 Art-Nr pict @K@!
+column 20 VK netto pict @K@!
+column 24 VK brutto pict @K@!
+column 4 Bezeichnung F pict @K@S20
+column 6 Bezeichnung N pict @K@S20
+column 14 Kat pict @K@!
+column 1 Grp pict @K@!
+column 12 Erstelld. say ""
+column 27 Bemerkung pict @K@S35
+column 13 gÅltig seit say ""
+column 28 LE pict @k
+column 30 Format pict !
+column 19 Attr pict @K@!
+mask ART
+order 3

@@ -1,0 +1,53 @@
+// Auswertung /Vertreter
+before DlgDefine("Kosten",0)
+before DlgDefine("Umsatz",0)
+header1 "Auswertung "+trim(DlgValue("IdUsr"))
+header2 "Betr„ge in "+SetDevise()
+header3 "Auftr„ge abgeschl. zwischen "\
+  +dtoc(DlgValue("Date1"))+" und "+dtoc(DlgValue("Date2"))
+area { oVen(), oPar() }
+order 1
+group text={|x|"alle"} align="L"
+OnNoValue {||Confirm(MsgIdJnlDoc()+" : welche Kolonne ?",MsgContinue())}
+start "AUF"
+while cblock("VEN->IdJnl=='AUF'")
+filter cblock("!empty(VEN->Closed)")
+#if !empty(DlgValue("IdUsr"))
+filter cblock("VEN->Auteur=='"+DlgValue("IdUsr")+"'")
+#endif
+#if !empty(DlgValue("Date1"))
+filter cblock("dtos(VEN->Closed)>='"+dtos(DlgValue("Date1"))+"'")
+#endif
+#if !empty(DlgValue("Date2"))
+filter cblock("dtos(VEN->Closed)<='"+dtos(DlgValue("Date2"))+"'")
+#endif
+filter {||ActExec("VENUSR")}
+column header="abgeschl." width=10 text={||dtoc(VEN->Closed)}
+column header="Jnl" width=LenIdJnl() text={||VEN->IdJnl}
+column header="Dok.Nr." width=6 text={||VEN->IdDoc}
+column header="Partner" width=30 text={||padr(ParName(VEN->IdPar),30)}
+// column header="Bemerkung" width=30 text={||padr(VEN->NB1,30)}
+// column header="User" width=LenIdUsr() text={||VEN->Auteur}
+column header="Auftrag" width=LenMont() \
+       value={||DlgValue("Auftrag")}\
+       text={|x|ntomf(x)}
+column header="Kosten" width=LenMont() \
+       value={||DlgValue("Kosten")}\
+       text={|x|ntomf(x)}
+column header="Umsatz" width=LenMont() \
+       value={||DlgValue("Umsatz")}\
+       text={|x|ntomf(x)}
+column header="Marge" width=LenMont() \
+       value={||DlgValue("Umsatz")-DlgValue("Kosten")}\
+       text={|x|ntomf(x)}
+column header="%" width=3 text={||VEN->Prov}
+column header="Provision" width=LenMont() \
+       value={||(DlgValue("Umsatz")-DlgValue("Kosten"))*val(VEN->Prov)/100}\
+       text={|x|ntomf(x)}
+// column header="G/V" width=LenMont() \
+       when={||VEN->IdJnl$"VKR,ABZ,EKR,KOS,LIE"}\
+       value={||if(VEN->IdJnl$"VKR",1,-1)*DlgValue("HTVA")}\
+       text={|x|ntomf(x)}
+// value={||val(VenMontDb())}
+total when={||.t.}
+

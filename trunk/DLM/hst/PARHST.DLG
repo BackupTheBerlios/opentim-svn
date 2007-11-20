@@ -1,0 +1,82 @@
+// Saldenliste Partner
+// before DlgDefault("IdDev",DevDefault(MemPer2))
+before DlgDefault("IdCtr","V")
+before DlgDefine("DC",CtrDC(DlgValue("IdCtr")))
+before DlgDefault("IdJnl",space(LenIdJnl()))
+
+#include "PERIODE.DLG"
+
+// field block={|x|SetPeriode(x)} \
+    picture="@k@!" \
+    caption="Periode von-bis " \
+    pick={|x|PickPerRange(x)}
+
+// field caption="W„hrung  " \
+      block={|x|SetDevise(x)}\
+      picture="@k@!"\
+      pick={|x|PickDev(x)}\
+      valid={||DevExist(SetDevise())}
+
+field name="IdJnl" \
+    caption="Nur Journal " \
+    picture="@k@!" \
+    pick={|x|DbfPick(\
+              {oJnl()},"Auswahl Journal","JNLPICK",\
+              x,\
+              "'G'$Attrib"\
+    )}
+field name="IdCtr" \
+    caption="Nur Zentralisierungsart " \
+    picture="@k@!" \
+    pick={|x|PickCtr(x)}
+field name="DC" \
+    caption="Salden " \
+    caption2=" positiv, ansonsten negativ" \
+    picture="@k@!" 
+    // validate={|x|DcValidate(x)}
+
+#include "PREVIEW.DLG"
+
+// field block={|x|SetTplIni(x)} picture="@k@!" \
+    caption="Druckparametersatz " \
+    value=padr("LISTE",LenIdTpl()) \
+    pick={|x|PickTpl("INI",x)}
+// field block={|x|SetPreview(x)} \
+    caption2=" Seitenvorschau " \
+    value="X" \
+    reader={|g|CbxReader(g)}
+
+// field name="subttl" \
+    caption2=" Zwischensummen pro Periode " \
+    value=" " \
+    reader={|g|CbxReader(g)}
+//  field name="date1" \
+//      caption="Datum : vom " \
+//      value=ctod("") \
+//      attrib="N"
+//  field name="date2" \
+//      caption=" bis zum " \
+//      value=UserDate()
+
+#include "ASPDF.DLG"
+
+after SetSolde("2")
+after DlgDefine("ParFilter",".t.")
+after DlgDefine("HstFilter",if(\
+    empty(DlgValue("IdJnl")),\
+    ".t.",\
+    "HST->IdJnl=='"+DlgValue("IdJnl")+"'"\
+))
+after empty(DlgValue("IdCtr")).or.DlgPlus("HstFilter",\
+  ".and.HST->IdCtr=='"+DlgValue("IdCtr")+"'")
+
+after DlgDefine("FltText",if(\
+  empty(DlgValue("IdCtr")),\
+  "(Verkauf/Einkauf)",\
+  trim(CtrName(DlgValue("IdCtr")))\
+))
+after empty(DlgValue("IdJnl")).or.DlgPlus("FltText",\
+  "(nur Journal "+DlgValue("IdJnl")+")"\
+)
+// after SetDevise(DlgValue("IdDev"))
+after AppSaveMem()

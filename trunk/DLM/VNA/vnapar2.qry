@@ -1,0 +1,26 @@
+//
+// VNAPAR2.QRY - generated 11/10/1999
+// for VNA.DBF
+//
+window 16 76 0 0 
+column 12 Date say ""
+column 1 Jnl
+column 2 NøDoc
+column 14 r‚f. art pict @K@s10
+column 8 p.u.
+column 0 cd‚ block if(VNA->IdJnl=="VKA",VNA->Qte,space(LenQte())) skip .t.
+column 0 … liv. block if(VNA->IdJnl=="VKA",VNA->QteUs,space(LenQte())) skip .t.
+column 0 livr‚ block if(VNA->IdJnl=="VKL",VNA->Qte,space(LenQte())) skip .t.
+column 0 … fact block if(VNA->IdJnl=="VKL",VNA->QteUs,space(LenQte())) skip .t.
+column 20 *
+column 11 Per. pict @K@!
+column 13 Remarque pict @k@s20
+column 4 AdrF
+column 0 AdrL block VenExpr(VNA->IdJnl+VNA->IdDoc,"VEN->IdPar2") skip .t.
+column 5 ÿ
+column 6 q.init
+column 7 q.ouv
+column 15 Match
+column 16 D‚signation
+order 2
+help VNAPAR

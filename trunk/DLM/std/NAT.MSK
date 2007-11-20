@@ -1,0 +1,24 @@
+//
+// C:\SOFT\RELEASE\TIM300\220D\NAT.MSK - generated 13.11.98
+// for NAT.DBF
+//
+
+
+string 3 13 Code
+string 5 6 Bezeichnung
+string 7 10 Sprache
+string 9 10 W„hrung
+string 11 10 Vorwahl
+string 13 3 Format Telefon
+string 15 6 Format MWSt
+string 17 3 Intrastat-Code
+
+get 1 3 19 pict @K@!
+get 2 5 19
+get 4 7 19 pict @K@!
+get 8 9 19 pict @K@!
+get 6 11 19
+get 5 13 19 pict @K@!
+get 7 15 19 pict @K@!
+get 9 15 26
+get 3 17 19 pict @K@!

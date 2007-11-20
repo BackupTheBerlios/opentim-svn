@@ -1,0 +1,13 @@
+//
+// IPB.QRY - generated 12.04.2003
+// for IPB.DBF
+//
+window 18 74 0 0 
+column 1 Nr. pict @K@!
+column 2 Z pict @K@!
+column 3 Reg pict @K@!
+column 4 Kat pict @K@!
+column 5 MWS pict @K@!
+column 6 =utr("Accnt","G-Kto","Compte") pict @K@!
+column 7 =utr("Description","Bezeichnung","D‚signation") pict @k@s23
+column 11 xlWhen pict @k@s24

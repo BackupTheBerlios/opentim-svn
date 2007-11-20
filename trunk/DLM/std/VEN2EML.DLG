@@ -1,0 +1,9 @@
+before ParExist(VEN->IdPar)
+before setvar("ToName",padr(\
+       trim1(PAR->Allo)+trim1(PAR->Vorname)+trim(PAR->Firme),200))
+before setvar("ToAddr",padr(PAR->email,200))
+before setvar("Subject",\
+       padr(JnlDocLib(VEN->IdJnl,VEN->IdDoc,VEN->DC),200))
+before setvar("infile",padr("VENHTML.EML",11))
+#include "OPENEML.DLG"
+after .f.

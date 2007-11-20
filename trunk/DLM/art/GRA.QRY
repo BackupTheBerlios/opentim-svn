@@ -1,0 +1,11 @@
+//
+// C:\SOFT\RELEASE\TIM220\STD01D\GRA.QRY - generated 09.10.97
+// for GRA.DBF
+//
+window 18 56 0 0 
+column 1 Grp
+column 3 Bezeichnung 1
+column 6 Attr pict @K@!
+column 7 Qry pict @K@!
+column 4 Bezeichnung 2
+column 5 Bezeichnung 3

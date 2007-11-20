@@ -1,0 +1,8 @@
+//
+// F:\SOFT\TEST\TIM300\HEINEN\ANAPICK.QRY - generated 09.10.95
+// for ANA.DBF
+//
+window 18 46 0 0 
+column 1 Konto
+column 2 Bezeichnung (D)
+mask ANA

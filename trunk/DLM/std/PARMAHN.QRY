@@ -1,0 +1,29 @@
+//
+// C:\SOFT\RELEASE\TIM220\STD01D\PARMAHN.QRY - generated 28.05.97
+// for PAR.DBF
+//
+column 17 Debit expr val(PAR->Debit) say ntom(nSum)
+column 18 Kredit expr val(PAR->Credit) say ntom(nSum)
+column 42 seit
+column 33 Name (Anrede)
+column 9 Telefon pict @k@s16
+column 19 Attr pict @K@!
+column 20 ZA pict @K@!
+column 1 Ref. pict @K@!
+column 21 Spr pict @K@!
+column 36 W„ pict @K@!
+column 8 Land pict @K@!
+column 6 Plz. pict @K@!
+column 31 Ort
+column 41 Straáe, Nr.
+column 12 MWSt. pict @K@!
+column 32 Anrede
+column 3 Name 1
+column 4 Name 2
+column 10 Fax
+column 11 Bank (1)
+column 38 Bank (2)
+column 28 Erstellt am
+column 7 Grp pict @K@!
+mask PARMAHN
+order 5

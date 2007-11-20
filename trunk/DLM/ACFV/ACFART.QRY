@@ -1,0 +1,15 @@
+//
+// ACFART.QRY - generated 12.02.2001
+// for ACF.DBF
+//
+window 10 80 12 0 
+column 3 IdPar pict @K@!
+column 9 Kunde pict @K@S17 skip .t.
+column 15 Remise
+column 0 Preis EUR block ntom(ActExec("ACFPRIX"),2) skip .t. say ""
+column 10 W„ pict @K@! skip .t.
+column 6 Datum skip .t. say ""
+column 4 Bemerkung pict @K@S20 skip .t.
+column 2 Seq pict @K@! skip .t.
+column 12 Z pict @K@! skip .t.
+column 0  block ntom(Db2Dev(ACF->IdDev,PerActive(UserDate()),ActExec("ACFPRIX")),2) skip .t.

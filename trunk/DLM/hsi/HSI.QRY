@@ -1,0 +1,16 @@
+//
+// HSI.QRY - generated 13.01.99
+// for HSI.DBF
+//
+column 1 Jnl pict @K@!
+column 2 Dok.Nr pict @K@!
+column 10 Lnd pict @K@!
+column 4 ZN pict @K@!
+column 0 Code block DbfPeek(oInt(),HSI->IdInt,"INT->Code",space(10)) skip .t.
+column 5 Anz.
+column 6 Kg
+column 7 Betrag
+column 8 Betrag FW
+column 9 Periode pict @K@!
+column 3 Pos
+order 1

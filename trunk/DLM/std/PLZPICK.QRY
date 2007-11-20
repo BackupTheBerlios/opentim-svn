@@ -1,0 +1,11 @@
+//
+// PLZPICK.QRY - generated 01.06.1999
+// for PLZ.DBF
+//
+window 15 60 0 0 
+column 3 Nom
+column 1 Pays pict @K@!
+column 2 CP pict @K@!
+column 4 Format pict @K
+column 5 Prefix pict @K
+order 2

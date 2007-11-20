@@ -1,0 +1,104 @@
+// G/V-Rechnung
+initialize SetMntFormat("S12") // [set montant S10]
+header1 MnuItemName() // "G/V-Rechnung"
+header2 PerText() // + " (" + SetDevise() + ")"
+header3 tr("Amounts in ","Betr„ge in ","Montants en ")+SetDevise()
+area { oGen(), oBil() }
+order 3 // GEN->IdBil+GEN->IdGen
+
+#if !empty(getvar("IdBil1"))
+  start trim(getvar("IdBil1"))
+#endif
+#if !empty(getvar("IdBil2"))
+  while cblock("GEN->IdBil<='"+getvar("IdBil2")+"'")
+#endif
+
+ValidateRecord {|| BilExist(GEN->IdBil) }
+ValidateRecord {|| !empty(BIL->DC) }
+
+ValidateRecord {|| DlgDefine("Mont",DbfSum(\
+    {oHst(),oGen(),oPar(),oVen(),oFin()},\
+    "HstMont('"+SetDevise()+"')*if(HST->DC=='C',1,-1)",\
+    3,GEN->IdGen+MemPer1,\
+    "HST->IdGen=='"+GEN->IdGen+"'.and.HST->Periode<='"+MemPer2+"'"\
+  )) \
+}
+
+filter {|| !"H"$BIL->Attrib.and.!empty(BIL->DC) }
+filter {|| abs(getvar("Mont"))>DevTolerance() }
+
+group key={|| GEN->IdBil } \
+      header={||PrintLine().and.PrintLine(\
+        GEN->IdBil + " " + Tagged("B")+ trim(BIL->Name)+Tagged("b")\
+      ).and.PrintLine()} \
+  text={|| space(LenIdBil()+LenIdGen()+2)\
+    +tr("Total","Summe","Total")+" ("+BIL->DC+")" } \
+  when={|nCount,nDtlCount|nDtlCount>0} \
+  format="B"
+
+group key={|| left(GEN->IdBil,3) } \
+      header={||PrintLine().and.PrintLine(tagged("B")+left(GEN->IdBil,3)+" "\
+        +DbfPeek(\
+          oBil(),padr(left(GEN->IdBil,3),LenIdBil()),\
+          "trim(BIL->Name)",\
+          left(GEN->IdBil,3)\
+      )+tagged("b")).and.PrintLine()} \
+      text={|| iif(\
+        BilExist(padr(left(GEN->IdBil,2),LenIdBil())),\
+        trim1(BIL->IdBil)+trim1(BIL->Name)+'('+BIL->DC+')',\
+        NIL\
+      ) } \
+      when={|nCount,nDtlCount|nDtlCount>0} \
+      after={||PrintLine()}
+
+      // text={|| left(GEN->IdBil,3)+" "+DbfPeek(\
+        oBil(),padr(left(GEN->IdBil,3),LenIdBil()),\
+        "trim1(BIL->Name)+'('+BIL->DC+')'",\
+        left(GEN->IdBil,3)\
+      ) } \
+
+
+group key={|| left(GEN->IdBil,2) } \
+      header={||PrintLine().and.PrintLine(tagged("B")\
+        +left(GEN->IdBil,2)+" "+DbfPeek(\
+        oBil(),padr(left(GEN->IdBil,2),LenIdBil()),\
+        "trim(BIL->Name)",\
+        left(GEN->IdBil,2)\
+      )+tagged("b")).and.RptTit2()} \
+      text={|| iif(\
+        BilExist(padr(left(GEN->IdBil,2),LenIdBil())),\
+        trim1(BIL->IdBil)+trim1(BIL->Name)+'('+BIL->DC+')',\
+        NIL\
+      ) } \
+      when={|nCount,nDtlCount|nDtlCount>0} \
+      after={||RptTit2()}
+
+group key={|| left(GEN->IdBil,1) } \
+      header={||DbfPeek(\
+          oBil(),padr(left(GEN->IdBil,1),LenIdBil()),\
+          "(!'S'$BIL->Attrib.or.(p_eject()==NIL)).and.PrintLine(trim(BIL->Name))",.f.\
+      )} \
+      text={|| iif(\
+        BilExist(padr(left(GEN->IdBil,1),LenIdBil())),\
+        trim1(BIL->IdBil)+trim1(BIL->Name)+'('+BIL->DC+')',\
+        NIL\
+      ) } \
+      when={|nCount,nDtlCount|nDtlCount>0} \
+      after={||RptTit2()}
+
+group text={|x|"Gesamt"} when={||.f.}
+
+
+
+column header=tr("Item","Art.","Code") width=LenIdBil() text={||space(LenIdBil())}
+column header=tr("Accnt","Konto","Compte") width=LenIdGen() \
+       text={||GEN->IdGen}
+column header=tr("Description","Bezeichnung","Description") width=40 \
+       text={||padr(GenName(NIL,TplLang()),40)}
+column header="D/C" width=3 text={||" "+BIL->DC+" "}
+column header=padl(MsgMontant(TplLang()),LenMntF()) \
+       width=LenMntF() \
+       value={||getvar("Mont")} \
+       text={|x|ntomf(iif(BIL->DC=="C",x,x*-1))} \
+       xsum={|x|ntomf(iif(BIL->DC=="C",x,x*-1))}
+total text={||""} when={||.t.}

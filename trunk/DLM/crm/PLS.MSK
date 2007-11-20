@@ -1,0 +1,14 @@
+//
+// generated 01/12/05
+// for PLS.DBF
+//
+
+
+
+get 1 2 1 pict @K@!
+get 2 2 12
+get 3 2 63 pict @K@!
+get 5 2 67 pict @K@!
+get 8 3 12 pict @k@s30
+get 4 4 1 pict 78x5
+wait 29 78 10 0 24

@@ -1,0 +1,24 @@
+// BLGPRINT.DLG : print a VEN of type BLG
+// created 20021101 by LS
+// called from BLGPRINT.ACT
+title =utr("Print receipt","Beleg drucken","imprimer quittance")
+field block={||VEN->IdJnl} \
+      caption=utr("Document ID","Dokument Nr. ","Nø document") \
+      when={||.f.} \
+      color="N/W" attrib="N"
+field block={||VEN->IdDoc} \
+      caption=" " \
+      when={||.f.} \
+      color="N/W"
+field block={||padr(ParName(VEN->IdPar),35)} \
+      caption=utr("Partner ","Partner ","Partenaire ") \
+      when={||.f.} \
+      color="N/W"
+field name="Copies" \
+      caption=utr("Copies ","Anzahl Exemplare ","Copies ") \
+      default=1 \
+      picture="999"
+field block={|x|SetPreview(x)} \
+      caption2=utr("Preview ", " Seitenvorschau ", "Pr‚visualisation ") \
+      value="X" \
+      reader={|g|CbxReader(g)}

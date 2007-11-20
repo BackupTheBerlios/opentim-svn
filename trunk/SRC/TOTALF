@@ -1,0 +1,16 @@
+[etc if 'O' $ VEN->Attrib]
+[etc goto -12]
+[etc line]
+[set align r]
+[etc if 'O'$VEN->Attrib.and.!empty(VEN->Remise)]
+Total brut :     [=ntomf(val(VEN->MontR))]
+Remise [=ltrim(VEN->Remise)] % :     [=ntomf(\
+  val(VEN->Mont)-val(VEN->MontT)-val(VEN->MontR)\
+)]
+[etc if 'O'$VEN->Attrib]
+Total hors TVA :     [ven htva]
+[ven memo_tax]
+컴컴컴컴컴컴컴
+Total TVA comprise : [=VEN->IdDev] [ven tvac]
+[set align l]
+[etc endif]

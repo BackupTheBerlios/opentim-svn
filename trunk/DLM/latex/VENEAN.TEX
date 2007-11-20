@@ -1,0 +1,37 @@
+% VENEAN.TEX
+% Template to be used by TIM. Author Luc Saffre. PAC Systems Eupen
+%
+[=fparse("EANETI1.TEX")]
+[* note : no empty lines here!]
+[* first print a number of empty cells]
+[* etc do ForLoop(\
+  1,\
+  DlgValue("EmptyCells"),\
+  {||DlgPlus("CellCount",1),\
+     ToStream("\etiquette{}"+if(\
+       DlgValue("CellCount") % DlgValue("ColCount")==0,\
+       " \\"+chr(13)+chr(10),\
+       " "\
+     ))\
+  }\
+)]
+[* now scan contents of the document]
+[=DlgDefine("LoopCmd","\
+  ForLoop(1,if(\
+    qton(VNL->Qte)/qton1(ART->QteEti)==int(qton(VNL->Qte)/qton1(ART->QteEti)),\
+    qton(VNL->Qte)/qton1(ART->QteEti),\
+    int(qton(VNL->Qte)/qton1(ART->QteEti))+1\
+  ),cblock('\
+")]
+[=DlgPlus("LoopCmd",'fparse("ARTEAN2.TEX")')]
+[=DlgPlus("LoopCmd","'))")]
+[=DbfScan(\
+  {oVnl(),oArt()},\
+  1,\
+  VEN->IdJnl+VEN->IdDoc,\
+  "VNL->IdDoc==VEN->IdDoc.and.VNL->IdJnl==VEN->IdJnl",\
+  "VNL->Code$'AF'.and.ArtExist(VNL->IdArt).and.!empty(ART->EAN).and.empty(ART->NoEAN)",\
+  DlgValue("LoopCmd")\
+)]
+
+\end{document}

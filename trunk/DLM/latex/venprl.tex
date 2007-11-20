@@ -1,0 +1,222 @@
+% VENSTD.TEX
+% Template to be used by TIM. Author Luc Saffre. PAC Systems Eupen
+%
+% \special{header=bb1.ps}
+%
+% This template expects the following document types
+% VEN->IdJnl    Document type
+% ------------  ---------------
+% OFF,VKA       Angebot
+% AUF           Auftragsbest„tigung
+% CDV,VKB       Bestellschein
+% VEN,VNA,VKR   Rechnung
+%
+[etc do SetDateFormat(if(TplLang()=="D","d. mmmm yyyy","d mmmm yyyy"))]
+[set montant S10]
+
+\documentclass[a4paper,10pt]{report}
+
+[etc do DlgDefine("GraphicsType",\
+  if(DlgValue("AsPdf")=="X","jpg","eps")\
+)]
+[etc do DlgDefine("Color",\
+  if(DlgValue("AsFax")=="X","bw","")\
+)]
+
+\setlength{\hoffset}{-1in}  % header starts at (2.54 - 2 = 0.54) cm
+\setlength{\oddsidemargin}{2cm}
+\setlength{\textwidth}{18cm}
+
+% input encoding
+\usepackage[cp850]{inputenc}
+% N.B.: Windows : ansinew
+%       Linux   : latin1
+
+% use EC fonts instead of CM fonts
+% \usepackage[T1]{fontenc}
+
+[etc if TplLang()=="F"]
+\usepackage[french]{babel}
+[etc else]
+\usepackage[ngerman]{babel}
+[etc endif]
+
+% \usepackage{lastpage}
+% requires the latex runs twice for each document...
+% ... which would be disturbing...
+
+% include EPS files
+% \usepackage{epsfig}
+% not needed if graphicx....
+
+% \usepackage{eurosym}
+
+% extensions for tabular environment :
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{tabularx}
+\renewcommand{\tabularxcolumn}[1]{p{#1}}
+
+% use graphics :
+[etc if DlgValue("AsPdf")=="X"]
+\usepackage[pdftex]{graphicx}
+[etc else]
+\usepackage[dvips]{graphicx}
+[etc endif]
+
+%
+% vertical page layout
+%
+\setlength{\voffset}{-1in}  % header starts at (2.54 - 2 = 0.54) cm
+\setlength{\textheight}{235mm}
+\setlength{\topmargin}{2mm}
+\setlength{\headheight}{30mm}
+\setlength{\headsep}{10mm}
+
+%
+% header and footer definition
+% N.B. Weil der header berbreit ist und ganz links anfangen soll, und
+% weil man in fancyhdr diese Parameter nur fr header und footer
+% zugleich definieren kann, muss ich ein paar Tricks anwenden, damit der
+% footer nicht auch so breit wie der header ist...
+%
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+%\setlength{\headwidth}{19.5cm}
+\lhead{
+\parbox{\headwidth}{\center{
+[etc if file(\
+  DbPath()+"\head"+DlgValue("Color")+"."+DlgValue("GraphicsType")\
+)]
+\includegraphics[height=25mm]{\
+ [=strtran(DbPath(),"\","/")]/head\
+   [=DlgValue("Color")].\
+   [=DlgValue("GraphicsType")]\
+}
+[etc else]
+\hspace{0mm}
+[etc endif]
+}}
+}
+\chead{}
+\rhead{}
+\lfoot{
+\parbox{\textwidth}{
+\footnotesize
+[=JnlDocLib(VEN->IdJnl,VEN->IdDoc,VEN->DC)]
+[=if(TplLang()=="F","Nø","Nr.")]
+[=VEN->IdDoc] ([ven date])
+\hfill
+[=if(TplLang()=="F","Page","Blz.")] \thepage
+}
+}
+\cfoot{}
+% \rfoot{\footnotesize [=if(TplLang()=="D","Seite","Page")] \thepage}
+\rfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\renewcommand{\footrule}{
+\vspace{\footruleskip}
+\rule{\textwidth}{\footrulewidth}\\\
+}
+
+\setcounter{secnumdepth}{3}
+\renewcommand{\thesubsubsection}{
+\arabic{subsection}.\arabic{subsubsection}
+}
+\renewcommand{\thesubsection}{\arabic{subsection}.}
+
+\newcommand{\PreserveBackSlash}[1]{\let\temp=\\#1\let\\=\temp}
+
+% \renewcommand{\familydefault}{cmss}
+\renewcommand{\familydefault}{cmr}
+
+\input{[=strtran(GetDlmPath("timdefs.tex"),"\","/")]}
+
+\begin{document}
+
+% Petr Orsag
+% see eantest.tex for comments
+\input ean13
+\X=[=ltrim(str(0.33*DlgValue("Scale")/100,6,3))]mm
+\font\ocrb=ocrb9 scaled [=ntrim(DlgValue("Scale")*10)]
+%\bcorr=0.015mm         % bar correction (?)
+
+
+
+\setlength{\parskip}{0.5\baselineskip}
+\setlength{\parindent}{0pt}
+
+% \hspace{-3cm}
+[etc if VEN->IdJnl$"OFF"]
+\parbox[t]{8cm}{
+[etc do fparse("myadr.tex")]
+}
+\hfill
+\parbox[t]{8.5cm}{
+[etc do fparse("adrpar.tex")]
+}
+
+\bigskip
+[etc endif]
+
+\hfill
+Eupen, [=if(TplLang()=="F","le","")] [ven date]
+
+\smallskip
+
+
+
+[etc if !empty(VEN->Memo)]
+
+\nopagebreak
+
+[etc do ToStream(Memo2Tex(VEN->Memo))]
+
+[etc else]
+
+\nopagebreak[3]
+
+[etc endif]
+
+
+
+[etc do DlgDefine("ColSep",if(VEN->IdJnl$"VEN,VNA,VKR","|",""))]
+[etc do DlgDefine("TableActive",.f.)]
+[etc do DlgDefine("ColAttr",trim(VEN->Attrib))]
+
+[=VenVnlList("[etc do fparse('VEN'+DlgValue('Model')+'2.TEX')]")]
+
+[etc if DlgValue("TableActive")]
+
+\end{longtable}
+[etc endif]
+
+\nopagebreak
+\setlength{\parskip}{0.5\baselineskip} \setlength{\parindent}{0pt}
+
+[etc if VEN->IdJnl$"OFF"]
+
+[etc if VEN->IdReg=="I"]
+\raggedleft
+[=if(TplLang()=="F",\
+  "Livraisons intracommunautaire de marchandises",\
+  "Innergemeinschaftliche Warenlieferung."\
+)]
+\raggedright
+[etc endif]
+
+[etc endif]
+
+\nopagebreak
+\bigskip
+
+[etc if TplLang()=="F"]
+  Tous les prix en [=VEN->IdDev]\
+  [=if("C"$VEN->Attrib.or.'O'$VEN->Attrib,""," et hors T.V.A.")].
+[etc else]
+  Alle Preise in [=VEN->IdDev]\
+  [=if("C"$VEN->Attrib.or.'O'$VEN->Attrib,""," und zzgl. MWSt.")].
+[etc endif]
+
+\end{document}

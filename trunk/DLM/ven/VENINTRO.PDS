@@ -1,0 +1,79 @@
+def header():
+  th=TableModel()
+  th.addColumn(width=40*mm)
+  th.addColumn()
+  beginTable(model=th)
+  p("""
+  Osahing Rumma & Ko
+  Tartu mnt. 71-5
+  10115 Tallinn
+  """,stylesheet.Wrapped)
+  formatCell("BOX",0,colors.white)
+  endCell()
+  p("""
+  Free software to the people
+  """,stylesheet.Wrapped)
+  formatCell("BOX",0.1,colors.white)
+  endRow()
+  endTable()
+
+formatDocument(topMargin=45*mm, header=header)
+
+p("""[=trim(ParName(VEN->IdPar))]
+[=trim(PAR->Name2)]
+[=trim(ParStreet())]
+[=trim(ParCity())]
+""",stylesheet.Wrapped)
+
+
+h1(getTitle())
+
+p("""\
+[B][=tr("Place","Ort","Lieu")][b] : [=VEN->NB1]
+[B][=tr("Street","Baustelle","Chantier")][b] : [=VEN->NB2]
+[B][=tr("Contact","Kontakt","Contact")][b] : [=VEN->NB3]
+[B][=tr("Tel.","Tel.","T‚l.")][b] : [=VEN->NB3]""",stylesheet.Wrapped)
+
+[etc if VEN->IdJnl$"BST"]
+p("""We order as follows :""")
+[etc endif]
+[etc if VEN->IdJnl$"DON"]
+p("""We confirm receipt for the following donations :""")
+[etc endif]
+[etc if VEN->IdJnl$"VKA,AUF"]
+p("""
+Wir danken Ihnen fr Ihre Preisanfrage und m”chten Ihnen folgendes Angebot
+unterbreiten.
+""")
+[etc endif]
+
+p("""[=tr("Your ref.","Ihr Zeichen","Votre r‚f.")]:""")
+p("""[=tr("Our ref.","Unser Zeichen","Notre r‚f.")]:
+[=trim1(VEN->Auteur,"/")][=trim(VEN->VnaMatch)]""")
+p("""[=tr("Date","Datum","Date")] : [=dtocf(VEN->Date,"dd.mm.yyyy")]""")
+
+[etc if VEN->IdPar2!=VEN->IdPar]
+th=TableModel()
+th.addColumn(width=40*mm)
+th.addColumn()
+beginTable(model=th)
+p("""[=tr("","Interventionsadresse","Adresse d'intervention")]""")
+formatCell("BOX",0,colors.white)
+endCell()
+p("""\
+[=trim(ParName(VEN->IdPar2))]
+[=trim(PAR->Name2)]
+[=trim(ParStreet())]
+[=trim(ParCity())]
+""",stylesheet.Wrapped)
+formatCell("BOX",0.1,colors.black)
+endRow()
+endTable()
+[etc endif]
+
+[etc if !empty(VEN->Memo)]
+[=memo2pds(VEN->Memo)]
+[etc endif]
+
+
+

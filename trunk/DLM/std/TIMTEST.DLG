@@ -1,0 +1,32 @@
+// before setvar("LogFile",dbpath()+"\itest.txt")
+
+field name="TstList" caption=utr(\
+      "Only some tests:",\
+      "Nur folgende Tests",\
+      "Seulement les tests suivants:") \
+      default=space(200) \
+      picture="@k@s30" \
+      pick={|x|PickTstList(x)}
+
+field caption=utr(\
+    "(the previous test ",\
+    "(Der letzte Integrit„tstest ",\
+    "(le dernier test ",\
+  )\
+  +if(\
+    IndExist("TIMTEST"),\
+    utr("was run ","wurde vor ","date depuis ")\
+    +ntrim(UserDate()-IndDate("TIMTEST")) \
+    +utr(" days ago."," Tagen gemacht."," jours."),\
+    utr("failed.","war unvollst„ndig.","‚tait incomplet.")\
+  )+")"
+
+
+field block={|x|SetPeriode(x)} \
+    picture="@k@!" \
+    caption=utr("Period from-to ","Periode von-bis ","P‚riodes de-… ") \
+    valid={||ph_refresh()} \
+    pick={|x|PickPerRange(x)}
+
+#include "PREVIEW.DLG"
+

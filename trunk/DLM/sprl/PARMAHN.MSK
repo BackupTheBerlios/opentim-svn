@@ -1,0 +1,21 @@
+//
+// C:\SOFT\RELEASE\TIM300\220D\PARMAHN.MSK - generated 17.12.98
+// for PAR.DBF
+//
+
+
+string 5 1 [F9] Historik :
+string 4 61 Attribute
+string 20 37 Saldo
+string 20 1 [F7] Kontoauszug drucken
+string 4 17 Partnerw„hrung
+
+get 33 2 2 pict @k@s28
+get 41 2 32 pict @k@s28
+get 9 2 61
+get 19 4 74 pict @K@!
+get 6 3 32 pict @K@!
+get 31 3 41 pict @K@S19
+get 0 20 44 block solde2(val(PAR->Debit),val(PAR->Credit))
+get 36 4 32 pict @K@!
+wait 13 78 6 1 9

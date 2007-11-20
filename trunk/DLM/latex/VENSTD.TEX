@@ -1,0 +1,595 @@
+% VENSTD.TEX
+% Template to be used by TIM. Author Luc Saffre. PAC Systems Eupen
+%
+% \special{header=bb1.ps}
+%
+% This template expects the following document types
+% VEN->IdJnl    Document type
+% ------------  ---------------
+% OFF,VKA       Angebot
+% AUF           Auftragsbest„tigung
+% CDV,VKB       Bestellschein
+% VEN,VNA,VKR   Rechnung
+%
+% 2000-12-08 :
+% - IdJnl VKG ebenfalls behandeln wie VEN,VNA,VKR
+% - der Test ob "\hline" geht jetzt !empty(DlgValue("ColSep")) statt
+%   nochmals auf die vier Journale zu testen.
+[etc do SetDateFormat(if(TplLang()=="D","d. mmmm yyyy","d mmmm yyyy"))]
+[set montant S10]
+
+[etc if TplLang()=="F"]
+\documentclass[a4paper,12pt,french]{report}
+[etc else]
+\documentclass[a4paper,12pt,ngerman]{report}
+[etc endif]
+
+[etc do DlgDefine("DocTitle",JnlDocLib(VEN->IdJnl,VEN->IdDoc,VEN->DC)\
+  +tr(" No. "," Nr. "," Nø "," nr. "," nr. ")+VEN->IdDoc)]
+[etc do DlgDefine("GraphicsType",\
+  if(DlgValue("AsPdf")=="X","jpg","eps")\
+)]
+[etc do DlgDefine("Color",\
+  if(DlgValue("AsFax")=="X","bw","")\
+)]
+[etc do DlgDefine("ColHeader",.t.)]
+[etc do DlgDefine("IsFacture",VEN->IdJnl$"VEN,VNA,VKR,VKG")]
+[etc do DlgDefine("IsOffre",VEN->IdJnl$"VKA,OFF")]
+[etc do DlgDefine("IsAuftrag",VEN->IdJnl$"CDV,VKB,AUF")]
+[etc if DlgValue("IsOffre").and.!empty(DlgValue("AsAuftrag"))]
+  [etc do DlgDefine("IsOffre",.f.)]
+  [etc do DlgDefine("IsAuftrag",.t.)]
+  [etc do DlgDefine("DocTitle",tr(\
+    "Order confirmation",\
+    "Confirmation de commande",\
+    "Auftragsbest„tigung"\
+  )+tr(" No. "," Nr. "," Nø ")+VEN->IdDoc)]
+[etc endif]
+
+\setlength{\hoffset}{-1in}
+\setlength{\oddsidemargin}{20mm}
+\setlength{\textwidth}{17.5cm}
+
+% input encoding
+\usepackage[cp850]{inputenc}
+% N.B.: Windows : ansinew
+%       Linux   : latin1
+
+% use EC fonts instead of CM fonts
+% \usepackage[T1]{fontenc}
+
+\usepackage{babel}
+
+% \usepackage{lastpage}
+% requires the latex runs twice for each document...
+
+% include EPS files
+% \usepackage{epsfig}
+% not needed if graphicx....
+
+\usepackage{eurosym}
+
+% extensions for tabular environment :
+\usepackage{array}
+\usepackage{tabularx}
+\renewcommand{\tabularxcolumn}[1]{p{#1}}
+
+% use graphics :
+[etc if DlgValue("AsPdf")=="X"]
+\usepackage[pdftex]{graphicx}
+[etc else]
+\usepackage[dvips]{graphicx}
+[etc endif]
+
+%
+% vertical page layout
+%
+\setlength{\voffset}{-1in}  % header starts at (2.54 - 2 = 0.54) cm
+\setlength{\textheight}{230mm}
+\setlength{\topmargin}{2mm}
+\setlength{\headheight}{30mm}
+\setlength{\headsep}{10mm}
+
+%
+% header and footer definition
+% N.B. Weil der header berbreit ist und ganz links anfangen soll, und
+% weil man in fancyhdr diese Parameter nur fr header und footer
+% zugleich definieren kann, muss ich ein paar Tricks anwenden, damit der
+% footer nicht auch so breit wie der header ist...
+%
+\usepackage{calc}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\setlength{\headwidth}{185mm}
+
+[=fparse("MYHEAD.TEX")]
+\lfoot{
+\parbox{\textwidth}{
+\footnotesize
+[=DlgValue("DocTitle")]
+\hfill
+[=tr("Page","Seite","Page","Blz.","lk.")] \thepage
+}
+}
+\cfoot{}
+\rfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\renewcommand{\footrule}{
+\vspace{\footruleskip}
+\rule{\textwidth}{\footrulewidth}\\\
+}
+
+\setcounter{secnumdepth}{3}
+\renewcommand{\thesubsubsection}{
+\arabic{subsection}.\arabic{subsubsection}
+}
+\renewcommand{\thesubsection}{\arabic{subsection}.}
+
+\newcommand{\PreserveBackSlash}[1]{\let\temp=\\#1\let\\=\temp}
+
+\renewcommand{\familydefault}{cmss}
+% \renewcommand{\familydefault}{cmr}
+
+\input{[=strtran(GetDlmPath("timdefs.tex"),"\","/")]}
+
+%
+\begin{document}
+
+\setlength{\parskip}{0.5\baselineskip}
+\setlength{\parindent}{0pt}
+
+[etc if DlgValue("AsFax")=="X"]
+\hspace{-10mm}
+\parbox[t]{8cm}{
+[etc do fparse("myadr.tex")]
+}
+[etc endif]
+\hfill
+\parbox[t]{80mm}{
+[etc do fparse("adrpar.tex")]
+}
+
+[etc if DlgValue("AsFax")==" "]
+\vspace{12mm}
+
+[etc endif] \
+\hfill
+[=alltrim(substr(MemName3,at(" ",MemName3)))], [=tr("","den","le")] [ven date]
+
+\textbf{\large [=DlgValue("DocTitle")]}
+[etc if DlgValue("AsFax")==" "]
+\hfill
+{\footnotesize \
+[etc if .f. .and. !empty(PAR->Tel)] \
+[=if(TplLang()=="F","T‚l.","Tel.")]: [= trim(PAR->Tel)] \
+[etc endif] \
+[etc if .f. .and. !empty(PAR->Fax)] \
+[=if(empty(PAR->Tel),""," --- ")] \
+Fax~: [=trim(PAR->Fax)] \
+[etc endif] \
+}
+[etc endif]
+
+\bigskip
+
+[etc if DlgValue("IsOffre")]
+% Angebot
+  [=if(\
+    empty(DlgValue("Anrede")),\
+    if(TplLang()=="D","Sehr geehrter Kunde,","Cher client,"),\
+    trim(DlgValue("Anrede"))\
+  )]
+
+  [etc if TplLang()=="D"]
+  wir danken Ihnen fr Ihre Preisanfrage, und berreichen Ihnen hiernach
+  unser Angebot fr die Lieferung
+  [=if("M"$PAR->Attrib,"","und Montage")] von:
+  [etc else]
+  nous vous remercions de votre int‚rˆt et avons le plaisir de vous
+  proposer l'offre suivante~:
+  [etc endif]
+[etc endif]
+
+
+[etc if DlgValue("IsAuftrag")]
+% Bestellschein
+  [etc if TplLang()=="D"]
+    Wir danken fr Ihre Bestellung und bitten um schriftliche Best„tigung
+    Ihres Auftrags:
+  [etc else]
+    Nous vous remercions de votre commande et vous prions de retourner la
+    confirmation sign‚e.
+  [etc endif]
+[etc endif]
+
+[etc if !empty(VEN->Memo)]
+
+\nopagebreak
+
+[etc do ToStream(Memo2Tex(VEN->Memo))]
+
+[etc else]
+
+\nopagebreak[3]
+
+[etc endif]
+
+
+
+[etc do DlgDefine("ColSep",if(DlgValue("IsFacture"),"|",""))]
+[etc do DlgDefine("TableActive",.f.)]
+[etc do DlgDefine("ColAttr",trim(VEN->Attrib))]
+
+[=VenVnlList("[etc do fparse('VEN'+DlgValue('Model')+'2.TEX')]")]
+
+[etc if DlgValue("TableActive")]
+
+[etc if !empty(DlgValue("ColSep"))]
+\hline
+[etc endif]
+
+\end{tabularx}
+[etc endif]
+
+[etc if DlgValue("IsFacture")]
+
+\vfill
+
+[etc endif]
+
+\nopagebreak
+\setlength{\parskip}{0pt} \setlength{\parindent}{0pt}
+
+[etc if "O"$VEN->Attrib.or.DlgValue("IsFacture")]
+[etc do DlgDefine("PrintTVAC",.f.)]
+\nopagebreak
+\bigskip
+
+\hfill\parbox{9cm}{
+\begin{tabularx}{9cm}{|Xp{3cm}|}
+
+\hline
+
+
+[etc if !empty(VEN->Remise)]
+[=tr("Total brutto: ",\
+  "Total brut: ",\
+  "Gesamt brutto: "\
+)]
+&
+\PreserveBackSlash{\raggedleft}
+[=ntomf(val(VEN->MontR))] \\\
+
+[=tr("Reduction ",\
+  "Remise ",\
+  "Rabatt "\
+)] [=ltrim(VEN->Remise)] \% :
+&
+\PreserveBackSlash{\raggedleft}
+[=ntomf(\
+  val(VEN->Mont)-val(VEN->MontT)-val(VEN->MontR)\
+)] \\\
+[etc endif]
+
+[=tr("Total excl. V.A.T.",\
+  "Gesamt ohne MWSt.: ",\
+  "Total hors T.V.A.: ",\
+  "Total zonder BTW",\
+  "Kokku k„ibemaksuta"\
+)]
+&
+\PreserveBackSlash{\raggedleft}
+% [=VEN->IdDev]
+[=ntomf(VenHtva(VEN->IdDev),DevDecPos(VEN->IdDev))] \\\
+
+
+
+[****]
+[etc if VenHtva(VEN->IdDev,"15 ")!=0]
+[=if(TplLang()=="F","T.V.A.","MWSt.")] 15 \%
+&
+\PreserveBackSlash{\raggedleft}
+% [=VEN->IdDev]
+[=ntomf(VenMtva(VEN->IdDev,"15 "),DevDecPos(VEN->IdDev))] \\\
+[etc do DlgDefine("PrintTVAC",.t.)]
+[etc endif]
+[****]
+[etc if VenHtva(VEN->IdDev,"16 ")!=0]
+[=if(TplLang()=="F","T.V.A.","MWSt.")] 16 \%
+&
+\PreserveBackSlash{\raggedleft}
+% [=VEN->IdDev]
+[=ntomf(VenMtva(VEN->IdDev,"16 "),DevDecPos(VEN->IdDev))] \\\
+[etc do DlgDefine("PrintTVAC",.t.)]
+[etc endif]
+[****]
+[etc if VenHtva(VEN->IdDev,"18 ")!=0]
+[=tr("V.A.T.","MWSt.","T.V.A.","B.T.W.","K„ibemaks")] 18 \%
+&
+\PreserveBackSlash{\raggedleft}
+% [=VEN->IdDev]
+[=ntomf(VenMtva(VEN->IdDev,"18 "),DevDecPos(VEN->IdDev))] \\\
+[etc do DlgDefine("PrintTVAC",.t.)]
+[etc endif]
+[****]
+[etc if VenHtva(VEN->IdDev,"N  ,21 ")!=0]
+[=if(TplLang()=="F","T.V.A.","MWSt.")] 21 \%
+&
+\PreserveBackSlash{\raggedleft}
+% [=VEN->IdDev]
+[=ntomf(VenMtva(VEN->IdDev,"N  ,21 "),DevDecPos(VEN->IdDev))] \\\
+[etc do DlgDefine("PrintTVAC",.t.)]
+[etc endif]
+[****]
+[etc if VenHtva(VEN->IdDev,"A  ,6  ")!=0]
+[=if(TplLang()=="F","T.V.A.","MWSt.")] 6 \%
+&
+\PreserveBackSlash{\raggedleft}
+% [=VEN->IdDev]
+[=ntomf(VenMtva(VEN->IdDev,"A  ,6  "),DevDecPos(VEN->IdDev))] \\\
+[etc do DlgDefine("PrintTVAC",.t.)]
+[etc endif]
+
+[etc if DlgValue("PrintTVAC")]
+\hline
+
+[=tr(\
+  "Total incl. VAT:",\
+  "Gesamt inkl. MWSt.:",\
+  "Total TVAC:",\
+  "Total BTW inbegrepen:",\
+  "Kokku k„ibemaksuga:",\
+)]
+&
+\PreserveBackSlash{\raggedleft}
+% [=VEN->IdDev]
+[=ntomf(VenHtva(VEN->IdDev)+VenMtva(VEN->IdDev),DevDecPos(VEN->IdDev))+"\\"]
+[etc endif]
+
+\hline
+
+\end{tabularx}
+}
+[etc endif]
+
+\nopagebreak
+\setlength{\parskip}{0.5\baselineskip} \setlength{\parindent}{0pt}
+
+[etc if VEN->IdReg=="I"]
+\raggedleft
+[=tr("", \
+  "Innergemeinschaftliche Warenlieferung.",\
+  "Livraisons intracommunautaire de marchandises"\
+)]
+\raggedright
+\nopagebreak
+[etc endif]
+
+[etc if VEN->IdReg=="C"]
+\raggedleft
+[=tr("",\
+  "MWSt. vom Vertragspartner zu entrichten.",\
+  "T.V.A. acquitt‚e par le co-contractant."\
+)]
+\raggedright
+\nopagebreak
+[etc endif]
+
+[etc if VEN->IdReg=="X"]
+\raggedleft
+[=tr("",\
+  "MWSt-befreite Ausfuhr von Dienstleistungen.",\
+  "Exportation de prestations de services, sans T.V.A."\
+)]
+\raggedright
+\nopagebreak
+[etc endif]
+
+[etc if VEN->IdReg=="S"]
+\raggedleft
+[=tr("",\
+  "Innergemeinschaftliche Dienstleistungen.",\
+  "Prestations de services intracommunautaires.",\
+  "Intracommunity services.",\
+  "Intracommunautaire prestaties."\
+)]
+[etc if MemPays=="EE "]
+[="KM 0% vastavalt KMS õ 15 lg 4 p 1 (direktiiv art 21)."]
+[etc endif]
+\raggedright
+\nopagebreak
+[etc endif]
+
+\bigskip
+
+[etc if VEN->IdDev=="EEK"]
+  [="Käik hinnad Eesti kroonides."]
+[etc else]
+[=tr("All prices in ","Alle Preise in ","Tous les prix en ",\
+  "Alle prijzen in ")+VEN->IdDev][=if(\
+"O"$VEN->Attrib,"",tr(" and without V.A.T.",\
+" und zuzglich MWSt",\
+" et hors T.V.A",\
+" en zonder BTW"\
+))].
+[etc endif]
+
+[******  Betrag in Euro]
+[etc if DlgValue("IsFacture").and.VEN->IdDev!="EUR"]
+  [etc if TplLang()=="F"]
+  % Le montant total de la facture ‚quivaut …
+  % [=ltrim(ntomf(VenHtva("EUR")+VenMtva("EUR"),2))] \euro{}.
+  [etc else]
+  % Der Gesamtbetrag dieser Rechnung entspricht
+  % [=ltrim(ntomf(VenHtva("EUR")+VenMtva("EUR"),2))] \euro{}.
+  [etc endif]
+[etc endif]
+[********* CDA]
+[etc if VEN->IdJnl$"CDA,EKB"]
+  [etc if TplLang()=="F"]
+  \nopagebreak
+  {\Large\textbf{Attention:}}
+  Si la marchandise n'est pas de stock~:
+  veuillez renvoyer ce fax  au 087.59.35.59
+  en sp‚cifiant la date de livraison probable.
+  % \normalsize
+  \bigskip
+
+  \nopagebreak
+  Date de livraison probable: \unterschrift % fbox{\vspace{20mm}\hspace{3cm}}
+
+  [etc else]
+  \nopagebreak
+
+  {\Large\textbf{Wichtig:}} Wenn die Ware oder ein Teil der Ware
+  nicht ab Lager lieferbar sind, schicken Sie bitte diese Bestellung
+  mit voraussichtlichen Lieferfristen per Fax zurck an
+  0032.87.59.35.59
+  % \normalsize
+  \bigskip
+
+  \nopagebreak
+  Voraussichtliches Lieferdatum: \unterschrift % fbox{\vspace{20mm}\hspace{3cm}}
+
+  [etc endif]
+[etc endif]
+[****** Zahlungsbedingungen Angebote **********]
+[etc if !empty(VEN->IdMfc).and.DlgValue("IsOffre")]
+[=VenIfcMemo()]
+[etc endif]
+[****** Ihre MWSt-Nummer **********]
+[etc if DlgValue("IsFacture").and.!empty(PAR->NoTva)]
+
+  [=tr("Your V.A.T. ID:",\
+  "Ihre MWSt-Nr.:",\
+  "Votre nø~TVA~:",\
+  "","Kliendi reg.nr.:")] [=trim(PAR->NoTva)].
+[etc endif]
+[****** Zahlungsbedingungen Rechnungen/Auftrag **********]
+[etc if !empty(VEN->IdMfc).and.(DlgValue("IsFacture").or.DlgValue("IsAuftrag"))]
+  [etc if TplLang()=="E"]
+    Payment conditions:
+    [=trim(MfcName(VEN->IdMfc,TplLang()))].
+  [etc endif][etc if TplLang()=="D"]
+    Zahlungsbedingungen:
+    [=trim(MfcName(VEN->IdMfc,TplLang()))].
+  [etc endif][etc if TplLang()=="F"]
+    Conditions de paiement~:
+    [=trim(MfcName(VEN->IdMfc,TplLang()))].
+  [etc endif]
+[etc endif]
+[*** Best„tigung bei Barzahlung]
+[etc if DlgValue("IsFacture").and.VEN->IdMfc$"BAR"]
+\nopagebreak
+\begin{center}
+  \par\bigskip
+  \begin{tabularx}{14cm}{XX}
+  [etc if TplLang()=="F"]
+    Date~: \dotfill &     pour acquit~: \dotfill \\\
+  [etc else]
+    Datum: \dotfill  & Betrag dankend erhalten: \dotfill \\\
+  [etc endif]
+  \end{tabularx}
+  \par\bigskip
+\end{center}
+[etc endif]
+[*** "Fr die Richtigkeit des Betrags von ..."]
+[etc if DlgValue("IsFacture").and."T"$PAR->Attrib]
+  \nopagebreak
+  \par
+  [etc if TplLang()=="K"]
+  [="Arve koostas: "+UsrName(VEN->Auteur)]
+  [etc else]
+  [=tr("",\
+    "Fr die Richtigkeit des Betrags von",\
+    "Certifi‚ conforme pour le montant de",
+    "")]
+  [=ntext(strtran(VEN->Mont,".00",""),TplLang(),.t.)]~[=VEN->IdDev] :
+  [etc endif]
+  \unterschrift
+  \par % \bigskip
+[etc endif]
+[etc if .f..and.DlgValue("IsFacture").and.VEN->IdDev=="EEK"]
+  \nopagebreak
+  \par
+  Arve koostas:
+  \unterschrift
+  \par \bigskip
+[etc endif]
+[** Bestellscheine]
+[etc if DlgValue("IsAuftrag")]
+\nopagebreak
+\begin{center}
+  \par
+  \begin{tabularx}{\textwidth}{X|X}
+  [etc if TplLang()=="F"]
+    Date~: \dotfill               &  Acompte~: \dotfill    \\\
+    \vspace{10mm} & \\\
+    pour commande~: \dotfill &  pour acquit~: \dotfill \\\
+  [etc else]
+    Datum der Bestellung : \dotfill  &   Anzahlung: \dotfill \\\
+    \vspace{10mm} & \\\
+    Unterschrift: \dotfill &   Betrag erhalten: \dotfill \\\
+  [etc endif]
+  \end{tabularx}
+\end{center}
+[etc endif]
+% Zahlungsziel / Angebot gltig bis
+[etc if !empty(VEN->DatEch).and.VEN->DatEch != VEN->Date]
+  [etc if DlgValue("IsFacture").and.!VenIsNc()]
+    [=tr("Payment term:",\
+         "Zahlungsziel:",\
+         "Date d'‚ch‚ance~:",\
+         "Te betalen tot:",\
+         "Makset„htaeg:")]
+    [=dtocf(VEN->DatEch)].
+  [etc endif]
+  [etc if DlgValue("IsOffre")]
+    [etc if TplLang()=="F"]
+      Offre valable jusqu'au [=dtocf(VEN->DatEch)].
+    [etc else]
+      Angebot gltig bis zum [=dtocf(VEN->DatEch)].
+    [etc endif]
+  [etc endif]
+[etc endif]
+% Anweisung zum šberweisen
+[etc if DlgValue("IsFacture").and.!VenIsNc().and.!VEN->IdMfc$"BAR,DOM"]
+  [etc if TplLang()=="F"]
+    R‚f‚rence paiement~: [=VEN->IdDoc].
+  [etc endif]
+  [etc if TplLang()=="D"]
+    Bei Zahlung bitte angeben: [=VEN->IdDoc].
+  [etc endif]
+[etc endif]
+[****** Salutations]
+
+[etc if DlgValue("IsOffre")]
+  \par\bigskip\nopagebreak
+  [etc if TplLang()=="F"]
+    Dans l'attente de vous lire … ce sujet, nous vous prions d'agr‚er,
+    Monsieur, nos salutations distingu‚es.
+  [etc else]
+    In der Hoffnung, mit Ihrem werten
+    Auftrag beehrt zu werden, stehen wir
+    Ihnen fr weitere Informationen
+    stets gerne zur Verfgung und zeichnen
+
+    mit freundlichen Gráen
+  [etc endif]
+  \par\nopagebreak
+  [etc if DlgValue("AsFax")=="X".and.file(DbPath()+"\"+trim(VEN->Auteur)+"."+DlgValue("GraphicsType"))]
+  \includegraphics[height=2cm]{[=strtran(DbPath(),"\","/")]\
+  /[=lower(trim(VEN->Auteur))].[=DlgValue("GraphicsType")]}
+  [etc else]
+  \vspace{2cm}
+  [etc endif]
+
+  \nopagebreak
+
+  [=trim(UsrName(VEN->Auteur))+"\\"]
+  [=trim(Fonction(VEN->Auteur,TplLang()))]
+
+[etc endif]
+
+\end{document}

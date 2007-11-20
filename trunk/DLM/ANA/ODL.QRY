@@ -1,0 +1,12 @@
+//
+// C:\SOFT\RELEASE\TIM220\STD01D\ODL.QRY - generated 29.11.96
+// for ODL.DBF
+//
+window 18 78 4 0 
+column 4 Art. pict @K@!
+column 5 Bezeichnung skip .t.
+column 9 Aus pict @K@!
+column 10 Ein pict @K@!
+column 11 StÅckwert
+column 8 Gesamtwert pict @K@!
+column 3 Pos skip .t.

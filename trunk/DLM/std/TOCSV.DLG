@@ -1,0 +1,4 @@
+field name="ToCSV" \
+    caption2=utr(" export to CSV"," Export nach CSV"," Exporter en format CSV") \
+    default=" " \
+    reader={|g|CbxReader(g)}

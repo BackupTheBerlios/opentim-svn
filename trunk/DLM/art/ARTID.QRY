@@ -1,0 +1,27 @@
+//
+// C:\SOFT\TEST\TIM300\HEEREN\ARTID.QRY - generated 23.01.96
+// for ART.DBF
+//
+column 34 ArtNr
+column 11 Ref
+column 5 Bezeichnung 1
+column 20 Preis 1 pict @K@!
+column 21 Preis 2 pict @K@!
+column 24 Preis 3 pict @K@!
+column 15 Bestand pict @K@!
+column 10 Mind.Bestand
+column 4 Bezeichnung 2
+column 6 Bezeichnung 3
+column 3 Bezeichnung 4 pict @K@!
+column 14 Kat pict @K@!
+column 1 Grp pict @K@!
+column 12 Erstellt
+column 16 Letzter EK pict @K@!
+column 17 Mittel-EK pict @K@!
+column 27 Bemerkung
+column 13 gÅltig seit
+column 28 LE pict @K@!
+column 30 Format pict !
+column 19 Attr pict @K@!
+mask ART
+order 1

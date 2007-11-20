@@ -1,0 +1,27 @@
+// PARTRM02.DLG
+
+before SetDlgTitle("Dienstleistungsbericht")
+before DlgDefault("Date1",FirstOfMonth(SkipMonth(UserDate(),-1)))
+before DlgDefault("Date2",UserDate())
+
+before DlgDefine("IdPar",PAR->IdPar)
+
+field name="Date1" caption="Datum : von " attrib="N"
+field name="Date2" caption=" bis "
+
+field block={||PAR->IdPar+" "+padr(ParName(),40)} \
+      caption="Partner : " \
+      when={||.f.} color="N/W"
+
+field block={|x|SetPreview(x)} \
+    caption2=" Pr‚visualisation" \
+    value="X" \
+    reader={|g|CbxReader(g)}
+
+field block={|x|SetTplIni(x)} \
+    caption="Druckparametersatz " \
+    picture="@k@!" \
+    pick={|x|PickTpl("INI",x)}
+
+// after RepPrint("PARTRM02",NIL,SetDlgTitle(),SetTplIni(),SetPreview())
+// after .f.

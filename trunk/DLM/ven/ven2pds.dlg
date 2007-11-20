@@ -1,0 +1,5 @@
+before fparse("VENSTD.PDS",".\"+VEN->IdDoc+".PDS","[]",.t.,.t.,.f.,NIL,.f.)
+// TimTools("pds2pdf .\TMP",MnuItemName())
+before AppShell(AppPath()+"\timtools pds2pdf .\"+VEN->IdDoc,MnuItemName())
+before .f.
+

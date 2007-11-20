@@ -1,0 +1,45 @@
+//
+// C:\SOFT\RELEASE\TIM220\STD01D\ARTMOD.MSK - generated 09.10.97
+// for ART.DBF
+//
+
+box 10 0 14 79
+box 1 0 9 40
+box 1 41 6 62
+
+string 2 25 Art.Nr.
+string 3 2 D
+string 4 2 F
+string 5 2 N
+string 2 2 Bezeichnungÿ:
+string 2 43 Steuerkategorie
+string 7 2 Bemerkung
+string 5 43 Artikelgruppe
+string 3 43 Liefereinheit
+string 4 43 Mengenformat
+string 7 42 Attribute
+string 8 59 VK
+string 5 65 Preisgruppe
+string 10 1 ÿMemo-Text bearbeiten mit [F12]ÿ
+string 9 59 inkl.MWSt
+string 15 1 Komponenten bearbeiten mit [F9]
+string 9 42 Bestand
+string 7 59 Selbstk.
+
+get 34 2 33
+get 5 3 4 pict @K@S35
+get 4 4 4 pict @K@S35
+get 6 5 4 pict @K@S35
+get 27 8 2 pict @K@S37
+get 14 2 59
+get 28 3 58 pict @K
+get 30 4 60
+get 1 5 58
+get 19 7 53
+get 39 9 50
+get 3 5 77 pict @K@!
+get 10 7 69 pict @K@! attr C
+get 20 8 69
+get 24 9 69 pict @K@!
+wait 5 78 16 1 9
+wait 3 76 11 2 12

@@ -1,0 +1,69 @@
+// DLS.DEF
+ddAddIndex("DLS->IdDla+dtos(DLS->Date)","Art+Datum")
+// ddAddIndex("DLS->IdPrj+dtos(DLS->Date)","Projekt+Datum")
+!HasDlm("PRJ").or.ddAddIndex("DLS->IdPrj+dtos(DLS->Date)+DLS->Von+DLS->Bis","Projekt+Datum")
+ddAddField("Dauer","C",5,0,"","",NIL,NIL,\
+  NIL,NIL,\
+  {||.t.},{|x|GetQte(x,":")}\
+)
+ddAddField("IdPrj","C",LenIdPrj(),0,"",iif(HasDlm("PRJ"),"","H"),\
+  NIL,NIL,\
+  {||empty(DLS->IdPrj).or.(\
+    PrjExist(DLS->IdPrj).and.(\
+      empty(PRJ->IdPar).or.(DLS->IdPar:=PRJ->IdPar)!=NIL\
+    ))\
+  },{|x|PickPrj(x)},\
+  {||.t.},{|x|GetNum(x)}\
+)
+
+ddPreCreate("setvar('a',CopyRec())")
+ddPreCreate("Confirm('Neue Dienstleistung erfassen ? (J/N)')")
+// ddPreCreate('DlgDefine("id",DbfAutoInc(oDls()))')
+ddPreCreate('DlgDefine("id",DbfNextId(oDls(),SetAbtlg(),LenIdPar()))')
+ddOnCreate("PasteRec(getvar('a'))")
+ddOnCreate("(DLS->Memo:='')!=NIL")
+ddOnCreate("(DLS->IdDls:=DlgValue('id'))!=NIL")
+ddOnCreate("(DLS->IdUsr:=UserId())!=NIL")
+ddOnCreate("indexord()!=2.or.(DLS->Date:=stod(left(ddKeyValue(),8)))!=NIL")
+ddOnCreate("!empty(DLS->Date).or.(DLS->Date:=UserDate())!=NIL")
+ddOnCreate("!empty(DLS->Etat).or.(DLS->Etat:=iif(\
+  DLS->Date<UserDate(),'D',iif(DLS->Date>UserDate(),'S',' ')))!=NIL")
+ddOnCreate("!empty(DLS->Von).or.DLS->Date!=UserDate().or.(DLS->Von:=time())!=NIL")
+ddOnCreate("!empty(DLS->Bis).or.DLS->Date!=UserDate().or.(DLS->Bis:=time())!=NIL")
+ddOnCreate("indexord()!=3.or.(DLS->IdUsr:=left(ddKeyValue(),LenIdUsr()))!=NIL")
+ddOnCreate("indexord()!=4.or.(DLS->IdPar:=left(ddKeyValue(),LenIdPar()))!=NIL")
+ddOnCreate("indexord()!=5.or.(DLS->IdDla:=left(ddKeyValue(),LenIdDla()))!=NIL")
+ddOnCreate("!empty(DLS->IdPar).or.(DLS->IdPar:='001107')!=NIL")
+
+// ddPreCreate("DlgDefine('IdPar',PRJ->IdPar)")
+// ddPreCreate("DlgDefine('IdPar2',PRJ->IdPar2)")
+// ddOnCreate("(PRJ->IdPar:=DlgValue('IdPar'))!=NIL")
+
+ddFldSetValidate("Zahlart",\
+  {||!empty(DbcText("DLSZAHL.DBC",DLS->Zahlart))\
+    .or.!SetMsg('"'+DLS->Zahlart+'": ungltige Angabe im Feld "Zahlart"')})
+ddFldSetValidate("Etat",\
+  {||!empty(DbcText("DLSETAT.DBC",DLS->Etat))\
+    .or.!SetMsg('"'+DLS->Etat+'": ungltige Angabe im Feld "Status"')})
+ddOnPostEdit("ActExec('DLSPOST')")
+ddFldSetValidate("Dauer",{||empty(DLS->Dauer).or.(DLS->Bis:="")!=NIL})
+
+// ddFldSetWhen("IdDls",'trim(UserId())=="LUC"')
+!HasRfx().or.ActExec("RFXDEF")
+
+ddAddSpecial(\
+  {||ActExec("DLSDAY")},\
+  "Tag ~w„hlen      [Alt-W]",\
+  273,{||QryIdQry()=="DLSDAY"}\
+)
+ddAddSpecial(\
+  {||DlgPlus("Date",1).and.ddQryReset("DLSDAY")},\
+  "Tag ~+1          [Ctrl+]",\
+  400,{||QryIdQry()=="DLSDAY"}\
+)
+ddAddSpecial(\
+  {||DlgPlus("Date",-1).and.ddQryReset("DLSDAY")},\
+  "Tag ~-1          [Ctrl-]",\
+  398,{||QryIdQry()=="DLSDAY"}\
+)
+

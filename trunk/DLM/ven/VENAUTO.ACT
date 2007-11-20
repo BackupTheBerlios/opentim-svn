@@ -1,0 +1,13 @@
+// venauto.act : Rechnung ausstellen
+ParExist(FIELD->IdPar)
+DlgExec("VENAUTO","Rechnung ausstellen")
+// vorher :
+// ParVnaAuto(FIELD->IdPar,"VKR",DlgValue("Date"),".t.",DlgValue("Edit"))
+//
+// nachher :
+ParVnaAuto(\
+  FIELD->IdPar,"VKR",\
+  DlgValue("Date"),\
+  "IdJnl=='AUF'.and.IdDoc=='"+FIELD->IdDoc+"'",\
+  DlgValue("Edit"),""\
+)

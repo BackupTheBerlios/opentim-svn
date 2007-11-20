@@ -1,0 +1,10 @@
+//
+// C:\SOFT\RELEASE\TIM220\STD01D\ZLA.QRY - generated 30.05.97
+// for ZLA.DBF
+//
+window 15 60 0 0 
+column 1 Z pict @K@!
+column 2 A pict !
+column 3 Bezeichnung (+)
+column 4 Bezeichnung (-)
+column 5 W„h pict @K@!

@@ -1,0 +1,7 @@
+// Saldenliste Generalkonten importieren
+InputFile "c:\temp\TEST.TXT"
+// SeekKey NIL
+FieldUpdate FNL->IdCtr " "
+FieldUpdate FNL->IdCpt   substr(i_line,1,6)
+FieldUpdate FNL->Mont    substr(i_line,8,10)
+FieldUpdate FNL->DC      substr(i_line,19,1)

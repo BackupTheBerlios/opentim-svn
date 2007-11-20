@@ -1,0 +1,26 @@
+// Saldenliste Analysekonten (via MVA)
+// Variablen : IdAna1 : Konto1
+//             IdAna2 : Konto2
+//             Periodenbereich
+initialize {set solde 2} {set montant S10}
+header1 "Saldenliste Analysekonten"
+header2 PerText()
+// header3 "..."
+area { oMva(), oPar(), oGen(), oAna(), oVen(), oFin(), oOda() }
+order 1 // MVA->IdAna+MVA->Periode+dtos(MVA->Date)
+ValidateRecord {|| DocExist(MVA->IdJnl,MVA->IdDoc).and.GenExist(MVA->IdGen) }
+filter {|| ChkPeriode(MVA->Periode)<=0}
+detail {|| .f.}
+start trim(DlgValue("IdAna1"))
+while {|| empty(DlgValue("IdAna2")).or.MVA->IdAna <= DlgValue("IdAna2") }
+group key={|| MVA->IdAna } text={|| MVA->IdAna + " " + padr(AnaName(MVA->IdAna),30)} after={||.t.}
+group text={|x|"Gesamt"}
+column header="Konto" width=LenIdAna()
+column header="Bezeichnung" width=30
+column header=padc("Beginnsaldo",LenSolde())+";"+pads("Debit","Kredit",LenSolde())width=LenSolde() when={||ChkPeriode(MVA->Periode)<0} value={||DcVal("D")} xsum={|x| DcSolde("D",x) }
+column header="Debit" width=LenMont() value={||val(MVA->Mont)} when={||MVA->DC=="D".and.ChkPeriode(MVA->Periode)==0} xsum={|x| ntomf(x) }
+column header="Kredit" width=LenMont() value={||val(MVA->Mont)} when={||MVA->DC=="C".and.ChkPeriode(MVA->Periode)==0} xsum={|x| ntomf(x) }
+column header=padc("Beginnsaldo",LenSolde())+";"+pads("Debit","Kredit",LenSolde())width=LenSolde() when={||ChkPeriode(MVA->Periode)<=0} value={||DcVal("D")} xsum={|x| DcSolde("D",x) }
+
+total text={||""} when={||.t.}
+

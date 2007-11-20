@@ -1,0 +1,6 @@
+DlgExec("GENBIL2")
+DbfExport({oGen(),oBil()},3,\
+  getvar("IdBil1"),\
+  if(empty(getvar("IdBil2")),".t.","GEN->IdBil<='"+getvar("IdBil2")+"'"),\
+  ".t.",\
+  "_GENBIL2.EXP")

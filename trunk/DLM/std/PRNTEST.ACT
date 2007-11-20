@@ -1,0 +1,4 @@
+SetRange("1")
+SetTplIni("LISTE")
+DlgExec("PRNTEST")
+fprint("PRNTEST.TPL","[]")

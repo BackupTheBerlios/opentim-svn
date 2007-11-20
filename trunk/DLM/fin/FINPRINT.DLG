@@ -1,0 +1,15 @@
+before DlgDefault("Copies",1)
+title utr("Print Document","Dokument drucken","Imprimer document")
+field block={||FIN->IdJnl} \
+      caption=utr("Document # ","Dokument Nr. ","Nø Document") \
+      when={||.f.} \
+      color="N/W" attrib="N"
+field block={||FIN->IdDoc} \
+      caption=" " \
+      when={||.f.} \
+      color="N/W"
+// field name="Copies" \
+      caption=utr("Copies ","Anzahl Exemplare ","Copies ") \
+      picture="999"
+
+#include "PREVIEW.DLG"

@@ -1,0 +1,15 @@
+//
+// NAT.QRY - generated 03.03.04
+// for NAT.DBF
+//
+column 1 ID pict @K@!
+column 2 Bezeichnung
+column 12 IC pict @K
+column 8 W„ pict @K@!
+column 3 Intra pict @K@!
+column 4 S pict @K@!
+column 5 T pict @K@!
+column 6 Vorwahl
+column 7 MWS pict @K@!
+column 9 MWSt-Format
+mask NAT

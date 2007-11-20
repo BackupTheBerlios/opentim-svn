@@ -1,0 +1,14 @@
+//
+// DCF.QRY - generated 14.06.05
+// for DCF.DBF
+//
+column 1 Code pict @K@!
+column 9 Dcl pict @K@!
+column 8 Sel pict @K@!
+column 10 CljList pict @k@!@s5
+column 4 ="Description "+MemLang1 pict @K@S30
+column 7 Type pict @k@!
+column 2 DC pict @K@!
+column 3 Attrib pict @K@!
+column 5 ="Description "+MemLang2 pict @K@S30
+column 6 ="Description "+MemLang3 pict @K@S40 IfExpr !empty(MemLang3)

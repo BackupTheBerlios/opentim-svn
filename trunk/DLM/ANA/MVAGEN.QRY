@@ -1,0 +1,17 @@
+//
+// MVAGEN.QRY - generated 19.05.1999
+// for MVA.DBF
+//
+window 16 80 0 0 
+column 2 Jnl pict @K@!
+column 3 Dok.Nr pict @K@!
+column 15 Pos pict @K@!
+column 5 Datum say ""
+column 1 A-Kto pict @K@!
+column 12 Debit pict @K@!
+column 13 Kredit pict @K@! say ""
+column 6 Bemerkung pict @k@s20 say ""
+column 7 Bemerkung Dok.
+column 8 Periode
+column 14 Partner pict @S25
+help MVA

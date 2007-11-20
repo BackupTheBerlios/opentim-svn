@@ -1,0 +1,7 @@
+// sex.dbc
+M|=utr("Male","M„nnlich","Masculin")
+W|=utr("Female","Weiblich","F‚minin")
+E|Ehepaar
+F|Familie
+O|Organisation
+L|=utr("List","Liste","Liste")

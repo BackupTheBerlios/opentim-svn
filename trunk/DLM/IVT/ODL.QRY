@@ -1,0 +1,17 @@
+//
+// .\PENNARTZ\ODL.QRY - generated 02.01.99
+// for ODL.DBF
+//
+column 4 Art. pict @K@!
+column 0 Bemerkung block DbfPeek(oOds(),ODL->IdJnl+ODL->IdDoc,"left(ODS->Remarq,10)",space(10)) skip .t.
+column 10 Anz. pict @K@!
+column 5 Bezeichnung skip .t.
+column 2 Dok.Nr
+column 0 Ref. block ArtField(IdArt,{||ART->iGra+right(ART->IdPar,3)+left(ART->RefExt,8)}) skip .t.
+column 0 VK DEM block ArtField(IdArt,{||ART->TVACDEM}) skip .t.
+column 9 Aus pict @K@! skip .t.
+column 11 Stckwert skip .t.
+column 8 Gesamtwert pict @K@! skip .t.
+column 1 Jnl
+column 3 Pos skip .t.
+order 2

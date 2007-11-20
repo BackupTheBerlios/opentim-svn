@@ -1,0 +1,18 @@
+<br>
+<p class="Recipient" style="[=getvar("margin-left")]">
+[=empty(PAR->Allo).or.(toTxtStream(trim(PAR->Allo)).and.toStream("<br>"))]
+[=trim1(PAR->Vorname)+trim1(PAR->Firme)+"<br>"]
+[=if(empty(PAR->Name2),NIL,trim1(PAR->Allo)+trim1(PAR->Vorname)+trim1(PAR->Firme)+"<br>")]
+[=if(empty(VEN->IdPar2),NIL,DbfPeek(oPar(),VEN->IdPar2,"\
+  if(PAR->Sex=='W',\
+    tr('Mrs. ','Frau ','Mme '),\
+    tr('Mr. ','Herrn ','M. ')\
+  )+trim1(PAR->Vorname)+trim(PAR->Firme)+'<br>'\
+",.f.))]
+[=ParStreet()]<br>
+[=if(TplLang()=="F",upper(trim(ParCity())),trim(ParCity()))]
+[=if(PAR->Pays!=MemPays,"<br>"+NatField(PAR->Pays,"trim(NAT->Name)"),"")]
+</p>
+
+
+

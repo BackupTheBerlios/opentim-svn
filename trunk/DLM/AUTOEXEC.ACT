@@ -1,0 +1,5 @@
+// Datei autoexec.act
+// Wird von TIM benutzt.
+// Hat nichts zu tun mit der autoexec.bat
+setvar("PC","MOMO")
+setvar("USER","MOMO")

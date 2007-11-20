@@ -1,0 +1,152 @@
+// Saldenliste Generalkonten
+before SetSolde("2")
+// #exec SetMntFormat("S10")
+before SetMntFormat("Z12")
+
+#exec setvar("Start",if(getvar("ShowSaldo1")=="X",\
+                     PerStart(MemPer1),\
+                     MemPer1))
+
+header1 MnuItemName()
+// header1 tr(\
+  "General Account Balances",\
+  "Saldenliste Generalkonten",\
+  "Soldes des comptes g‚n‚raux",\
+)
+header2 PerText() + " ("+SetDevise()+")"
+header3 if(empty(DlgValue("GenFilter")),"",DlgValue("GenFilter"))
+area { oGen() }
+order 1
+
+#if !empty(DlgValue("IdGen1"))
+  start trim(DlgValue("IdGen1"))
+#endif
+#if !empty(DlgValue("IdGen2"))
+while cblock("left(GEN->IdGen,"\
+  +ntrim(len(trim(DlgValue("IdGen2"))))\
+  +")<='"+trim(DlgValue("IdGen2"))+"'"\
+)
+#endif
+
+ValidateRecord {||MsgDisplay(GEN->IdGen+" "+GEN->Libell1)}
+ValidateRecord {||\
+  DlgDefine("Saldo1",0),\
+  DlgDefine("D",0),\
+  DlgDefine("C",0)\
+}
+
+// #if getvar("ShowSaldo1") == "X"
+#exec DlgDefine("b",{||if(\
+  CTG->Periode<MemPer1,\
+  DlgPlus('Saldo1',Db2Dev(SetDevise(),CTG->Periode,val(CTG->Debit)-val(CTG->Credit))),\
+  DlgPlus('D',Db2Dev(SetDevise(),CTG->Periode,val(CTG->Debit)))\
+    .and.DlgPlus('C',Db2Dev(SetDevise(),CTG->Periode,val(CTG->Credit)))\
+)})
+
+ValidateRecord {||\
+  len(trim(GEN->IdGen))<LenIdGen().or.DbfScan(\
+    {oCtg()},\
+    1,\
+    GEN->IdGen+getvar("Start"),\
+    "CTG->IdGen=='"+GEN->IdGen+"'"\
+      +if(empty(MemPer2),"",".and.CTG->Periode<=MemPer2"),\
+    "CTG->Periode!=PerYear(CTG->Periode)",\
+    DlgValue('b'),NIL,.f.\
+)}
+// #endif
+
+// ValidateRecord {||\
+  len(trim(GEN->IdGen))<LenIdGen().or.DbfScan(\
+  {oHst(),oGen(),oPar(),oVen(),oFin()},\
+  3,\
+  GEN->IdGen+getvar("Start"),\
+  "HST->IdGen=='"+GEN->IdGen+"'.and.HST->Periode<=MemPer2",\
+  DlgValue("HstFilter"),\
+  DlgValue('b'),NIL,.f.\
+)}
+
+#if !empty(DlgValue("GenFilter"))
+  filter cblock(DlgValue("GenFilter"))
+#endif
+filter {||len(trim(GEN->IdGen))==LenIdGen()}
+filter {|| \
+  DlgValue("D")!=0.or.DlgValue("C")!=0.or.DlgValue("Saldo1")!=0 \
+}
+
+group key={||left(GEN->IdGen,4)} \
+      when={||.t.} \
+      align="L" \
+      after={||DbfPeek(\
+        oGen(),padr(left(GEN->IdGen,4),LenIdGen()),"!'H'$GEN->Attrib",.f.\
+      )} \
+      text={||left(GEN->IdGen,4)+" "+DbfPeek(oGen(),padr(left(GEN->IdGen,4),LenIdGen()),"GenName(NIL,TplLang())","")}
+group key={||left(GEN->IdGen,3)} \
+      when={||.t.} \
+      align="L" \
+      after={||DbfPeek(\
+        oGen(),padr(left(GEN->IdGen,3),LenIdGen()),"!'H'$GEN->Attrib",.f.\
+      )} \
+      text={||left(GEN->IdGen,3)+" "+DbfPeek(oGen(),padr(left(GEN->IdGen,3),LenIdGen()),"GenName(NIL,TplLang())","")}
+group key={||left(GEN->IdGen,2)} \
+      when={||.t.} \
+      align="L" format="B" \
+      after={||.f..or.DbfPeek(\
+        oGen(),padr(left(GEN->IdGen,2),LenIdGen()),"!'H'$GEN->Attrib",.f.\
+      )} \
+      text={||left(GEN->IdGen,2)+" "+DbfPeek(oGen(),padr(left(GEN->IdGen,2),LenIdGen()),"GenName(NIL,TplLang())","")}
+      // text={||left(GEN->IdGen,2)+" "+trim(GEN->Libell1)}
+group key={||left(GEN->IdGen,1)} \
+      when={||.t.} \
+      align="L" format="B" \
+      after={||.t.} \
+      text={||left(GEN->IdGen,1)+" "+DbfPeek(oGen(),padr(left(GEN->IdGen,1),LenIdGen()),"GenName(NIL,TplLang())","")}
+group text={|x|"TOTAL"} align="L" when={||.t.} after={||.t.}
+
+column header=tr("Accnt","Konto","Compte") \
+       width=LenIdGen() \
+       text={||GEN->IdGen}
+#if hasdlm("BIL")
+column header="Bil." \
+       width=LenIdBil() \
+       text={||GEN->IdBil}
+#endif
+column header=tr("Description","Bezeichnung","Description") \
+       width=30 \
+       text={||padr(GenName(NIL,TplLang()),30)}
+
+#if getvar("ShowSaldo1") == "X"
+column header=tr("Opening bal","Beginnsaldo","Solde init") \
+       width=LenSolde() \
+       value={||DlgValue("Saldo1")}  \
+       text={|x| DcSolde('D',x) } \
+       xsum={|x| DcSolde('D',x) }
+#endif
+
+column header="Debit" \
+       width=LenMntF() \
+       value={||DlgValue("D")}  \
+       text={|x|ntomf(x)} \
+       xsum={|x| ntomf(x) }
+column header=tr("Credit","Kredit","Cr‚dit") \
+       width=LenMntF() \
+       value={||DlgValue("C")}  \
+       text={|x|ntomf(x)} \
+       xsum={|x| ntomf(x) }
+
+column header=if(getvar("ShowSaldo1") == "X",\
+                 tr("final balance","Endsaldo","Solde final"), \
+                 tr("sum","Summe","Somme")) \
+       width=LenSolde() \
+       value={||\
+         DlgValue("Saldo1")+DlgValue("D")-DlgValue("C")\
+       }  \
+       text={|x| DcSolde('D',x) } \
+       xsum={|x| DcSolde('D',x) }
+
+total text={||""} \
+      when={|nCount|nCount<=1.or.RptTit3()} \
+      after={|nGroup|nGroup<=1.or.PrintLine()}
+
+// PreTotal {||RptTit2()}
+// PostTotal {||PrintLine()}
+

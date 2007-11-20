@@ -1,0 +1,8 @@
+// Bestellscheine Lieferanten
+area { oPar(), oPlz() }
+order 1
+start trim(DlgValue("IdPar"))
+while {||empty(DlgValue("IdPar")).or.PAR->IdPar<=DlgValue("IdPar")}
+// ValidateRecord {|| ArtExist(VNA->IdArt).and.ParExist(VNA->IdPar) }
+filter {|| PAR->IdPrt == "L" .and. DbfSum( { oVna() }, "qton1(VNA->QteUs)", 3, PAR->ArtRoot, "left(VNA->IdArt,2)=='"+PAR->ArtRoot+"'","VNA->IdJnl=='VKB'.and.Date<=DlgValue('Date')" )!=0}
+oneach {|| PrintTemplate("PAR","CMD",DlgValue("preview"))}

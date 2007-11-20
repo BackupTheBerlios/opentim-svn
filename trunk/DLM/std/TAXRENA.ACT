@@ -1,0 +1,16 @@
+// TaxRename()
+Confirm(\
+  "Dies ist eine einmalige Konvertierungsroutine !",\
+  MsgSure()\
+)
+TaxRename({\
+ { "V","A  ","6  " },\
+ { "V","B  ","12 " },\
+ { "V","N  ","21 " },\
+ { "E","DA ","D6 " },\
+ { "E","DB ","D12" },\
+ { "E","DN ","D21" },\
+ { "E","NA ","N6 " },\
+ { "E","NB ","N12" },\
+ { "E","NN ","N21" } \
+})

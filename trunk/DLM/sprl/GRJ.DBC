@@ -1,0 +1,22 @@
+// Journalgruppen
+VKA|=utr("P~rice offers","~Angebote","~Offres de prix")
+BST|~Bestellscheine
+AUF|=utr("~Orders","A~uftr„ge","~Commandes")
+LIE|~Lieferscheine
+SRV|~Service-Scheine
+DON|=utr("~Donation Receipts","~Spendenbelege","~Quittances")
+APM|=utr("~Appointments","~Termine","Rendez-~vous")
+NLT|~Newsletters
+
+VKR|=utr("~Sales invoices","~Verkaufsrechnungen","Factures ~vente")
+EKR|=utr("~Purchase invoices","~Einkaufsrechnungen","Factures ~achat")
+NCR|=utr("~Credit notes","~Gutschriften","Notes de ~cr‚dit")
+
+KAS|=utr("~Cash journals","~Kassenbcher","Journaux de ~caisse")
+BNK|=utr("~Bank journals","~Bankkonten","Journaux de ~banque")
+ZAU|=utr("P~ayment orders","~Zahlungsauftr„ge","Ordres de ~paiement")
+DIV|=utr("~Misc. Transactions","~Diverse Buchungen","~Op‚rations diverses")
+REP|=utr("~Year-end postings","~Jahresabschluss","Cl“ture an~nuelle")
+
+PRD|~Produktionsscheine
+IVT|~Inventuren

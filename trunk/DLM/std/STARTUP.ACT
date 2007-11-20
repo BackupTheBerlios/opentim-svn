@@ -1,0 +1,11 @@
+// STARTUP.ACT called from STD.INI
+!file("C:\AUTOEXEC.ACT").or.ActExec("C:\AUTOEXEC")
+DlgDefault("USER",alltrim(upper(\
+  iif(empty(getenv("USER")),getenv("USERNAME"),getenv("USER"))\
+)))
+DlgDefault("PC",alltrim(upper(\
+  iif(empty(getenv("PC")),getenv("COMPUTERNAME"),getenv("PC"))\
+)))
+RETURN .t. if !PathExist(AppPath()+"\HOME")
+ChDir(AppPath()+"\HOME\"+getvar("PC"))
+FileDelete(".\after.bat",.f.,.t.)

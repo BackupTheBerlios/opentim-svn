@@ -1,0 +1,28 @@
+// included from PAR.EXP, TXTWIN.DRV, ...
+convert "Ä" to  ""
+convert "ö" to  "”"
+convert "Ö" to  "™"
+convert "ü" to  ""
+convert "Ü" to  "š"
+convert "ß" to  "á"
+convert "à" to  "…"
+convert "â" to  "ƒ"
+convert "é" to  "‚"
+convert "ê" to  "ˆ"
+convert "è" to  "Š"
+convert "î" to  "Œ"
+convert "ô" to  "“"
+convert "û" to  "–"
+convert "ù" to  "—"
+convert "ë" to  "‰"
+convert "ç" to  "‡"
+convert "±" to  "ñ"
+
+convert "ä" to  "„"
+convert "á" to  " "
+convert "õ" to  "ä"
+convert "Õ" to  "å"
+
+convert "«" to  "®"
+convert "»" to  "¯"
+

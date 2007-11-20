@@ -1,0 +1,12 @@
+// artb2e.act
+// activate from command line using "tim /exec:artb2e"
+DlgDefine("b",{||\
+  empty(ART->PrixR).or.(ART->PrixR:=ntom(val(ART->PrixR)/40.3399,2))!=NIL,\
+  empty(ART->Prix1).or.(ART->Prix1:=ntom(val(ART->Prix1)/40.3399,2))!=NIL,\
+  empty(ART->TVAC).or.(ART->TVAC:=ntom(val(ART->TVAC)/40.3399,2))!=NIL\
+})
+Confirm("Alle Artikelpreise (PrixR, Prix1, TVAC) werden "\
++"jetzt durch 40.3399 geteilt!",MsgSure())
+DbfScan({oArt()},1,NIL,NIL,NIL,{||TryRecLock(DlgValue('b'))})
+SetMsg(MsgDone())
+Warning("Manuell anzupassen: tim.dbi (ArtIdDev), Basispreise, ART.DEF")

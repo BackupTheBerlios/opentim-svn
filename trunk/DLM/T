@@ -1,0 +1,11 @@
+[etc if 'T'$PAR->Attrib]
+
+[=tr("",\
+  "Fr die Richtigkeit des Betrags von",\
+  "Certifi‚ conforme pour le montant de"]
+[ven tvac /format full text] [=VEN->IdDev]:
+
+
+................
+[=UsrName(VEN->Auteur)]
+[etc endif]

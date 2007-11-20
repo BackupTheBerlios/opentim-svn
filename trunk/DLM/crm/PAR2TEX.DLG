@@ -1,0 +1,47 @@
+// PAR2TEX.DLG
+
+before DlgDefault("AsFax"," ")
+before DlgDefault("Draft"," ")
+before DlgDefault("Model","PDR")
+before DlgDefault("AsPdf"," ")
+
+before DlgDefine("User",UserId())
+before DlgDefine("co",PAR->Name3)
+before DlgDefine("Anrede",padr(PAR->Name4,80))
+before DlgDefine("OutFile","pardsr")
+before DlgDefine("Copies",1)
+before DlgDefine("psnup",2)
+
+before SetDlgTitle("Partnerdossier via LaTeX drucken")
+field block={||PAR->IdPar+" "+padr(ParName(),40)} \
+      caption="Partner : " \
+      when={||.f.} color="N/W"
+field name="co" \
+      caption="zu H„nden " \
+      picture="@k@s40"
+field name="Anrede" \
+      caption="Briefanrede     " \
+      picture="@k@s40"
+field caption='                (leer = "Sehr geehrter Kunde,")'
+field block={|x|SetPreview(x)} \
+    caption2=" Pr‚visualisation" \
+    value="X" \
+    reader={|g|CbxReader(g)}
+
+field name="Model" \
+      caption="Modell " \
+      picture="@k@!"
+
+// field name="AsPdf" \
+    caption2=" Format PDF au lieu de DVI" \
+    reader={|g|CbxReader(g)}
+
+field name="AsFax" \
+    caption2=" comme Fax (avec signature)" \
+    reader={|g|CbxReader(g)}
+
+after SetTplLang(PAR->Langue)
+after DlgDefine("InFile",DbPath()+"\PAR"+DlgValue("Model")+".TEX")
+// after Confirm("InFile = " + DlgValue("InFile"))
+after ActExec("TEXPARSE")
+after .f.

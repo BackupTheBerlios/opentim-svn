@@ -1,0 +1,84 @@
+// Fakturationsdokument in RTF-Datei
+// header1 "Rechnungsbuch Einkauf"
+
+area { oVnl(), oArt(), oGen() }
+order 1 // IdJnl+Periode+IdDoc (siehe HST.ACT)
+start DlgValue("IdJnl")+DlgValue("IdDoc")
+// while {|| HST->IdJnl==DlgValue("IdJnl") }
+// der default-while ist wahrscheinlich schneller, weil er nicht
+// jedesmal DlgValue() zu rufen braucht
+before {|| DocExist(HST->IdJnl,HST->IdDoc)}
+before {|| GenExist(HST->IdGen)}
+before {|| empty(HST->IdCtr).or.ParExist(HST->IdPar)}
+onNoValue {|| Confirm(\
+  MsgIdJnlDoc() + " : Buchung " + HST->IdGen + \
+  " konnte keiner Kolonne zugewiesen werden !", \
+  MsgContinue() \
+)}
+group key={|| HST->IdJnl + HST->Periode + HST->IdDoc }
+group key={|| HST->IdJnl + HST->Periode } \
+      text={|x|"Periode "+HST->Periode } \
+      after={||DlgValue("subttl")=="X".and.MemPer1!=MemPer2}
+group text={|x|"Gesamt"}
+// column header="Jnl" width=LenIdJnl() text={||HST->IdJnl} \
+//        when={|grp|IsFirst(1)}
+column header="Dok.Nr" width=6 text={||HST->IdDoc} \
+       when={|grp|IsFirst(1)}
+column header="Datum" width=8 \
+       text={||dtoc(HST->Date)} \
+       when={|grp|IsFirst(1)}
+column header="Konto" width=LenIdCtr()+1+LenCompte() \
+       text={||if(empty(HST->IdCtr),"G "+HST->IdGen,HST->IdCtr+" "+HST->IdPar)}
+column header="Bezeichnung" width=20 text={||padr(HstCptName(),20)}
+column header="Ko" width=2 text={||GEN->IdClj}
+column header="Liefernt" width=LenMntF() \
+       when={||!empty(HST->IdCtr)} \
+       value={||DcValue("C")} \
+       text={|x|ntomf(x)} \
+       xsum={|x| ntomf(x) }
+column header="Waren" width=LenMntF() \
+       when={||GEN->IdClj=="81"} \
+       value={||DcValue("D")} \
+       text={|x|ntomf(x)} \
+       xsum={|x| ntomf(x) }
+column header="Kosten" width=LenMntF() \
+       when={||GEN->IdClj=="82"} \
+       value={||DcValue("D")} \
+       text={|x|ntomf(x)} \
+       xsum={|x| ntomf(x) }
+column header="Invest." width=LenMntF() \
+       when={||GEN->IdClj=="83"} \
+       value={||DcValue("D")} \
+       text={|x|ntomf(x)} \
+       xsum={|x| ntomf(x) }
+column header="Abz.MWSt." width=LenMntF() \
+       when={||GEN->IdClj=="59"} \
+       value={||DcValue("D")} \
+       text={|x|ntomf(x)} \
+       xsum={|x| ntomf(x) }
+column header="MWSt.Intra" width=LenMntF() \
+       when={||GEN->IdClj=="55"} \
+       value={||DcValue("C")} \
+       text={|x|ntomf(x)} \
+       xsum={|x| ntomf(x) }
+column header="MWSt.cc" width=LenMntF() \
+       when={||GEN->IdClj=="56"} \
+       value={||DcValue("C")} \
+       text={|x|ntomf(x)} \
+       xsum={|x| ntomf(x) }
+column header="Feld 86" width=LenMntF() \
+       when={||HST->IdTax$"NI "} \
+       value={||DcValue("D")} \
+       text={|x|ntomf(x)} \
+       xsum={|x| ntomf(x) }
+// column header="Debit" width=LenMont() text={||HST->Mont} \
+//        value={||val(HST->Mont)} \
+//        when={|grp|HST->DC == "D"} \
+//        xsum={|x| ntomf(x) }
+// column header="Kredit" width=LenMont() text={||HST->Mont} \
+//        value={||val(HST->Mont)} \
+//        when={|grp|HST->DC == "C"} \
+//        xsum={|x| ntomf(x) }
+total for={||VEN->DC=="C"} text={||"RECHNUNGEN"}
+total for={||VEN->DC=="D"} text={||"GUTSCHRIFTEN"}
+total text={||""}

@@ -1,0 +1,17 @@
+//
+// C:\SOFT\RELEASE\TIM220\STD01D\ACF.QRY - generated 12.11.96
+// for ACF.DBF
+//
+column 1 Art.Nr
+column 13 Bezeichnung pict @K@S20
+column 9 Name Partner pict @k@s20
+column 5 Ref. Lieferant pict @K@S15
+column 12 Z pict @K@!
+column 7 Preis pict @K@!
+column 6 Datum
+column 2 Seq pict @K@!
+column 4 Bemerkung pict @K@S15
+column 8 Packing pict @K@!
+column 3 IdPar pict @K@!
+column 10 W„ pict @K@!
+column 11 VglPreis

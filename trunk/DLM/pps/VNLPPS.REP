@@ -1,0 +1,106 @@
+header1 MnuItemName() // "Auswertung Fakturation"
+header2 if(\
+  empty(DlgValue("IdPar")),\
+  "(alle Partner)",\
+  trim(ParName(DlgValue("IdPar")))\
+)
+header3 dtocf(DlgValue("Date1"))+" bis "+dtocf(DlgValue("Date2"))
+// header3 "(Gesamtliste pro Produzent/Artikelnummer)"
+// tplini "LISTE"
+// preview "X"
+area { oVnl(), oArt(), oPar(), oVen() }
+index on="VenField(VNL->IdJnl+VNL->IdDoc,cblock('dtos(VEN->Date)'))" \
+      for='VNL->Code$"AF".and.VNL->IdJnl=="'+DlgValue("IdJnl")+'"'
+ValidateRecord {|| DocExist(VNL->IdJnl,VNL->IdDoc) }
+ValidateRecord {|| ParExist(VEN->IdPar) }
+ValidateRecord {|| ArtExist(VNL->IdArt) }
+ValidateRecord {|| DlgDefine("Match",VEN->VnaMatch)}
+OnNoValue {||Confirm(\
+  "Artikel "+alltrim(ART->Match)\
+    +" (Nr."+alltrim(VNL->IdArt)+") hat keine PPS-Kolonne!",\
+  MsgContinue())}
+start dtos(DlgValue("Date1"))
+// while {||VEN->Date<=DlgValue("Date2")}
+filter {||VEN->Date>=DlgValue("Date1").and.VEN->Date<=DlgValue("Date2") }
+filter {||empty(DlgValue("IdPar")).or.VEN->IdPar==DlgValue("IdPar")}
+filter {||empty(DlgValue("VnaMatch")).or.VEN->VnaMatch==DlgValue("VnaMatch")}
+group key={|| VenField(VNL->IdJnl+VNL->IdDoc,cblock('VEN->Date')) }
+group text={|x|"Total"}
+column header="Datum" width=8 \
+       text={||dtocf(VEN->Date,"dd.mm.yy")} \
+       when={|grp|IsFirst(1)}
+column header="Referenz" width=9 \
+       text={||DlgValue("Match")}
+#if empty(DlgValue("IdPar"))
+  column header="Partner" width=20 \
+         text={||VenField(VEN->VnaMatch,cblock('padr(ParName(VEN->IdPar),20)')\
+         )}
+#else
+  column header="Baustelle" width=20 \
+         text={||padr(VEN->NB1,20)}
+#endif
+column header="Art" width=LenIdArt() text={||VNL->IdArt}
+column header="Match" width=20 \
+       text={||padr(ART->Match,20)}
+#exec setvar("b",{|nValue|ntoq(nValue,ART->QteForm)})
+#exec DbcLoop("PPS.DBC",{|x|RptAddColumn(\
+        {x[2]},\
+        LenQte(),\
+        cblock("ART->IdPps=='"+x[1]+"'"),\
+        cblock("qton1(VNL->Qte)"),\
+        getvar("b")\
+      )})
+// column header="Arbeit" width=6 text={||VNL->Qte} \
+       when={||trim(VNL->IdArt)$"MON,VBL,ETC,REP"} \
+       value={||qton(VNL->Qte)} \
+       xsum={|x|ntoq(x,":")}
+// column header="A-Kosten" width=LenMntF() \
+       text={|x|ntomf(x)} \
+       when={||trim(VNL->IdArt)$"MON,VBL,ETC,REP"} \
+       value={||val(VNL->cMont)} \
+       xsum={|x|ntomf(x)}
+// column header="Urlaub" width=6 text={||VNL->Qte} \
+       when={||trim(VNL->IdArt)$"U,ABK"} \
+       value={||qton(VNL->Qte)} \
+       xsum={|x|ntoq(x,":")}
+// column header="Krank" width=6 text={||VNL->Qte} \
+       when={||trim(VNL->IdArt)=="K"} \
+       value={||qton(VNL->Qte)} \
+       xsum={|x|ntoq(x,":")}
+// column header="Lohn" width=LenMntF() \
+       text={||ntomf(val(VNL->cMont))} \
+       value={||val(VNL->cMont)} \
+       when={||trim(VNL->IdArt)=="AS"} \
+       xsum={|x| ntomf(x) }
+// column header="Fahrt" width=6 text={||VNL->Qte} \
+       when={||trim(VNL->IdArt)=="KM"} \
+       value={||qton(VNL->Qte)} \
+       xsum={|x|ntoq(x,":")}
+// column header="F-Kosten" width=LenMntF() \
+       text={||ntomf(val(VNL->cMont))} \
+       value={||val(VNL->cMont)} \
+       when={||trim(VNL->IdArt)=="KM"} \
+       xsum={|x| ntomf(x) }
+// column header="Gesamt" width=LenMntF() \
+       text={||ntomf(val(VNL->cMont))} \
+       value={||val(VNL->cMont)} \
+       xsum={|x| ntomf(x) }
+// column header="Andere" width=LenMntF() \
+       text={||ntomf(val(VNL->cMont))} \
+       value={||val(VNL->cMont)} \
+       when={||!trim(VNL->IdArt)$"AS,KM"} \
+       xsum={|x| ntomf(x) }
+
+total text={|x|"Produktiv "} \
+      for={||len(trim(DlgValue("Match")))==9}
+total text={|x|"Intern "} \
+      for={||len(trim(DlgValue("Match")))==3}
+total text={|x|"Unproduktiv "} \
+      for={||len(trim(DlgValue("Match")))==0}
+total text={|x|"Gesamt "}
+//
+      // when={||VenField(\
+        VNL->IdJnl+VNL->IdDoc,\
+        cblock("len(trim(VEN->VnaMatch))"))==3\
+      }
+

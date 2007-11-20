@@ -1,0 +1,17 @@
+//
+// TRMPRJ.QRY - generated 23.05.01
+// for TRM.DBF
+//
+window 30 76 0 0 
+column 2 Date say ""
+column 16 Duree pict @K
+column 5 Texte pict @K@S40
+column 8 Tarif pict @K@!
+column 7 Attr pict @K@!
+column 6 User pict @K@!
+column 18 Etat pict @K@!
+column 15 _Tarif pict @k@s15
+column 19 _Etat pict @K@S10
+column 3 Debut pict @K@!
+mask TRM
+order 5

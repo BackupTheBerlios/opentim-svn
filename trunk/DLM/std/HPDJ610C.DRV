@@ -1,0 +1,51 @@
+// HP DeskJet 610C
+// Luc Saffre <luc.saffre@pacsystems.be>
+
+//
+// DÇsignation (max.30 caractäres)
+//
+Name HP DeskJet 610C
+Initialize ""
+
+//
+// Reset : apräs chaque impression
+//
+Reset                  chr(27)+"E"
+
+FormFeed               chr(12)
+
+//
+// FÅr jede verfÅgbare Schriftart steht ein "Font"-Eintrag
+//   Font <Name> <AnzahlCPI> <Steuerzeichen>
+//
+Font  5cpi    5    12/72  chr(27)+"(s5H"
+Font  10cpi  10    12/72  chr(27)+"(s10H"
+Font  12cpi  12    12/72  chr(27)+"(s12H"
+Font  17cpi  16.67 12/72  chr(27)+"(s16.67H"
+Font  20cpi  20    12/72  chr(27)+"(s20H"
+
+//
+//  Zeichenformatierungs-Steuerzeichen
+//
+BoldOn   chr(27)+"(s3B"
+BoldOff  chr(27)+"(s0B"
+ItalOn   chr(27)+"(s1S"
+ItalOff  chr(27)+"(s0S"
+UnderOn  chr(27)+"&d1D"
+UnderOff chr(27)+"&d@"
+
+Option P Portrait             "&l0O"
+Option L Landscape            "&l1O"
+
+Option 6 6LinesPerInch        "&l6d&l72P"
+Option 7 6.9LinesPerInch      "&l7c&l83P"
+Option 8 8LinesPerInch        "&l8d&l96P"
+
+// ESC & l (n) C sets VMI (Vertical Motion Index) :
+// number of 0.021-inch-increments of spacing between two lines
+// Default is 8 (= 6lpi)
+// ESC & l n P sets the paper length in lines
+Option C CustomSpacing        "&l9c&l64P"
+
+// ESC * b (n) Y is the "Y Offset" in Pixels
+Option V VerticalAdjust chr(27)+"*b5Y"

@@ -1,0 +1,10 @@
+// Artikelattribute
+// T|Tempor„r-Artikel
+// M|Muster
+// D|Volumen nach Durchmesser rechnen
+S|ohne Lagerbestand
+H|Unsichtbar (hidden)
+B|Memotext vor Bezeichnung drucken
+A|Memotext nach Bezeichnung drucken
+R|Schreibgeschtzt (read-only)
+// N|mit Seriennummer

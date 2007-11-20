@@ -1,0 +1,12 @@
+// NEC P5 Series
+// P.A.C. Systems Eupen T‚l. 087/55 62 31
+//
+Name NEC P5 Series
+Reset          chr(28)+"@"
+FormFeed       chr(12)
+Font 10cpi 10 12/72 chr(27)+"P"
+Font 12cpi 12 12/72 chr(27)+"M"
+Font 15cpi 15 12/72 chr(27)+"g"
+Font 17cpi 17 12/72 chr(27)+"P"+chr(15)
+Font 20cpi 20 12/72 chr(27)+"M"+chr(15)
+Font 24cpi 24 12/72 chr(27)+"g"+chr(15)

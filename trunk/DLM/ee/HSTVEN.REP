@@ -1,0 +1,155 @@
+// Rechnungsbcher Einkauf/Verkauf
+
+header1 "Journal "+DlgValue("IdJnlVen") + " : " + trim(JnlName(DlgValue("IdJnlVen")))
+header2 trim1(PerText(cblock("JNL->IdJnl=='"+DlgValue("IdJnlVen")+"'")))+"("+SetDevise()+")"
+area { oHst(), oPar(), oGen(), oFin(), oVen() }
+order 6 // IdJnl+Periode+IdDoc (siehe HST.DEF)
+start DlgValue("IdJnlVen")+trim(MemPer1)
+while {|| HST->IdJnl==DlgValue("IdJnlVen").and.ChkPeriode(HST->Periode)<=0}
+
+//order 9 // HST->Periode+dtos(HST->Date)
+//start MemPer1
+//while {|| ChkPeriode(HST->Periode)<=0}
+//filter {||JnlAlias(HST->IdJnl)=='VEN'.and.'G'$JnlAttrib(HST->IdJnl)}
+
+ValidateRecord {|| DocExist(HST->IdJnl,HST->IdDoc)}
+ValidateRecord {|| GenExist(HST->IdGen)}
+ValidateRecord {|| empty(HST->IdCtr).or.ParExist(HST->IdPar)}
+
+OnNoValue {|| Confirm(MsgIdJnlDoc() + \
+  utr(" : booking "," : Buchung ","l'imputation") \
+  + HST->IdGen + " (" + trim(HST->IdTax)\
+  + utr(\
+    ") does not fit into any columnÿ!", \
+    ") konnte keiner Kolonne zugewiesen werdenÿ!", \
+    " n'est attribu‚e … aucune colonne !"), \
+  MsgContinue() \
+)}
+
+group key={|| HST->IdJnl + HST->Periode + HST->IdDoc }
+group key={|| HST->IdJnl + HST->Periode } \
+      text={|x|"Periode "+HST->Periode } \
+      after={||DlgValue("subttl")=="X".and.MemPer1!=MemPer2\
+        .and.RptTit2().and.PrintTotal(1,2).and.RptTit2()}
+group text={|x|utr("Total","Gesamt","Total")}
+
+// Kolonnen die in allen Varianten vorkommen :
+// column header="Jnl" width=LenIdJnl() text={||HST->IdJnl} //        when={|grp|IsFirst(1)}
+column header=utr("Doc.#","Dok.Nr","NøDoc") \
+       width=6 text={||HST->IdDoc} \
+       when={|grp|IsFirst(1)}
+column header=utr("Date","Datum","Date") \
+       width=5 text={||dtocf(HST->Date,"dd.mm")} \
+       when={|grp|IsFirst(1)}
+column header=utr("Accnt","Konto","Compte") \
+       width=LenIdCtr()+1+LenCompte() \
+       text={||if(\
+         empty(HST->IdCtr),\
+         padr("G",LenIdCtr())+" "+padr(HST->IdGen,LenCompte()),\
+         HST->IdCtr+" "+padr(HST->IdPar,LenCompte())\
+       )}
+column header=utr("Description","Bezeichnung","Libell‚") \
+       width=20 text={||padr(HstCptName(),20)}
+column header=utr("Cn","Ko","CF") width=2 text={||GEN->IdClj}
+column header=utr("VAT","MWS","TVA") width=3 text={||HST->IdTax}
+
+#if JnlIdCtr(DlgValue("IdJnlVen"))=="V"
+  column header="Customer" width=LenMntF() \
+         when={||HST->IdCtr=="V"} \
+         value={||HstDcMont("D",SetDevise())} \
+         text={|x|ntomf(x)} xsum={|x| ntomf(x) }
+  // 1. : 18% m„„raga maksustatav k„ive
+  column header="1" width=LenMntF() \
+         when={||GEN->IdClj=="..".and.HST->IdTax$"18 "} \
+         value={||HstDcMont("C",SetDevise())} \
+         text={|x|ntomf(x)} xsum={|x| ntomf(x) }
+  // 1.1 : sh. kinnisasjade ja nendega seotud tehingute...
+  // column header="1.1" width=LenMntF() \
+         when={||GEN->IdClj=="..".and.HST->IdTax$"?  "} \
+         value={||HstDcMont("C",SetDevise())} \
+         text={|x|ntomf(x)} xsum={|x| ntomf(x) }
+  // 1.2. Registreeritud maksukohustuslasele kasvava metsa...
+  // column header="1.2" width=LenMntF() \
+         when={||GEN->IdClj=="..".and.HST->IdTax$"?  "} \
+         value={||HstDcMont("C",SetDevise())} \
+         text={|x|ntomf(x)} xsum={|x| ntomf(x) }
+
+  // 2 : 5% m„„raga maksustatav k„ive
+  // column header="2" width=LenMntF() \
+         when={||GEN->IdClj=="..".and.HST->IdTax$"5  "} \
+         value={||HstDcMont("C",SetDevise())} \
+         text={|x|ntomf(x)} xsum={|x| ntomf(x) }
+  // 3 : 0% m„„raga maksustatav k„ive
+  // column header="3" width=LenMntF() \
+         when={||GEN->IdClj=="..".and.HST->IdTax$"0  ,XS "} \
+         value={||HstDcMont("C",SetDevise())} \
+         text={|x|ntomf(x)} xsum={|x| ntomf(x) }
+
+  // services sales intracom
+  column header="3" width=LenMntF() \
+         when={||GEN->IdClj=="..".and.HST->IdTax$"0  IS IM XM "} \
+         value={||HstDcMont("C",SetDevise())} \
+         text={|x|ntomf(x)} xsum={|x| ntomf(x) }
+  // 3.1. sh. kaupade hendusesisene k„ive
+  // column header="3.1" width=LenMntF() \
+         when={||GEN->IdClj=="..".and.HST->IdTax$"IM "} \
+         value={||HstDcMont("C",SetDevise())} \
+         text={|x|ntomf(x)} xsum={|x| ntomf(x) }
+
+  // 3.2. sh. kaupade eksport
+  column header="3.2" width=LenMntF() \
+         when={||GEN->IdClj=="..".and.HST->IdTax$"XM "} \
+         value={||HstDcMont("C",SetDevise())} \
+         text={|x|ntomf(x)} xsum={|x| ntomf(x) }
+
+  // 4. K„ibemaks kokku
+  column header="4" width=LenMntF() \
+         when={||GEN->IdClj=="5 "} \
+         value={||HstDcMont("C",SetDevise())} \
+         text={|x|ntomf(x)} xsum={|x| ntomf(x) }
+
+#endif
+
+
+#if JnlIdCtr(DlgValue("IdJnlVen"))=="E"
+
+column header="Supplier" width=LenMntF() \
+       when={||HST->IdCtr=="E"} \
+       value={||HstDcMont("C",SetDevise())} \
+       text={|x|ntomf(x)} xsum={|x| ntomf(x) }
+// The purchases themselves don't need to be declared
+column header="Purchases" width=LenMntF() \
+       when={||GEN->IdClj$"80"} \
+       value={||HstDcMont("D",SetDevise())} \
+       text={|x|ntomf(x)} xsum={|x| ntomf(x) }
+
+
+// 5. deductible VAT
+column header="5" width=LenMntF() \
+       when={||GEN->IdClj=="6 "} \
+       value={||HstDcMont("D",SetDevise())} \
+       text={|x|ntomf(x)} xsum={|x| ntomf(x) }
+
+// 5.1 VAT paid to custom (Zoll)
+// column header="6.1" width=LenMntF() \
+       when={||GEN->IdClj=="61"} \
+       value={||HstDcMont("D",SetDevise())} \
+       text={|x|ntomf(x)} xsum={|x| ntomf(x) }
+
+// 5.2. VAT on service import
+// column header="6.2" width=LenMntF() \
+       when={||GEN->IdClj=="62"} \
+       value={||HstDcMont("D",SetDevise())} \
+       text={|x|ntomf(x)} xsum={|x| ntomf(x) }
+
+column header="**" width=LenMntF() \
+       when={||GEN->IdClj=="**".and.HST->IdTax$"0  "} \
+       value={||HstDcMont("D",SetDevise())} \
+       text={|x|ntomf(x)} xsum={|x| ntomf(x) }
+#endif
+
+// total for={||!VenIsNC()} when={|n|n>0} \
+      text={||utr("INVOICES","RECHNUNGEN","FACTURES")}
+// total for={||VenIsNC()} when={|n|n>0}  \
+      text={||utr("CREDIT NOTES","GUTSCHRIFTEN","NOTES DE CREDIT")}
+total text={||""}  when={|n|n>0}

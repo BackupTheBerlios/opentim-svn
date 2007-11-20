@@ -1,0 +1,105 @@
+// ParNewId.act
+RETURN !Warning(if(MemLang1=="D",\
+  "Funktion blockiert! Benachrichtigen Sie den Systemverwalter",\
+  "Fonction d‚sactiv‚e! Contactez l'administrateur systŠme!"\
+)) if IndExist("PARNEWID")
+DlgDefine("IdPar1",PAR->IdPar)
+DlgDefine("IdPar2",space(LenIdPar()))
+DlgExec("PARNEWID")
+if(MemLang1=="D",\
+  Confirm(\
+    "Partner "+DlgValue("IdPar1")+" kriegt "+DlgValue("IdPar2")\
+    +" als neue interne Nummer", MsgSure(), "N"\
+  ),\
+  Confirm(\
+    "Le partenaire "+DlgValue("IdPar1")+" re‡oit "+DlgValue("IdPar2")\
+    +" comme nouveau nø interne", MsgSure(), "N"\
+  )\
+)
+DlgDefine("Union",DbfPeek(oPar(),DlgValue("IdPar2"),".t.",.f.))
+RETURN .f. if DlgValue("Union").and.!Confirm(\
+  DlgValue("IdPar2")\
+  +if(MemLang1=="D"," existiert bereits."," existe d‚j…."),\
+  if(MemLang1=="D",\
+    "Alle Referenzen werden umgeleitet auf ",\
+    "Toutes les r‚f‚rences seront d‚vi‚es vers "\
+  )+DlgValue("IdPar2")\
+  +if(MemLang1=="D"," und Partner "," et le partenaire ")\
+  +DlgValue("IdPar1")\
+  +if(MemLang1=="D"," anschlieáend gel”scht! "," sera supprim‚! ")\
+  +MsgSure()\
+)
+SendConsole("ParNewId.act "+DlgValue("IdPar1")+" to "+DlgValue("IdPar2"))
+IndCreate("PARNEWID",DlgValue("IdPar1")+" to "+DlgValue("IdPar2"))
+MsgDisplay(MsgWorking())
+ddCloseAll()
+SendConsole("VEN...")
+DbfReplace(oVen(),2,"IdPar",DlgValue("IdPar1"),DlgValue("IdPar2"))
+DbfReplace(oVen(),6,"IdPar2",DlgValue("IdPar1"),DlgValue("IdPar2"))
+// DlgDefine("tmp",cblock("(VEN->IdPar2:='"+DlgValue("IdPar2")+"')!=NIL"))
+// DbfScan({oVen()},\
+  0,NIL,NIL,\
+  "VEN->IdPar2=='"+DlgValue("IdPar1")+"'",\
+  "TryRecLock(DlgValue('tmp'))"\
+)
+
+SendConsole("HST...")
+DbfReplace(oHst(),2,"IdPar",DlgValue("IdPar1"),DlgValue("IdPar2"))
+IndCreate("REBUILD")
+
+SendConsole("FNL...")
+DlgDefine("tmp",cblock("(FNL->IdCpt:='"+DlgValue("IdPar2")+"')!=NIL"))
+DbfScan({oFnl()},\
+  1,NIL,NIL,\
+  "!empty(FNL->IdCtr).and.left(FNL->IdCpt,"+ntrim(LenIdPar())+")=='"\
+  +DlgValue("IdPar1")+"'",\
+  "TryRecLock(DlgValue('tmp'))"\
+)
+
+// SendConsole("MVS...")
+// DbfReplace(oMvs(),2,"IdPar",DlgValue("IdPar1"),DlgValue("IdPar2"))
+
+SendConsole("VNA...")
+DbfReplace(oVna(),2,"IdPar",DlgValue("IdPar1"),DlgValue("IdPar2"))
+
+SendConsole("DLS...")
+DbfReplace(oDls(),4,"IdPar",DlgValue("IdPar1"),DlgValue("IdPar2"))
+SendConsole("DLP...")
+DbfReplace(oDlp(),2,"IdPar",DlgValue("IdPar1"),DlgValue("IdPar2"))
+
+// SendConsole("PSC...")
+// DbfReplace(oPsc(),1,"IdPar",DlgValue("IdPar1"),DlgValue("IdPar2"))
+// DbfReplace(oPsc(),2,"IdPar2",DlgValue("IdPar1"),DlgValue("IdPar2"))
+
+// SendConsole("MBR...")
+// DbfReplace(oMbr(),2,"IdPar",DlgValue("IdPar1"),DlgValue("IdPar2"))
+
+SendConsole("MSG...")
+DbfReplace(oMsg(),2,"IdPar",DlgValue("IdPar1"),DlgValue("IdPar2"))
+
+// SendConsole("EVI...")
+// DbfReplace(oEvi(),2,"IdPar",DlgValue("IdPar1"),DlgValue("IdPar2"))
+
+// SendConsole("TRM...")
+// DbfReplace(oTrm(),2,"IdPar",DlgValue("IdPar1"),DlgValue("IdPar2"))
+
+SendConsole("ACF...")
+DbfReplace(oAcf(),2,"IdPar",DlgValue("IdPar1"),DlgValue("IdPar2"))
+
+SendConsole("PRJ...")
+DbfReplace(oPrj(),2,"IdPar",DlgValue("IdPar1"),DlgValue("IdPar2"))
+DbfReplace(oPrj(),3,"IdPar2",DlgValue("IdPar1"),DlgValue("IdPar2"))
+
+TryRecLock(\
+  if(DlgValue("Union"),\
+    {||dbdelete(),.t.},\
+    {||(PAR->IdPar:=DlgValue("IdPar2"))!=NIL}\
+))
+
+
+SendConsole("ParNewId.act : okay")
+IndDelete("PARNEWID")
+ddCloseAll()
+ddRefreshAll()
+SetMnuDone()
+SetMsg("rename "+DlgValue("IdPar1")+" to "+DlgValue("IdPar2")+MsgDone())

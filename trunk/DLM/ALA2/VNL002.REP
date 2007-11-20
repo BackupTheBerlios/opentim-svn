@@ -1,0 +1,35 @@
+header1 VEN->IdJnl+" "+VEN->IdDoc
+header2 "Baustelle: " + trim(ParName(VEN->IdPar2))
+// header3 dtocf(DlgValue("Date1"))+" bis "+dtocf(DlgValue("Date2"))
+// header3 "(Gesamtliste pro Produzent/Artikelnummer)"
+// tplini "LISTE"
+// preview "X"
+area { oVnl(), oArt(), oPar(), oVen() }
+order 1
+start VEN->IdJnl+VEN->IdDoc
+while {||VNL->IdDoc==VEN->IdDoc.and.VNL->IdJnl==VEN->IdJnl}
+ValidateRecord {|| !VNL->Code$"AF".or.ArtExist(VNL->IdArt) }
+// ValidateRecord {||VnlVarCollect()}
+filter {||VNL->Code!="T"}
+group text={||"Summe"}
+column header="Art.Nr" width=LenIdArt() \
+       text={||VNL->IdArt} 
+column header="Match" width=15 text={||left(ART->Match,15)}
+column header="H" width=2 text={||VNL->Attrib}
+column header="Memo" width=40 text={||padr(memoline(VNL->Memo,40,1),40)}
+column header="Menge" width=LenQte() text={||VNL->Qte}
+column header="Stckpreis" width=LenMont() text={||VNL->PrixU}
+column header="VK htva" width=LenMont() text={||VNL->cMont} \
+       value={||if(VNL->Code$"T".or."H"$VNL->Attrib,0,val(VNL->cMont))}\
+       xsum={|x|DlgDefine("HTVA",x),ntomf(x)}
+column header="SK" width=LenMont() \
+       value={||if(\
+         VNL->Code$"T".or."H"$VNL->Attrib,0,val(VNL->PrixR)*qton1(VNL->Qte)\
+       )} \
+       text={|x|ntom(val(VNL->PrixR)*qton1(VNL->Qte))} \
+       xsum={|x|DlgDefine("SK",x),ntomf(x)}
+column header="C" width=1 text={||VNL->Code}
+
+total text={||""} when={||.t.}
+// total when={||.t.}
+

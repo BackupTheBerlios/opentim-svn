@@ -1,0 +1,11 @@
+// VENPRINT.ACT
+// created 20021101 by LS
+// called on F7 and if JNL->IdTpt is empty
+// (not if VEN.DEF calls ddPrintRecord({||ActExec("VENPRINT")}))
+//
+// RETURN ActExec("BLGPRINT") if JnlIdGrj(VEN->IdJnl) == "BLG"
+RETURN ActExec(VEN->IdJnl+"PRINT") if GetDlmPath(VEN->IdJnl+"PRINT.ACT") != NIL
+// RETURN VenPrint() if ! empty(JnlIdTpt(VEN->IdJnl)) // $ "DON"
+// RETURN DlgExec("VEN2PRN")
+RETURN DlgExec("VEN2TEX")
+// RETURN DlgExec("VEN2PDS")

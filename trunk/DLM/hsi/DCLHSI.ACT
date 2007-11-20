@@ -1,0 +1,3 @@
+SetTplIni("LISTE")
+DlgExec("DCLHSI")
+fprint("DCLHSI.LST","{}")

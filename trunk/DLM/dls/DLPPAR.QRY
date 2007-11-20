@@ -1,0 +1,12 @@
+//
+// DLPPAR.QRY - generated 22.09.05
+// for DLP.DBF
+//
+window 15 60 0 1 
+column 4 Datum say ""
+column 0 Ther block DlsExpr(DLP->IdDls,"DLS->IdUsr") skip .t.
+column 0 Dl-Art block padr(DlsExpr(DLP->IdDls,'DbfPeek(oDla(),DLS->IdDla,"DLA->Name1","")'),30) skip .t.
+column 1 IdDls
+column 2 IdPar pict @K@!
+column 3 Line pict @K@!
+order 2

@@ -1,0 +1,32 @@
+// VKAPRINT.DLG
+before SetDlgTitle("Angebot RTF-Druck")
+// before DlgDefine("Anrede",space(80))
+before DlgDefine("InFile",padr(DbPath()+"\VKA001"+PAR->Langue+".RTF",100))
+before DlgDefine("OutFile",padr(AppPath()+"\RTF\"+VEN->IdJnl+"\"+VEN->IdDoc+".RTF",100))
+field block={||PAR->IdPar+" "+padr(ParName(),40)} \
+      caption="Client : " \
+      when={||.f.} color="N/W"
+// field name="Anrede" \
+      caption="Briefanrede     " \
+    picture="@k@s40"
+// field caption='                (leer = "Sehr geehrter Kunde,")'
+// field caption="Date document " \
+    block=fieldwblock("Date","MSG") \
+    valid={||ph_refresh()}
+field name="InFile" \
+      caption="Vorlage         " \
+      picture="@k@s40"
+field name="OutFile" \
+      caption="Tempor„re Datei " \
+      picture="@k@s40"
+// field name="Spool" \
+    caption2=" imprimer directement (ne foncionne pas encore)" \
+    value=" " \
+    reader={|g|CbxReader(g)}
+// field block={|x|SetPreview(x)} \
+    caption2=" Pr‚visualisation" \
+    value=" " \
+    reader={|g|CbxReader(g)}
+// after DrvLoad("RTF")
+after ActExec("FPARSE")
+after .f.

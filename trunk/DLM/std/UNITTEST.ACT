@@ -1,0 +1,9 @@
+Confirm(\
+  "This will start the Unit Test Suite.",\
+  "Did you make a backup of your database (Y/N)",\
+  "N")
+// UnitTest()
+SetDialog(.f.)
+MnuLoad("",.t.)
+// SetOnQryWait({||SendKey(27)})
+DoEach(GetMainMenu()) // ,"Confirm(MnuJobName(),MsgSure())")

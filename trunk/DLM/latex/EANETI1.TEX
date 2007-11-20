@@ -1,0 +1,91 @@
+% EANETI1.TEX - to be included using fparse() from ARTEAN and VENEAN
+% Template to be used by TIM. Author Luc Saffre. PAC Systems Eupen
+%
+\documentclass[a4paper,landscape]{article}
+
+% input encoding
+\usepackage[cp850]{inputenc}
+% N.B.: Windows : ansinew
+%       Linux   : latin1
+
+[etc if TplLang()=="F"]
+\usepackage[french]{babel}
+[etc else]
+\usepackage[ngerman]{babel}
+[etc endif]
+
+
+
+\renewcommand{\familydefault}{cmss}
+
+% Petr Orsag
+% see eantest.tex for comments
+\input ean13
+\X=[=ltrim(str(0.33*DlgValue("Scale")/100,6,3))]mm
+\font\ocrb=ocrb9 scaled [=ntrim(DlgValue("Scale")*10)]
+%\bcorr=0.015mm         % bar correction (?)
+
+
+\pagestyle{empty}
+
+\setlength{\hoffset}{-1in}
+\setlength{\marginparsep}{0mm}
+\setlength{\marginparwidth}{0mm}
+\setlength{\voffset}{-1in}  % header starts at (2.54 - 2 = 0.54) cm
+\setlength{\headheight}{0mm}
+\setlength{\headsep}{0mm}
+
+[etc if DlgValue("AsPdf")==" "]
+
+% Etilux : 40 x 18 mm on A4 papper
+\setlength{\oddsidemargin}{13mm}
+\setlength{\textwidth}{205mm}
+\setlength{\textheight}{287mm}
+\setlength{\topmargin}{12mm}
+%
+\newcommand{\etiquette}[1]{\parbox[=chr(91)]b][17.71mm]{[=ntrim(getvar("Width"))]mm}{#1}}
+\newcommand{\etisep}{} % what goes between 2 labels on a same row
+\newcommand{\etirowsep}{\par}
+
+[etc else]
+
+% Avery Label printer
+\setlength{\oddsidemargin}{0mm}
+\setlength{\textwidth}{[=ntrim(getvar("PageWidth"))]mm}
+\pdfpagewidth [=ntrim(getvar("PageWidth"))]mm
+\setlength{\topmargin}{[=ntrim(getvar("Margin"))]mm}
+\setlength{\textheight}{[=ntrim(getvar("PageHeight")-getvar("Margin")*2)]mm}
+\pdfpageheight [=ntrim(getvar("PageHeight"))]mm
+\pdfpagesattr{/Rotate [=ntrim(getvar("Rotate"))]}
+%
+\newcommand{\etiquette}[1]{\hspace{0pt}\vfill\hspace{0pt}\hfill\parbox[=chr(91)]b][17.71mm]{[=ntrim(getvar("Width"))]mm}{#1}\hfill\hspace{0pt}}
+\newcommand{\etisep}{\newpage} % what goes between 2 labels on a same row
+\newcommand{\etirowsep}{\newpage}
+
+[etc endif]
+
+
+% other
+\setlength{\parindent}{0mm}
+\setlength{\parskip}{0mm}
+
+\begin{document}
+
+% \sloppy
+
+[etc do DlgDefine("CellCount",0)]
+[etc do DrvLoad("")]
+% first print [=ntrim(DlgValue("EmptyCells"))] empty cells
+[etc do ForLoop(\
+  1,\
+  DlgValue("EmptyCells"),\
+  {||DlgPlus("CellCount",1),\
+     toStream("\etiquette{\tiny\hspace{0pt}\newline}"),\
+     toStream(if(\
+         DlgValue("CellCount") % DlgValue("ColCount")==0,\
+         "\etirowsep","\etisep"\
+       )+chr(13)+chr(10)\
+     )\
+  }\
+)]
+[etc do DrvLoad("TEX")]

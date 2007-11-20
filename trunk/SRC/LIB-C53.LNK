@@ -1,0 +1,63 @@
+#
+# FILE LIB-BX.LNK - Blinker Linker Script (protected mode)
+#
+BLINKER EXECUTABLE CLIPPER F:95
+# VMSIZE:16000 wegen "internal error 8002"...?
+#NODEFLIB
+#FILE getsys
+#LIB EXOSPACE
+#LIB CLIPPER
+#LIB DBFNTX
+#LIB EXTEND
+#LIB TERMINAL
+#BEGINAREA
+#
+# Luc's LIB modules
+#
+FILE errsysls
+FILE rptmeths
+FILE Etc
+FILE Login
+FILE ddLayout
+FILE report
+// 20071013 FILE ScrSave
+# Clipper SYS modules (somewhat modified...)
+FILE ddSeek
+FILE filter
+FILE import
+FILE aBrowse
+FILE Protect
+FILE Calend
+FILE woy
+#ENDAREA
+##
+## Nanfor OBJ patches (only exospace)
+##
+FILE diskfunc
+# FILE alt
+##
+## Nanfor LIB patch (only exospace)
+##
+# LIB NANFORX, NANFOR
+LIB f:\soft\clip52d\lib\NANFOR
+LIB f:\soft\clip52d\lib\CPMI
+FILE AppInit
+FILE ddMeths
+FILE TxtEdit
+FILE Stdio
+FILE Windows
+FILE ddGet
+FILE ddArea
+FILE ddEdit
+FILE dlg
+FILE sMenu
+FILE views
+FILE Colors
+FILE OSTREAM
+FILE tab
+FILE drv
+FILE mfileio
+FILE dbcedit
+FILE lsget
+##
+BLINKER INCREMENTAL OFF

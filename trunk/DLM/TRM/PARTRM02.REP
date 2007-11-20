@@ -1,0 +1,57 @@
+header1 "Kontostand Kontingente"
+header2 trim(ParName())
+header3 dtocf(DlgValue("Date1")) + " bis " + dtocf(DlgValue("Date2"))
+area { oTrm() }
+before p_setWidth(RptWidth())==NIL
+order 2 // TRM->IdPAr
+start DlgValue("IdPar")
+while cblock("TRM->IdPar=='"+DlgValue("IdPar")+"'")
+// ValidateRecord {|| DlgDefine("QteCdv",DbfSum({oVna()},"qton1(VNA->QteUs)",5,ART->IdArt+"CDV "))}
+#if !empty(DlgValue("Date1"))
+  detail cblock("dtos(TRM->Date)>='"+dtos(DlgValue("Date1"))+"'")
+#endif
+#if !empty(DlgValue("Date2"))
+  filter cblock("dtos(TRM->Date)<='"+dtos(DlgValue("Date2"))+"'")
+#endif
+// OnNoValue {||.t.}
+filter {||TRM->Fact=="K"}
+
+// group key={||TRM->IdPar} \
+      text={||NIL} \
+      when={||.t.} \
+      after={|nCount,nDetail|nDetail>0} \
+      align="R" \
+      before={|nCount|nCount>0.and.PrintLine()\
+        .and.PrintLine(Tagged("B")+TRM->IdPar + " : " + \
+              ParName(TRM->IdPar)+Tagged("b"))\
+        .and.PrintTotal(1,1)\
+      }
+
+// filter cblock(DlgValue("TrmFilter"))
+// filter {||!"H"$MSG->Attrib}
+// group key={||ART->iGra} text={|x|ART->iGra + " " + trim(GraName(ART->iGra)) + " :"} align="R"
+column header="Datum" width=len(dtoc(UserDate())) \
+       text={||dtoc(TRM->Date)}
+column header="Bezeichnung" width=50 text={||padr(TRM->Texte,50)}
+column header="Haben" width=LenQte() \
+       when={||qton(TRM->Duree)<0} \
+       text={|x|ntoq(x,':')} \
+       value={||-qton(TRM->Duree)} \
+       xsum={|x,nTtl| ntoq(if(nTtl==2,x,if(x>ClnSum(1),x-ClnSum(1),0)),":") }
+column header="Soll" width=LenQte() \
+       when={||qton(TRM->Duree)>=0} \
+       text={|x|ntoq(x,':')} \
+       value={||qton(TRM->Duree)} \
+       xsum={|x,nTtl| ntoq(if(nTtl==2,x,if(x>ClnSum(-1),x-ClnSum(-1),0)),":") }
+group text={||""}
+// total // text={||"alle"}
+
+total for={||TRM->Date < DlgValue("Date1")} \
+      text={||"Beginnsaldo"} \
+      when={|nCount|nCount>0}
+total for={||inrange(TRM->Date,DlgValue("Date1"),DlgValue("Date2"))} \
+      text={||"Summe"} \
+      when={|nCount|nCount>1}
+total text={||"Endsaldo"} \
+      when={||.t.}
+

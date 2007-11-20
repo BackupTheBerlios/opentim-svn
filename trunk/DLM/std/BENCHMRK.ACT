@@ -1,0 +1,11 @@
+// LogMsg("benchmrk.log","start")
+setvar("timeStarted",seconds())
+// DbfScan({oVnl(),oVen(),oPar(),oPlz(),oNat()},1,NIL,\
+  "DocExist(VNL->IdJnl,VNL->IdDoc).and.ParExist(VEN->IdPar)",\
+  ".t.",".t.")
+DbfScan({oVen(),oPar(),oPlz(),oNat()},1,NIL,\
+  "ParExist(VEN->IdPar)",\
+  ".t.",".t.")
+setvar("timeUsed",seconds()-getvar("timeStarted"))
+LogMsg("benchmrk.log","benchmrk.act finished after "+ntrim(getvar("timeUsed"))+" seconds")
+FileEdit(".\benchmrk.log",NIL,.f.)

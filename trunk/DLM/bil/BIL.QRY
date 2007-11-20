@@ -1,0 +1,10 @@
+//
+// C:\SOFT\RELEASE\TIM220\220D\BIL.QRY - generated 02.04.98
+// for BIL.DBF
+//
+column 1 ID pict @K@!
+column 5 Num
+column 2 Titel pict @K@S51
+column 6 Code
+column 3 DC pict @K@!
+column 4 Attrib pict @K@!

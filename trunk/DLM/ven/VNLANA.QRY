@@ -1,0 +1,17 @@
+//
+// F:\SOFT\TEST\TIM300\HEINEN\VNLANA.QRY - generated 08.09.95
+// for VNL.DBF
+//
+window 11 80 11 0 
+column 10 Mont
+column 5 V
+column 6 Objekt
+column 8 =utr("Qty","Menge","QtÇ")
+column 7 =utr("Description","Bezeichnung","DÇsignation")
+column 9 StÅckpreis
+column 15 Erm.%
+column 16 =utr("price","Netto","htva")
+column 13 M
+column 14 =utr("inclTax","Brutto","TVAC")
+column 17 E.K.
+column 11 =utr("VAT","MWSt","TVA")

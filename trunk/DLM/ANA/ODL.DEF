@@ -1,0 +1,13 @@
+// odl.def
+// ddAddSpecial(\
+  {||Confirm(\
+     "Inventur aus aktuellen Stammdaten bernehmen",MsgSure()\
+     ).and.OdlArtCopy(\
+    "!empty(ART->Stock).and.!'H'$ART->Attrib.and.!'S'$ART->Attrib",\
+    "ART->Lager",\
+    "ntom(val(ART->PrixR)*qton(ART->Lager))"\
+  )}, \
+  "~Inventur bernehmen           ",\
+  NIL\
+)
+

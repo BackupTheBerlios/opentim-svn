@@ -1,0 +1,48 @@
+initialize SetMntFormat("S10")
+header1 MnuItemName()
+header2 PerText()
+area { oPer() }
+order 1
+ValidateRecord {|| (MemPer1:=MemPer2:=PER->Periode)!=NIL }
+ValidateRecord {|| setvar("60",CtgValue("D",'60'))}
+ValidateRecord {|| setvar("61",CtgValue("D",'61'))}
+ValidateRecord {|| setvar("62",CtgValue("D",'62'))}
+ValidateRecord {|| setvar("63-69",CtgValue("D",'63-69'))}
+ValidateRecord {|| setvar("70",CtgValue("D",'70'))}
+ValidateRecord {|| setvar("71",CtgValue("D",'71'))}
+ValidateRecord {|| setvar("72",CtgValue("D",'72'))}
+start MemPer1
+while cblock("PER->Periode <= '"+MemPer2+"'")
+group text={|x|"="}
+
+column header="Per." width=4 text={||PER->Periode}
+column header=padl("60",LenMntF()) \
+       width=LenMntF() \
+       value={||getvar("60")} \
+       text={|x|ntomf(x)}\
+       xsum={|x| ntomf(x) }
+column header=padl("61",LenMntF()) \
+       width=LenMntF() \
+       value={||getvar("61")} \
+       text={|x|ntomf(x)}\
+       xsum={|x| ntomf(x) }
+column header=padl("62",LenMntF()) \
+       width=LenMntF() \
+       value={||getvar("62")} \
+       text={|x|ntomf(x)}\
+       xsum={|x| ntomf(x) }
+column header=padl("63-69",LenMntF()) \
+       width=LenMntF() \
+       value={||getvar("63-69")} \
+       text={|x|ntomf(x)}\
+       xsum={|x| ntomf(x) }
+column header=padl("70",LenMntF()) \
+       width=LenMntF() \
+       value={||getvar("70")} \
+       text={|x|ntomf(x)}\
+       xsum={|x| ntomf(x) }
+total text={||""} when={||.t.}
+
+after fparse("PERGEN.TXT")
+
+

@@ -1,0 +1,32 @@
+//
+// F:\SOFT\TEST\TIM300\HEINEN\PARID.QRY - generated 11.09.95
+// for PAR.DBF
+//
+column 1 Ref.
+column 33 Name (Anrede)
+column 41 Straáe, Nr.
+column 6 Plz.
+column 8 Land
+column 9 Telefon
+column 29 R
+column 20 ZA
+column 21 Spr
+column 36 W„
+column 31 Ort
+column 12 MWSt.
+column 32 Anrede
+column 3 Name 1
+column 4 Name 2
+column 10 Fax
+column 11 Bank (1)
+column 38 Bank (2)
+column 30 Erm„á
+column 23 Mail
+column 24 Beruf
+column 25 Code1
+column 26 Code2
+column 27 Code3
+column 28 Erstellt am
+column 7 Grp
+column 19 Attr
+mask PAR

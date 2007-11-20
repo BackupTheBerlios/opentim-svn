@@ -1,0 +1,49 @@
+// Termine exportieren nach Excel...
+OutputFile    AppPath()+"\TEMP\TRM.TXT"
+Delimiter     chr(9)
+LineValidate  ParExist(TRM->IdPar)
+// FieldUpdate   Straáe  trim(ParStreet())
+// FieldUpdate   Tel     trim(PAR->Tel)
+// FieldUpdate   Fax     trim(PAR->Fax)
+//
+// FieldUpdate   IdPar   alltrim(TRM->IdPar)
+FieldUpdate   Datum   dtocf(TRM->Date,"yyyy-mm-dd")
+FieldUpdate   Von     alltrim(TRM->Debut)
+FieldUpdate   Bis     alltrim(TRM->Fin)
+FieldUpdate   Dauer     alltrim(TRM->Duree)
+FieldUpdate   Pause     alltrim(TRM->Pause)
+FieldUpdate   Tarif     alltrim(TRM->IdTac)
+FieldUpdate   Partner trim(ParName())
+FieldUpdate   Beschreibung    trim(TRM->Texte)
+FieldUpdate   Fact if(TRM->Fact=="F",komma(ntrim(qton(TRM->Duree)-qton(TRM->Pause))),"")
+FieldUpdate   Motz if(TRM->Fact=="M",komma(ntrim(qton(TRM->Duree)-qton(TRM->Pause))),"")
+FieldUpdate   Prj  if(TRM->Fact=="P",komma(ntrim(qton(TRM->Duree)-qton(TRM->Pause))),"")
+FieldUpdate   Abo  if(TRM->Fact=="A",komma(ntrim(qton(TRM->Duree)-qton(TRM->Pause))),"")
+FieldUpdate   Kont if(TRM->Fact=="K",komma(ntrim(qton(TRM->Duree)-qton(TRM->Pause))),"")
+FieldUpdate   Etc  if(!TRM->Fact$"FPAMK",komma(ntrim(qton(TRM->Duree)-qton(TRM->Pause))),"")
+FieldUpdate   Fahrt     alltrim(TRM->Fahrt)
+FieldUpdate   User      alltrim(TRM->User)
+
+OnSuccess AppShell('cmd /c s:\path\excel.bat "'+i_OutputFile()+'"',NIL,.f.)
+
+// Siehe auch DOS2WIN.CVT
+convert "„" to "ä"
+convert "" to "Ä"
+convert "”" to "ö"
+convert "™" to "Ö"
+convert "" to "ü"
+convert "š" to "Ü"
+convert "á" to "ß"
+convert "…" to "à"
+convert "ƒ" to "â"
+convert "‚" to "é"
+convert "ˆ" to "ê"
+convert "Š" to "è"
+convert "Œ" to "î"
+convert "“" to "ô"
+convert "–" to "û"
+convert "—" to "ù"
+convert "‰" to "ë"
+convert "‡" to "ç"
+convert "ñ" to "±"
+

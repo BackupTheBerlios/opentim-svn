@@ -1,0 +1,49 @@
+// AUFAUTO.DLG : Rechnung (VKR) erstellen ausgehend von AUftrag (AUF)
+// Aufruf aus VENAUTO.ACT
+title "Rechnung erstellen aus Auftrag"
+before DlgDefault("Date",UserDate())
+before DlgDefault("Edit","X")
+before DlgDefine("IdJnl","VKR")
+before DlgDefine("IdPar1",VEN->IdPar)
+before DlgDefine("IdPar2",VEN->IdPar2)
+before DlgDefine("Match",VEN->VnaMatch)
+field name="Match" \
+    caption="Referenz  " \
+    picture="@k@!" \
+    pick={|x| DbfPick( \
+      {oVen(),oPar(),oPlz()},\
+      "Auswahl Referenz",\
+      "VENMATCH",\
+      x,\
+      NIL,\
+      left(VEN->VnaMatch,6),\
+      "left(VEN->VnaMatch,6)",\
+      "VEN->VnaMatch"\
+    )}
+// field name="IdJnl" \
+//     caption="Journal " \
+//     picture="@k@!" \
+//     pick={|x|PickIdJnl("VEN",x)}
+field name="Date" \
+    caption="Datum     " 
+field name="IdPar2" \
+      caption="Baustelle :           " \
+      picture="@k@!"\
+      pick={|x|PickPar("P",x,"Baustelle")}\
+      attrib="N"
+field caption=" : " \
+      when={||.f.} \
+      color="N/W" \
+      block={||padr(ParName(DlgValue("IdPar2")),30)}
+field name="IdPar1" \
+      caption="Fakturationsadresse : " \
+      picture="@k@!"\
+      pick={|x|PickPar("P",x,"Fakturationsadresse")}\
+      attrib="N"
+field caption=" : " \
+      when={||.f.} \
+      color="N/W" \
+      block={||padr(ParName(DlgValue("IdPar1")),30)}
+field name="Edit" \
+      caption2=" erstelltes Dokument bearbeiten" \
+      reader={|g|CbxReader(g)}

@@ -1,0 +1,10 @@
+// RESTORE.ACT
+Confirm(\
+  "Sicherheitskopie der Datenbank von Diskette zurÅckspielen.",\
+  MsgSure(), "N" \
+)
+Confirm(\
+  "Bestehende Daten werden unwiderruflich Åberschrieben !",\
+  MsgSure(), "N" \
+)
+AppNormEnd("dbrest " + CfgDataBase())

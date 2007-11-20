@@ -1,0 +1,5 @@
+Name: [=trim(PAR->Firme)]
+Nummer: [=PAR->IdPar]
+
+[=hardcr(PAR->Memo)]
+

@@ -1,0 +1,11 @@
+//
+// F:\SOFT\RELEASE\TIM220\STD01D\TAC.QRY - generated 30.09.97
+// for TAC.DBF
+//
+column 1 KÅrzel
+column 2 Bezeichnung 1 pict @K@S30
+column 3 Bezeichnung 2 pict @K@S30
+column 5 Tarif
+column 6 Attr pict @K@!
+column 4 Bezeichnung 3 pict @K@S30
+mask TAC

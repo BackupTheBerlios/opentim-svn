@@ -1,0 +1,7 @@
+//
+// C:\SOFT\TEST\TIM300\HEEREN\QTSART.QRY - generated 05.01.96
+// for QTS.DBF
+//
+window 8 50 0 0 
+column 3 Menge
+column 6 Stock

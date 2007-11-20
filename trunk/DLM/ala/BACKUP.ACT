@@ -1,0 +1,6 @@
+// BACKUP.ACT : mise … jour logiciel
+Confirm(\
+  "Sicherheitskopie "+CfgDataBase()+" und RTF nach Diskette schreiben.",\
+  MsgSure() \
+)
+AppNormEnd("dbback " + CfgDataBase() + " RTF")

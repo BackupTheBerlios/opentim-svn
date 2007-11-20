@@ -1,0 +1,9 @@
+// Rechnung ausstellen
+// Aufruf mit [Alt-F6] auf einem Auftrag
+field name="Date" \
+    caption="Datum " \
+    value=UserDate()
+field name="Edit" \
+    caption2=" Rechnung bearbeiten" \
+    value="X" \
+    reader={|g|CbxReader(g)}

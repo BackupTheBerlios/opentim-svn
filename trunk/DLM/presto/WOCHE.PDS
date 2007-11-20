@@ -1,0 +1,20 @@
+setTitle("Woche vom [=dtoc(getvar("Date"))]")
+formatDocument(pagesize=landscape(A4))
+
+
+th = TableModel()
+th.addColumn(label="Tag",         width=25*mm,
+             style=styles.Normal)
+th.addColumn(label="SPU", style=styles.Normal)
+th.addColumn(label="SAN", style=styles.Normal)
+th.addColumn(label="KAM", style=styles.Normal)
+th.addColumn(label="Sonstige", style=styles.Normal)
+
+
+beginTable(model=th)
+
+[=DbfScan({oTrm()},1,dtos(getvar("Date")),".t.",".t.",\
+  {||fparse("WOCHE2.PDS")},6)]
+
+endTable()
+

@@ -1,0 +1,12 @@
+//
+// TPLSTD.QRY - generated 16.07.07
+// for TPL.DBF
+//
+window 16 66 0 0 
+column 2 Name pict @K@!
+column 3 Bezeichnung
+column 7 Br. pict @K@!
+column 8 Param pict @K@!
+column 10 IdDlg pict @K@!
+column 11 Filter pict @k@s20
+mask TPL

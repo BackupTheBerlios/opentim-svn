@@ -1,0 +1,11 @@
+// Fakturationsdokumente
+p_SetPgAlign( "r")
+p_SetPort(MemLpt)
+DrvLoad(MemDrv)
+p_SetPapWidth( 8.27)
+p_SetLMargin( 1)
+p_SetRMargin( 0.5)
+p_SetPapHeight( 11)
+p_SetTMargin( 0.5)
+p_SetBMargin( 0.5)
+p_setCopies(DlgValue("Copies"))

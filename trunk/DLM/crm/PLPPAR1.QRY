@@ -1,0 +1,13 @@
+//
+// PLPPAR1.QRY - generated 05.11.05
+// for PLP.DBF
+//
+window 15 58 1 16 
+column 0 Name block padr(ParName(PLP->IdPar2),22) skip .t.
+column 4 Art block padr(PlpText(),9) pict @K skip .t.
+column 5 NB pict @k@s21
+column 1 IdPar1 skip .t.
+column 2 IdPar2 skip .t.
+column 4 Type pict @K skip .t.
+order 1
+attrib W

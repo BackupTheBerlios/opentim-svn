@@ -1,0 +1,121 @@
+% VENSTD3.TEX on [=MsgIdJnlDoc()+"."+VNL->Line]
+[***** tabular detail ****]
+[etc if !DlgValue("TableActive")]
+  [etc do DlgDefine("TexColumns",if(\
+    "Q"$DlgValue("ColAttr"),\
+    DlgValue("ColSep")+"p{65mm}"+DlgValue("ColSep")\
+      +"r"+DlgValue("ColSep"),\
+    DlgValue("ColSep")+"p{65mm}"+DlgValue("ColSep")\
+  ))]
+  [etc do !"U"$DlgValue("ColAttr").or.DlgPlus("TexColumns",\
+    "p{1.9cm}"+DlgValue("ColSep"))]
+  [etc do !"D"$DlgValue("ColAttr").or.DlgPlus("TexColumns",\
+    "p{1.9cm}"+DlgValue("ColSep"))]
+  [etc do !"C"$DlgValue("ColAttr").or.DlgPlus("TexColumns",\
+    "p{1.9cm}"+DlgValue("ColSep"))]
+  [etc do !"I"$DlgValue("ColAttr").or.DlgPlus("TexColumns",\
+    "p{1.5cm}"+DlgValue("ColSep"))]
+  [etc do !"L"$DlgValue("ColAttr").or.DlgPlus("TexColumns",\
+    "p{18mm}"+DlgValue("ColSep"))]
+  [etc do !"M"$DlgValue("ColAttr").or.DlgPlus("TexColumns",\
+    "p{10mm}"+DlgValue("ColSep"))]
+  [etc do !"B"$DlgValue("ColAttr").or.DlgPlus("TexColumns",\
+    "p{30mm}"+DlgValue("ColSep"))]
+  \setlength{\extrarowheight}{1mm}
+  \begin{longtable}{|[=DlgValue("TexColumns")]|}
+  \hline
+  {\small [=if(TplLang()=="D","Beschreibung","Description")]}
+  [etc if "Q"$DlgValue("ColAttr")]
+  & \PreserveBackSlash{\raggedleft} {\small [=if(TplLang()=="D","Menge","Quantit‚")]}
+  [etc endif]
+  [etc if "U"$DlgValue("ColAttr")]
+  & \PreserveBackSlash{\raggedleft}
+  {\small [=if(TplLang()=="D","Stckpreis","Prix unitaire")]}
+  [etc endif]
+  [etc if "D"$DlgValue("ColAttr")]
+  & \PreserveBackSlash{\raggedleft} {\small [=if(TplLang()=="D","Preis","Prix")]}
+  [etc endif]
+  [etc if "C"$DlgValue("ColAttr")]
+  & \PreserveBackSlash{\raggedleft} {\scriptsize [=if(TplLang()=="D","Preis inkl.~MWSt.","Prix tvac")]}
+  [etc endif]
+  [etc if  "I"$DlgValue("ColAttr")]
+  & {\small [=if(TplLang()=="D","Art.-Nr.","Nø Art.")]}
+  [etc endif]
+  [etc if  "L"$DlgValue("ColAttr")]
+  &
+  {\small [=if(TplLang()=="F","emballage","pakking")]}
+  [etc endif]
+  [etc if  "M"$DlgValue("ColAttr")]
+  & \PreserveBackSlash{\raggedleft}
+  {\small [=if(TplLang()=="F","min.","min.")]}
+  [etc endif]
+  [etc if  "B"$DlgValue("ColAttr")]
+  & \PreserveBackSlash{\raggedleft}
+  {\small [=if(TplLang()=="D","Strichcode","Code barres")]}
+  [etc endif]
+  \endhead
+  \hline
+  [etc do DlgDefine("TableActive",.t.)]
+[etc endif][etc if ArtIsTotal(VNL->IdArt)]
+\hline
+[etc endif]
+[******]
+[***************** Kolonne "Beschreibung" *****]
+[etc if "B"$ART->Attrib.and.!empty(ART->Memo1)]
+\begin{memo}[etc do ToStream(Memo2Tex(ArtMemo(TplLang())))]\end{memo}
+[etc endif]
+[=if("U"$VNL->Attrib,"\textbf{","")][=trim(if(\
+  empty(VNL->Desig),VnlObjName(TplLang()),trim(VNL->Desig)\
+))][=if("U"$VNL->Attrib,"}","")]
+[etc if !empty(VNL->Memo)]
+\begin{memo}[etc do ToStream(Memo2Tex(VNL->Memo))]\end{memo}
+[etc endif]
+[etc if "A"$ART->Attrib.and.!"M"$VNL->Attrib.and.!empty(ART->Memo1)]
+\begin{memo}[etc do ToStream(Memo2Tex(ArtMemo(TplLang())))]\end{memo}
+[etc endif]
+[**************** Kolonne "Menge" *******]
+[etc if "Q"$DlgValue("ColAttr")]
+[etc if empty(VNL->Qte).and.!empty(VNL->PrixU).and.VEN->IdJnl$"VEN,VNA,VKR"]
+& \PreserveBackSlash{\raggedleft}1
+[etc else]
+& \PreserveBackSlash{\raggedleft}[=komma(VNL->Qte)]
+[etc endif]
+[etc endif]
+[**************** Kolonne "Stckpreis" **]
+[etc if "U"$DlgValue("ColAttr")]
+& \PreserveBackSlash{\raggedleft}
+[=if("D"$VNL->Attrib,"",ntomf(val(VNL->PrixU)))]
+[etc endif]
+[etc if "D"$DlgValue("ColAttr")]
+& \PreserveBackSlash{\raggedleft}
+[=if("D"$VNL->Attrib,"",ntomf(val(VNL->cMont)))]
+[etc endif]
+[etc if "C"$DlgValue("ColAttr")]
+& \PreserveBackSlash{\raggedleft}
+[=ntomf(val(VNL->cMont)+val(MontT))]
+[etc endif]
+[etc if "I"$DlgValue("ColAttr")]
+& [=trim(ART->Ref)]
+[etc endif]
+[etc if "L"$DlgValue("ColAttr")]
+&
+[=VnlUntName(TplLang())]
+[etc endif]
+[etc if "M"$DlgValue("ColAttr")]
+& \PreserveBackSlash{\raggedleft}
+[=komma(ART->QteVk)]
+[etc endif]
+[etc if "B"$DlgValue("ColAttr")]
+&
+[etc if !empty(ART->EAN)]
+
+\vspace{1pt}
+\barheight=7mm
+\EAN [=strtran(trim(ART->EAN),".","")]
+[etc endif]
+[etc endif]
+\\\
+\hline
+[etc if ArtIsTotal(VNL->IdArt).and.empty(DlgValue("ColSep"))]
+\bigskip \\\
+[etc endif]

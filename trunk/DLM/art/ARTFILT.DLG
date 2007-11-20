@@ -1,0 +1,63 @@
+// Artikel filtern
+before DlgDefault("von",0)
+before DlgDefault("hidden"," ")
+before DlgDefault("bis",10000)
+before DlgDefault("IdPar",space(LenIdPar()))
+before DlgDefault("IdGra",space(LenIdGra()))
+// before DlgDefault("Match",space(20))
+before DlgDefault("Date1",ctod(""))
+before DlgDefault("Date2",ctod(""))
+title "Artikel filtern"
+// field name="Match" \
+    caption="Match " \
+    caption2=" (auch Teile)"
+field name="IdPar" \
+    caption="Nur Lieferant " \
+    picture="@k@!"\
+    pick={|x|PickPar("L",x,"nur Lieferant :")}\
+    valid={||ph_refresh()}\
+    attrib="N"
+field block={||padr(ParName(DlgValue("IdPar")),30)} \
+      when={||.f.} color="N/W" caption=" "
+field name="IdGra" \
+    caption="Nur Gruppe " \
+    picture="@k@!"\
+    pick={|x|PickGra(x,"nur Artikel aus folgender Gruppe :")}\
+    valid={||ph_refresh()}\
+    attrib="N"
+field block={||padr(GraName(DlgValue("IdGra")),30)} \
+      when={||.f.} color="N/W" caption=" "
+field name="Date1" \
+    caption="Letzte Preisaktualisierung : vom " \
+    attrib="N"
+field name="Date2" \
+    caption=" bis zum "
+// field name="von" \
+    caption="VK DEM von " \
+    picture="9999999.99"\
+    pick={|x|PickNum(x)}\
+    attrib="N"
+// field name="bis" \
+    caption=" bis " \
+    picture="9999999.99"\
+    pick={|x|PickNum(x)}
+field name="hidden" \
+      caption2=" auch unsichtbare Artikel" \
+      reader={|x|CbxReader(x)}
+after DlgDefine("ArtFilter",if(empty(DlgValue("hidden")),"!'H'$Attrib",".t."))
+// after empty(DlgValue("von")).or.DlgPlus("ArtFilter",\
+      ".and.val(TVACDEM)>="+ltrim(str(DlgValue("von"))))
+// after empty(DlgValue("bis")).or.DlgPlus("ArtFilter",\
+  ".and.val(TVACDEM)<="+ltrim(str(DlgValue("bis"))))
+// after empty(DlgValue("Match")).or.\
+  DlgPlus("ArtFilter",".and.'"+trim(DlgValue("Match"))+"'$ART->Match")
+after empty(DlgValue("IdPar")).or.\
+  DlgPlus("ArtFilter",".and.ART->IdPar=='"+DlgValue("IdPar")+"'")
+after empty(DlgValue("IdGra")).or.\
+  DlgPlus("ArtFilter",".and.ART->iGra=='"+DlgValue("IdGra")+"'")
+after empty(DlgValue("Date1")).or.\
+  DlgPlus("ArtFilter",".and.dtos(ART->DatPrix)>='"+dtos(DlgValue("Date1"))+"'")
+after empty(DlgValue("Date2")).or.\
+  DlgPlus("ArtFilter",".and.dtos(ART->DatPrix)>='"+dtos(DlgValue("Date2"))+"'")
+
+

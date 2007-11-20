@@ -1,0 +1,12 @@
+// DLA.DEF
+ddPreCreate("setvar('a',CopyRec())")
+ddPreCreate("Confirm('Neue Dienstleistungsart anlegen ? (J/N)')")
+ddPreCreate('DlgDefine("id",DbfAutoInc(oDla()))')
+ddOnCreate("PasteRec(getvar('a'))")
+ddOnCreate("(DLA->IdDla:=DlgValue('id'))!=NIL")
+
+// ddPreCreate("DlgDefine('IdPar',PRJ->IdPar)")
+// ddPreCreate("DlgDefine('IdPar2',PRJ->IdPar2)")
+// ddOnCreate("(PRJ->IdPar:=DlgValue('IdPar'))!=NIL")
+
+

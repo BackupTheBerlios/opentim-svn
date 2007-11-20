@@ -1,0 +1,19 @@
+//
+// DLS1.QRY - generated 14.11.05
+// for DLS.DBF
+//
+column 1 DL-Nr.
+column 2 Datum say ""
+column 5 Ther. pict @K@!
+column 10 Akte pict @K
+column 0 Bezeichnung block padr(ParName(DLS->IdPar),20) skip .t.
+column 6 Art pict @K@!
+column 0 Art der DL block padr(DbfPeek(oDla(),DLS->IdDla,"DLA->Name1",""),40) pict @k@s20 skip .t.
+column 9 Z pict @K@!
+column 11 RgDatum say ""
+column 12 RgNr
+column 7 S pict @K@!
+column 8 Bemerkung pict @k@s20
+mask DLS
+order 1
+help DLS

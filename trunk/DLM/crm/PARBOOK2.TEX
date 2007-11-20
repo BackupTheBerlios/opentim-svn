@@ -1,0 +1,15 @@
+% PARBOOK1.TEX called from PARBOOK.TEX with fparse() on each PAR
+
+[=trim(PAR->Allo)] \textbf{[=trim(PAR->Firme)]}\
+[=trim1b(PAR->Vorname)][=trim1b(PAR->Name2,", ")]\
+[=if(empty(PAR->Name3),""," ("+trim(PAR->Name3)+")")]
+[etc if !empty(PAR->Rue)]
+[=trim1b(trim1(PAR->Rue)+trim1(ltrim(PAR->RueNum))+trim(PAR->RueBte),", ")]\
+[=if(PAR->Pays=="B  ".and.left(PAR->CP,3)=="470","",trim1b(ParCity(),", "))]
+[etc endif]
+[=trim1b(PAR->Tel,", ")]\
+[=trim1b(PAR->Fax,", Fax:~")]\
+[=trim1b(PAR->GSM,", G:~")]\
+[=trim1b(PAR->email,", ")]\
+[=trim1b(PAR->Memo,", ")]
+

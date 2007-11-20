@@ -1,0 +1,20 @@
+// Intrastat-Erkl„rung
+field name="Periode" \
+    caption="Periode von-bis " \
+    value=GsbPeriode() \
+    postedit={|x|GsbPeriode(x)} \
+    pick={|x|PickPerRange(x)}
+field name="Contact" \
+    caption="Kontaktperson " \
+    value=padr("Kontaktperson",30)
+field name="Tel" \
+    caption="Telefon       " \
+    value=padr("087/xx.xx.xx",30)
+field name="Fax" \
+    caption="Fax           " \
+    value=padr("087/xx.xx.xx",30)
+
+#include "PREVIEW.DLG"
+
+
+after AppSaveMem()

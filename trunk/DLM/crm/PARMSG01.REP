@@ -1,0 +1,40 @@
+header1 "šbersicht Problemmeldungen"
+header2 trim(ParName())
+header3 "Žnderungen zwischen " + dtocf(DlgValue("New1")) + " und " + dtocf(DlgValue("New2"))
+area { oMsg() }
+before p_setWidth(RptWidth())==NIL
+order 3
+start DlgValue("IdPar")
+while cblock("MSG->IdPar=='"+DlgValue("IdPar")+"'")
+// ValidateRecord {|| DlgDefine("QteCdv",DbfSum({oVna()},"qton1(VNA->QteUs)",5,ART->IdArt+"CDV "))}
+filter cblock(DlgValue("MsgFilter"))
+// filter {||!"H"$MSG->Attrib}
+// group key={||ART->iGra} text={|x|ART->iGra + " " + trim(GraName(ART->iGra)) + " :"} align="R"
+column header="Nr" width=4 text={||MSG->IdPdr}
+column header="Bezeichnung" width=60 text={||padr(MSG->Titre,60)}
+column header="Wartet" width=LenQte() \
+       when={||MSG->Status==" "} \
+       text={||MSG->Aufwand} \
+       value={||qton(MSG->Aufwand)} \
+       xsum={|x|ntoq(x,":")}
+column header="Aktiv" width=LenQte() \
+       when={||MSG->Status=="A"} \
+       text={||MSG->Aufwand} \
+       value={||qton(MSG->Aufwand)} \
+       xsum={|x|ntoq(x,":")}
+column header="Bereit" width=LenQte() \
+       when={||MSG->Status=="R"} \
+       text={||MSG->Aufwand} \
+       value={||qton(MSG->Aufwand)} \
+       xsum={|x|ntoq(x,":")}
+column header="Closed" width=LenQte() \
+       when={||MSG->Status=="C"} \
+       text={||MSG->Aufwand} \
+       value={||qton(MSG->Aufwand)} \
+       xsum={|x|ntoq(x,":")}
+column header="Total" width=LenQte() \
+       text={||MSG->Aufwand} \
+       value={||qton(MSG->Aufwand)} \
+       xsum={|x|ntoq(x,":")}
+group text={||"alle"}
+total // text={||"alle"}

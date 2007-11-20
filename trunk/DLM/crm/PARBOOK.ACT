@@ -1,0 +1,16 @@
+// PARBOOK.ACT
+
+DlgDefault("Draft"," ")
+DlgDefault("Model","BOOK")
+DlgDefault("AsPdf"," ")
+
+DlgDefine("Copies",1)
+DlgDefine("psnup",1)
+
+DlgExec("PARFILT")
+DlgExec("PARBOOK")
+
+DlgDefine("InFile","PAR"+DlgValue("Model")+".TEX")
+DlgDefine("OutFile","TMP")
+ActExec("TEXPARSE")
+

@@ -1,0 +1,18 @@
+#include "PARFILT.DLG"
+
+title MnuItemName()+" "+alltrim(PLS->IdPls)
+// title "Mitglieder hinzufgen fr "+alltrim(PLS->IdPls)
+
+before DlgDefault("PlpType",space(3)) \
+
+#if oPlp()!=NIL
+field name="PlpType" \
+      caption="zu H„nden  " \
+      pick={|x|PickDbcCode("PLPTYPE.DBC")}
+#endif
+
+after ParMbrCollect(\
+  PLS->IdPls,getvar("ParFilter"),NIL,NIL,NIL,\
+    iif(empty(getvar("PlpType")),NIL,\
+      "PLP->Type=='"+getvar("PlpType")+"'")\
+).and.ddGoBottom(.t.)

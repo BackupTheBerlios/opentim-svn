@@ -1,0 +1,30 @@
+// TIMTEST.ACT
+// DlgExec("TIMTEST") replaces TimTest(cTplIni,xlChecksolde,lDlg,cPreview)
+
+empty(DlgValue("GenTest")).or.GenTest("GenTest()")
+empty(DlgValue("ArtTest")).or.ArtTest("ArtTest()")
+empty(DlgValue("VenTest")).or.VenTest("VenTest()")
+empty(DlgValue("VnlTest")).or.VnlTest("VnlTest()")
+empty(DlgValue("FinTest")).or.FinTest("FinTest()")
+empty(DlgValue("FnlTest")).or.FnlTest("FnlTest()")
+empty(DlgValue("ParTest")).or.ParTest("ParTest()")
+empty(DlgValue("HstTest")).or.HstTest("HstTest()")
+#if HasOption("IMP")
+empty(DlgValue("LniTest")).or.LniTest("LniTest()")
+empty(DlgValue("BudTest")).or.BudTest("BudTest()")
+empty(DlgValue("MviTest")).or.MviTest("MviTest()")
+empty(DlgValue("MviCtbTest")).or.MviCtbTest("MviCtbTest()")
+empty(DlgValue("CtbBudTest")).or.CtbBudTest("CtbBudTest()")
+empty(DlgValue("ImpImlTest")).or.ImpImlTest("ImpImlTest()")
+empty(DlgValue("TraTest")).or.TraTest("TraTest()")
+#endif
+#if HasOption("ODS")
+empty(DlgValue("OdlTest")).or.OdlTest("OdlTest()")
+#endif
+#if HasOption("SER")
+empty(DlgValue("SerTest")).or.SerTest("SerTest()")
+#endif
+oSes()==NIL.or.empty(getvar("SesTest")).or.SesTest("Sitzungen")
+oKtg()==NIL.or.empty(getvar("KtgTest")).or.KtgTest("Kontingente")
+oKrg()==NIL.or.empty(getvar("KrgTest")).or.KrgTest("Rechnungen")
+

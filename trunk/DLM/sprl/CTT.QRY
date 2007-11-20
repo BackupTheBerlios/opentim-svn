@@ -1,0 +1,13 @@
+//
+// C:\SOFT\RELEASE\TIM220\STD01D\CTT.QRY - generated 10.01.97
+// for CTT.DBF
+//
+column 2 Periode
+column 9 IdCtr pict @K@!
+column 1 IdJnl pict @K@!
+column 3 IdTax pict @K@!
+column 4 IdCtf pict @K@!
+column 5 DC pict @K@!
+column 7 Basisbetrag pict @K@!
+column 8 MWStBetrag pict @K@!
+column 6 Differenz

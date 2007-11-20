@@ -1,0 +1,73 @@
+% VENSTD2.TEX on [=MsgIdJnlDoc()+"."+VNL->Line]
+[etc if !"H"$VNL->Attrib]
+[etc do VnlRefExist()]
+[etc do !VnlTotBegin().or.setvar("ColAttr",trim(VNL->Attrib))]
+[etc if left(IdArt,1)=="+"\
+    .or.(trim(VNL->IdArt)=="*".and.empty(VNL->Desig))\
+    .or.trim(VNL->IdArt)=="A"\
+    .or."S"$VNL->Attrib\
+    .or."V"$ART->Attrib\
+  ]
+    [etc if getvar("TableActive")]
+      [etc if !empty(getvar("ColSep"))]
+      \hline
+      [etc endif]
+    \end{tabularx}
+    [=setvar("TableActive",.f.)]
+    [=setvar("ColHeader",.t.)]
+  [etc endif]
+[etc endif]
+[etc if "P"$VNL->Attrib.and.getvar("TableActive")]
+[etc if !empty(getvar("ColSep"))]
+\hline
+[etc endif]
+    \end{tabularx}
+    \smallskip
+
+    [etc do setvar("TableActive",.f.)]
+    [etc do setvar("ColHeader",.f.)]
+  [etc endif]
+[etc endif]
+[etc if "S"$VNL->Attrib]
+
+\pagebreak
+
+[etc endif]
+[etc if empty(VNL->cMont).and.("U"$VNL->Attrib.or.left(VNL->IdArt,1)=="+")]
+  \sub[=if(substr(VNL->IdArt,2,1)=="+","sub","")]section\
+  [=if(left(VNL->IdArt,1)=="+","","*")]{\
+    [=trim(if(empty(VNL->Desig),VnlObjName(TplLang()),VNL->Desig))]\
+    }
+  [etc if !empty(VNL->Memo)]
+  \par
+  \nopagebreak\par [etc do ToStream(Memo2Tex(VNL->Memo))]
+  \nopagebreak\par
+  [etc endif]
+[etc else]
+  [etc if trim(VNL->IdArt)=="*".and.empty(VNL->Desig+VNL->cMont)]
+    [etc if !empty(VNL->Memo)]
+    \par [etc do ToStream(Memo2Tex(VNL->Memo))] \par
+    \nopagebreak
+    [etc endif]
+  [etc else]
+    [etc if "V"$ART->Attrib.and.empty(VNL->cMont)]
+      \smallskip
+      \par{\em [=trim(if(empty(VNL->Desig),VnlObjName(TplLang()),VNL->Desig))]}
+      \nopagebreak
+      [etc if !empty(VNL->Memo)]
+      \begin{memo}
+      [etc do ToStream(Memo2Tex(VNL->Memo))]
+      \end{memo}
+      \nopagebreak
+      [etc endif]
+      [etc if !empty(ART->Memo1)]
+      \begin{memo}
+      [etc do ToStream(Memo2Tex(ArtMemo(TplLang())))]
+      \end{memo}
+      [etc endif]
+      \nopagebreak\par
+    [etc else]
+      [etc do fparse("VEN"+getvar("Model")+"3.TEX")]
+    [etc endif]
+  [etc endif]
+[etc endif]

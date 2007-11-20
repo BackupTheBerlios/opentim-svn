@@ -1,0 +1,14 @@
+//
+// FINDEV.QRY - generated 07.09.05
+// for FIN.DBF
+//
+column 2 =utr("DocId","Dok.Nr","NøDoc")
+column 3 =utr("Date","Datum","Date") say ""
+column 7 St pict !
+column 9 =utr("Old bal.","Alter     ;     Saldo","solde i") pict @K@!
+column 10 =utr("New bal.","Neuer     ;     Saldo","Solde f.") pict @K@!
+column 4 =utr("Remark","Bemerkung","Remarque") pict @K@S20
+column 8 Per. pict @K@!
+column 11 W„ pict @K@!
+column 6 Wechselk. pict @K@!
+mask FINDEV

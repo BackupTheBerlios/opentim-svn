@@ -1,0 +1,88 @@
+HSTREP.PKG (c) PAC Systems Eupen 1999
+⁄ƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒø
+≥ INHALTSVERZEICHNIS ≥
+¿ƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒŸ
+  1. Allgemeine Dokumentation
+  2. Installation
+  3. Bekannte Probleme
+  4. énderungsprotokoll
+
+⁄ƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒø
+≥ 1. ALLGEMEINE DOKUMENTATION  ≥
+¿ƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒŸ
+Dies ist die Datei HSTREP.PKG, die alle technischen Notizen zum
+Ersetzen der HistJnl() durch entsprechende .rep-Dateien enthÑlt.
+
+Vorteile Ausdruck Journale via .rep statt HistJnl() :
+- Performance bei Datenbanken mit mehr als einem Jahr Buchungen
+- Flexibler an individuelle BedÅrfnisse anpassbar.
+- Monatliche Zwischensummen mîglich bei Ausdruck von mehr als einer
+  Periode.
+- HistJnl() wird langfristig abgesetzt
+- Mîglichkeit, eine Version der RechnungsbÅcher fÅrs deutsche Finanzamt
+  auszudrucken.
+
+⁄ƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒø
+≥ 2. INSTALLATION      ≥
+¿ƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒŸ
+Die Dateien des Pakets aufspielen :
+- HSTREP.PKG : die vorliegende Datei
+- HSTVEN.DLG : Dialogdatei
+- HSTFIN.DLG : Dialogdatei
+- HSTVEN.REP
+- HSTFIN.REP
+- HST.DEF
+Manuelle Anpassungen :
+- MNUPRINT.DBC : HistJnl() ersetzen durch RepPrint("HSTVEN")
+                                          RepPrint("HSTFIN")
+- öberflÅssige Kolonnen in den .rep-Dateien rausschmei·en.
+- CLJ.DBC (D1, D2)
+⁄ƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒø
+≥ 3. BEKANNTE PROBLEME ≥
+¿ƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒŸ
+⁄ƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒø
+≥ 4. éNDERUNGSPROTOKOLL ≥
+¿ƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒƒŸ
+19990409
+- Wenn ArtikelverkÑufe Åber die IPB verteilt werden, gibt es ja zwei
+  Philosophien zum Zuweisen des Generalkontos : (a) Ventilierung nach
+  verwendetem MWSt-Code oder (b) Ventilierung nach anderen Kriterien
+  (Warenkategorie). Bei (b) mussten die .hcl-Dateien bisher noch
+  individuell angepasst werden. Die neuen hcl-Dateien schauen auf
+  HST->IdTax, wenn GEN->IdClj==".." ist.
+
+19990421
+- HSTFIN.DLG und HSTFIN.REP
+- Anwendung der neuen Mîglichkeit von #if und #endif
+- Mîglichkeit, eine Version der RechnungsbÅcher fÅrs deutsche Finanzamt
+  auszudrucken. In dieser Version werden nur einige Kolonnen und nur die
+  Rechnungen mit MWSt-Regime "D" gedruckt.
+- Rename HSTREP.TXT HSTREP.PKG
+
+19990505 : Traduction. Les REP et DLG sont maintenant bilinques.
+
+19990512 : Die Summen (Rechnungen/Gutschriften) waren im Verkauf der
+falschen Zeile zugeordnet (VEN->DC wurde einfach mit "D" verglichen,
+statt mit JnlDC(VEN->IdJnl).
+
+19990526
+- Die Kolonne "Fach 86" (Einkauf Belgien) zeigte fÑlschlicherweise die
+  Buchungen mit IdTax "NI" an, statt die mit IdTax$"IM ,IM6,NIM".
+- HSTVEN.REP : "Einkauf Belgien" war noch nicht Åbersetzt, jetzt ist
+  auch dieser Teil zweisprachig. IdCtr$"EA" statt IdCtr=="E"
+
+19990602
+- HSTFIN.DLG und HSTFIN.REP : Standardwert im Feld IdJnl. Variable
+  "IdJnlFin" statt "IdJnl". Wenn man das Dialogfenster ein zweites Mal
+  aufrief, dann war der Name des Journals wieder auf leer. Idem fÅr
+  HSTVEN.*
+
+19990628
+- HSTVEN.REP : Die Kolonne "Fach 87" zeigte nur BetrÑge mit MWst-Code C.
+  Jetzt auch mit IS und NIS.
+
+20000105
+- HSTFIN.REP und HSTVEN.REP funktionieren jetzt auch wenn LenIdCtr() nicht
+  1 ist und LenIdGen() verschieden von LenIdPar() ist (Kolonne Konto)
+- HSTVEN.REP kennt jetzt ebenfalls die Kolonnen fÅr
+  Honoraraufstellungen ("Kunde" und "Umsatz 0%").

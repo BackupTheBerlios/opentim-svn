@@ -1,0 +1,9 @@
+title "Lettrierungen rekonstruieren"
+
+before DlgDefault("HstDate",UserDate())
+
+field name="HstDate" \
+      caption="Situation vom " \
+      caption2=" rekonstruieren"
+
+

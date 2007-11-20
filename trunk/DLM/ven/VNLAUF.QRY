@@ -1,0 +1,15 @@
+//
+// C:\SOFT\RELEASE\TIM220\220D\VNLAUF.QRY - generated 06.05.98
+// for VNL.DBF
+//
+window 11 80 11 0 
+column 6 =utr("Prd#","Art.Nr.","N¯art.") pict @K@! attr P
+column 21 =utr("Description","Bezeichnung","DÇsignation") pict @K@S36 attr P
+column 8 =utr("Qty","Menge","QtÇ") pict @K@! attr P
+column 9 StÅckpreis pict @K@!
+column 16 =utr("price","Netto","htva") skip .t.
+column 13 M pict @K@! skip .t.
+column 14 =utr("inclTax","Brutto","TVAC") skip .t.
+column 11 =utr("VAT","MWSt","TVA") pict @K@! skip .t.
+column 5 V pict ! skip .t.
+column 30 DU pict @K@! skip .t.

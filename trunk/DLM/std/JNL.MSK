@@ -1,0 +1,53 @@
+//
+// t:\data\luc\release\tim4\dlm\STD\JNL.MSK - generated 10.01.03
+// for JNL.DBF
+//
+
+
+string 2 2 Jnl
+string 2 49 Typ
+string 2 7 Journalbezeichnung
+string 10 2 Attribute
+string 10 28 Druckmaske
+string 6 2 Zentralisierungsart
+string 7 28 Gegenkonto
+string 7 2 Buchungsrichtung (D/C)
+string 6 28 W„hrung
+string 2 39 Gruppe
+string 8 2 Vorgangsart
+string 9 28 Bildschirmmaske
+string 16 1 Dokumentbezeichnungen
+string 18 1 =MemLang1
+string 19 1 =MemLang2
+string 20 1 =MemLang3
+string 17 3 normal
+string 17 29 umgekehrt
+string 9 2 Dezimalstellen MWSt.
+string 12 2 Letztes Dokument
+string 14 2 =utr("definitively closed until","abgeschlossen bis Periode","cl“tur‚ jusque p‚riode")
+string 12 28 =utr("Sequence method","Nummerierungsart","Num‚rotation")
+
+get 1 3 2
+get 3 3 7 pict @K@S30
+get 14 3 39
+get 2 3 49
+get 7 6 25
+get 8 7 25
+get 16 8 25
+get 15 9 25
+get 4 10 14
+get 10 6 42
+get 6 7 42
+get 23 9 47
+get 17 10 42
+get 5 10 46
+get 28 12 20 pict @K@!
+get 33 12 46 pict @K@!
+get 11 18 3
+get 12 19 3
+get 13 20 3
+get 20 18 29
+get 21 19 29
+get 22 20 29
+get 29 14 28
+wait 18 24 3 55 1

@@ -1,0 +1,27 @@
+
+KIBEDEKLARATSIOON
+
+1     18% m„„raga maksustatavad toimingud ja tehingud
+2     5% m„„raga maksustatavad toimingud ja tehingud
+3     0% m„„raga maksustatavad toimingud ja tehingud sh
+3.1   1) kauba hendusesisene k„ive
+3.2   2) kauba eksport sh
+3.2.1 k„ibemaksutagastusega mk reisijale
+4     K„ibemaks kokku (18% lahtrist 1 + 5% lahtrist 2) (+)
+5     Kokku sisendk„ibemaksusumma, mis on seadusega lubatud
+      maha arvata sh (-)
+5.1   1) tollis impordilt tasutud k„ibemaks
+5.2   2) pohivara soetamiselt tasutud k„ibemaks
+6     Kauba hendusesisene soetamine
+7     Muu kauba soetamine ja teenuse saamine, mida maksustatakse
+      k„ibemaksuga
+8     Maksuvaba k„ive
+9     Teises liikmesriigis paigaldatava voi kokkupandava kauba
+      maksustatav v„„rtus
+10    T„psustused (+)
+11    T„psustused (-)
+12    Tasumisele kuuluv k„ibemaks
+      (lahter 4 - lahter 5 + lahter 10 - lahter 11) (+)
+13    Enammakstud k„ibemaks
+      (lahter 4 - lahter 5 + lahter 10 - lahter 11) (-)
+

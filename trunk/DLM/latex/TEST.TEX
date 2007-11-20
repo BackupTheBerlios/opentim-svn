@@ -1,0 +1,144 @@
+\documentclass[a4paper]{report}
+
+% input encoding
+\usepackage[cp850]{inputenc}
+% N.B.: Windows : ansinew
+%       Linux   : latin1
+
+\usepackage{verbatim}
+% \usepackage{array}
+
+\renewcommand{\familydefault}{cmtt}
+
+\begin{document}
+
+fd sjfl sjdklfs
+
+
+\section*{Using parboxes}
+
+\parbox[][][s]{1.2cm}{
+12
+}
+\parbox[b][][t]{3cm}{
+bli bli blibli bli blib blib
+bli bli blibli bli blib blib
+bli bli blibli bli blib blib
+bli bli blibli bli blib blib
+}
+\parbox[][][b]{1.2cm}{
+1000,-
+}
+
+
+\section*{Using minipage}
+
+this is a test
+
+\begin{minipage}[b]{3cm}
+Description
+\end{minipage}
+\begin{minipage}{1.2cm}\raggedleft
+Qty.
+\end{minipage}
+\begin{minipage}{2cm}\raggedleft
+Price
+\end{minipage}
+
+\begin{minipage}[b]{3cm}
+blu blu blublu blu blub blub
+blu blu blublu blu blub blub
+blu blu blublu blu blub blub
+blu blu blublu blu blub blub
+\end{minipage}
+\begin{minipage}{1.2cm}\raggedleft
+12
+\end{minipage}
+\begin{minipage}{2cm}\raggedleft
+1000,-
+\end{minipage}
+
+
+
+\section*{(Versuche)}
+
+this is a test
+
+\hspace{-5cm}
+\begin{minipage}[b]{20cm}
+minipage 20cm
+minipage 20cm
+minipage 20cm
+minipage 20cm
+minipage 20cm
+minipage 20cm
+minipage 20cm
+minipage 20cm
+minipage 20cm
+minipage 20cm
+minipage 20cm
+minipage 20cm
+minipage 20cm
+minipage 20cm
+minipage 20cm
+minipage 20cm
+minipage 20cm
+minipage 20cm
+\end{minipage}
+
+
+\section*{(hoffset)}
+
+ djsfklsd jfkls djfklsd jfklsd fjklsd fjklsd jfkl jl
+ djsfklsd jfkls djfklsd jfklsd fjklsd fjklsd jfkl jl
+ djsfklsd jfkls djfklsd jfklsd fjklsd fjklsd jfkl jl
+
+
+\setlength{\hoffset}{1cm}
+after  hoffset 1cm
+fjsdkl fjklsd jfklsd jfklds fjksqll
+
+
+
+
+\section*{figure}
+
+
+\begin{figure}
+\begin{minipage}[b]{.4\linewidth} % [b] => Ausrichtung an \caption
+Bild links
+\caption{Bildunterschrift links}
+\end{minipage}
+\hspace{.1\linewidth}% Abstand zwischen Bilder
+\begin{minipage}[b]{.4\linewidth} % [b] => Ausrichtung an \caption
+Bild rechts
+\caption{Bildunterschrift rechts}
+\end{minipage}
+\end{figure}
+
+
+
+\section*{Using the tabbing environment}
+
+
+\begin{tabbing}
+Qty. \= \parbox{5cm}{Description} \= Price \\\
+12 \>
+\parbox[t]{5cm}{
+this is tabbing environment
+this is tabbing environment
+this is tabbing environment
+this is tabbing environment
+this is tabbing environment
+this is tabbing environment
+}
+\>
+\raggedleft 1000,-
+\end{tabbing}
+
+
+
+
+
+\end{document}
+

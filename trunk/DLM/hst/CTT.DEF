@@ -1,0 +1,16 @@
+// Anpassungen CTT.DBF
+ddAddSpecial(\
+  {||DbfEdit(\
+    {oHst(),oGen(),oPar(),oFin(),oVen()},\
+    "Historik : " + CTT->Periode ,\
+    "HSTPER",NIL,\
+    "HST->DC=='"+CTT->DC\
+      +"'.and.HST->IdCtr=='"+CTT->IdCtr+"'",\
+    CTT->Periode\
+  )}, \
+  "Detail                    [F2]",\
+  -1\
+)
+//      +"'.and.DbfPeek(oGen(),HST->IdGen,'GEN->IdClj','  ')=='"\
+//      +CTT->IdCtf+"'",
+

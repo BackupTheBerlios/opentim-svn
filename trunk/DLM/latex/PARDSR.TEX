@@ -1,0 +1,92 @@
+% pardsr.tex
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[cp850]{inputenc}
+% \usepackage{lscape}
+\usepackage{tabularx}
+\usepackage{latexsym}
+% \usepackage[ngerman,german]{babel}
+
+\sloppy
+
+% vertical settings
+\setlength{\voffset}{-1in}
+\setlength{\textheight}{250mm}
+\setlength{\topmargin}{10mm}
+\setlength{\headheight}{0mm}
+\setlength{\topskip}{2mm}
+
+
+% horizontal settings
+\setlength{\hoffset}{-1in}
+\setlength{\textwidth}{190mm}
+\setlength{\oddsidemargin}{10mm}
+
+% other settings
+
+\setlength{\parindent}{0mm}
+\setlength{\parskip}{0.5\baselineskip}
+
+\pagestyle{empty}
+
+
+\begin{document}
+
+\clearpage
+{\Large \textbf{Problem-Dossier}}
+\hfill\parbox{4cm}{
+$\Box$ Tim-Abo\newline
+$\Box$ dringend
+}
+
+Kunde: [=trim(PAR->Allo)] [=trim(PAR->Vorname)] [=trim(PAR->Firme)],
+[=ParStreet()],
+[=ParCity()],
+Tel.~[=trim(PAR->Tel)],
+Fax~[=trim(PAR->Fax)]
+
+\vfill
+
+\newcommand{\zeile}{
+\vspace{13mm} & & & \\ \hline
+}
+
+\setlength{\extrarowheight}{2mm}
+% \setlength{\tabcolsep}{2mm}
+
+\begin{tabularx}{\textwidth}{|p{2cm}|p{2cm}|X|p{2cm}|}
+
+\hline
+
+Datum & wer & was & \\\
+
+\hline
+
+\zeile
+\zeile
+\zeile
+\zeile
+\zeile
+\zeile
+\zeile
+\zeile
+\zeile
+\zeile
+\zeile
+\zeile
+\zeile
+\zeile
+\zeile
+\zeile
+\zeile
+\zeile
+\zeile
+\zeile
+\zeile
+\zeile
+\zeile
+
+
+\end{tabularx}
+
+\end{document}

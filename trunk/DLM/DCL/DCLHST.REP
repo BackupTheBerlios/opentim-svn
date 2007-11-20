@@ -1,0 +1,57 @@
+initialize SetPeriode(getvar("range1"))
+header1 trim1(LngExpr("DCL->Name"))+" Detail" // MnuItemName()
+header2 PerText()
+header3 ""
+area { oHst(), oPar(), oGen(), oVen() }
+order 9 // HST->Periode+dtos(HST->Date), sh. HST.DEF
+start PerStart(MemPer1)
+while {||ChkPeriode(HST->Periode) <= 0}
+filter cblock(DclJnlFilter()) // {||HST->IdJnl$"HP ,FOR,BEF,EUR"}
+ValidateRecord {||GenExist(HST->IdGen) }
+ValidateRecord {||empty(HST->IdCtr).or.ParExist(HST->IdPar) }
+OnNoValue {|| Confirm(\
+  MsgIdJnlDoc() + " : Buchung " + HST->IdGen + \
+  " konnte keiner Kolonne zugewiesen werden !", \
+  MsgContinue() \
+)}
+
+group key={|| HST->Periode+dtos(HST->Date) } after={||!PrintLine()} text={|x|NIL} align="R"
+// group key={|| HST->Periode } text={|x|HST->Periode } align="R" after={||RptTit3()}
+group text={|x|"Gesamt"} align="L"
+
+column header="Datum" width=8 text={||dtoc(HST->Date)} when={|grp|IsFirst(1)}
+column header="Jnl" width=LenIdJnl() text={||HST->IdJnl}
+column header="Dok.Nr" width=6 text={||HST->IdDoc}
+column header="G-Kto" width=LenIdGen() text={||HST->IdGen}
+column header="P-Kto" width=LenIdPar() text={||HST->IdPar}
+column header="Name" width=20 text={||padr(\
+  if(empty(HST->IdCtr),GenName(),ParName()),20)}
+// column header="Per." width=4 text={||HST->Periode} when={|grp|IsFirst(1)}
+
+// #exec DbcLoop("CLJ.DBC",{|x|\
+  !empty(x[1]).or.RptAddColumn({x[2]},LenMntF(),\
+   cblock('GEN->IdClj=="'+x[2]+'"'),\
+   cblock('if(HST->DC=="C",val(HST->Mont),-val(HST->Mont))')\
+  )})
+
+column header="Value" width=LenMont()+2 text={||HST->Mont+" "+HST->DC}
+
+#exec DbfScan({oDcf()},1,DCL->IdDcl,"DCF->IdDcl==DCL->IdDcl",\
+  "DcfHasValue()",\
+  "RptAddColumn({DCF->IdDcf},1,\
+   cblock(DcfGenFilter()+'.and.'+DcfHstFilter()),\
+   cblock('1'),cblock('chr(88)')\
+  )")
+
+// #exec DbfScan({oDcf()},1,DCL->IdDcl,"DCF->IdDcl==DCL->IdDcl",\
+  "DcfHasValue()",\
+  "RptAddColumn({DCF->IdDcf},LenMntF(),\
+   cblock(DcfGenFilter()+'.and.'+DcfHstFilter()),\
+   cblock(DcfValExpr())\
+  )")
+
+// column header="l+f" width=LenMntF() \
+       value={||val(HST->Mont)} \
+       text={|x|ntomf(x)} 
+
+total text={||"Gesamt"} when={|nCount|nCount>1}

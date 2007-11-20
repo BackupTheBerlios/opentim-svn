@@ -1,0 +1,48 @@
+MnuAddTitle("~Addressbook")
+MnuAddItem("~PAR.DBF : Partners             ",{||DbfEdit({oPar(),oPlz(),oNat()})})
+MnuAddItem("~PLP.DBF : Partner2Partner links",{||DbfEdit({oPlp(),oPar(),oPlz(),oNat()})})
+MnuAddItem("~PLZ.DBF : Cities               ",{||DbfEdit({oPlz(),oNat()})})
+MnuAddItem("~NAT.DBF : Nations              ",{||DbfEdit({oNat()})})
+
+MnuAddTitle("~Stock")
+MnuAddItem("~ART.DBF : Products             ",{||DbfEdit({oArt(),oGra()})})
+MnuAddItem("~ALA.DBF : Product2Product links",{||DbfEdit({oAla(),oArt(),oGra()})})
+oAcf()==NIL.or.MnuAddItem("AC~F.DBF : Partnerpreise",\
+  {||DbfEdit({oAcf(),oPar(), oArt(),oGra()})})
+
+MnuAddTitle("~Invoicing")
+MnuAddItem("~VEN.DBF : PartnerDocuments"      ,{||DbfEdit({oVen(),oPar(),oPlz()})})
+MnuAddItem("~VNL.DBF : VEN contents"          ,{||DbfEdit({oVnl(),oArt(),oGen(),oVen(),oPar(),oPlz()})})
+!HasDlm("VNA").or.MnuAddItem("~VNA.DBF : Fakturationsvorschl„ge",\
+  {||DbfEdit({oVna(),oArt(),oGen(),oVen(),oPar(),oPlz()})})
+MnuAddItem("~TAX.DBF : V.A.T. codes    ",{||DbfEdit({oTax(),oGen()})})
+
+MnuAddTitle("~Financial")
+MnuAddItem("~FIN.DBF : FinancialDocuments",{||DbfEdit({oFin()})})
+MnuAddItem("~FNL.DBF : FIN contents      ",{||DbfEdit({oFnl(),oPar(),oGen()})})
+MnuAddSep()
+MnuAddItem("~HST.DBF : history           ",{||DbfEdit({oHst(),oVen(),oFin(),oPar(),oGen()})})
+MnuAddItem("~CTT.DBF                     ",{||DbfEdit({oCtt()})})
+MnuAddItem("~CTG.DBF                     ",{||DbfEdit({oCtg()})})
+MnuAddItem("~CTP.DBF                     ",{||DbfEdit({oCtp()})})
+
+#if HasDlm("WWW")
+MnuAddTitle("~Web")
+MnuAddItem("~RFX.DBF : X-references ",{||DbfEdit({oRfx(),oArt(),oMsx(),oNew(),oPar(),oVoc()})})
+MnuAddItem("~KWD.DBF : Keywords ",{||DbfEdit({oKwd()})})
+MnuAddItem("~KWI.DBF : Keyword instances ",{||DbfEdit({oKwi(),oArt(),oMsx(),oNew(),oPar(),oVoc()})})
+#endif
+
+MnuAddTitle("~Other")
+MnuAddItem("~MSG.DBF Correspondence      ",{||DbfEdit({oMsg(),oPar()})})
+#if oPrj() != NIL
+MnuAddItem("~PRJ.DBF Projects            ",{||DbfEdit({oPrj(),oPar()})})
+#if oMbr() != NIL
+MnuAddItem("~MBR.DBF Memberships",         {||DbfEdit({oMbr(),oPar(),oPls()})})
+#endif
+
+MnuAddTitle("~System")
+MnuAddItem("~TPL.DBF Templates           ",{||DbfEdit({oTpl()})})
+MnuAddItem("~FLT.DBF Views               ",{||DbfEdit({oFlt()})})
+
+FileExec("prog.mnu")

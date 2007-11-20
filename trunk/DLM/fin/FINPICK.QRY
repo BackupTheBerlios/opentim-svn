@@ -1,0 +1,15 @@
+//
+// FINPICK.QRY - generated 02.08.2001
+// for FIN.DBF
+//
+window 15 70 0 0 
+column 2 =utr("DocId","Dok.Nr","NøDoc")
+column 8 Per. pict @K@!
+column 3 =utr("Date","Datum","Date") say ""
+column 4 =utr("Remark","Bemerkung","Remarque") pict @K@S20
+column 11 W„ pict @K@!
+column 7 S pict !
+column 5 Status
+column 6 W-Kurs pict @K@!
+column 9 Saldo 1
+column 10 Saldo 2

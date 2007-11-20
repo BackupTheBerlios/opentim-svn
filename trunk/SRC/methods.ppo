@@ -1,0 +1,1095 @@
+#line 1 "C:\ALASKA\XPPW32\INCLUDE\STD.CH"@"STD.CH" 
+#line 1 "C:\ALASKA\XPPW32\INCLUDE\Set.ch"@"Set.ch" 
+#line 1 "C:\ALASKA\XPPW32\INCLUDE\natmsg.ch"@"natmsg.ch" 
+#line 18 "C:\ALASKA\XPPW32\INCLUDE\Set.ch" 
+#line 37 "C:\ALASKA\XPPW32\INCLUDE\STD.CH" 
+#line 1 "C:\ALASKA\XPPW32\INCLUDE\Get.ch"@"Get.ch" 
+#line 42 "C:\ALASKA\XPPW32\INCLUDE\STD.CH" 
+#line 1 "C:\ALASKA\XPPW32\INCLUDE\Prompt.ch"@"Prompt.ch" 
+#line 47 "C:\ALASKA\XPPW32\INCLUDE\STD.CH" 
+#line 1 "C:\ALASKA\XPPW32\INCLUDE\Memvar.ch"@"Memvar.ch" 
+#line 53 "C:\ALASKA\XPPW32\INCLUDE\STD.CH" 
+#line 1 "C:\ALASKA\XPPW32\INCLUDE\collat.ch"@"collat.ch" 
+#line 58 "C:\ALASKA\XPPW32\INCLUDE\STD.CH" 
+#line 1 "methods.prg" 
+#line 1 "Tim.ch"@"Tim.ch" 
+#line 1 "Lib.ch"@"Lib.ch" 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+memvar nKey
+memvar GetList
+#line 1 "precust.ch"@"precust.ch" 
+#line 84 "Lib.ch" 
+#line 1 "cust.ch"@"cust.ch" 
+#line 1 "t:\svnwork\tim\trunk\SRC\CUST\spz.CH"@"t:\svnwork\tim\trunk\SRC\CUST\spz.CH" 
+#line 1 "cust.ch" 
+#line 85 "Lib.ch" 
+#line 1 "postcust.ch"@"postcust.ch" 
+#line 86 "Lib.ch" 
+#line 1 "appinit.ch"@"appinit.ch" 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+memvar MrkInstall
+
+memvar MrkStr1
+memvar MrkStr2
+memvar MrkStr3
+memvar MrkMaxUsers
+memvar MemVersion
+memvar MemName1
+memvar MemName2
+memvar MemName3
+memvar MemLang1
+memvar MemLang2
+memvar MemLang3
+#line 89 "Lib.ch" 
+#line 1 "C:\ALASKA\XPPW32\INCLUDE\Inkey.ch"@"Inkey.ch" 
+#line 90 "Lib.ch" 
+#line 1 "types.ch"@"types.ch" 
+#line 91 "Lib.ch" 
+#line 1 "C:\ALASKA\XPPW32\INCLUDE\gra.ch"@"gra.ch" 
+#line 93 "Lib.ch" 
+#line 1 "C:\ALASKA\XPPW32\INCLUDE\os.ch"@"os.ch" 
+#line 94 "Lib.ch" 
+#line 1 "getsysph.ch"@"getsysph.ch" 
+#line 105 "Lib.ch" 
+#line 1 "ddGet.ch"@"ddGet.ch" 
+#line 106 "Lib.ch" 
+#line 1 "Inkey2.ch"@"Inkey2.ch" 
+#line 107 "Lib.ch" 
+#line 1 "data.ch"@"data.ch" 
+#line 109 "Lib.ch" 
+#line 1 "views.ch"@"views.ch" 
+#line 110 "Lib.ch" 
+#line 1 "montant.ch"@"montant.ch" 
+#line 111 "Lib.ch" 
+#line 1 "ddEdit.ch"@"ddEdit.ch" 
+#line 112 "Lib.ch" 
+#line 1 "Windows.ch"@"Windows.ch" 
+#line 113 "Lib.ch" 
+#line 1 "C:\ALASKA\XPPW32\INCLUDE\setcurs.ch"@"setcurs.ch" 
+#line 114 "Lib.ch" 
+#line 1 "C:\ALASKA\XPPW32\INCLUDE\Box.ch"@"Box.ch" 
+#line 1 "C:\ALASKA\XPPW32\INCLUDE\natmsg.ch"@"natmsg.ch" 
+#line 20 "C:\ALASKA\XPPW32\INCLUDE\Box.ch" 
+#line 115 "Lib.ch" 
+#line 1 "Report.ch"@"Report.ch" 
+#line 116 "Lib.ch" 
+#line 1 "C:\ALASKA\XPPW32\INCLUDE\FileIO.ch"@"FileIO.ch" 
+#line 117 "Lib.ch" 
+#line 1 "printer.ch"@"printer.ch" 
+#line 118 "Lib.ch" 
+#line 1 "abrowse.ch"@"abrowse.ch" 
+#line 119 "Lib.ch" 
+#line 1 "login.ch"@"login.ch" 
+#line 120 "Lib.ch" 
+#line 1 "smenu.ch"@"smenu.ch" 
+#line 121 "Lib.ch" 
+#line 1 "sayget.ch"@"sayget.ch" 
+#line 122 "Lib.ch" 
+#line 1 "C:\ALASKA\XPPW32\INCLUDE\directry.ch"@"directry.ch" 
+#line 124 "Lib.ch" 
+#line 52 "Tim.ch" 
+#line 1 "Objects.ch"@"Objects.ch" 
+#line 53 "Tim.ch" 
+
+
+
+
+
+memvar MemPays
+
+
+
+
+
+memvar MemRapLimit
+memvar MemPer1
+memvar MemPer2
+memvar MemMatch
+memvar MemAttrib
+
+
+
+
+
+memvar MemTxtCor
+memvar MemIdDev
+memvar MemNoTva
+memvar MemPickArtMode
+#line 19 "methods.prg" 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  static MSG_READONLY := " : dieser Record ist schreibgeschtzt !"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+static scIdPrt  := NIL
+static scIdPrf  := NIL
+static scExpr   := NIL
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+FUNCTION GenPreEdit()
+if "R" $ GEN->Attrib
+  SetMsg(GEN->IdGen + MSG_READONLY )
+  RETURN .f.
+endif
+if ("B"  $ UsrAttrib()) ;RETURN (.t.) ;endif
+Warning(MsgNoAccess(),NIL,"WRN028")
+RETURN .F.
+
+
+
+
+
+
+FUNCTION ArtPostEdit
+if (! OnTest(oArt())) ;RETURN (.f.) ;endif
+if (empty(ART->IdCat)) ;RETURN (.t.) ;endif
+
+  if (! CtaExist(ART->IdCat)) ;RETURN (.f.) ;endif
+
+RETURN .t.
+
+FUNCTION ArtPreEdit()
+if "R"  $ ART->Attrib
+  SetMsg(ART->IdArt + MSG_READONLY )
+  RETURN .f.
+endif
+RETURN .t.
+
+
+
+
+FUNCTION ParPreEdit()
+
+
+
+
+
+
+
+RETURN .t.
+
+
+
+
+
+FUNCTION GenPostedit()
+
+if ! empty(GEN->IdCtr)
+  if (! CtrExist(GEN->IdCtr)) ;RETURN (.f.) ;endif
+endif
+if len(trim(GEN->IdGen)) == LenIdGen()
+
+    if ! empty(GEN->IdClj)
+      if (! CljExist(GEN->IdCtr,GEN->IdClj)) ;RETURN (.f.) ;endif
+    endif
+
+
+
+
+
+
+  RETURN .t.
+else
+
+
+
+
+  RETURN .t.
+endif
+RETURN .f.
+
+
+
+
+FUNCTION ParMfcValidate()
+if (empty(PAR->IdMfc)) ;RETURN (.t.) ;endif
+
+  if (! ParIfcExist()) ;RETURN (.f.) ;endif
+
+RETURN .t.
+
+
+
+
+
+
+
+FUNCTION FinPreEdit(cId)
+if cId != NIL
+  if FIN->IdJnl + FIN->IdDoc != cId
+    FIN -> ( dbSeek(cId) )
+  endif
+endif
+if (FIN->Etat == DocStatOpen()) ;RETURN (.T.) ;endif
+if (FIN->Etat == DocStatNew()) ;RETURN (.T.) ;endif
+SetMsg(MsgIdJnlDoc() + MsgIsClosed(), NIL, "WRN053")
+RETURN .F.
+
+
+
+
+FUNCTION FinPostEdit
+local jnl := JnlLocate(FIN->IdJnl)
+if (jnl == NIL) ;RETURN (.f.) ;endif
+if ! CheckIdDoc(jnl,FIN->IdDoc,FIN->Periode)
+
+  RETURN .f.
+endif
+if FIN->Etat == DocStatNew()
+  if nKey == 13  .or. nKey == -9  .or. nKey == 3 
+    FinFnlEdit()
+  endif
+endif
+RETURN .T. 
+
+
+
+
+
+
+FUNCTION CptExist(cCptType,cCompte)
+if empty(cCompte)
+  SetMsg("Konto : darf nicht leer sein.") 
+  RETURN .F.
+endif
+
+  if (empty(cCptType)) ;RETURN (GenExist(cCompte)) ;endif 
+
+if (CtrLocate(cCptType) != NIL) ;RETURN (ParExist(cCompte)) ;endif
+SetMsg(cCptType + " : ungltige Kontenart.")
+RETURN .F.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+FUNCTION GenExist( cId )
+if (GEN->IdGen == cId .and. ! eof()) ;RETURN (.t.) ;endif
+GEN -> ( dbSeek(cId) )
+if (GEN->(eof().or.bof()))
+  SetMsg(cId + " : unbekanntes Generalkonto.") 
+  RETURN .F.
+endif
+RETURN .T.
+
+
+
+
+
+
+
+
+FUNCTION BilExist( cId )
+if (BIL->IdBil == cId .and. ! eof()) ;RETURN (.t.) ;endif
+BIL -> ( dbSeek(cId) )
+if (BIL->(eof().or.bof()))
+
+  SetMsg(cId + " : unbekannter Bilanzposten !")
+
+
+
+
+
+
+
+  RETURN .f.
+endif
+RETURN .t.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+FUNCTION ArtExist(cId)
+if ART->IdArt == cId .and. ! (ART->(eof().or.bof()))
+  RETURN .T.
+endif
+ART -> ( dbSeek(cId) )
+if (ART->(eof().or.bof()))
+  SetMsg(cId + " : unbekannter Artikel." )
+  RETURN .F.
+endif
+RETURN .T.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+FUNCTION AnaExist(cId)
+if ((ANA->IdAna == cId) .and. ! eof()) ;RETURN (.t.) ;endif
+ANA -> ( dbSeek(cId) )
+if (ANA->(eof().or.bof()))
+  SetMsg(cId + " : unbekanntes Analysekonto.")
+  RETURN .F.
+endif
+RETURN .T.
+
+
+
+
+FUNCTION MsgParExist(cId)
+RETURN cId + " : unbekannter Partner."
+
+FUNCTION MsgTplExist(cId)
+if cId == NIL ;cId := "" ;endif
+RETURN cId + " : unbekannte Druckmaske."
+
+FUNCTION ParExist(cId)
+if (PAR->IdPar == cId) ;RETURN (.t.) ;endif
+if empty(cId)
+
+
+  Confirm( "eof() is "+utos(PAR->(eof())) + ", bof() is "+utos(PAR->(bof())) )
+endif
+PAR -> ( dbSeek(cId) )
+if (PAR->(eof().or.bof()))
+  SetMsg(MsgParExist(cId)) 
+  RETURN .f.
+endif
+RETURN .t.
+
+FUNCTION PlzExist(cIdNat,cIdPlz)
+if (PLZ->Pays+PLZ->CP == cIdNat+cIdPlz .and. ! eof()) ;RETURN (.t.) ;endif
+PLZ -> ( dbSeek(cIdNat+cIdPlz) )
+if (PLZ->(eof().or.bof()))
+  SetMsg(trim(cIdNat) + "-" + trim(cIdPlz) + MsgPlzExist())
+  RETURN .f.
+endif
+RETURN .t.
+
+FUNCTION MsgPlzExist()
+
+
+
+  RETURN " : unbekannte Postleitzahl !"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+FUNCTION CoursValidate(cIdDev)
+if (! DevExist(cIdDev)) ;RETURN (.t.) ;endif
+if empty(FIELD->Cours)
+  FIELD->Cours  := DocDevCours(cIdDev,FIELD->Periode)
+endif
+RETURN .T.
+
+FUNCTION DevExist(cId)
+if DevLocate(cId) == NIL
+  SetMsg(cID + MsgDevExist()) 
+  RETURN .F.
+endif
+RETURN .T.
+
+
+
+
+FUNCTION qSum(cQte1,cQte2)
+local nSum := qton1(cQte1) + qton1(cQte2)
+local nDec := max(MntDecPos(cQte1),MntDecPos(cQte2))
+
+if (":" $ cQte1 + cQte2) ;RETURN (ntoq(nSum,":")) ;endif
+RETURN str(nSum,len(cQte1),nDec)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+FUNCTION ValPrompt(cPrompt)
+if ("~" $ cPrompt) ;RETURN (cPrompt) ;endif
+RETURN "~" + left(cPrompt,len(cPrompt)-1)
+
+FUNCTION CtrPostEdit()
+
+
+
+
+RETURN .t.
+
+FUNCTION CtrPreEdit()
+local lOkay := .f.
+RETURN .t. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+FUNCTION ParSetFilter(cExpr)
+if (cExpr == NIL) ;RETURN (scExpr) ;endif
+scExpr := cExpr
+scIdPrt := NIL
+scIdPrf := NIL
+RETURN NIL
+
+FUNCTION ParFltText
+local cFltText := ""
+if ! empty(scIdPrt) ;cFltText += scIdPrt + " " ;endif
+if ! empty(scIdPrf) ;cFltText += trim(scIdPrf) + " " ;endif
+cFltText += scExpr
+RETURN cFltText
+
+FUNCTION ParEvalFilter
+if empty(scIdPrf) .or. PAR->Prof == scIdPrf
+  if empty(scIdPrt) .or. PAR->IdPrt == scIdPrt
+    if empty(scExpr) .or. &scExpr
+      RETURN .t.
+    endif
+  endif
+endif
+RETURN .f.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+FUNCTION DocDevValidate()
+if (! DevExist(FIELD->IdDev)) ;RETURN (.f.) ;endif
+if FIELD->Etat != DocStatClosed()
+  FIELD->Cours := DocDevCours(FIELD->IdDev,FIELD->Periode)
+  FIELD->Etat  := DocStatNew()
+endif
+
+RETURN .t.
+
+
+FUNCTION DocDateValidate(cIdDevPar)
+local cIdJnl := FIELD->IdJnl
+local jnl := JnlLocate(cIdJnl)
+local cPeriode := PerActive(FIELD->Date)
+local nOrder := indexord()
+local nRecNo := recno()
+if jnl != NIL .and. jnl[2] == "FIN"
+  if "R"  $ jnl[4]
+    cPeriode := PerActive(SkipMonth(FIELD->Date,-1))
+  endif
+endif
+if cPeriode != FIELD->Periode 
+  if "G"  $ jnl[4] .or. "F"  $ jnl[4]
+    ddSetOrder(1) 
+    dbSkip(-1)
+    if FIELD->IdJnl == cIdJnl .and. ! bof()
+      if FIELD->Periode > cPeriode
+        cPeriode := FIELD->Periode
+      endif
+    endif
+    ddSetOrder(nOrder)
+    dbGoto(nRecNo)
+  endif
+  FIELD->Periode := cPeriode
+  DocPerValidate(cIdDevPar)
+endif
+RETURN .t.
+
+
+FUNCTION DocPerValidate(cIdDevPar)
+if empty(JnlIdDev(FIELD->IdJnl)).and.empty(cIdDevPar)
+  FIELD->IdDev := DevDefault(FIELD->Periode)
+  DocDevValidate()
+endif
+RETURN .t.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+FUNCTION AttrHasOneOf(cHas,cMustHave)
+local i
+for i := 1 to len(cMustHave)
+  if (substr(cMustHave,i,1) $ cHas) ;RETURN (.t.) ;endif
+next
+RETURN .f.
+
+FUNCTION AttrHasAllOf(cHas,cMustHave)
+local i
+for i := 1 to len(cMustHave)
+  if (! substr(cMustHave,i,1) $ cHas) ;RETURN (.f.) ;endif
+next
+RETURN .t.

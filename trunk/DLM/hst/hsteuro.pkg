@@ -1,0 +1,58 @@
+HSTEURO.PKG (c) PAC Systems Eupen 1999
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+³ INHALTSVERZEICHNIS ³
+ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+  1. Allgemeine Dokumentation
+  2. Installation
+  3. Bekannte Probleme
+  4. nderungsprotokoll
+
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+³ 1. ALLGEMEINE DOKUMENTATION  ³
+ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+Dies ist die Datei HSTEURO.PKG, die alle technischen Notizen zum
+internen Umstieg auf EUR als Grundw„hrung enth„lt.
+
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+³ 2. INSTALLATION ³
+ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+Beim Aufspielen der Dateien des Pakets evtl. mit bestehenden Dateien
+vergleichen
+Folgende Dateien geh”ren zum Paket "HSTEURO" :
+- HSTEURO.PKG : die vorliegende Datei
+- HSTDOC.QRY : Historik pro Dokument zeigt Betr„ge in EUR *und* BEF
+- Das Paket HSTREP (siehe HSTREP.PKG)
+
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+³ 3. BEKANNTE PROBLEME ³
+ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+- Die MWSt-Erkl„rung kann nicht in BEF ausgedruckt werden, wenn die
+  Grundw„hrung bereits EUR ist. Weil in der CTT nur EUR-Betr„ge summiert
+  werden. Dadurch kann das Paket nur verwendet werden, wenn die
+  MWSt-Erkl„rung in EUR eingereicht wird.
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+³ 4. NDERUNGSPROTOKOLL ³
+ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+19990409
+- Das Paket wurde begonnen, um eine L”sung dafr zu bieten, dass TIM
+  W„hrungsbetr„ge zwischen zwei verschiedenen Nicht-Euro-W„hrungen (z.B.
+  zwischen DEM und BEF) direkt ber den Wechselkurs rechnet (z.B.
+  20.6254xxx) und nicht, wie offiziell vorgeschrieben, ber den Euro als
+  Drittw„hrung.
+  Also ein Betrag von 10.000,- DEM wird als 206.254,63 BEF = 206.255 BEF
+  verbucht. Offiziell muss jedoch im Dreieck umgerechnet werden:
+    (1) 10.000,- DEM = 5.112,9188 EUR = 5.112,92 EUR
+    (2) 5.112,92 EUR * 40,3399 = 206.136 BEF
+  Die einfachste und eleganteste L”sung ist es, intern auf EUR
+  umzusteigen. Damit die MWSt-Erkl„rung, Journale, Historiken etc.
+  jedoch trotzdem noch in BEF ausgedruckt werden k”nnen, muss
+  das vorliegende Paket aufgespielt werden.
+
+19990409
+- Neue Funktion HstDcMont(cDC,cIdDev). Kann beim Ausdruck der Journale
+  anstelle von DcValue() verwendet werden, um die Betr„ge nicht
+  unbedingt in Grundw„hrung zu drucken.
+
+19990421
+- Rename HSTEURO.TXT HSTEURO.PKG
+

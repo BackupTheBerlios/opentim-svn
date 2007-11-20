@@ -1,0 +1,54 @@
+// Saldenliste Generalkonten
+before SetDevise(DevDefault(MemPer1))
+before DlgDefault("IdGen1",space(LenIdGen()))
+before DlgDefault("IdGen2",space(LenIdGen()))
+before DlgDefault("TailIdGen"," ")
+
+#include "PERIODE.DLG"
+
+field name="ShowSaldo1" \
+    default="X"\
+    reader={|g|CbxReader(g)} \
+    caption2=utr(" show initial balances"," mit Beginnsalden", " soldes initiaux")
+
+
+
+// field block={|x|GsbPeriode(x)} \
+    picture="@k@!" \
+    caption="Periode von-bis " \
+    pick={|x|PickPerRange(x)}   \
+    valid={||ph_refresh()}
+
+field name="IdGen1" \
+    caption="(nur Konten von " \
+    pick={|x|PickGen(NIL,x)} \
+    attrib="N"
+field name="IdGen2" \
+    caption=" bis " \
+    pick={|x|PickGen(NIL,x)}
+
+// field caption="W„hrung  " \
+      block={|x|SetDevise(x)}\
+      picture="@k@!"\
+      pick={|x|PickDev(x)}\
+      valid={||DevExist(SetDevise())}
+
+field name="TailIdGen" \
+    caption="(nur Konten, die mit " \
+    caption2=" enden)"
+
+field caption=utr("Language  ","Sprache  ","Langue  ") \
+      block={|x|SetTplLang(x)}\
+      picture="@k@!"\
+      pick={|x|PickLng(x)}
+
+#include "PREVIEW.DLG"
+#include "ASPDF.DLG"
+
+// after DlgDefine("HstFilter",".t.")
+after DlgDefine("GenFilter",if(\
+  empty(DlgValue("TailIdGen")),\
+  "",\
+  "right(GEN->IdGen,1)=='" + trim(DlgValue("TailIdGen")) + "'"\
+))
+after AppSaveMem()

@@ -1,0 +1,26 @@
+// Export nach Textdatei fr Excel,...
+OutputFile    "ART.TXT"
+Confirm       off // DlgValue("Append")==" "
+// NoTitles      DlgValue("Append")=="X"
+// Append        DlgValue("Append")=="X"
+Delimiter     chr(9)
+
+FieldExport   Art.Nr trim(ART->IdArt)
+// FieldExport   Match trim(ART->Match)
+FieldExport   SK komma(ltrim(ART->PrixR))
+FieldExport   VkNetto komma(ltrim(ART->Prix1))
+FieldExport   TVAC komma(ltrim(ART->TVAC))
+FieldExport   Menge komma(ltrim(ART->Lager))
+FieldExport   Name1 trim(ART->Name1)
+FieldExport   Name2 trim(ART->Name2)
+#if type("ART->Liter") == "C"
+  FieldExport   Liter alltrim(ART->Liter)
+#endif
+FieldExport   Lieferant trim(ParName(ART->IdPar))
+FieldExport   BestNr trim(ART->RefExt)
+// FieldExport   W„ ltrim(ART->IdDev)
+// FieldExport   EK ltrim(ART->PrixRDev)
+
+#include "DOS2WIN.CVT"
+
+OnSuccess AppShell("excel.bat "+i_OutputFile(),NIL,.f.)

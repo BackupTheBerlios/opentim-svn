@@ -1,0 +1,31 @@
+// Bilanz
+// Variablen : range1 : erstes Steuerjahr
+//             range2 : erstes Steuerjahr
+initialize SetSolde("2").and.SetMntFormat("S10")
+header1 "Bilanz (sch‚ma abr‚g‚)"
+header2 "Steuerjahr " + SayPeriode(DlgValue("range1"))
+header3 "verglichen mit " + SayPeriode(DlgValue("range2"))
+area { oBil() }
+order 1 // GEN->IdBil+GEN->IdGen
+// ValidateRecord {|| BilExist(GEN->IdBil) }
+filter {|| !"H"$BIL->Attrib}
+// start trim(DlgValue("IdGen1"))
+// while {|| empty(DlgValue("IdGen2")).or.HST->IdGen <= DlgValue("IdGen2") }
+group key={|| left(BIL->IdBil,1) } \
+      text={|| left(BIL->IdBil,1) }
+group text={|x|"Gesamt"}
+
+column header="" width=LenIdBil() text={||BIL->IdBil}
+column header="Bezeichnung" width=50 text={||padr(BIL->Name,50)}
+column header="D/C" width=3 \
+       text={||" "+BIL->DC+" "}
+column header=padl(trim(DlgValue("range1")),LenMntF()) \
+       width=LenMntF() \
+       value={||BilMont(DlgValue("range1"))} \
+       text={|x|ntomf(x)}\
+       xsum={|x| ntomf(x) }
+column header=padl(trim(DlgValue("range2")),LenMntF()) \
+       width=LenMntF() \
+       value={||BilMont(DlgValue("range2"))} \
+       text={|x|ntomf(x)}xsum={|x| ntomf(x) }
+total text={||""} when={||.t.}

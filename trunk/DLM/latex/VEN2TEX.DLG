@@ -1,0 +1,80 @@
+// VEN2TEX.DLG
+before SetDlgTitle(MsgIdJnlDoc()+" : Dokument via LaTeX drucken")
+
+before ParExist(VEN->IdPar)
+
+before DlgDefault("AsFax"," ")
+before DlgDefault("Draft"," ")
+before DlgDefault("Model","STD")
+before DlgDefault("AsPdf","X")
+before DlgDefault("AsAuftrag"," ")
+before DlgDefault("Logo"," ")
+
+before DlgDefine("User",VEN->Auteur)
+before DlgDefine("co",if(VEN->IdJnl$"VKR,VEN,VNA",space(40),VEN->NB2))
+before DlgDefine("Anrede",padr("",80))
+before DlgDefine("Copies",if(VEN->IdJnl$"VEN,VNA,VKR",2,1))
+before DlgDefine("psnup",1)
+
+#exec DlgDefault("VenBatch",.f.)
+#if !DlgValue("VenBatch").or.!empty(SetPreview())
+
+field block={||PAR->IdPar+" "+padr(ParName(),40)} \
+      caption="Partner : " \
+      when={||.f.} color="N/W"
+#if !VEN->IdJnl$"VEN,VNA"
+field name="co" \
+      caption="zu H„nden " \
+      picture="@k@s40"
+field name="Anrede" \
+      caption="Briefanrede     " \
+    picture="@k@s40"
+field caption='                (leer = "Sehr geehrter Kunde,")'
+#endif
+// field caption="Date document " \
+    block=fieldblock("Date") \
+    when={||.f.} color="N/W"   // valid={||ph_refresh()}
+// field name="InFile" \
+      caption="Vorlage         " \
+      picture="@k@s40"
+// field name="OutFile" \
+      caption="Tempor„re Datei " \
+      picture="@k@s40"
+// field name="Spool" \
+    caption2=" imprimer directement (ne foncionne pas encore)" \
+    value=" " \
+    reader={|g|CbxReader(g)}
+field block={|x|SetPreview(x)} \
+    caption2=" Pr‚visualisation" \
+    reader={|g|CbxReader(g)}
+    // value="X"
+
+field name="Model" \
+      caption="Modell " \
+      picture="@k@!"
+
+// field name="AsPdf" \
+    caption2=" Format PDF au lieu de DVI" \
+    reader={|g|CbxReader(g)}
+
+field name="AsAuftrag" \
+    caption2=" als Auftragsbest„tigung" \
+    reader={|g|CbxReader(g)}
+
+field name="Logo" \
+    caption2=" imprimer en-tˆte head.jpg" \
+    reader={|g|CbxReader(g)}
+
+field name="AsFax" \
+    caption2=" comme Fax (noir/blanc + signature + mon adresse)" \
+    reader={|g|CbxReader(g)}
+
+#endif
+
+after SetTplLang(PAR->Langue)
+after DlgDefine("InFile","VEN"+DlgValue("Model")+".TEX")
+after DlgDefine("OutFile",VEN->IdJnl+VEN->IdDoc)
+after DlgDefine("Tray2Copies",if(VEN->IdJnl$"VNA,VEN",1,0))
+after ActExec("TEXPARSE")
+after .f.
+

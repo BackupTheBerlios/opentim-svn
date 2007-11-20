@@ -1,0 +1,12 @@
+// RAPAUTO.ACT
+// calls RAPAUTOS.ACT
+
+DlgDefault("IdDgr","0")
+DlgDefault("Date",UserDate())
+DlgDefault("Detail","X")
+DlgExec("RAPAUTO")
+DbfScan(\
+  {oPar(),oPlz()},5,"K","PAR->IdPrt=='K'",\
+  "ParIdDgrMax(PAR->IdPar,DlgValue('Date'))>='"+DlgValue("IdDgr")+"'",\
+  "ActExec('RAPAUTOS')"\
+)

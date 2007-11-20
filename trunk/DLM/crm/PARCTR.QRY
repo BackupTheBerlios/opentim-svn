@@ -1,0 +1,10 @@
+//
+// C:\SOFT\RELEASE\TIM220\STD01D\PARCTR.QRY - generated 28.05.97
+// for PAR.DBF
+//
+column 3 Bezeichnung pict @k@s30
+column 1 Nr. pict @K@!
+column 4 Bemerkung
+column 11 Bankkonto
+mask PARCTR
+order 2

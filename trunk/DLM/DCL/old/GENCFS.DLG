@@ -1,0 +1,28 @@
+// Cash Flow Statement
+before DlgDefault("range1",GetPeriode(str(year(UserDate())-1,4)))
+before DlgDefault("range2",GetPeriode(str(year(UserDate())-2,4)))
+before DlgDefault("IdDev",DevDefault(MemPer2))
+
+field name="range1" \
+    caption="Periodenbereich 1 " \
+    picture="@k@!" \
+    postedit={|x|GetPeriode(x)}
+field name="range2" \
+    caption="                2 " \
+    picture="@k@!" \
+    postedit={|x|GetPeriode(x)}
+
+field caption="W„hrung  " \
+      name="IdDev"\
+      picture="@k@!"\
+      pick={|x|PickDev(x)}\
+      valid={||DevExist(DlgValue("IdDev"))}
+
+field caption=utr("Language  ","Sprache  ","Langue  ") \
+      block={|x|SetTplLang(x)}\
+      picture="@k@!"\
+      pick={|x|PickLng(x)}
+
+#include "PREVIEW.DLG"
+
+after SetDevise(DlgValue("IdDev"))

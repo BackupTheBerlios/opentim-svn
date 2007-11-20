@@ -1,0 +1,34 @@
+// Rechnungsbuch Einkauf/Verkauf
+// before DlgDefault("IdDev",DevDefault(MemPer2))
+before SetTplIni("LISTEX")
+field name="IdJnlVen" \
+    caption="Journal " \
+    picture="@k@!" \
+    valid={||\
+      SetTplIni(CtrTplIni(JnlIdCtr(DlgValue("IdJnlVen")))),\
+      DlgDefine("HstVenCols",\
+        padr(CtrHstCols(JnlIdCtr(DlgValue("IdJnlVen"))),10)\
+      ),\
+      ph_refresh()\
+    } \
+    pick={|x|DbfPick(\
+              {oJnl()},\
+              utr("Select Journal","Auswahl Journal","Choix journal"),\
+              "JNLPICK",\
+              x,\
+              "Alias=='VEN'.and.'G'$Attrib"\
+    )} \
+    default=space(LenIdJnl())
+#include "PERIODE.DLG"
+field name="subttl" \
+    caption2=utr(" monthly sub-totals",\
+      " Zwischensummen pro Periode ", \
+      " Sous-totaux par p‚riode") \
+    default=" " \
+    reader={|g|CbxReader(g)}
+
+#include "PREVIEW.DLG"
+#include "ASPDF.DLG"
+
+after AppSaveMem()
+

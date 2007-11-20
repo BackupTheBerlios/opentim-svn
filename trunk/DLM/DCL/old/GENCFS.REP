@@ -1,0 +1,50 @@
+// Bilanz
+// Variablen : range1 : erstes Steuerjahr
+//             range2 : erstes Steuerjahr
+initialize SetMntFormat("S12") // [set montant S10]
+header1 MnuItemName()
+header2 tr("Fiscal years ", "Steuerjahre ","Ann‚es fiscales") \
+        + trim(DlgValue("range1")) \
+        + tr(" and ", " und "," et ") + trim(DlgValue("range2"))
+
+header3 tr("Amounts in ","Betr„ge in ","Montants en ")+SetDevise()
+area { oGen(), oCfs() }
+order 5 // GEN->IdCfs+GEN->IdGen
+
+ValidateRecord {|| ActExec("GENCFS") }
+
+filter {|| !empty(GEN->IdCfs) }
+filter {|| !"H"$CFS->Attrib.and.!empty(CFS->DC) }
+// filter {|| abs(DlgValue("Mont1"))>DevTolerance().or.abs(DlgValue("Mont2"))>DevTolerance() }
+
+
+group key={|| GEN->IdCfs } \
+      header={||PrintLine(\
+        GEN->IdCfs + " " + Tagged("B")+ trim(CFS->Name1)+Tagged("b")\
+      )} \
+  text={|| space(LenIdCfs()+LenIdGen()+2)+tr("Total","Summe","Total") } \
+  when={|nCount,nDtlCount|nDtlCount>1} \
+  format="B"
+
+group text={|x|"Gesamt"} when={||.t.}
+
+column header=tr("Item","Art.","Code") width=LenIdCfs() text={||space(LenIdCfs())}
+column header=tr("Accnt","Konto","Compte") width=LenIdGen() \
+       text={||GEN->IdGen}
+column header=tr("Description","Bezeichnung","Description") width=40 \
+       text={||padr(GenName(NIL,TplLang()),40)}
+column header="Type" width=2 text={||" "+CFS->Type+" "}
+column header="D/C" width=3 text={||" "+CFS->DC+" "}
+column header=padl(trim(DlgValue("range1")),LenMntF()) \
+       width=LenMntF() \
+       value={||DlgValue("Mont1")} \
+       text={|x|ntomf(x)} \
+       xsum={|x| ntomf(x) }
+
+column header=padl(trim(DlgValue("range2")),LenMntF()) \
+       width=LenMntF() \
+       value={||DlgValue("Mont2")} \
+       text={|x|ntomf(x)} \
+       xsum={|x| ntomf(x) }
+
+total text={||""} when={||.t.}

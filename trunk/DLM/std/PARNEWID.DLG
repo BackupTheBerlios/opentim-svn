@@ -1,0 +1,13 @@
+// ParNewId.dlg - called from ParNewId.act
+field name="IdPar1" \
+    caption=if(MemLang1=="D","Alte Nummer ","Ancien ID ") \
+    pick={|x| PickPar(NIL,x)} \
+    postedit={|x|GetIdPar(x)}
+field name="IdPar2" \
+    caption=if(MemLang1=="D","Neue Nummer ","Nouvel ID ") \
+    pick={|x| PickPar(x)} \
+    postedit={|x|GetIdPar(x)}
+// field name="Union" \
+    caption2=" union" \
+    reader={|g|CbxReader(g)}
+

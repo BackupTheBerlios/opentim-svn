@@ -1,0 +1,18 @@
+// Dieses Dokument exportieren
+OutputFile AppPath()+"\TEMP\FNL.TXT"
+// SeekKey NIL
+Delimiter chr(9)
+NoTitles on
+FieldUpdate IdCtr   FNL->IdCtr
+FieldUpdate IdCpt   FNL->IdCpt
+FieldUpdate Libell  FNL->Libell
+FieldUpdate Match   FNL->Match
+FieldUpdate Line    FNL->Line
+FieldUpdate DC      FNL->DC
+FieldUpdate Mont    FNL->Mont
+FieldUpdate MontDev FNL->MontDev
+FieldUpdate IdDev   FNL->IdDev
+FieldUpdate Date    dtos(FNL->Date)
+#if HasOption("ANA")
+  FieldUpdate IdAna   FNL->IdAna
+#endif

@@ -1,0 +1,20 @@
+//
+// TRMDATE.QRY - generated 07.05.1999
+// for TRM.DBF
+//
+column 1 WT pict @K@S2 ColorBlock {||{dow(TRM->Date)+2,2}}
+column 2 Datum say "" ColorBlock {||{dow(TRM->Date)+2,2}}
+column 3 Von pict @K@! ColorBlock {||{dow(TRM->Date)+2,2}}
+column 4 Bis pict @K@! ColorBlock {||{dow(TRM->Date)+2,2}}
+column 16 Dauer ColorBlock {||{dow(TRM->Date)+2,2}}
+column 5 Kommentar pict @K@S20 ColorBlock {||{dow(TRM->Date)+2,2}}
+column 19 Status pict @K@S10 ColorBlock {||{dow(TRM->Date)+2,2}}
+column 6 Benutzer pict @K@! ColorBlock {||{dow(TRM->Date)+2,2}}
+column 8 Tarif pict @K@! ColorBlock {||{dow(TRM->Date)+2,2}}
+column 7 Attr pict @K@!
+column 9 ParNr. pict @K@!
+column 18 S pict @K@!
+column 10 Kunde
+column 0 dow block str(dow(trm->date),2) skip .t.
+colorspec w/b,n/w,w/b,gr+/b,g/b,bg/b,r/b,rb/b,gr/b
+mask TRM

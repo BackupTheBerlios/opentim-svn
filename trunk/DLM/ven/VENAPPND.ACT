@@ -1,0 +1,32 @@
+// venauto.act : Rechnung ausstellen
+ParExist(FIELD->IdPar)
+// DlgExec("VENAPPND","Rechnung ausstellen")
+// vorher :
+// ParVnaAuto(FIELD->IdPar,"VKR",DlgValue("Date"),".t.",DlgValue("Edit"))
+//
+// nachher :
+DlgDefine("IdJnl","")
+VEN->IdJnl!="VKA".or.DlgDefine("IdJnl","VKR")
+VEN->IdJnl!="VKL".or.DlgDefine("IdJnl","VKR")
+DlgDefine("IdJnl", DbfPick(\
+  {oJnl()},\
+  "Was fr ein Dokument erstellen?",\
+  "JNLPICK",\
+  DlgValue("IdJnl"),\
+  "Alias=='VEN'"\
+))
+!empty(DlgValue("IdJnl"))
+DlgDefine("VnaMatch",VEN->IdJnl+VEN->IdDoc)
+VenAppend(\
+    DlgValue("IdJnl"),\
+    DlgValue("IdJnl")+" erstellen als Kopie von " + MsgIdJnlDoc()\
+  )
+// Angebote kriegen jetzt ein "ok" reingeschrieben
+VEN->IdJnl!="VKA".or.TryRecLock({||(VEN->NB3:=trim(VEN->NB3)+"ok")!=NIL})
+RETURN .t. if VEN->IdJnl!="VKL"
+// Lieferscheine werden jetzt evtl. gel”scht
+Confirm(\
+  MsgIdJnlDoc()+" : Lieferschein l”schen (J/N) ?"\
+)
+VEN->Etat!=DocStatClosed().or.TryRecLock({||VenClose(.t.),.t.})
+ddEditDelete()

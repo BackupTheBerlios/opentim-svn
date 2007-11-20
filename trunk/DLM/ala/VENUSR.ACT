@@ -1,0 +1,26 @@
+// VENUSR.ACT
+DlgDefine("Auftrag",0)
+DlgDefine("Kosten",0)
+DlgDefine("Umsatz",0)
+DbfScan(\
+  {oVen()},3,VEN->VnaMatch,\
+  "VEN->VnaMatch=='"+VEN->VnaMatch+"'",\
+  "VEN->IdJnl$'AUF'",\
+  "DlgPlus('Auftrag',VenDev2Db(val(VEN->MontR))*if(VenIsNC(),-1,1))"\
+)
+DbfScan(\
+  {oVen()},3,VEN->VnaMatch,\
+  "VEN->VnaMatch=='"+VEN->VnaMatch+"'",\
+  "VEN->IdJnl$'VKR'",\
+  "DlgPlus('Umsatz',VenDev2Db(val(VEN->MontR))*if(VenIsNC(),-1,1))"\
+)
+DbfScan(\
+  {oVen()},3,VEN->VnaMatch,\
+  "VEN->VnaMatch=='"+VEN->VnaMatch+"'",\
+  "VEN->IdJnl$'ABZ,KOS,LIE,EKR'",\
+  "DlgPlus('Kosten',VenDev2Db(val(VEN->MontR))*if(VenIsNC(),-1,1))"\
+)
+
+DlgDefine("Umsatz",Db2Dev(SetDevise(),VEN->Periode,DlgValue("Umsatz")))
+DlgDefine("Kosten",Db2Dev(SetDevise(),VEN->Periode,DlgValue("Kosten")))
+DlgDefine("Auftrag",Db2Dev(SetDevise(),VEN->Periode,DlgValue("Auftrag")))

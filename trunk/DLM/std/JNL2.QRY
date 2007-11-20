@@ -1,0 +1,27 @@
+//
+// JNL2.QRY - generated 15.02.2000
+// for JNL.DBF
+//
+column 1 Jnl
+column 9 Seq pict @K@!
+column 33 N pict @K@!
+column 3 Bezeichnung pict @K@S20
+column 7 Z pict @K@!
+column 6 Konto
+column 8 DC pict @K@!
+column 10 W„ pict @K@!
+column 4 Attr. pict @K@!
+column 14 JGr pict @K@!
+column 16 V pict @K@!
+column 23 View pict @K@!
+column 17 TPT pict @K@!
+column 5 Maske pict @K@!
+column 11 Dokumentbezeichnung 1
+column 12 Dokumentbezeichnung 2
+column 13 Dokumentbezeichnung 3
+column 28 Dok.Nr. pict @K@!
+column 2 Art pict @K@!
+column 27 DocAttr pict @K@!
+mask JNL
+order 1
+help JNL

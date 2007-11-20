@@ -1,0 +1,13 @@
+// Artikelbestand anpassen
+#static
+title "Manuelle Bestandsanpassung"
+before DlgDefine("Qte",space(LenQte()))
+field name="Qte" \
+      caption="Menge Ausgang  " \
+      picture="@k@!"\
+      postedit={|x|GetNum(x)}
+
+after TryRecLock({||(\
+  ART->Lager:=ntoq(qton(ART->Lager)-qton(DlgValue("Qte")),ART->QteForm)\
+)!=NIL})
+after ddRefreshCurrent()

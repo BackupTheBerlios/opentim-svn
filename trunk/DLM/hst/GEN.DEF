@@ -1,0 +1,23 @@
+// gen.def
+ddAddField("Libell4","C",LenGenName(),0,NIL,if(Has4Lang(),NIL,"H"))
+ddAddField("PrixU","C",LenMont(),0,"",if(HasDlm("GENPRIX"),NIL,"H"),NIL,NIL,NIL,{|x|PickNum(x)},{||.t.},{|x|GetMont(x)})
+ddAddField("Match","C",20,0)
+ddAddField("DclSel","C",4,0,NIL,if(HasDlm("DCL"),NIL,"H"),NIL,NIL,\
+  {||empty(DclSel).or.len(trim(GEN->IdGen))==LenIdGen()\
+     .or.!SetMsg("DclSel only for leaf accounts")},\
+  {||DbfPick({oDcf()},"Statement selector for "+GEN->IdGen,"DCFPICK",\
+     NIL,NIL,NIL,NIL,"DCF->DclSel")}\
+  )
+// ddAddField("IdCfs","C",4,0,NIL,if(HasDlm("DCL"),NIL,"H"),NIL,NIL,\
+  {||empty(IdCfs).or.(len(trim(GEN->IdGen))==LenIdGen().and.CfsExist(GEN->IdCfs))},\
+  {||DbfPick({oCfs()},"CFS entry for "+GEN->IdGen,"DCFPICK",GEN->IdCfs)}\
+  )
+ddAddField("IdAna","C",LenIdAna(),0,"@k@!",\
+  if(HasDlm("ANA"),NIL,"H"),NIL,NIL,{||.t.},\
+  {|x|PickAna(x)},NIL,{|x|GetIdAna(x)}\
+)
+ddAddIndex("upper(GEN->Match)","Matchcode",NIL,{|x|upper(x)})
+!HasDlm("DCL").or.ddAddIndex("GEN->DclSel+GEN->IdGen","DclSel","!empty(GEN->DclSel)")
+ddAddSpecial({||GenRename()}, MsgMnuRename(), -31 )
+ddPrintRecord({||ActExec("GENPRINT")})
+

@@ -1,0 +1,60 @@
+header1 "KMD overview"
+initialize SetMntFormat("S10")
+header2 PerText()
+area { oPer() }
+order 1 // GEN->IdBil+GEN->IdGen
+ValidateRecord {|| (MemPer1:=MemPer2:=PER->Periode)!=NIL }
+ValidateRecord {|| setvar("4",CttTaxe('IdCtr=="V".and.IdTax$"18 "'))}
+ValidateRecord {|| setvar("5",CttTaxe('IdCtr=="E".and.IdTax$"D5 ,D18"'))}
+// filter {|| !"H"$BIL->Attrib}
+start MemPer1 // trim(DlgValue("IdGen1"))
+while cblock("PER->Periode <= '"+MemPer2+"'")
+// while {|| empty(DlgValue("IdGen2")).or.HST->IdGen <= DlgValue("IdGen2") }
+group text={|x|"Gesamt"}
+
+column header="Per." width=4 text={||PER->Periode}
+column header=padl("1",LenMntF()) \
+       width=LenMntF() \
+       value={||CttBase('IdCtr=="V".and.IdTax$"18 "')} \
+       text={|x|ntomf(x)}\
+       xsum={|x| ntomf(x) }
+column header=padl("3",LenMntF()) \
+       width=LenMntF() \
+       value={||CttBase('IdCtr=="V".and.IdTax$"IS ,XS "')} \
+       text={|x|ntomf(x)}\
+       xsum={|x| ntomf(x) }
+column header=padl("3.1",LenMntF()) \
+       width=LenMntF() \
+       value={||CttBase('IdCtr=="V".and.IdTax$"IM "')} \
+       text={|x|ntomf(x)}\
+       xsum={|x| ntomf(x) }
+column header=padl("3.2",LenMntF()) \
+       width=LenMntF() \
+       value={||CttBase('IdCtr=="V".and.IdTax$"XM "')} \
+       text={|x|ntomf(x)}\
+       xsum={|x| ntomf(x) }
+column header=padl("4",LenMntF()) \
+       width=LenMntF() \
+       value={||getvar("4")} \
+       text={|x|ntomf(x)}\
+       xsum={|x| ntomf(x) }
+column header=padl("5",LenMntF()) \
+       width=LenMntF() \
+       value={||getvar("5")} \
+       text={|x|ntomf(x)}\
+       xsum={|x| ntomf(x) }
+column header=padl("4-5",LenMntF()) \
+       width=LenMntF() \
+       value={||round(getvar("4"),0)-round(getvar("5"),0)} \
+       text={|x|ntomf(x)}\
+       xsum={|x| ntomf(x) }
+column header=padl("round",LenMntF()) \
+       width=LenMntF() \
+       value={||getvar("4")-getvar("5")-(round(getvar("4"),0)-round(getvar("5"),0))} \
+       text={|x|ntomf(x)}\
+       xsum={|x| ntomf(x) }
+total text={||""} when={||.t.}
+
+after fparse("PERKMD.TXT")
+
+

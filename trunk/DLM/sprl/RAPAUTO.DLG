@@ -1,0 +1,21 @@
+// Mahnungen generieren
+
+before DlgDefault("Date",UserDate())
+before DlgDefault("IdDgr","0")
+before DlgDefault("Detail","X")
+title if(MemLang1=="D","Mahnungen generieren","G‚n‚rer rappels")
+
+field name="Date" \
+      caption=if(MemLang1=="D","Datum ","Date ")
+field name="IdDgr" \
+    caption=if(MemLang1=="D","Mindestmahngrad  ","Degr‚ de rappel minimum : ") \
+    picture="@k@!"\
+    pick={|x|PickDgr(x,"D","degr‚ de rappel")}
+field name="Detail" \
+      caption2=if(MemLang1=="D"," einzeln bearbeiten"," modifier chaque document g‚n‚r‚ ") \
+      reader={|g|CbxReader(g)}
+field block={|x|SetPreview(x)} \
+    caption2=if(MemLang1=="D"," Seitenvorschau"," Pr‚visualisation") \
+    value="X" \
+    reader={|g|CbxReader(g)}
+

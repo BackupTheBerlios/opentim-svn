@@ -1,0 +1,1 @@
+ddOnCreate("indexord()!=1.or.(DCF->IdDcl:=ddKeyValue())!=NIL")

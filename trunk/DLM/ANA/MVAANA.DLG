@@ -1,0 +1,23 @@
+// Historik / Saldenliste Analysekonten
+field block={|x|SetPeriode(x)} \
+    caption="Periode von-bis " \
+    pick={|x|PickPerRange(x)}
+field name="IdAna1" \
+    caption="(nur Konten von " \
+    value=space(LenIdAna()) \
+    pick={|x|PickAna(x)} \
+    attrib="N"
+field name="IdAna2" \
+    caption=" bis " \
+    value=space(LenIdAna()) \
+    pick={|x|PickAna(x)}
+field block={|x|SetTplIni(x)} picture="@k@!" \
+    caption="Druckparametersatz " \
+    value=padr("LISTE",LenIdTpl()) \
+    pick={|x|PickTpl("INI",x)}
+field block={|x|SetPreview(x)} \
+    caption2=" Seitenvorschau " \
+    value="X" \
+    reader={|g|CbxReader(g)}
+
+after AppSaveMem()

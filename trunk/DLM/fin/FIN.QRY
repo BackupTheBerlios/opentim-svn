@@ -1,0 +1,12 @@
+//
+// FIN.QRY - generated 10.10.05
+// for FIN.DBF
+//
+window 15 76 0 0 
+column 1 Jnl
+column 2 Dok.Nr
+column 3 =utr("Date","Datum","Date") say ""
+column 4 =utr("Remark","Bemerkung","Remarque") pict @K@S20
+column 5 Status
+column 8 Periode pict @K@!
+mask FIN

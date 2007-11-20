@@ -1,0 +1,9 @@
+//
+// C:\SOFT\RELEASE\TIM220\STD01D\CTSART.QRY - generated 20.10.97
+// for CTS.DBF
+//
+window 15 40 0 0 
+column 2 Per.
+column 3 Jnl
+column 4 Menge
+column 5 Betrag

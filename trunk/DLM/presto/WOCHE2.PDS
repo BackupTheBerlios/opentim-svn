@@ -1,0 +1,19 @@
+p("""[=dos2latin1(dtocf(TRM->Date,"<b>dddd</b>"))]""")
+p("""[=dos2latin1(dtocf(TRM->Date,"d. mmmm yyyy"))]""")
+[etc if left(TRM->Texte,1)!="±"]
+p(""" [=dos2latin1(trim(TRM->Texte))] """)
+[etc endif]
+endCell()
+[=DbfScan(\
+  {oVen(),oPar()},4,"ABZ"+dtos(TRM->Date),\
+  "VEN->IdJnl+dtos(VEN->Date)=='"+"ABZ"+dtos(TRM->Date)+"'",\
+  "VEN->Team=='SPU'",{||fparse("WOCHE3.PDS")}\
+)]
+endCell()
+p(""" [=dos2latin1(TrmVenList("ABZ","Team=='SAN'"))] """)
+endCell()
+p(""" [=dos2latin1(TrmVenList("ABZ","Team=='KAM'"))] """)
+endCell()
+p(""" [=dos2latin1(TrmVenList("ABZ","!Team$'SPU,SAN,KAM'"))] """)
+endRow()
+

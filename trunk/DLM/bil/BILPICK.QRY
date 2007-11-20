@@ -1,0 +1,9 @@
+//
+// C:\SOFT\RELEASE\TIM220\STD01D\BILPICK.QRY - generated 25.04.97
+// for BIL.DBF
+//
+window 15 59 0 0 
+column 1 Bil. pict @K@!
+column 2 Bezeichnung pict @K@S40
+column 3 DC pict @K@!
+column 4 Attrib pict @K@!

@@ -1,0 +1,20 @@
+// Partnerliste nach Umsatz
+// ToCSV !empty(getvar("ToCSV"))
+header1 "Partnerliste nach Umsatz " + CtrName(DlgValue("IdCtr"))
+header2 PerText()
+header3 ""
+#if !empty(DlgValue("ParAttr"))
+  header3 "Nur Attribut "+getvar("ParAttr")
+  filter cblock("'"+DlgValue("ParAttr")+"'$PAR->Attrib")
+#endif
+
+area { oPar(), oPlz() }
+index for="ParCtpSum(PAR->IdPar,'val(Umsatz)','"+DlgValue("IdCtr")+"')!=0" on="-ParCtpSum(PAR->IdPar,'val(Umsatz)','"+DlgValue("IdCtr")+"')"
+group text={|x|"alle"} align="L"
+column header="Nr." width=LenIdPar() text={||PAR->IdPar}
+column header="Name" width=30 text={||padr(ParName(),30)}
+column header="Straáe" width=50 \
+       text={||padr(trim1(ParStreet())+ParCity(),50)}
+column header="Umsatz" width=LenMntF() \
+       value={||ParCtpSum(PAR->IdPar,'val(Umsatz)',DlgValue('IdCtr')) }
+total when={||.t.} // text={||"Gesamt"}

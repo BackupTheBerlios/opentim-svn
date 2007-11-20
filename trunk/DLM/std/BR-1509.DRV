@@ -1,0 +1,8 @@
+// Brother M-1409, Mode II : IBMPRO emulation (DIP SW2-5 = ON)
+Name Brother M-1409 (IBM emulation)
+Reset            // chr(27)+"k"+chr(128)
+FormFeed         chr(12)
+Font Enlarged      5  12/72 chr(27)+"W"+chr(1)
+Font Police8cpi    8  12/72 chr(27)+"W"+chr(1)+chr(15)
+Font Police10cpi  10  12/72 chr(18)+chr(27)+"W"+chr(0)
+Font Police17cpi  17  12/72 chr(27)+"W"+chr(0)+chr(15)

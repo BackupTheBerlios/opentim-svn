@@ -1,0 +1,30 @@
+// Kontrollliste MWSt
+// Variablen :
+//             Periodenbereich
+initialize {set montant S10}
+header1 SetDlgTitle() // "Kontrolliste MWSt"
+header2 PerText()
+// header3 "..."
+area { oCtt() }
+index on="CTT->IdCtr+CTT->IdTax+CTT->IdCtf+CTT->DC+CTT->Periode" for="ChkPeriode(CTT->Periode)==0"
+// filter {|| ChkPeriode(HST->Periode)<=0}
+// detail {|| .f.}
+// start trim(DlgValue("IdGen1"))
+// while {|| empty(DlgValue("IdGen2")).or.HST->IdGen <= DlgValue("IdGen2") }
+group key={|| IdCtr+IdTax+IdCtf } text={|| "IdCtr+IdTax+IdCtf"} when={||.t.} align="R"
+group key={|| CTT->IdCtr+CTT->IdTax } text={|| "IdCtr+IdTax"} when={||.t.} align="R"
+group text={|x|"Gesamt"} align="R"
+
+column header="Z." width=5 text={||padr(IdCtr,5)}
+column header="Code" width=5 text={||padr(IdTax,5)}
+column header="Kol." width=5 text={||padr(IdCtf,5)}
+// column header="D/C" width=5 text={||padr(DC,5)}
+column header="Periode" width=8 text={||padr(Periode,8)}
+column header="Zwischensummen" width=20 text={||space(20)}
+column header="Wert D" width=LenMont() value={||val(CTT->Base)} when={||DC=="D"}text={|x|ntomf(x)} xsum={|x| ntomf(x) }
+column header="MWSt D" width=LenMont() value={||val(CTT->Taxe)} when={||DC=="D"}text={|x|ntomf(x)} xsum={|x| ntomf(x) }
+column header="Wert C" width=LenMont() value={||val(CTT->Base)} when={||DC=="C"}text={|x|ntomf(x)} xsum={|x| ntomf(x) }
+column header="MWSt C" width=LenMont() value={||val(CTT->Taxe)} when={||DC=="C"}text={|x|ntomf(x)} xsum={|x| ntomf(x) }
+
+total text={||""} when={||.t.}
+

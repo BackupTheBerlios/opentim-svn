@@ -1,0 +1,13 @@
+//
+// C:\TIM\HEINEN\MVAODA.QRY - generated 21.01.97
+// for MVA.DBF
+//
+window 15 76 6 0 
+column 1 A-Kto pict @K@!
+column 6 Bezeichnung pict @k@s20
+column 4 Bemerkung pict @k@s20
+column 11 G-Kto
+column 7 _DocName
+column 9 DC pict @K@!
+column 10 Betrag pict @K@!
+column 15 Pos. pict @K@!

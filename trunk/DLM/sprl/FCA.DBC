@@ -1,0 +1,12 @@
+// Attribute fr Fakturationsdokumente
+I|Kolonne "Artikel-Nr."
+C|Kolonne "inkl. MWSt."
+Q|Kolonne "Menge"
+U|Kolonne "Stckpreis"
+N|Kolonne "Gesamt"
+E|Kolonne "Ihre Ref." (ART->RefExt)
+L|Kolonne "Liefereinheit" (ART->IdUnt)
+B|Kolonne "Bar-Code" (ART->EAN)
+O|Total
+T|mit Positionen und Zwischensummen
+P|Dokument wurde ausgedruckt

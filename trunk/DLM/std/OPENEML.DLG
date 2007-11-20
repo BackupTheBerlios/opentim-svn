@@ -1,0 +1,22 @@
+title tr("Write an e-mail","E-Mail schreiben","Ecrire e-mail")
+before left(getvar("infile"),3)==alias().or.setvar("infile",padr(alias()+".EML",12))
+field name="ToName" \
+      caption="Name Empf„nger  " \
+      picture="@k@s50" \
+      default=space(200)
+field name="ToAddr" \
+      caption="Adresse         " \
+      picture="@k@s50" \
+      default=space(200)
+field name="Subject" \
+      caption="Betreff         " \
+      picture="@k@s50" \
+      default=space(200)
+field name="infile" \
+      caption="Vorlage         " \
+      picture="@k@!" \
+      pick={|x|FilePick(alias()+"*.EML",NIL,"Vorlage",NIL,x)}
+
+after setvar("outfile",strtran(time(),":")+".eml")
+after fparse(getvar("infile"),getvar("outfile"),"[]")
+after AppShell(getvar("outfile"))

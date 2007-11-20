@@ -1,0 +1,11 @@
+// Ausdruck in Textdatei
+p_SetPgAlign("l")
+p_SetCapture("TEXT*.TXT")
+DrvLoad("TTX")
+p_SetLMargin( 0)
+p_SetRMargin( 0)
+p_SetPapWidth( 8)
+p_SetPapHeight( 11)
+p_SetTMargin( 0)
+p_SetBMargin( 0)
+SetMntFormat("S10")

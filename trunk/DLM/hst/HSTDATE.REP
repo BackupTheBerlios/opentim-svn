@@ -1,0 +1,46 @@
+// Gesamthistorik
+header1 "Gesamthistorik"
+header2 PerText()
+header3 ""
+area { oHst(), oPar(), oGen(), oVen() }
+order 9 // HST->Periode+dtos(HST->Date), sh. HST.DEF
+start MemPer1
+while {||ChkPeriode(HST->Periode) == 0}
+ValidateRecord {||\
+  if(empty(IdCtr),GenExist(HST->IdGen),ParExist(HST->IdPar)) }
+OnNoValue {|| Confirm(\
+  MsgIdJnlDoc() + " : Buchung " + HST->IdGen + \
+  " konnte keiner Kolonne zugewiesen werden !", \
+  MsgContinue() \
+)}
+group key={|| HST->Periode+dtos(HST->Date) } after={||.f.} text={|x|NIL} align="R"
+group key={|| HST->Periode } text={|x|HST->Periode } align="R" after={||RptTit3()}
+group text={|x|"Gesamt"} align="L"
+column header="Datum" width=8 text={||dtoc(HST->Date)} when={|grp|IsFirst(1)}
+column header="Jnl" width=LenIdJnl() text={||HST->IdJnl}
+column header="Dok.Nr" width=6 text={||HST->IdDoc}
+column header="Debit" width=LenMntF() \
+       when={||HST->DC=="D"} \
+       value={||val(HST->Mont)} \
+       text={|x|ntomf(x)} xsum={|x| ntomf(x) }
+column header="Kredit" width=LenMntF() \
+       when={||HST->DC=="C"} \
+       value={||val(HST->Mont)} \
+       text={|x|ntomf(x)} xsum={|x| ntomf(x) }
+column header="Bemerkung" width=20 text={||padr(DocName(IdJnl,IdDoc,Line),20)}
+column header="G-Kto" width=LenIdGen() text={||HST->IdGen}
+column header="P-Kto" width=LenIdPar() text={||HST->IdPar}
+column header="Name" width=30 text={||padr(\
+  if(empty(HST->IdCtr),GenName(),ParName()),30)}
+column header="Per." width=4 text={||HST->Periode} when={|grp|IsFirst(1)}
+column header="Match" width=6+LenIdJnl() text={||HST->Match}
+column header="*"     width=1            text={||HST->Satis}
+// ... #exec setvar("b",{||AddRptTotal()})
+// #exec DbfScan({oJnl()},1,NIL,NIL,"'G'$JNL->Attrib","RptAddTotal()")
+//total for={||HST->IdJnl=="VKR"} text={||"Verkauf"} when={|nCount|nCount>0}
+//total for={||HST->IdJnl=="EKR"} text={||"Einkauf"} when={|nCount|nCount>0}
+//total for={||HST->IdJnl=="KAS"} text={||"Kasse"} when={|nCount|nCount>0}
+//total for={||HST->IdJnl=="HP "} text={||"Bank"} when={|nCount|nCount>0}
+//total for={||HST->IdJnl=="DIV"} text={||"Diverse"} when={|nCount|nCount>0}
+//total for={||HST->IdJnl=="REP"} text={||"Übertrag"} when={|nCount|nCount>0}
+total text={||"Gesamt"} when={|nCount|nCount>1}

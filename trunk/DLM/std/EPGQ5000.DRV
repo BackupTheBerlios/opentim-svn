@@ -1,0 +1,19 @@
+// Epson GQ-5000 Laser Printer
+Name Epson GQ-5000 Laser Printer
+Initialize    chr(27)+"2" // line spacing 1/6 inch
+Reset ""
+// FormFeed      "@"
+FormFeed      chr(12)
+Font 10cpi  10 12/72 chr(27)+"y"+chr(0)+chr(0)
+Font 12cpi  12 12/72 chr(27)+"y"+chr(0)+chr(11)
+Font 13cpi  13 12/72 chr(27)+"y"+chr(0)+chr(2)
+Font 17cpi  17 12/72 chr(27)+"y"+chr(0)+chr(9)
+Font 20cpi  20 12/72 chr(27)+"y"+chr(0)+chr(12)
+BoldOn            "E"
+BoldOff           "F"
+UnderOn
+UnderOff
+ItalOn            "4"
+ItalOff           "5"
+Option A Label35mm chr(27)+"3"+chr(46)
+Option B Label37mm chr(27)+"3"+chr(44)

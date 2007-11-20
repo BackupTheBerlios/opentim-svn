@@ -1,0 +1,94 @@
+// initialize {set solde 2} {set montant S10}
+// ToCSV getvar("ToCSV")=="X"
+header1 utr("Best/Worst Sellers","Renner/Penner-Liste",\
+ "Chiffre d'affaires par article")
+header2 PerText()
+header3 "Journal " + DlgValue("IdJnl")
+area { oArt(), oCts(), oGra() }
+// #exec setvar("ByGroup",.t.)
+
+#if getvar("ByGroup")=="X"
+
+  order 2
+  group key={||ART->iGra} text={|x|trim(GraName(ART->iGra))} \
+        align="L" when={||.t.} \
+        after={||RptTit2().and.PrintTotal(1,1).and.PrintLine()}
+
+  total when={||.t.}
+
+#else
+  index for="ArtCtsSum(ART->IdArt,'CTS->IdJnl=="\
+            +'"'+DlgValue("IdJnl")+'"'\
+            +".and.ChkPeriode(CTS->Periode)==0','1')!=0" \
+        on="ArtCtsSum(ART->IdArt,'CTS->IdJnl=="\
+           +'"'+DlgValue("IdJnl")+'"'\
+           +".and.ChkPeriode(CTS->Periode)==0','-val(Mont)')"
+  total when={||.t.}
+#endif
+
+group text={|x|utr("all","alle","tous")} align="L"
+
+ValidateRecord {||setvar("Qte", ArtCtsSum(\
+  ART->IdArt,\
+  "CTS->IdJnl=='"+getvar('IdJnl')+"'.and.ChkPeriode(CTS->Periode)==0",\
+  "val(CTS->Qte)"))}
+
+ValidateRecord {||setvar("Mont", ArtCtsSum(\
+  ART->IdArt,\
+  "CTS->IdJnl=='"+getvar('IdJnl')+"'.and.ChkPeriode(CTS->Periode)==0",\
+  "val(CTS->Mont)"))}
+
+ValidateRecord {||setvar("Anz", ArtCtsSum(\
+  ART->IdArt,\
+  "CTS->IdJnl=='"+getvar('IdJnl')+"'.and.ChkPeriode(CTS->Periode)==0",\
+  "CTS->Anz"))}
+
+
+
+filter {|| getvar("Mont")!=0.or.getvar("Qte")!=0}
+// filter {|| !"H"$ART->Attrib.and....}
+// start trim(DlgValue("IdGen1"))
+// while {|| empty(DlgValue("IdGen2")).or.HST->IdGen <= DlgValue("IdGen2") }
+#if getvar("ByGroup")=="X"
+  column header="Grp" width=LenIdGra() text={||ART->iGra}
+#endif
+column header=utr("Pr-Id","Art.Nr","Nøart.") \
+       width=LenIdArt() \
+       text={||ART->IdArt}
+column header=utr("Description","Bezeichnung","D‚signation") \
+       width=30 text={||padr(ART->Name1,30)}
+#if HasField(oArt(),"Ref")
+  column header="Ref." width=15 text={||padr(ART->Ref,15)}
+#endif
+
+column header=utr("Turnover","Umsatz","C.A.") \
+       width=LenMntF() \
+       value={||getvar("Mont")} \
+
+column header=utr("Qty","Menge","Qt‚") \
+       width=LenQte()+2 \
+       decpos=2\
+       value={||getvar("Qte")}
+
+// Wenn man die Verkaufsmengen mit ART->QteForm formatiert haben will
+// Aber dann ist die CSV-Version nicht sehr brauchbar
+// column header=utr("Qty","Menge","Qt‚") \
+       width=LenQte() \
+       text={||ntoq(getvar("Qte"),ART->QteForm)}
+
+column header=utr("TO/Qty","Ums/Menge","C.A./Qt‚") \
+       value={||getvar("Mont")/getvar("Qte")} \
+       xsum={||""}
+
+column header=utr("Count","Anz","Nbre") \
+       width=6 \
+       decpos=0\
+       value={||getvar("Anz")}
+
+column header=utr("TO/Count","Ums/Anz.","C.A./Nbre") \
+       width=LenMntF() \
+       value={||getvar("Mont")/getvar("Anz")} \
+       xsum={||""}
+
+
+

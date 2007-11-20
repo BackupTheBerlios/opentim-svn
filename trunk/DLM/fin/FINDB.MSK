@@ -1,0 +1,26 @@
+//
+// t:\data\luc\release\tim4\dlm\FIN\FINDB.MSK - generated 28.10.02
+// for FIN.DBF
+//
+
+box 1 0 5 52
+box 1 53 5 79
+
+string 2 2 =utr("Doc.#","Dokument","Id Doc")
+string 2 22 =utr("Date","Datum","Date")
+string 2 55 =utr("Old balance","Alter Saldo","anc.solde")
+string 4 55 =utr("New balance","Neuer Saldo","Nouv.solde")
+string 4 31 Status
+string 2 39 =utr("Period","Periode","Periode")
+string 4 2 =utr("Currency","W„hrung","Devise")
+
+get 1 2 11
+get 2 2 15
+get 3 2 28
+get 8 2 47
+get 11 4 11 pict @K@!
+get 7 4 38
+get 9 2 68
+get 10 4 68
+get 5 4 40
+wait 15 76 6 2 1

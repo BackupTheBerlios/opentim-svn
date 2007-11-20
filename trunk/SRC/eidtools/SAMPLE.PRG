@@ -1,0 +1,3 @@
+PROCEDURE Main
+? GET_EID()
+RETURN

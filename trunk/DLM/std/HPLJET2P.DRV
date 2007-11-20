@@ -1,0 +1,10 @@
+// HP LaserJet 2
+// P.A.C. Systems Eupen T‚l. 087/55 62 31
+//
+Name HP LaserJet 2
+Initialize     chr(27)+"E"
+FormFeed               chr(27)+"&l0H"
+Font 10cpi 10 12/72 chr(27)+"(s10H"
+Font 12cpi 12 12/72 chr(27)+"(s12H"
+Font 17cpi 17 12/72 chr(27)+"(s17H"
+Option L Landscape   chr(27)+"&l1O" // Orientation paysage

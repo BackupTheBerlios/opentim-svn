@@ -1,0 +1,29 @@
+//
+// VENVKRA.QRY - generated 23.07.07
+// for VEN.DBF
+//
+column 2 =utr("Doc.#","Dok.Nr","NøDoc") pict @K@!
+column 22 DC pict @K@!
+column 8 =utr("Date","Datum","Date") say ""
+column 4 =utr("Customer","Kunde","Client") pict @K@S23
+column 31 IdPrj pict @K@!
+column 28 =utr("Ccy","W„.","Dev") pict @K@!
+column 6 =utr("Amount","Betrag","Montant") pict @K@! expr val(mont) say ntom(nSum)
+column 7 St pict !
+column 5 Betreff pict @K@S14
+column 19 Per. pict @K@!
+column 14 ZA pict @K@!
+column 9 =utr("Term","Z-Ziel","Ech‚ance") say ""
+column 13 Attr pict @K@!
+column 11 Autor pict @K@!
+column 3 Kd.Nr pict @K@!
+column 29 W-Kurs pict @K@!
+column 12 Match pict @K@!
+column 20 R pict @K@!
+column 32 Serie
+column 10 =utr("Remark","Bemerkung","Remarque") pict @k@s30
+column 26 Remise
+column 27 htva expr val(VEN->MontR) say ntom(nSum)
+mask ="VEN"+JnlIdDbv(VEN->IdJnl)
+help VENVKR
+freeze 4

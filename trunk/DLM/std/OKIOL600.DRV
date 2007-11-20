@@ -1,0 +1,24 @@
+// OKI OL-600 (HP Laserjet)
+// Copyright P.A.C. Systems Eupen
+//
+Name         OKI OL-600 (HP Laserjet)
+Initialize   "E"+"(12U"
+// (Reset) + (PC-850 (CP437) symbol set)
+Reset        ""
+FormFeed     chr(12)
+Font 10cpi 10 12/72  chr(27)+"(s3t0p10h10v0B"
+Font 12cpi 12 12/72  chr(27)+"(s3t0p12h10v0B"
+Font 17cpi 16.66 12/72  chr(27)+"(s0t0p16.66h10v0B"
+BoldOn     chr(27)+"(s3B"
+BoldOff    chr(27)+"(s0B"
+ItalOn     chr(27)+"(s1S"
+ItalOff    chr(27)+"(s0S"
+UnderOn    chr(27)+"&d0D"
+UnderOff   chr(27)+"&d@"
+Option P Portrait             "&l0O"
+Option L Landscape            "&l1O"
+Option 6 6LinesPerInch        "&l6D"
+Option 8 8LinesPerInch        "&l8D"
+Option A ErsterPapierschacht  "&l1H"
+Option C ZweiterPapierschacht "&l4H"
+Option M ManuellerEinzug      "&l2H"

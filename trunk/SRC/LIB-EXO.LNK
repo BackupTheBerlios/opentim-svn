@@ -1,0 +1,62 @@
+#
+# FILE LIB.LNK - General Linker Script part for standard applications
+#
+BLINKER EXECUTABLE CLIPPER F:95
+# BLINKER EXECUTABLE EXTENDED
+BEGINAREA
+#
+# Luc's LIB modules
+#
+FILE rptmeths
+FILE OSTREAM
+FILE drv
+FILE tab
+# FILE printer
+# FILE printtpl
+FILE Etc
+FILE Login
+FILE ddLayout
+FILE report
+// 20071013 FILE ScrSave
+# Clipper SYS modules (somewhat modified...)
+FILE ErrSysLS
+FILE ddSeek
+FILE filter
+FILE import
+FILE abrowse
+FILE a2browse
+FILE Protect
+FILE calend
+FILE views
+FILE woy
+##
+## Nanfor OBJ patches (only exospace)
+##
+#FILE diskfunc
+#FILE alt
+ENDAREA
+##
+## Nanfor LIB patch (only exospace)
+##
+LIB LFN # new 20040731
+LIB LL  # new 20040731
+#LIB NANFORX
+LIB NANFOR
+LIB CPMI
+LIB s:\oslib\lib\oslib
+####### FILE DbInit
+FILE appinit
+FILE ddmeths
+FILE txtedit
+FILE stdio
+FILE Windows
+FILE ddGet
+FILE ddArea
+FILE ddEdit
+FILE dlg
+FILE sMenu
+FILE Colors
+FILE getsysph
+FILE mfileio
+FILE dbcedit
+FILE datanorm

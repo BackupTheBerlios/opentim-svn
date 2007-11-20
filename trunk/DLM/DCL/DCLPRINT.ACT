@@ -1,0 +1,4 @@
+SetTplIni("LISTE")
+DlgExec("DCLPRINT")
+RETURN RepPrint("DCLDCF",NIL,"foo",SetTplIni(),SetPreview()) if empty(getvar("Detail"))
+RETURN RepPrint("DCLHST",NIL,"bar",SetTplIni(),SetPreview())

@@ -1,0 +1,61 @@
+// HP DeskJet 6122
+// Luc Saffre <luc.saffre@pacsystems.be>
+
+//
+// DÇsignation (max.30 caractäres)
+//
+Name HP DeskJet 6122
+Reset ""
+
+//
+// Reset : apräs chaque impression
+//
+// [url http://groups.google.com/groups?q=hp+deskjet+paper+length+esc&\
+// lr=&ie=UTF-8&oe=UTF-8&selm=C4452C.34C%40wyvern.wyvern.com&rnum=1]
+//
+// Paper size:             <Esc>E          Reset
+// Paper size:             <Esc>&l2A       US letter
+// Orientation:            <Esc>&l0O       Portrait
+// Line spacing:           <Esc>&l6D       6 lpi
+// Page length:            <Esc>&1l66P     66 lines
+// Perforation skip:       <Esc>&l0L       Off
+
+Initialize             chr(27)+"E&l0o&1l72p&l0L"
+
+FormFeed               chr(12)
+
+//
+// FÅr jede verfÅgbare Schriftart steht ein "Font"-Eintrag
+//   Font <Name> <AnzahlCPI> <Steuerzeichen>
+//
+Font  5cpi    5    12/72  chr(27)+"(s5H"
+Font  10cpi  10    12/72  chr(27)+"(s10H"
+Font  12cpi  12    12/72  chr(27)+"(s12H"
+Font  17cpi  16.67 12/72  chr(27)+"(s16.67H"
+Font  20cpi  20    12/72  chr(27)+"(s20H"
+
+//
+//  Zeichenformatierungs-Steuerzeichen
+//
+BoldOn   chr(27)+"(s3B"
+BoldOff  chr(27)+"(s0B"
+ItalOn   chr(27)+"(s1S"
+ItalOff  chr(27)+"(s0S"
+UnderOn  chr(27)+"&d1D"
+UnderOff chr(27)+"&d@"
+
+Option P Portrait             "&l0O"
+Option L Landscape            "&l1O"
+
+Option 6 6LinesPerInch        "&l6D&l72P"
+Option 7 6.9LinesPerInch      "&l7C&l82P"
+Option 8 8LinesPerInch        "&l8D&l96P"
+
+// ESC & l (n) C sets VMI (Vertical Motion Index) :
+// number of 0.021-inch-increments of spacing between two lines
+// Default is 8 (= 6lpi)
+// ESC & l n P sets the paper length in lines
+Option C CustomSpacing        "&l9c&l64P"
+
+// ESC * b (n) Y is the "Y Offset" in Pixels
+Option V VerticalAdjust chr(27)+"*b5Y"

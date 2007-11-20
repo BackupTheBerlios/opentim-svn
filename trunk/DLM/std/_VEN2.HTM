@@ -1,0 +1,49 @@
+[etc if !"H"$VNL->Attrib]
+  [=VnlRefExist()]
+  [=!VnlTotBegin().or.empty(VNL->Attrib).or.setvar("ColAttr",trim(VNL->Attrib))]
+  [etc if left(IdArt,1)=="+"\
+    .or.(trim(VNL->IdArt)=="*".and.empty(VNL->Desig))\
+    .or.trim(VNL->IdArt)=="A"\
+    .or."S"$VNL->Attrib\
+    .or."V"$ART->Attrib\
+  ]
+    [etc if getvar("TableActive")]
+    </table>
+    [=setvar("TableActive",.f.)]
+    [=setvar("ColHeader",.t.)]
+    [etc endif]
+  [etc endif]
+[etc endif]
+
+[etc if "P"$VNL->Attrib.and.getvar("TableActive")]
+    </table>
+    [=setvar("TableActive",.f.)]
+    [=setvar("ColHeader",.f.)]
+[etc endif]
+
+[etc if empty(VNL->cMont).and.left(VNL->IdArt,1)=="+"]
+  [=if(substr(VNL->IdArt,2,1)=="+","<H2>","<H1>")]
+  [=trim(if(empty(VNL->Desig),VnlObjName(TplLang()),VNL->Desig))]
+  [=if(substr(VNL->IdArt,2,1)=="+","</H2>","</H1>")]
+  [etc if !empty(VNL->Memo)]
+  <p class="VnlMemo">[=toHtmStream(VNL->Memo)]</p>
+  [etc endif]
+[etc else]
+  [etc if (trim(VNL->IdArt)=="*".and.empty(VNL->Desig))]
+    [etc if !empty(VNL->Memo)]
+    <p class="VnlMemo">[=toHtmStream(VNL->Memo)]</p>
+    [etc endif]
+  [etc else]
+    [etc if "V"$ART->Attrib.and.empty(VNL->cMont)]
+      [=trim(if(empty(VNL->Desig),VnlObjName(TplLang()),VNL->Desig))]
+      [etc if !empty(VNL->Memo)]
+      <p class="VnlMemo">[etc do toHtmStream(VNL->Memo)]</p>
+      [etc endif]
+      [etc if !empty(ART->Memo1)]
+      <p class="VnlMemo">[etc do toHtmStream(ArtMemo())]</p>
+      [etc endif]
+    [etc else]
+      [etc do fparse("_VEN3.HTM")]
+    [etc endif]
+  [etc endif]
+[etc endif]

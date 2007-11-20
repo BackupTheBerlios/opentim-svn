@@ -1,0 +1,24 @@
+// Partner mit Umsatz nach Excel exportieren
+
+#exec DlgExec("PARHST")
+
+#include "PAR.EXP"
+
+RecordBefore DlgDefine("Umsatz",0)
+
+#exec DlgDefine("b",{||\
+  DlgPlus('Umsatz',Db2Dev(SetDevise(),CTP->Periode,val(CTP->Umsatz)))\
+})
+
+RecordBefore DbfScan(\
+  {oCtp()},\
+  1,\
+  PAR->IdPar+trim(MemPer1),\
+  "CTP->IdPar=='"+PAR->IdPar+"'.and.ChkPeriode(CTP->Periode)<=0",\
+  "CTP->IdCtr=='"+getvar("IdCtr")+"'",\
+  DlgValue('b'),NIL,.f.\
+)
+
+
+FieldUpdate   Umsatz   komma(ltrim(ntom(getvar("Umsatz"))))
+

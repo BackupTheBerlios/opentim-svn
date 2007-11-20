@@ -1,0 +1,55 @@
+//
+// C:\SOFT\RELEASE\TIM300\220D\PARL.MSK - generated 21.04.1999
+// for PAR.DBF
+//
+
+box 1 0 10 50
+box 1 51 12 79
+box 13 51 20 79
+
+string 2 53 ID
+string 3 2 Name 1
+string 4 7 2
+string 6 2 Straáe
+string 8 2 Tel
+string 9 2 Fax
+string 9 53 Bank
+string 8 29 MWSt
+string 5 53 Zahlart
+string 4 53 Sprache
+string 4 66 Generalkonto
+string 5 2 PLZ/Ort
+string 6 53 W„hrung
+string 2 2 Anrede
+string 2 63 seit
+string 6 66 Attribute
+string 7 53 Ku./Li.
+string 13 60 ÿ[F12] Memoÿ
+string 11 1 [Sh-F9] Sammelhistorik
+
+get 1 2 56
+get 32 2 14 pict @k
+get 3 3 14 pict @k
+get 4 4 14
+get 8 5 10
+get 6 5 14
+get 31 5 23 pict @K@S26
+get 5 6 14
+get 39 6 38
+get 40 6 43
+get 9 8 6
+get 10 9 6
+get 29 9 29
+get 12 9 31 pict @k@s
+get 28 2 68
+get 21 4 61
+get 20 5 61
+get 36 6 61
+get 7 7 61 pict @K@!
+get 2 5 66
+get 19 7 66
+get 11 9 63
+get 38 10 63
+get 13 11 53
+get 37 14 52 pict 26x6
+wait 9 50 12 1 3

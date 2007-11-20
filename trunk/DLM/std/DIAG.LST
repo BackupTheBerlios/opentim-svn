@@ -1,0 +1,37 @@
+[set special P]
+[=p_setwidth(getvar("diag.Width"))]
+[=SetPageHeader({||PrintHeader(MnuItemName())})]
+curdir : [=curdir()]
+AppPath() : [=AppPath()]
+DbPath() : [=DbPath()]
+rpt_filename() : [=rpt_filename()]
+log_filename() : [=log_filename()]
+SetRptArchive() : [=SetRptArchive()]
+
+       getenv()    getvar()
+       컴컴컴컴컴  컴컴컴컴컴
+PC   : [=padr(getenv("PC"),10)]  [=padr(getvar("PC"),10)]
+USER : [=padr(getenv("USER"),10)]  [=padr(getvar("USER"),10)]
+
+
+HOME     : [=getenv("HOME")]
+TEXMFCNF : [=getenv("TEXMFCNF")]
+
+[etc if getvar("diag.Path")=="X"]
+PATH :
+[=strtran(getenv("PATH"),";",chr(13)+chr(10))]
+---
+[etc endif]
+[etc if getvar("diag.Tables")=="X"]
+ali reccount   header  recsize ro path
+--- -------- -------- -------- -- ----------------------------------------
+[=setvar("onArea",{||fparse("DIAG2.LST")})]
+[=setvar("expSearch",{|ad|!OnArea(ad,getvar('onArea'))})]
+[etc do ascan(AppDataList(),getvar("expSearch"))]
+
+[=ntrim(len(AppDataList()))] tables analyzed.
+[etc endif]
+
+[etc goto -2]
+[etc line]
+[=tr("End of report","Ende des Berichts","Fin du rapport")]

@@ -1,0 +1,20 @@
+// DBCHECK.ACT
+UsrIsAlone().or.Confirm( \
+  "Zur Zeit arbeiten andere Benutzer in dieser Datenbank. "\
+  +"Wollen Sie trotzdem den Datenbank-Check durchfÅhren (J/N) ?",NIL,"N"\
+)
+SetTplIni("LISTE")
+DlgExec("DBCHECK")
+empty(DlgValue("AppIndex")).or.AppReorg(.f.) //.or.Confirm(MsgContinue())
+empty(DlgValue("AppRebuild")).or.AppReorg(.f.,NIL,.f.,.f.,.t.) // .or.Confirm(MsgContinue())
+empty(DlgValue("Rebuild")).or.Rebuild(.f.,SetTplIni(),SetPreview()) //.or.Confirm(MsgContinue())
+empty(DlgValue("TimTest")).or.(SetPeriode("").and.TimTest(SetTplIni(),"X",.f.))
+RETURN Warning(SetDlgTitle()+utr(\
+  " has not been executed completely!",\
+  " wurde nicht korrekt beendet!",\
+  " n'a pas ÇtÇ effectuÇ correctement!")) \
+  if IndExist("INDEX")  // .or.IndExist("REBUILD")
+IndDelete("DBCHECK")
+SetMsg(SetDlgTitle()+MsgDone())
+empty(DlgValue("AppQuit")).or.AppNormEnd()
+SetMnuDone()

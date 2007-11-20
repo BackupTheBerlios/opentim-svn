@@ -1,0 +1,42 @@
+// Invetur
+title "Inventaire"
+// before DlgDefault("IdJnl","VKR")
+// field name="IdJnl" \
+    caption="Journal " \
+    picture="@k@!" \
+    pick={|x|DbfPick(\
+              {oJnl()},"Auswahl Journal","JNLPICK",\
+              x,\
+              "Alias=='VEN'.and.'M'$Attrib"\
+    )}
+field block={|x|SetPeriode(x)} \
+    caption="Summe EK/VK aus Periode " \
+    pick={|x|PickPerRange(x)}
+field block={|x|SetTplIni(x)} picture="@k@!" \
+    caption="Druckparametersatz " \
+    value="LISTE" \
+    pick={|x|PickTpl("INI",x)}
+field block={|x|SetPreview(x)} \
+    caption2=" Seitenvorschau " \
+    value="X" \
+    reader={|g|CbxReader(g)}
+field name="NurBestand" \
+    caption2=" Nur Artikel mit Lagerbestand " \
+    value="X" \
+    reader={|g|CbxReader(g)}
+field name="NurOhneWert" \
+    caption2=" Nur Artikel ohne Wert " \
+    value=" " \
+    reader={|g|CbxReader(g)}
+//  field name="date1" \
+//      caption="Datum : vom " \
+//      value=ctod("") \
+//      attrib="N"
+//  field name="date2" \
+//      caption=" bis zum " \
+//      value=UserDate()
+
+after DlgDefine("ArtFilter",'!"S"$ART->Attrib.and.!"H"$ART->Attrib')
+after empty(DlgValue("NurBestand")).or.DlgPlus("ArtFilter",".and.qton(ART->Lager)!=0")
+after empty(DlgValue("NurOhneWert")).or.DlgPlus("ArtFilter",".and.empty(ART->PrixR)")
+after AppSaveMem()

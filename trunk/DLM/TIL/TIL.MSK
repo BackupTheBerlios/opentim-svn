@@ -1,0 +1,35 @@
+//
+// t:\data\luc\release\tim4\dlm\TIL\TIL.MSK - generated 02.04.03
+// for TIL.DBF
+//
+
+
+string 2 1 TP Nr.
+string 3 1 Erstellt
+string 8 34 Erste Rate
+string 2 20 Partner
+string 3 20 Empf„nger
+string 4 20 Matchliste
+string 9 35 Bemerkung
+string 7 1 Gesamtbetrag
+string 8 1 Max. Rate
+string 9 1 Anz. Raten
+string 7 36 Rhythmus
+string 4 1 Status
+
+get 1 2 12
+get 2 3 10
+get 3 2 31 pict @K@!
+get 0 2 42 block padr(ParName(TIL->IdPar),35)
+get 4 3 31 pict @K@!
+get 0 3 42 block padr(ParName(TIL->IdPar2),35)
+get 5 4 31 pict @k@s40
+get 12 7 17
+get 8 8 17
+get 9 9 17
+get 10 7 45
+get 6 8 45
+get 11 9 45
+get 7 4 8
+get 0 4 10 block padr(EtatText(TIL->Etat),8)
+wait 9 70 13 2 1

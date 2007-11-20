@@ -1,0 +1,36 @@
+// HP Laserjet 4000
+// Copyright P.A.C. Systems Eupen
+//
+Name         HP Laserjet4000
+// Initialize   "E"+"(12U"
+Initialize   chr(27)+"E"+chr(27)+"(12U"
+// (Reset) + (PC-850 (CP437) symbol set)
+Reset        ""
+FormFeed     chr(12)
+// Note : ESC + "&l" + chr(n) + "C" : vertical motion index n/48"
+// 1/6" = 8/48
+// Folgende Kombinationen sind ok: 10 cpi -> 8/48 lpi
+//                                 12
+Font  5cpi  5 16/48  chr(27)+"(s3t0p5h5v0B"+chr(27)+"&l16C"
+Font  8cpi  8 12/48  chr(27)+"(s3t0p8h8v0B"+chr(27)+"&l12C"
+Font 10cpi 10  8/48  chr(27)+"(s3t0p10h10v0B"+chr(27)+"&l8C"
+Font 12cpi 12  7/48  chr(27)+"(s3t0p12h12v0B"+chr(27)+"&l7C"
+Font 14cpi 14  6/48  chr(27)+"(s3t0p14h14v0B"+chr(27)+"&l6C"
+Font 15cpi 15  6/48  chr(27)+"(s3t0p15h15v0B"+chr(27)+"&l6C"
+Font 18cpi 18  5/48  chr(27)+"(s0t0p18h18v0B"+chr(27)+"&l5C"
+Font 19cpi 19  5/48  chr(27)+"(s0t0p19h18v0B"+chr(27)+"&l5C"
+Font 20cpi 20  5/48  chr(27)+"(s0t0p20h18v0B"+chr(27)+"&l5C"
+BoldOn     chr(27)+"(s3B"
+BoldOff    chr(27)+"(s0B"
+ItalOn     chr(27)+"(s1S"
+ItalOff    chr(27)+"(s0S"
+UnderOn    chr(27)+"&d0D"
+UnderOff   chr(27)+"&d@"
+// Option A ErsterPapierschacht  "&l4H"
+Option B ZweiterPapierschacht "&l1H"
+Option C DritterPapierschacht "&l4H"
+Option M ManuellerEinzug      "&l2H"
+Option P Portrait             "&l0O"
+Option L Landscape            "&l1O"
+Option 6 6LinesPerInch        "&l6D"
+Option 8 8LinesPerInch        "&l8D"

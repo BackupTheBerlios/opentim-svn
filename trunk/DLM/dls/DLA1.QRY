@@ -1,0 +1,10 @@
+//
+// DLA1.QRY - generated 11.11.05
+// for DLA.DBF
+//
+column 1 Nr pict @K@!
+column 2 Ref
+column 4 Bezeichnung DE pict @K@S40
+column 3 Attrib pict @K@!
+order 1
+help DLA

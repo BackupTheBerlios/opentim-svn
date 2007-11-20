@@ -1,0 +1,4 @@
+field caption=utr("Language  ","Sprache  ","Langue  ") \
+      block={|x|SetTplLang(x)}\
+      picture="@k@!"\
+      pick={|x|PickLng(x)}

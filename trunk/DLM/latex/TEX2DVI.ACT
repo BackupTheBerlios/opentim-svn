@@ -1,0 +1,43 @@
+// TEX2DVI.ACT
+// called from TEXPARSE.ACT
+FileDelete(DlgValue("OutFile")+".DVI",.f.,.t.)
+// Confirm(getvar("OutFile")+".DVI","Weiter?")
+AppShell(\
+  "latex "\
+  +if("E"$UsrAttrib(),"","--quiet ")\
+  +DlgValue("OutFile")+".TEX",\
+  "Lancement de LaTeX...",.f.\
+)
+file(DlgValue("OutFile")+".DVI").or.!SetMsg(\
+  DlgValue("OutFile")+".DVI wurde nicht erstellt."\
+)
+RETURN AppShell(\
+  "yap "+DlgValue("OutFile")+".DVI",\
+  "Lancement de yap",.f.\
+) if SetPreview()=="X"
+!file(DlgValue("OutFile")+".PS")\
+  .or.FileDelete(DlgValue("OutFile")+".PS",.f.)\
+  .or.!Warning(SetMsg())
+DlgDefine("Cmd",\
+  "dvips -f -K"\
+  +if(DlgValue("Copies")==1,""," -b "+ntrim(DlgValue("Copies")))\
+  +" "+DlgValue("OutFile")+".DVI"\
+  +if(\
+     DlgValue("psnup")==1,\
+     "",\
+     " | psnup -"+ntrim(DlgValue("psnup"))\
+  )\
+  +" > " +DlgValue("OutFile")+".PS"\
+)
+Confirm(DlgValue("Cmd"))
+AppShell(DlgValue("Cmd"),\
+  "Lancement de dvips...",.f.\
+)
+file(DlgValue("OutFile")+".PS").or.!SetMsg(\
+  DlgValue("OutFile")+".PS wurde nicht erstellt."\
+)
+// Confirm("i'm gonna print!",MsgSure())
+AppShell(\
+  "copy "+DlgValue("OutFile")+".PS LPT2:",\
+  "Envoi vers LPT2..."\
+)

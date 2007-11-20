@@ -1,0 +1,19 @@
+//
+// F:\SOFT\RELEASE\TIM220\STD01D\TAC.MSK - generated 30.09.97
+// for TAC.DBF
+//
+
+
+string 2 9 KÅrzel
+string 2 24 Bezeichnung 1
+string 4 36 2
+string 10 28 Attribute
+string 6 36 3
+string 8 24 Betrag/Stunde
+
+get 1 2 16
+get 2 2 38
+get 3 4 38
+get 4 6 38
+get 5 8 38
+get 6 10 38

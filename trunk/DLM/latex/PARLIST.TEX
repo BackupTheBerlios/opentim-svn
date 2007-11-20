@@ -1,0 +1,16 @@
+% PARLIST.TEX - Template to be used by TIM
+% Luc Saffre. PAC Systems Eupen
+%
+
+\documentclass{article}        % Your input file must contain these two lines 
+\begin{document}               % plus the \end{document} command at the end.
+
+\section*{Partnerliste}        % This command makes a section title.
+
+[etc do DbfScan(\
+  {oPar(),oPlz(),oNat()},1,\
+  NIL,NIL,NIL,\
+  "fparse(AppPath()+'\tpl\par.tex')"\
+)]
+
+\end{document}                 % The input file ends with this command.

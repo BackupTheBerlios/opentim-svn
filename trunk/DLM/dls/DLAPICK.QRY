@@ -1,0 +1,13 @@
+//
+// DLAPICK.QRY - generated 08.11.06
+// for DLA.DBF
+//
+window 15 50 0 0 
+column 2 Ref
+column 4 Bezeichnung DE pict @K@S25
+column 1 Nr pict @K@!
+column 7 Zahlart pict @K@!
+column 3 Attrib pict @K@!
+column 5 Bezeichnung FR pict @K@S25
+column 6 Name3 pict @K@S25
+order 2

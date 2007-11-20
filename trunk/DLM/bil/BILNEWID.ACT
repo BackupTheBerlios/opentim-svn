@@ -1,0 +1,53 @@
+// BilNewId.act
+RETURN !Warning(tr(\
+  "Function is locked! Please contact your System administrator!",\
+  "Funktion blockiert! Benachrichtigen Sie den Systemverwalter",\
+  "Fonction d‚sactiv‚e! Contactez l'administrateur systŠme!"\
+)) if IndExist("BILNEWID")
+DlgDefine("IdBil1",BIL->IdBil)
+DlgDefine("IdBil2",BIL->IdBil)
+// DlgDefine("IdBil2",space(LenIdBil()))
+DlgExec("BILNEWID")
+if(MemLang1=="D",\
+  Confirm(\
+    "Bilanzposten "+DlgValue("IdBil1")+" kriegt "+DlgValue("IdBil2")\
+    +" als neue interne Nummer", MsgSure(), "J"\
+  ),\
+  Confirm(\
+    "Poste de bilan "+DlgValue("IdBil1")+" re‡oit "+DlgValue("IdBil2")\
+    +" comme nouveau nø interne", MsgSure(), "O"\
+  )\
+)
+DlgDefine("Union",DbfPeek(oBil(),DlgValue("IdBil2"),".t.",.f.))
+RETURN .f. if DlgValue("Union").and.!Confirm(\
+  DlgValue("IdBil2")\
+  +if(MemLang1=="D"," existiert bereits."," existe d‚j…."),\
+  if(MemLang1=="D",\
+    "Alle Referenzen werden umgeleitet auf ",\
+    "Toutes les r‚f‚rences seront d‚vi‚es vers "\
+  )+DlgValue("IdBil2")\
+  +if(MemLang1=="D"," und Biltner "," et le partenaire ")\
+  +DlgValue("IdBil1")\
+  +if(MemLang1=="D"," anschlieáend gel”scht! "," sera supprim‚! ")\
+  +MsgSure()\
+)
+SendConsole("BilNewId.act "+DlgValue("IdBil1")+" to "+DlgValue("IdBil2"))
+IndCreate("BILNEWID",DlgValue("IdBil1")+" to "+DlgValue("IdBil2"))
+MsgDisplay(MsgWorking())
+ddCloseAll()
+SendConsole("GEN...")
+DbfReplace(oGen(),3,"IdBil",DlgValue("IdBil1"),DlgValue("IdBil2"))
+
+TryRecLock(\
+  if(DlgValue("Union"),\
+    {||dbdelete(),.t.},\
+    {||(BIL->IdBil:=DlgValue("IdBil2"))!=NIL}\
+))
+
+
+SendConsole("BilNewId.act : okay")
+IndDelete("BILNEWID")
+ddCloseAll()
+ddRefreshAll()
+SetMnuDone()
+SetMsg("rename "+DlgValue("IdBil1")+" to "+DlgValue("IdBil2")+MsgDone())

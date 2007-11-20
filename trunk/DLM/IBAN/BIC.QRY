@@ -1,0 +1,8 @@
+//
+// BIC.QRY - generated 23.05.03
+// for BIC.DBF
+//
+window 15 62 0 0 
+column 1 BIC pict @K@!
+column 2 Name der Bank
+column 3 Lnd pict @K@!

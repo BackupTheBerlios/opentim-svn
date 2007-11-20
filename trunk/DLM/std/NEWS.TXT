@@ -1,0 +1,22 @@
+
+
+       ÚÄÄÄÄÄÄÄ¿Ä¿ÄÄÄÂÄÄÄÄ¿
+       ³       ³ ³   ³    ³  [=tr("The Business Software","Das Verwaltungsprogramm","Le Logiciel de gestion")]
+       ÀÄ¿   ÚÄÙ ³        ³
+         ³   ³   ³ ³   ³  ³
+         ÀÄÄÄÙÄÄÄÙÄÁÄÄÄÁÄÄÙ  [=tr("...when time is money","...wenn Zeit Geld ist","...si le temps est argent")]
+       ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+       Copyright 1992-2002 P.A.C. Systems Eupen
+                 2002-2007 Rumma & Ko, Tallinn
+
+       Support   luc.saffre@gmx.net +372/4824.548 +372/5667.2435
+
+       [=if(empty(LimitDate()),"",\
+       tr(\
+         "This license is limited until ",\
+         "Diese Lizenz ist zeitlich begrenzt bis zum ",\
+         "Cette licence est limit‚e jusqu'au ")+\
+       dtocf(LimitDate()))]
+
+       PC=[=getvar("PC")]
+

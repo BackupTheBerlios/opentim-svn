@@ -1,0 +1,8 @@
+DlgDefault("IdUsr",UserId())
+WhileLoop(\
+  {||setvar("IdUsr",PickUsr(getvar("IdUsr"),MnuItemName()))\
+     .and.getvar("IdUsr")!=NIL},\
+  {||DbfEdit(\
+    {oPin(),oPar(),oPrj()},MnuItemName()+" : "+trim(getvar("IdUsr")),\
+    "PINUSR",NIL,".t.",\
+    getvar("IdUsr"),"PIN->IdUsr")})

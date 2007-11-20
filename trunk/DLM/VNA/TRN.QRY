@@ -1,0 +1,11 @@
+//
+// C:\SOFT\RELEASE\TIM220\STD220D\TRN.QRY - generated 12.01.98
+// for TRN.DBF
+//
+window 15 50 0 0 
+column 1 Nr. pict @K@!
+column 8 JG1 pict @K@!
+column 3 Jn1 pict @K@!
+column 9 JG2 pict @K@!
+column 4 Jn2 pict @K@!
+column 5 Attr pict @K@!

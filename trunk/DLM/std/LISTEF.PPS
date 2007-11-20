@@ -1,0 +1,12 @@
+// Liste mit Footer
+p_SetPgAlign( "r")
+p_SetPort(MemLpt)
+DrvLoad(MemDrv)
+p_SetLMargin( 0.5)
+p_SetRMargin( 0.5)
+p_SetPapWidth( 8.27)
+p_SetPapHeight( 12.0)
+p_SetTMargin( 0)
+p_SetBMargin( 0.5)
+SetMntFormat( "S10")
+p_SetFooter( "FOOTER")

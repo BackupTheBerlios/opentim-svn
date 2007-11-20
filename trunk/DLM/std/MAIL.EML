@@ -1,0 +1,20 @@
+From: [=trim(getvar("mailfrom"))]
+To: [=trim(getvar("mailto"))]
+Bcc: [=trim(getvar("mailbcc"))]
+Subject: [=SetDlgTitle()]
+
+[=hardcr(getvar("mailbody"))]
+
+[=iif(empty(getvar("mailhost")),p_PreBuffer(),.t.)]
+
+[etc if .f.]
+[=tr("Best regards,",\
+     "Mit freundlichen Gráen,",\
+     "Salutations distingu‚es,")]
+[=Auteur()]
+[=Fonction()]
+
+[=MemName1]
+[=MemName2]
+[=MemName3]
+[etc endif]

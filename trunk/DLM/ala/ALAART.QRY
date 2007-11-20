@@ -1,0 +1,13 @@
+//
+// ALAART.QRY - generated 01.02.99
+// for ALA.DBF
+//
+window 14 80 8 0 
+column 3 Art.Nr pict @K@!
+column 0 Match block ArtField(ALA->IdArt2,cblock("ART->Match")) pict @k@s12 skip .t.
+column 8 Bezeichnung pict @k@s26 skip .t.
+column 5 Menge pict @K@!
+column 6 Preis pict @K@!
+column 7 Selbstk. pict @K@!
+column 4 Bemerkung pict @K@S16 skip .t.
+column 2 Pos. pict @K@! skip .t.

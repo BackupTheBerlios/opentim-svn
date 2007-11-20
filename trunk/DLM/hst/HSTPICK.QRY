@@ -1,0 +1,22 @@
+//
+// C:\SOFT\RELEASE\TIM220\STD01D\HSTPICK.QRY - generated 07.11.97
+// for HST.DBF
+//
+window 18 76 0 0 
+column 3 Jnl pict @K@!
+column 4 Dok.Nr pict @K@!
+column 1 =utr("Accnt","G-Kto","Compte")
+column 2 =utr("Partn.","P-Kto","CptPar")
+column 7 Name pict @k@s20
+column 17 Debit
+column 18 =utr("Credit","Kredit","Cr‚dit")
+column 5 Line
+column 6 =utr("Date","Datum","Date")
+column 8 =utr("Remark","Bemerkung","Remarque")
+column 9 Periode
+column 10 DC
+column 11 =utr("Amount","Betrag","Montant")
+column 12 =utr("Amnt FC","Betrag FW","MontDev")
+column 13 Match pict @K@!
+column 14 *
+column 15 Z

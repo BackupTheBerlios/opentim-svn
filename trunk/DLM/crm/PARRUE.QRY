@@ -1,0 +1,14 @@
+//
+// C:\SOFT\RELEASE\TIM220\STD01D\PARRUE.QRY - generated 31.10.96
+// for PAR.DBF
+//
+window 16 76 0 0 
+column 5 Straáe pict @K@S23 attr R
+column 39 Nr. pict @K@!
+column 40 Box
+column 33 Name + Anrede
+column 4 Name 2 pict @K
+column 9 Tel
+column 10 Fax
+column 12 MWSt.-Nr pict @K@!
+mask PAR

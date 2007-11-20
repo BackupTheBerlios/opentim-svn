@@ -1,0 +1,27 @@
+//
+// F:\SOFT\TEST\TIM300\HEINEN\VEN.QRY - generated 12.09.95
+// for VEN.DBF
+//
+column 2 =utr("Doc.#","Dok.Nr","NøDoc")
+column 4 Partner
+column 5 =utr("Remark","Bemerkung","Remarque")
+column 6 zu zahlen
+column 7 St
+column 8 =utr("Date","Datum","Date")
+column 9 =utr("Term","Z-Ziel","Ech‚ance")
+column 19 Per.
+column 10 Bezug
+column 11 Autor
+column 3 Part-Id
+column 14 ZA
+column 13 Attr
+column 27 EK
+column 18 Marge
+column 28 =utr("Ccy","W„.","Dev")
+column 29 W-Kurs
+column 17 =utr("Amount","Betrag","Montant")
+column 26 Netto
+column 25 MWSt
+column 30 MWSt intra
+column 12 Match
+mask ="VEN"+JnlIdDbv(VEN->IdJnl)

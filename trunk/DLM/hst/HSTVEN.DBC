@@ -1,0 +1,13 @@
+// HSTVEN.DBC
+0|0%
+A|6%
+B|12%
+N|21%
+C|Vertragspartner
+M|Marge b‚n‚ficiaire
+I|Intracom Waren
+S|Intracom Dienstleistungen
+X|Import/Export
+*|Kolonne "hors d‚cl."
+D|MWSt-Nr im Ausland (D,NL,L,F)
+E|eigene Kolonne fr "N.abz. MWSt"

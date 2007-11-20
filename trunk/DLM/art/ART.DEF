@@ -1,0 +1,63 @@
+// Anpassungen ART.DBF
+// ddAddIndex("ART->iGra+right(ART->IdPar,3)+upper(ART->RefExt)","Gruppe+Lfr+BestNr")
+// ddAddIndex("right(ART->IdPar,3)+ART->iGra+upper(ART->RefExt)","Gruppe+Lfr+BestNr")
+ddAddIndex("upper(ART->Name1)","Bezeichnung",NIL,{|x|upper(x)})
+ddAddField("Lager","C",LenQte(),0,"","",NIL,NIL,NIL,{|x|PickNum(x)},{||"S"$UsrAttrib()},{|x|GetQte(x,ART->QteForm)})
+ddAddField("EAN","C",16,0,"","",NIL,NIL,{||IsEan13(ART->EAN)},\
+  {|x|PickNum(x)},\
+  {||.t.},\
+  {|x|GetEAN13(x,"541234567","@r 99.9999999.999.9")}\
+)
+ddAddField("idPPS","C",2,0,\
+  "@k@!",if(HasDlm("PPS"),NIL,"H"),\
+  NIL,NIL,NIL,\
+  {|x|PickDbcCode("PPS.DBC",x,"PPS-Kolonne")}\
+)
+ddAddField("IdGenE","C",LenIdGen(),0,\
+  "@k@!",if(HasDlm("HST"),NIL,"H"),\
+  NIL,NIL,NIL,\
+  {|x|PickGen(NIL,x)}\
+)
+
+// ddAddField("DEM","C",LenMont(),0,"","",\
+  NIL,NIL,\
+  {||\
+    ART->Prix1:=ntom(round(val(ART->DEM)*22,-1)),\
+    ART->HFL:=ntom(round(val(ART->DEM)*1.222,0),2),\
+    ArtP1Validate(val(ART->PrixR))\
+  },\
+  {|x|PickNum(x)},\
+  {||"S"$UsrAttrib()},\
+  {|x|GetNum(x,2)}\
+)
+// ddAddField("HFL","C",LenMont(),0,"","",NIL,NIL,NIL,{|x|PickNum(x)},{||"S"$UsrAttrib()},{|x|GetNum(x,2)})
+// ddFldSetValidate("Prix1",  "\
+  ART->DEM:=ntom(round(val(ART->Prix1)/22,0),2),\
+  ART->HFL:=ntom(round(val(ART->Prix1)/18,0),2),\
+  ArtP1Validate(0)\
+")
+!HasDlm("VNA").or.ddAddSpecial(\
+  {||ArtVnaEdit(ART->IdArt)},\
+  "Fakturierungs~vorschl„ge   [F6]",\
+  -5\
+)
+
+
+ddAddSpecial(\
+  {||ParPage(ART->IdPar)}, \
+  MnuParPage(),\
+  -14\
+)
+ddAddSpecial(\
+  {||DlgExec("ARTSEEK").and.ActExec("ARTSEEK")},\
+  "~Textsuche...          [Alt-F8]",\
+  -37\
+)
+
+ddAddSpecial({||ArtRename()}, MsgMnuRename(), -31 )
+#if file(DbPath()+"\PRT.DBC")
+  ddFldSetPick("IdPar",{|x|PickPar("L",x,"Auswahl Lieferant")})
+#else
+  ddFldSetPick("IdPar",{|x|PickPar("P",x,"Auswahl Lieferant")})
+#endif
+

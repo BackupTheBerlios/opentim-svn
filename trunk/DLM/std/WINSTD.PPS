@@ -1,0 +1,13 @@
+// Windows-Drucker oder PDF
+p_SetPgAlign("l")
+p_SetPort("")
+DrvLoad("WINSTD")
+p_SetSpecial("P")
+p_SetLMargin(0.5)
+p_SetRMargin(0.5)
+p_SetPapWidth( 8.27)
+p_SetPapHeight(iif(SetAsMail(),0,11.69))
+p_SetTMargin(0.2)
+p_SetBMargin(0.2)
+SetMntFormat("S10")
+SetSolde("2")

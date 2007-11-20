@@ -1,0 +1,21 @@
+//
+// t:\data\luc\release\tim4\dlm\PRJ\PRJ.MSK - generated 05.03.03
+// for PRJ.DBF
+//
+
+
+string 1 1 Title
+string 3 14 start
+string 3 23 until
+string 3 32 Partner
+string 3 1 Status
+
+get 2 2 1 pict @k@s78
+get 11 4 1 pict @k@!
+get 0 4 3 block padr(DbcText("PRJSTAT.DBC",PRJ->Status),10)
+get 5 4 14
+get 6 4 23
+get 9 4 32 pict @k@!
+get 7 6 1 pict 78x16
+get 0 4 39 block padr(ParName(PRJ->IdPar),30)
+wait 10 78 23 0 5

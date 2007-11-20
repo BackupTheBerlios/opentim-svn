@@ -1,0 +1,89 @@
+// PRJ.DEF
+ddAddIndex("PRJ->IdPar+PRJ->IdPrj","by partner",NIL,{|x|x})
+ddAddIndex("PRJ->Status+dtos(PRJ->Date1)","todo",NIL,{|x|x})
+ddAddIndex("PRJ->Status+dtos(PRJ->Date2)","closed","!empty(PRJ->Date2)",{|x|x})
+ddAddIndex("PRJ->Parent+PRJ->Seq","Parent")
+ddAddIndex("upper(PRJ->Name1)","Name",NIL,{|x|upper(x)})
+
+ddAddField("IdPar","C",LenIdPar(),0,\
+  "@k@!","",NIL,NIL,\
+  {||ph_refresh()},\
+  {|x|PickPar("P",x,"Partner")},NIL,{|x|GetIdPar(x)}\
+)
+ddAddField("MoreText","M",10,0)
+ddAddField("Status","C",1,0,"@k@!",NIL,\
+  NIL,NIL,NIL,\
+  {|x|PickDbcCode("PRJSTAT.DBC",x,"Status")}\
+)
+ddAddField("IdArt","C",LenIdArt(),0,"@k@!",NIL,\
+  NIL,NIL,NIL,\
+  {|x|PickArt(x)}\
+)
+ddAddField("Parent","C",LenIdPrj(),0,\
+  "@k@!",NIL,\
+  NIL,NIL,\
+  {||.t.},{|x|PickPrj(x)},{||.t.},\
+  {|x|GetNum(x)}\
+)
+ddAddField("Seq","C",3,0,\
+  NIL,NIL,\
+  NIL,NIL,\
+  NIL,NIL,NIL,\
+  {|x|GetNum(x)}\
+)
+
+ddFldSetWhen("IdPrj","'E'$UsrAttrib()")
+ddFldSetWhen("Date1","'E'$UsrAttrib()")
+// ddFldSetWhen("IdPrj",".f.")
+
+ddFldSetWhen("IdPar","empty(PRJ->Date1).or.'E'$UsrAttrib()")
+
+ddFldSetSize("Name1",LenArtName(),0)
+ddFldSetSize("Type",4,0)
+ddFldSetPick("Type",{|x|PickDbcCode("PRJTYPE.DBC","Type d'installation")})
+ddFldSetValidate("Type","ActExec('PRJTYPEV',{PRJ->Type})")
+ddAddSpecial(\
+  {||DbfEdit(\
+    {oVen(),oPar(),oPlz(),oPrj()},\
+    "Documents par Dossier : " + trim(PRJ->IdPrj) ,\
+    "VENPRJ",NIL,NIL,PRJ->IdPrj\
+  )}, \
+  "Documents par Dossier     [F2]",\
+  -1\
+)
+ddAddSpecial(\
+  {||ParPage(PRJ->IdPar)},\
+  "Signal‚tique c~lient    [Sh-F5]",\
+  -14,\
+  {||!empty(PRJ->IdPar)} \
+)
+
+ddSetCreate(NIL)
+ddPreCreate('Confirm("Create new project (Y/N) ?")')
+ddPreCreate("\
+  DlgDefine('IdPrj',\
+    DbfOnBottom(oPrj(),1,'str(val(PRJ->IdPrj)+1,LenIdPrj(),0)')\
+  )\
+")
+// ddPreCreate("empty(PRJ->IdPar).or.DlgDefine('IdPar',PRJ->IdPar)")
+ddOnCreate("(PRJ->IdPrj:=DlgValue('IdPrj'))!=NIL")
+ddOnCreate("(PRJ->Date1:=UserDate())!=NIL")
+ddOnCreate("(PRJ->Status:='T')!=NIL")
+// ddOnCreate("(indexord()!=2.and.indexord()!=3).or.(PRJ->IdPar:=DlgValue('IdPar'))!=NIL")
+
+ddOnPostEdit("empty(PRJ->IdPar).or.ParExist(PRJ->IdPar)")
+ddOnPostEdit("!empty(DbcText('PRJSTAT.DBC',PRJ->Status)).or.!SetMsg('invalid status')")
+ddSetIndex(1,NIL,NIL,NIL,{|x|padl(x,LenIdPrj())})
+
+
+// ddAddSpecial(\
+  {||ActExec("PRJ-GO").and.DbfEdit(\
+    {oTrm(),oPar(),oArt(),oTac(),oPrj()},\
+    "Dienstleistungen /Projekt: "+ltrim(PRJ->IdPrj),\
+    "TRMPRJ",NIL,NIL,PRJ->IdPrj\
+  )},\
+  "~Arbeiten pro Projekt      [F8]",\
+  -7,\
+  {||!eof()}\
+)
+

@@ -1,0 +1,84 @@
+header1 "Arbeitszeiten "+DlgValue("IdRes")
+header3 dtocf(DlgValue("Date1"))+" bis "+dtocf(DlgValue("Date2"))
+area { oPtl(),oRes() }
+order 1 // IdJnl+Periode+IdDoc (siehe HST.DEF)
+start DlgValue("IdRes")
+while cblock('PTL->IdRes==DlgValue("IdRes").and.dtos(PTL->Date)<="' \
+      +dtos(getvar("Date2"))+'"')
+
+ValidateRecord {|| ResExist(PTL->IdRes)}
+
+detail {||PTL->Date>=getvar("Date1")}
+
+
+// OnNoValue {|| Confirm(MsgIdJnlDoc() + \
+  utr(" : booking "," : Buchung ","l'imputation") \
+  + HST->IdGen + " (" + trim(HST->IdTax)\
+  + utr(\
+    ") does not fit into any columnÿ!", \
+    ") konnte keiner Kolonne zugewiesen werdenÿ!", \
+    ") n'est attribu‚e … aucune colonne !"), \
+  MsgContinue() \
+)}
+
+column header=utr("Date","Datum","Date") \
+       width=8 text={||padr(Jour(PTL->Date),2)+" "+dtocf(PTL->Date,"dd.mm")} \
+       when={|grp|IsFirst(2)}
+column header="Typ"\
+       width=3\
+       text={||padr(PTL->Type,3)}
+column header="von" \
+       width=LenQte() \
+       text={||PTL->Qte1}
+column header="bis" \
+       width=LenQte() \
+       text={||PTL->Qte2}
+column header="Pause" \
+       width=LenQte() \
+       text={||PTL->QteP}
+column header="AS" \
+       width=LenQte() \
+       value={||if(PTL->Type=="A ",qton(PTL->Qte),0)} \
+       text={|x|ntoq(x,":")}
+column header="šS"\
+       width=8 \
+       value={||qton(PTL->Qte)-if(PTL->Type=="A ",8,0)}\
+       text={|x|ntoq(x,":",8)}
+
+#exec setvar("b",{|nValue|str(nValue,3,0)})
+#exec DbcLoop("PTLTYPE.DBC",{|x|x[1]=="šS".or.RptAddColumn(\
+        {x[2]},\
+        3,\
+        cblock("PTL->Type=='"+x[1]+"'"),\
+        cblock("1"),\
+        getvar("b")\
+      )})
+
+column header="Bemerkung"\
+       width=15\
+       text={||padr(PTL->Remarq,15)}
+
+group key={|| PTL->IdRes } \
+      text={||trim(RES->Nom1)} \
+      before={|nCount| PrintTotal(1,1).and.RptTit2() } \
+      after={|nCount| RptTit2() }
+
+      // header={|nCount| DlgDefine("Saldo",qton(RES->Saldo))} \
+      after={|nCount| PrintLine() }
+
+
+// group 3 is only used by IsFirst() if more thanone entry per day
+group key={|| PTL->IdRes+dtos(PTL->Date) }
+      // text={||""}
+
+// see PrintTotal()
+total for={||PTL->Date<getvar("Date1")} \
+      text={||"Anfang"} \
+      when={||.t.}
+total for={||inrange(PTL->Date,getvar("Date1"),getvar("Date2"))} \
+      text={||dtocf(DlgValue("Date1"))+" bis "+dtocf(DlgValue("Date2"))} \
+      when={||.t.}
+total text={||"Ende"} when={||.t.}
+// total text={||""}\
+      when={||RptGroup()==1}
+

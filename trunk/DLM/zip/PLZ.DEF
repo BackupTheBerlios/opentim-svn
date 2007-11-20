@@ -1,0 +1,11 @@
+// PLZ.DEF
+ddSetCreate(NIL)
+ddPreCreate("setvar('IdNat',PLZ->Pays)")
+ddPreCreate("setvar('IdPlz',substr(DbfNextId(oPlz(),getvar('IdNat'),len(PLZ->Pays+PLZ->CP)),4))")
+ddPreCreate("setvar('Name',space(len(PLZ->Nom)))")
+ddPreCreate("DlgExec('PLZCREA')")
+ddOnCreate("(PLZ->Pays:=getvar('IdNat'))!=NIL")
+ddOnCreate("(PLZ->CP:=getvar('IdPlz'))!=NIL")
+ddOnCreate("(PLZ->Nom:=getvar('Name'))!=NIL")
+ddFldSetSize('CP',5,0)
+

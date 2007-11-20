@@ -1,0 +1,20 @@
+header1 "Gesamtliste Lieferungen (fr Einkauf)"
+header2 "Lieferdatum " + dtocf(DlgValue("date"))
+area { oVna(), oArt(), oPar(), oVen() }
+order 3 // ORD_VNA_ARTDATE
+ValidateRecord {|| ArtExist(VNA->IdArt).and.ParExist(VNA->IdPar) }
+filter {|| VNA->IdJnl=="VKL".and.VNA->Date==DlgValue("date").and.!empty(VNA->PrixU)}
+group key={|| VNA->IdArt } text={|x|"          Gesamtmenge "+VNA->IdArt } when={|x|x>1.and.DlgValue("ttl")=="X"}
+group key={|| left(VNA->IdArt,2) } text={|x|"   Gesamtpreis "+left(VNA->IdArt,2) } when={|x|x>1.and.DlgValue("ttl")=="X"} 
+group text={|x|"alle Lieferanten"}
+column header="Pr" width=2 text={||left(VNA->IdArt,2)} when={|grp|IsFirst(2)}
+column header="Art.Nr" width=LenIdArt() text={||VNA->IdArt} when={|grp|IsFirst(1)}
+column header="Bezeichnung" width=40 text={||padr(ART->Name1,40)} when={|grp|IsFirst(1)}
+column header="Kunde" width=20 text={||padr(ParName(VNA->IdPar),20)}
+column header="Ku-Nr" width=LenIdPar() text={||VNA->IdPar}
+// column header="B-Datum" width=8 //        text={||dtoc(VNA->Date)}
+column header="Menge" width=6 text={||VNA->Qte} value={||qton1(VNA->Qte)} when={|grp|grp<=1} xsum={|x|ntoq(x,VNA->QteForm)}
+// column header="Unit" width=10 text={||ART->Unit}
+column header="Stckpreis" width=LenMont() text={||VNA->PrixU}
+column header="EK netto" width=LenMntF() text={||ntomf(qton1(VNA->Qte)*val(ART->PrixR))} value={||qton1(VNA->Qte)*val(ART->PrixR)} when={|grp|grp!=1} xsum={|x| ntomf(x) }
+total

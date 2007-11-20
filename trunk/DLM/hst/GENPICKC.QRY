@@ -1,0 +1,13 @@
+//
+// C:\SOFT\RELEASE\TIM220\STD01D\GENPICKC.QRY - generated 03.10.96
+// for GEN.DBF
+//
+window 18 60 0 0 
+column 1 Konto pict @K@!
+column 6 Bezeichnung D pict @K@S35
+column 2 Mws pict @K@!
+column 11 Ko pict @K@!
+column 4 Attr. pict @K@!
+column 7 Bezeichnung F pict @K@S35
+mask GEN
+help GENPICK

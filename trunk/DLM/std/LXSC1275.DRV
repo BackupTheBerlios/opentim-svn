@@ -1,0 +1,37 @@
+//
+// Copyright P.A.C. Systems Eupen
+//
+Name         Lexmark Optra 1275 SC
+Initialize   "E"+"(10U"+"&l6D"
+// (Reset) + (PC-8 (CP437) symbol set)
+Reset        ""
+FormFeed     chr(12)
+// ertain fonts seem to work only with courier (not with lettergothic)
+Font  5cpi  5    12/72  chr(27)+"(s0p5h0B"
+Font 10cpi 10    12/72  chr(27)+"(s0p10h0B"
+Font 12cpi 12    12/72  chr(27)+"(s0p12h0B"
+Font 15cpi 15    12/72  chr(27)+"(s0p15h0B"
+Font 17cpi 16.67 12/72  chr(27)+"(s0p16.67h0B"
+Font 20cpi 20    12/72  chr(27)+"(s0p20h0B"
+BoldOn     chr(27)+"(s3B"
+BoldOff    chr(27)+"(s0B"
+ItalOn     chr(27)+"(s1S"
+ItalOff    chr(27)+"(s0S"
+UnderOn    chr(27)+"&d0D"
+UnderOff   chr(27)+"&d@"
+Option P Portrait             "&l0O"
+Option L Landscape            "&l1O"
+Option 6 6LinesPerInch        "&l6D"
+Option 7 6.9LinesPerInch      "&l7C"
+Option 8 8LinesPerInch        "&l8D"
+
+// Option A Multipurpose         "&l8H"       // Firmenbogen
+Option B MPTray               "&l4H"       // nicht benutzt TIM
+// Option C Hauptschacht         "&l1H"       // weiá
+
+Option D FontCourier          "(s4099T"
+Option E FontLetterGothic     "(s4102T"
+
+Option A Overlay1             "&f1Y&f4X"  // Firmenbogen
+Option C Overlay0             "&f5X"       // weiá
+

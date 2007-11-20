@@ -1,0 +1,9 @@
+before setvar("ToName",padr(\
+       trim1(PAR->Allo)+trim1(PAR->Vorname)+trim(PAR->Firme),200))
+before setvar("ToAddr",padr(PAR->email,200))
+before setvar("Subject",\
+       padr(tr("(No subject)","(Ohne Betreff)","(Sans sujet)"),200))
+before setvar("infile",padr(alias()+".EML",11))
+#include "OPENEML.DLG"
+after .f.
+

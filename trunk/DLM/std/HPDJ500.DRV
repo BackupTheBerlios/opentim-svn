@@ -1,0 +1,25 @@
+// HP DeskJet 500
+// P.A.C. Systems Eupen T‚l. 087/55 62 31
+//
+Name HP DeskJet 500
+Initialize ""
+Reset                  chr(27)+"E"
+FormFeed               chr(12)
+Font  5cpi    5    12/72  chr(27)+"(s5H"
+Font  10cpi  10    12/72  chr(27)+"(s10H"
+Font  12cpi  12    12/72  chr(27)+"(s12H"
+Font  17cpi  16.67 12/72  chr(27)+"(s16.67H"
+Font  20cpi  20    12/72  chr(27)+"(s20H"
+BoldOn   chr(27)+"(s3B"
+BoldOff  chr(27)+"(s0B"
+ItalOn   chr(27)+"(s1S"
+ItalOff  chr(27)+"(s0S"
+UnderOn  chr(27)+"&d1D"
+UnderOff chr(27)+"&d@"
+
+Option P Portrait             "&l0O"
+Option L Landscape            "&l1O"
+Option 6 6LinesPerInch        "&l6D"
+Option 7 6.9LinesPerInch      "&l7C"
+Option 8 8LinesPerInch        "&l8D"
+

@@ -1,0 +1,8 @@
+//
+// PRJPICK.QRY - generated 26.03.04
+// for PRJ.DBF
+//
+window 10 60 0 0 
+column 2 Name 1 pict @k@s40
+column 1 Nr. pict @K@!
+order 6

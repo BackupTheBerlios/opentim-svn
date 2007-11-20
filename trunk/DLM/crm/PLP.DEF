@@ -1,0 +1,13 @@
+
+ddAddField("NB","C",80,0)
+
+// ddPreCreate("UsrLevel()<='C'.or.!SetMsg(MsgNoAccess())")
+ddPreCreate({||indexord()==1.or.!SetMsg("Einfgen hier nicht erlaubt")})
+ddPreCreate({||setvar("IdPar",PickPar())})
+ddPreCreate({||getvar("IdPar")!=NIL})
+ddPreCreate({||setvar("PlpType",NIL)})
+ddPreCreate({||setvar("PlpType",PickPlpType(NIL,left(ddKeyValue(),LenIdPar()),getvar("IdPar")))})
+ddPreCreate({||getvar("PlpType")!=NIL})
+ddOnCreate({||(PLP->Type:=getvar("PlpType"))!=NIL})
+// ddOnCreate({||indexord()==1.or.(PLP->IdPar1:=getvar("IdPar"))!=NIL})
+ddOnCreate({||(PLP->IdPar2:=getvar("IdPar"))!=NIL})

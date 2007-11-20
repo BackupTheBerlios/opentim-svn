@@ -1,0 +1,54 @@
+[etc if "S"$VNL->Attrib]
+if getRowIndex() != -1:
+  endTable()
+  beginTable(model=th)
+[etc endif]
+
+[=VnlRefExist()]
+
+[etc if 'T'$VEN->Attrib]
+p("""[=VnlNum()]""")
+endCell()
+[etc endif]
+
+p("""[=trim(if(empty(VNL->Desig),VnlObjName(TplLang()),VNL->Desig))] """)
+[etc if ! empty(VNL->Memo)]
+memo("""[=hardcr(VNL->Memo)]
+""")
+[etc endif]
+
+endCell()
+
+[etc if 'Q'$VEN->Attrib]
+p("""[vnl qt t]""")
+endCell()
+[etc endif]
+
+[etc if 'L'$VEN->Attrib]
+p("""[=trim(UntName(ART->IdUnt))] """)
+endCell()
+[etc endif]
+
+[etc if 'U'$VEN->Attrib]
+p("""[vnl pu]""")
+endCell()
+[etc endif]
+
+[etc if 'N'$VEN->Attrib]
+p("""[vnl htva]""")
+endCell()
+[etc endif]
+
+[etc if 'C'$VEN->Attrib]
+p("""[vnl tvac]""")
+endCell()
+[etc endif]
+
+[etc if "U"$VNL->Attrib]
+formatRow("LINEABOVE",1,colors.black)
+[etc else]
+formatRow("LINEABOVE",0,colors.white)
+[etc endif]
+
+endRow()
+

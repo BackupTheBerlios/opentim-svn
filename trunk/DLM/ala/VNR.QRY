@@ -1,0 +1,8 @@
+//
+// VNR.QRY - generated 23.02.99
+// for VNR.DBF
+//
+column 1 Nr
+column 2 Feld
+column 3 xlWhen pict @k@s30
+column 4 xnMult pict @k@s30

@@ -1,0 +1,31 @@
+// Color codes to be used :          
+//   N  Black      N+  Gray          
+//   B  Blue       B+  Bright Blue   
+//   G  Green      G+  Bright Green  
+//   BG Cyan       BG+ Bright Cyan   
+//   R  Red        R+  Bright Red    
+//   RB Magenta    RB+ Bright Magenta
+//   GR Brown      GR+ Yellow        
+//   W  White      W+  Bright White  
+
+// MainMenuColor und EditMenuColor bestimmen die Farben des HauptmenÅs
+// und des Listeneditor-MenÅs. Es mÅssen 4 Farbpaare angegeben werden.
+// Die erste Farbe eines Farbpaares gibt die Vordergrundfarbe an; die
+// "+"-Varianten stehen nur fÅr die Vordergrundfarbe zur VerfÅgung.
+//
+//      1 Normaler MenÅtext
+//      2 Aktive MenÅoption (Cursor)
+//      3 Nicht aktivierbare MenÅoptionen
+//      4 HotKey
+//
+MainMenuColor      N/W,W+/R,N+/W,R/W
+EditMenuColor      N/W,W+/R,N+/W,R/W
+BrowseColor        W/B,N/W,N/N,N/N,W/R
+MessageColor       W+/B
+LegendColor        N/W
+StatusColor        N/BG
+WindowColor        N/W,W+/N+,N/N,N/N,W/N+
+FullScreenColor    W/B,N/W,N/N,W+/BG,N/W+
+TextColor          W/B,N/W,,,N+/W
+WaitColor          N/BG
+HelpColor          GR+/R

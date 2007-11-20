@@ -1,0 +1,5 @@
+// HSI.DEF
+// Warning("Do not use with version after 20020515")
+// ddAddIndex("HSI->IdNat+HSI->IdInt","IdNat+IdInt")
+ddOnCreate("(HSI->Region:='2')!=NIL")
+

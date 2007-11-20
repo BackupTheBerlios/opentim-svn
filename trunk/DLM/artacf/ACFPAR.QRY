@@ -1,0 +1,13 @@
+//
+// C:\SOFT\RELEASE\TIM220\STD01D\ACFPAR.QRY - generated 28.11.96
+// for ACF.DBF
+//
+window 15 80 0 0 
+column 5 Ref.Lieferant pict @K@S15
+column 13 Artikel pict @K@S26
+column 4 Bemerkung pict @K@S20
+column 7 Preis pict @K@!
+column 11 VglPreis
+column 6 Datum
+column 1 Art.Nr
+order 2

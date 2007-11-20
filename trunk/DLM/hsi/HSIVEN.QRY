@@ -1,0 +1,14 @@
+//
+// HSIVEN.QRY - generated 15.05.2002
+// for HSI.DBF
+//
+window 10 76 0 0 
+column 4 ZN pict @K@!
+column 11 Region pict @K@!
+column 0 Code block DbfPeek(oInt(),HSI->IdInt,"INT->Code",space(10))
+column 5 Anz.
+column 6 Kg
+column 7 Betrag expr val(mont) say ntom(nSum)
+column 8 Betrag FW expr val(montdev) say ntom(nSum,2)
+column 0 Bezeichnung block DbfPeek(oInt(),HSI->IdInt,"INT->Name",space(30)) pict @k@s24 skip .t.
+column 3 Pos skip .t.

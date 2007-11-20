@@ -1,0 +1,17 @@
+// ArtAlaP2.ACT called from ARTALAPR.ACT
+#static
+(ART->AlaCount:=str(\
+  ArtAlaSum(ART->IdArt,"if(TryRecLock({||AlaIdValidate()}),1,0)"),3,0\
+))!=NIL
+(ART->PrixR:=ntom(\
+  ArtAlaSum(ART->IdArt,"val(ALA->PrixR)"),\
+  ArtPuDecPos()\
+))!=NIL
+(ART->Prix1:=ntom(\
+  ArtAlaSum(ART->IdArt,"val(ALA->Prix1)"),\
+  ArtPuDecPos()\
+))!=NIL
+(ART->TVAC:=ntom(\
+  val(ART->Prix1)*(100+CtaTaux(ART->IdCat))/100,\
+  ArtPuDecPos()\
+))!=NIL

@@ -1,0 +1,13 @@
+//
+// CTR.QRY - generated 28.10.02
+// for CTR.DBF
+//
+window 12 71 0 0 
+column 1 Z pict @K@!
+column 2 Beschreibung
+column 3 G-Kto pict @K@!
+column 6 Partner pict @K@!
+column 5 DC pict @K@!
+column 7 Attrib pict @K@!
+column 4 RB-Option pict @K@!
+column 8 RB-Ini pict @K@!

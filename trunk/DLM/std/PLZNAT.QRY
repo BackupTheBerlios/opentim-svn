@@ -1,0 +1,12 @@
+//
+// C:\SOFT\RELEASE\TIM220\STD01D\PLZ.QRY - generated 06.11.96
+// for PLZ.DBF
+//
+window 18 60 0 0 
+column 3 Ortschaft
+column 2 PLZ pict @K@!
+column 1 Lnd pict @K@!
+column 4 Fmt
+column 5 Vorwhl
+order 2
+help PLZNAT

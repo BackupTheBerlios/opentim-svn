@@ -1,0 +1,20 @@
+//
+// VNLART.QRY - generated 12.06.07
+// for VNL.DBF
+//
+window 18 80 0 0 
+column 1 Jnl
+column 2 Dok.Nr
+column 26 Datum say ""
+column 23 Partner pict @K@S26
+column 8 =utr("Qty","Menge","QtÇ") pict @K@! expr qton1(VNL->Qte) say ntoq(nSum,"1")
+column 9 StÅckpreis pict @K@!
+column 16 =utr("Amount","Betrag","Montant") expr val(cMont) say ntom(nSum)
+column 7 =utr("Remark","Bemerkung","Remarque") pict @K@S15
+column 11 =utr("VAT","MWSt","TVA") pict @K@!
+column 12 NB1
+column 13 % pict @K@!
+column 14 =utr("inclTax","Brutto","TVAC")
+column 4 Pos
+column 19 Peri
+column 5 Code pict !

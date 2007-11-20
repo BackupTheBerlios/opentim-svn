@@ -1,0 +1,24 @@
+// Intrastat-Erkl„rung
+field block={|x|SetPeriode(x)} \
+    picture="@k@!" \
+    caption="Periode von-bis " \
+    pick={|x|PickPerRange(x)}
+field name="Contact" \
+    caption="Kontaktperson " \
+    value=padr("",30)
+field name="Tel" \
+    caption="Telefon       " \
+    value=padr("",30)
+field name="Fax" \
+    caption="Fax           " \
+    value=padr("",30)
+#include "PREVIEW.DLG"
+// field block={|x|SetTplIni(x)} picture="@k@!" \
+    caption="Druckparametersatz " \
+    block={|x|GsbTplIni(x)}\
+    pick={|x|PickTpl("INI",x)}
+// field block={|x|SetPreview(x)} \
+    caption2=" Seitenvorschau " \
+    value="X" \
+    reader={|g|CbxReader(g)}
+after AppSaveMem()

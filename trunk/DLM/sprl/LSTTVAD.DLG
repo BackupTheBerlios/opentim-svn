@@ -1,0 +1,38 @@
+// Liste der MWSt-pflichtigen Kunden DEUTSCHLAND
+before DlgDefault("Filename",padr(\
+  "A"+str(pnYear(MemPer1),4)+".TXT"\
+  ,12\
+))
+before SetDevise(DevDefault(MemPer1))
+before DlgDefine("MontMin",padl("0.001",LenMont()))
+before SetTplIni("LISTE")
+// before DlgDefault("IdDev",DevDefault(MemPer2))
+// before DlgDefault("MontMin",ntom(5000))
+title "Liste der MWSt-pflichtigen Kunden Deutschland"
+field block={|x|GsbPeriode(x)} \
+    picture="@k@!" \
+    caption="Periode von-bis " \
+    pick={|x|PickPerRange(x)}
+field caption="W„hrung  " \
+      block={|x|SetDevise(x)}\
+      picture="@k@!"\
+      pick={|x|PickDev(x)}\
+      valid={||DevExist(SetDevise())}
+field caption="Mindestbetrag  " \
+      name="MontMin"\
+      picture="@k@!"\
+      pick={|x|PickNum(x)}\
+      postedit={|x|GetMont(x)}
+// field caption="Ihre MWSt-Nummer " \
+    picture="@k@!"\
+    postedit={|x|GetNoTva(x,MemPays)}\
+    valid={||ValNoTva(MemNoTva)}\
+    block={|x|if(x==NIL,MemNoTva,MemNoTva:=x)}
+
+#include "PREVIEW.DLG"
+
+after DoVenTvaListe(\
+  .t.,"V",SetDlgTitle(),val(DlgValue("MontMin")),\
+  ".t.","VEN->IdReg$'M'",\
+  NIL,\
+  1)

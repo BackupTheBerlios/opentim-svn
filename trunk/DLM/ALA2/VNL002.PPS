@@ -1,0 +1,17 @@
+// VNL002 Liste extrabreit
+p_SetPgAlign("r")
+p_SetPort( MemLpt)
+DrvLoad(MemDrv)
+p_SetSpecial( "L8")
+p_SetLMargin( 0.2)
+p_SetRMargin( 0.3)
+p_SetPapHeight( 10)
+p_SetPapWidth( 11.5)
+p_SetTMargin( 0)
+p_SetBMargin( 0.5)
+SetMntFormat( "S10")
+p_SetHeader( \
+  '[=VEN->IdJnl+" "+VEN->IdDoc]|\
+  Baustelle: [=trim(ParName(VEN->IdPar2))]|\
+  Ref. [=VEN->VnaMatch]'\
+)

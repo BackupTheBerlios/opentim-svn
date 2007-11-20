@@ -1,0 +1,9 @@
+// MSGSEEK.DLG : Textsuche Partner
+before DlgDefault("MsgSearch",space(30))
+title "Message suchen"
+field name="MsgSearch" caption="Suchtext" \
+                   picture="@k@!" 
+after DlgDefine("MsgFilter","'"+eupper(trim(DlgValue("MsgSearch")))+"'$eupper(\
+  MSG->Texte+' '+MSG->Titre\
+)")
+after !empty(DlgValue("MsgSearch")).or.DlgDefine("MsgFilter",".t.")

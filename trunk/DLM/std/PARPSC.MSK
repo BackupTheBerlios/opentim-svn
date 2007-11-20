@@ -1,0 +1,57 @@
+//
+// C:\SOFT\RELEASE\TIM300\STD01D\PARPSC.MSK - generated 27.03.96
+// for PAR.DBF
+//
+
+box 1 0 12 50
+box 1 51 12 79
+
+string 2 53 ID
+string 3 2 Name 1
+string 4 7 2
+string 5 2 Straáe
+string 8 2 Tel
+string 9 2 Fax
+string 8 53 Bank
+string 8 29 MWSt
+string 5 53 Zahlart
+string 4 53 Sprache
+string 11 53 G-Konto
+string 4 67 1
+string 5 67 2
+string 6 67 3
+string 6 2 Ort
+string 11 2 N.B.
+string 6 53 W„hrung
+string 2 2 Anrede
+string 2 65 seit
+string 10 73 Attr.
+
+
+get 1 2 56
+get 32 2 14
+get 3 3 14
+get 4 4 14
+get 5 5 14
+get 39 5 38
+get 40 5 43
+get 8 6 10
+get 6 6 14
+get 31 6 23
+get 9 8 6
+get 10 9 6
+get 29 9 29
+get 12 9 31
+get 34 11 7
+get 28 2 70
+get 21 4 61
+get 20 5 61
+get 36 6 61
+get 25 4 69 pict @K@S9
+get 26 5 69 pict @K@S9
+get 27 6 69 pict @K@S9
+get 11 8 63
+get 38 9 63
+get 43 11 63
+get 19 11 73
+wait 8 76 13 1 4

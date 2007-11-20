@@ -1,0 +1,123 @@
+header1 tr(\
+  "Analytic account history",\
+  "Historik Analysekonten",\
+  "Historique comptes analytiques"\
+)+if(\
+  empty(DlgValue("HSTANA.IdAna1")+DlgValue("HSTANA.IdAna2")),\
+  "",\
+  " "+trim(DlgValue("HSTANA.IdAna1"))+"-"+trim(DlgValue("HSTANA.IdAna2"))\
+)
+header2 PerText()
+header3 tr("Amounts in ","Betr„ge in ","Montants en ")+SetDevise()
+area { oHst(), oPar(), oAna(), oVen(), oFin() }
+order 9 // HST->IdAna+HST->Periode+dtos(HST->Date)
+ValidateRecord {|| \
+  empty(HST->IdAna).or.ChkPeriode(HST->Periode)>0\
+  .or.HST->Periode<PerStart(MemPer1)\
+  .or.(DocExist(HST->IdJnl,HST->IdDoc).and.AnaExist(HST->IdAna)) \
+}
+filter {|| !empty(HST->IdAna)}
+
+filter {|| \
+  ChkPeriode(HST->Periode)<=0\
+  .and.HST->Periode>=PerStart(MemPer1)\
+}
+
+#if !empty(DlgValue("HSTANA.HstFilter"))
+  filter cblock(DlgValue("HSTANA.HstFilter"))
+#endif
+#if !empty(DlgValue("HSTANA.IdJnl"))
+  filter cblock("HST->IdJnl=='"+DlgValue("HSTANA.IdJnl")+"'")
+#endif
+
+detail {|| ChkPeriode(HST->Periode)==0.and.!"D"$ANA->Attrib}
+
+#if !empty(DlgValue("HSTANA.IdAna1"))
+  start trim(DlgValue("HSTANA.IdAna1"))
+#endif
+#if !empty(DlgValue("HSTANA.IdAna2"))
+while cblock("left(HST->IdAna,"\
+  +ntrim(len(trim(DlgValue("HSTANA.IdAna2"))))\
+  +")<='"+trim(DlgValue("HSTANA.IdAna2"))+"'"\
+)
+#endif
+
+// group key={|| HST->IdAna+HST->Periode } \
+      text={|| HST->Periode} \
+      when={||"D"$ANA->Attrib}
+
+group key={|| HST->IdAna } \
+      text={|| NIL} \
+      when={||.t.} \
+      after={|nCount,nDetail|nDetail>0.or."D"$ANA->Attrib} \
+      align="R" \
+      format="B" \
+      before={|nCount| nCount>0 \
+        .and.PrintLine()\
+        .and.PrintLine(\
+          Tagged("B")+HST->IdAna+" : "+trim(AnaName(HST->IdAna))+Tagged("b")\
+          +if("D"$ANA->Attrib,\
+            tr(" (without detail)"," (ohne Detail)"," (sans d‚tail)"),\
+            "")\
+          )\
+        .and.PrintTotal(1,1)\
+      }
+#if empty(getvar("HSTANA.IdAna1")).or.(getvar("HSTANA.IdAna1")!=getvar("HSTANA.IdAna2"))
+group text={||tr("all accounts","alle Konten","tous")}
+#endif
+
+// column header="Konto" width=LenIdAna() text={||HST->IdAna}
+// column header="Peri" width=4 text={||HST->Periode}
+column header=tr("Date","Datum","Date") \
+       width=8 \
+       text={||dtocf(HST->Date,"dd.mm.yy")}
+column header="Jnl" width=LenIdJnl() text={||HST->IdJnl}
+column header=tr("Doc.#","Dok.Nr","Nødoc") width=6 text={||HST->IdDoc}
+column header="Partner" width=30 \
+       text={||padr(DocParName(HST->IdJnl,HST->IdDoc,HST->Line),30)}
+column header=tr("Debit","Debit","D‚bit") \
+       type="M" \
+       value=cblock("HstMont('"+SetDevise()+"')") \
+       when={|grp|HST->DC == "D"} \
+       xsum={|x,nTtl| if(nTtl==2,ntomf(x),SoldeD(x,ClnSum(1))) }
+       // width=LenMntF() \
+       // text={|x|ntomf(x)} \
+
+column header=tr("Credit","Kredit","Cr‚dit") \
+       type="M" \
+       value=cblock("HstMont('"+SetDevise()+"')") \
+       when={|grp|HST->DC == "C"} \
+       xsum={|x,nTtl| if(nTtl==2,ntomf(x),SoldeC(ClnSum(-1),x)) }
+       // width=LenMntF() \
+       // text={|x|ntomf(x)} \
+
+column header=tr("Remark","Bemerkung","Remarque") width=30 \
+       text={||padr(HstDocName(HST->IdJnl,HST->IdDoc,HST->Line),30)}
+// column header="Bezeichnung" width=20 //         text={||padr(AnaName(HST->IdAna),20)}
+
+total for={||ChkPeriode(HST->Periode)<0} \
+      text={||tr("Start balance","Beginnsaldo","Solde initial")} \
+      when={|nCount|nCount>0}
+
+#if getvar('HSTANA.SumByJnl')=="X"
+  total for={||.f.} \
+        when={||RptTit3().and..f.}\
+        text={||"dummy"}
+#exec setvar('b',{|nCount|nCount>0})
+#exec setvar('b2',{||RptAddTotal(\
+          cblock("'"+JNL->IdJnl+' '+trim(JNL->Libell)+"'"),\
+          cblock('ChkPeriode(HST->Periode)==0.and.HST->IdJnl=="'+JNL->IdJnl+'"'),\
+          getvar('b')\
+        )})
+#exec DbfScan({oJnl()},2,NIL,NIL,'"G"$JNL->Attrib',getvar('b2'))
+
+  total for={||.f.} \
+        when={||RptTit3().and..f.}\
+        text={||"dummy"}
+
+#endif
+
+total for={||ChkPeriode(HST->Periode)==0} \
+      text={||tr("Total ","Summe ","Total ")+PerText(cblock(".f."))}
+total text={||tr("Final balance","Endsaldo","Solde final")} when={||.t.}
+

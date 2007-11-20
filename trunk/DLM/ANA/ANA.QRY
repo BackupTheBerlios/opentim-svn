@@ -1,0 +1,8 @@
+//
+// C:\SOFT\TEST\TIM300\HEINEN\ANA.QRY - generated 25.10.95
+// for ANA.DBF
+//
+column 1 Konto pict @K@!
+column 2 Bezeichnung (D) pict @K@S30
+column 3 Bezeichnung (F) pict @K@S30
+mask ANACTA

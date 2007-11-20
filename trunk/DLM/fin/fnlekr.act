@@ -1,0 +1,17 @@
+// FNLEKR.ACT : EKR von FNL aus erstellen
+FIN->Etat!=DocStatClosed().or.!SetMsg("Dokument ist registriert.")
+empty(FNL->IdCpt).or.!SetMsg(\
+  "Gehen Sie mit dem Cursor auf einen leeren Record"\
+)
+DlgDefine("NoAppend",(recno()!=lastrec()+1))
+Confirm("Rechnung Bankkosten erstellen",MsgSure())
+DlgDefine("IdPar",PickPar("L","Lieferant ausw„hlen"))
+!empty(DlgValue("IdPar")).or.!SetMsg("Abbruch")
+VenAppend(\
+  "EKR",NIL,\
+  FIN->Date,NIL,NIL,\
+  DlgValue("IdPar"),NIL,\
+  .f.,.t.,.f.\
+)
+DlgValue("NoAppend").or.ddCreate()
+FnlSetPartner(DlgValue("IdPar"))

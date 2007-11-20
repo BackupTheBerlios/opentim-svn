@@ -1,0 +1,12 @@
+//
+// C:\SOFT\RELEASE\TIM220\STD01D\CTTTAX.QRY - generated 01.10.96
+// for CTT.DBF
+//
+window 18 60 0 0 
+column 1 Jnl pict @K@!
+column 2 Per.
+column 4 Ko pict @K@!
+column 5 DC pict @K@!
+column 7 Netto pict @K@!
+column 8 MWSt pict @K@!
+column 6 Delta

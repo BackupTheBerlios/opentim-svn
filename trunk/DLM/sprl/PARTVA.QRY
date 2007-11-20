@@ -1,0 +1,33 @@
+//
+// C:\SOFT\RELEASE\TIM220\STD220D\PARTVA.QRY - generated 18.02.98
+// for PAR.DBF
+//
+column 12 MWSt. pict @K@!
+column 29 R pict @K@!
+column 33 Name (Anrede) pict @K@S30
+column 8 Land pict @K@!
+column 6 Plz. pict @K@!
+column 7 P pict @K@!
+column 41 Straáe, Nr. pict @k@s30
+column 1 ID pict @K@!
+column 31 Ort pict pict @K@S15
+column 9 Telefon
+column 32 Anrede pict @K
+column 3 Name 1 pict @K
+column 4 Name 2 pict @K
+column 10 Fax
+column 11 Bank (1)
+column 38 Bank (2)
+column 21 Spr. pict @K@!
+column 20 ZA pict @K@!
+column 36 W„ pict @K@!
+column 24 Beruf pict @K@!
+column 25 Code1 pict @K@!
+column 26 Code2 pict @K@!
+column 27 Code3 pict @K@!
+column 28 Erstellt am
+column 19 Attr pict @K@!
+mask ="PAR"+PAR->IdPrt
+order 4
+help PAR
+keyvalue ""

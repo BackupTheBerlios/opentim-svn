@@ -1,0 +1,52 @@
+// Standard-Export HST.DBF
+OutputFile    "HST.TXT"
+Delimiter     chr(9)
+FieldUpdate   IdGen        HST->IdGen
+FieldUpdate   GenName      trim(GenName(HST->IdGen))
+FieldUpdate   IdPar        HST->IdPar
+FieldUpdate   ParName      trim(ParName(HST->IdPar))
+FieldUpdate   Jnl   HST->IdJnl
+FieldUpdate   Doc   '"'+HST->IdDoc+'"'
+FieldUpdate   Line  HST->Line
+FieldUpdate   Periode   '"'+left(HST->Periode,2)+"-"+right(HST->Periode,2)+'"'
+FieldUpdate   Date    dtocf(HST->Date,"yyyy-mm-dd")
+FieldUpdate   ValDate    dtocf(HstDate2(),"yyyy-mm-dd")
+FieldUpdate   Debit   if(DC=='D',komma(ltrim(HST->Mont)),'')
+FieldUpdate   Kredit  if(DC=='C',komma(ltrim(HST->Mont)),'')
+FieldUpdate   DebitFC   if(DC=='D',komma(ltrim(HST->MontDev)),'')
+FieldUpdate   KreditFC  if(DC=='C',komma(ltrim(HST->MontDev)),'')
+// FieldUpdate   FW      komma(ltrim(HST->MontDev))
+FieldUpdate   DocParName   DocPartner(HST->IdJnl,HST->IdDoc,HST->Line)
+FieldUpdate   HstDocName   HstDocName(HST->IdJnl,HST->IdDoc,HST->Line)
+FieldUpdate   DocName      DocName(HST->IdJnl,HST->IdDoc,HST->Line)
+FieldUpdate   WK           if(\
+  val(montdev)!=0,komma(ltrim(str(val(mont)/val(montdev),10,4))),"")
+
+#include "DOS2WIN.CVT"
+// convert "„" to "ä"
+// convert "" to "Ä"
+// convert "”" to "ö"
+// convert "™" to "Ö"
+// convert "" to "ü"
+// convert "š" to "Ü"
+// convert "á" to "ß"
+// convert "…" to "à"
+// convert "ƒ" to "â"
+// convert "‚" to "é"
+// convert "ˆ" to "ê"
+// convert "Š" to "è"
+// convert "Œ" to "î"
+// convert "“" to "ô"
+// convert "–" to "û"
+// convert "—" to "ù"
+// convert "‰" to "ë"
+// convert "‡" to "ç"
+// convert "ñ" to "±"
+// // convert "ø" to "°"
+// convert "ı" to " " // hoch 2
+// convert "ó" to " " // 3/4
+// convert "õ" to " " // Paragraph
+// convert chr(255) to " "
+// convert chr(141)+chr(10) to " "
+
+OnSuccess AppShell("excel.bat "+i_OutputFile(),NIL,.f.)

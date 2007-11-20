@@ -1,0 +1,76 @@
+header1 "šbersicht Dienstleistungen"
+header2 dtocf(DlgValue("Date1")) + " bis " + dtocf(DlgValue("Date2"))
+// header3 "sortiert pro Artikel"
+area { oPar() }
+order 1 // ORD_ART_GRA_NAME
+ValidateRecord {|| DlgDefine("TIM",DbfSum(\
+  {oTrm()},\
+  "qton(TRM->Duree)",\
+  2,\
+  PAR->IdPar+dtos(DlgValue("Date1")),\
+  "TRM->IdPar=='"+PAR->IdPar\
+   +"'.and.dtos(TRM->Date)<='"+dtos(DlgValue("Date2"))+"'",\
+  "TRM->IdTac=='"+padr("TIM",6)+"'"\
+))}
+ValidateRecord {|| DlgDefine("ETC",DbfSum(\
+  {oTrm()},\
+  "qton(TRM->Duree)",\
+  2,\
+  PAR->IdPar+dtos(DlgValue("Date1")),\
+  "TRM->IdPar=='"+PAR->IdPar\
+   +"'.and.dtos(TRM->Date)<='"+dtos(DlgValue("Date2"))+"'",\
+  "TRM->IdTac=='"+padr("ETC",6)+"'"\
+))}
+ValidateRecord {|| DlgDefine("TIMSRV",DbfSum(\
+  {oTrm()},\
+  "qton(TRM->Duree)",\
+  2,\
+  PAR->IdPar+dtos(DlgValue("Date1")),\
+  "TRM->IdPar=='"+PAR->IdPar\
+   +"'.and.dtos(TRM->Date)<='"+dtos(DlgValue("Date2"))+"'",\
+  "TRM->IdTac=='"+padr("TIMSRV",6)+"'"\
+))}
+ValidateRecord {|| DlgDefine("TIMPRJ",DbfSum(\
+  {oTrm()},\
+  "qton(TRM->Duree)",\
+  2,\
+  PAR->IdPar+dtos(DlgValue("Date1")),\
+  "TRM->IdPar=='"+PAR->IdPar\
+   +"'.and.dtos(TRM->Date)<='"+dtos(DlgValue("Date2"))+"'",\
+  "TRM->IdTac=='"+padr("TIMPRJ",6)+"'"\
+))}
+ValidateRecord {|| DlgDefine("JAN",DbfSum(\
+  {oTrm()},\
+  "qton(TRM->Duree)",\
+  2,\
+  PAR->IdPar+dtos(DlgValue("Date1")),\
+  "TRM->IdPar=='"+PAR->IdPar\
+   +"'.and.dtos(TRM->Date)<='"+dtos(DlgValue("Date2"))+"'",\
+  "TRM->IdTac=='"+padr("JAN",6)+"'"\
+))}
+filter {||\
+  DlgValue("TIM")!=0\
+  .or.DlgValue("TIMSRV")!=0\
+  .or.DlgValue("TIMPRJ")!=0\
+  .or.DlgValue("JAN")!=0\
+  .or.DlgValue("ETC")!=0\
+}
+
+group text={||"Total"}
+column header="Kunde" width=20 text={||padr(ParName(),20)}
+column header="TIM" width=LenQte() value={||DlgValue("TIM")} text={|x|ntoq(x,":")}
+column header="TIMSRV" width=LenQte() value={||DlgValue("TIMSRV")} text={|x|ntoq(x,":")}
+column header="TIMPRJ" width=LenQte() value={||DlgValue("TIMPRJ")} text={|x|ntoq(x,":")}
+column header="JAN" width=LenQte() value={||DlgValue("JAN")} text={|x|ntoq(x,":")}
+column header="ETC" width=LenQte() value={||DlgValue("ETC")} text={|x|ntoq(x,":")}
+column header="Total" width=LenQte() \
+       value={||\
+         DlgValue("TIM")\
+         +DlgValue("TIMSRV")\
+         +DlgValue("TIMPRJ")\
+         +DlgValue("JAN")\
+         +DlgValue("ETC")\
+       } \
+       text={|x|ntoq(x,":")}
+total
+

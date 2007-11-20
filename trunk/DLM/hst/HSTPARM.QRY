@@ -1,0 +1,21 @@
+//
+// HSTPARM.QRY - generated 26.05.07
+// for HST.DBF
+//
+window 15 80 0 0 
+column 13 Match pict @K@!
+column 15 Z
+column 6 =utr("Date","Datum","Date") say ""
+column 3 Jnl pict @K@!
+column 4 Dok.Nr pict @K@!
+column 0 =utr("Remark","Bemerkung","Remarque") block if(HST->IdJnl$"VKR;EKR",DocPartner(IdJnl,IdDoc,Line),HstDocName(IdJnl,IdDoc,Line)) pict @k@s20 skip .t. expr HstDcMont("D",SetDevise()) say "Saldo D="+ntom(nSum)
+column 17 Debit expr if(HST->DC=="D",HstMont(SetDevise()),0) say ntom(nSum)
+column 18 =utr("Credit","Kredit","Cr‚dit") expr if(HST->DC=="C",HstMont(SetDevise()),0) say ntom(nSum)
+column 14 *
+column 12 =utr("Amnt FC","Betrag FW","MontDev")
+column 5 Pos
+column 9 Per.
+column 1 =utr("Accnt","Konto","Compte")
+column 8 =utr("Remark","Bemerkung","Remarque") pict @k@s20
+order 2
+help HSTPAR

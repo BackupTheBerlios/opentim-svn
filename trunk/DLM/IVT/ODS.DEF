@@ -1,0 +1,8 @@
+// ODS.DEF
+ddAddSpecial(\
+  {||DlgExec("JNLIDDOC")}, \
+  "~Letzte Dokumentnummer setzen  ",\
+  NIL,{||"S"$UsrAttrib()}\
+)
+ddAddSpecial({||OdsRename()}, NIL, -31, {||"E"$UsrAttrib()} )
+

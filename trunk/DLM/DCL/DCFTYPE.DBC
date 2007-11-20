@@ -1,0 +1,6 @@
+F |Final saldo
+F+|Final saldo if > 0
+I |Initial saldo
+I+|Initial saldo if > 0
+M |Movements (sum of D and C)
+MX|Movements (exclusively same D/C)

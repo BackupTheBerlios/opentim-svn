@@ -1,0 +1,12 @@
+//
+// C:\SOFT\RELEASE\TIM300\STD01D\VNLVKR.QRY - generated 27.03.96
+// for VNL.DBF
+//
+window 11 80 11 0 
+column 6 =utr("Accnt","Konto","Compte") pict @K@!
+column 21 =utr("Description","Bezeichnung","D‚signation") skip .t.
+column 16 =utr("price","Netto","htva")
+column 13 % pict @K@! skip .t.
+column 11 =utr("VAT","MWSt","TVA") pict @K@! skip .t.
+column 14 =utr("inclTax","Brutto","TVAC") skip .t.
+mask VNL

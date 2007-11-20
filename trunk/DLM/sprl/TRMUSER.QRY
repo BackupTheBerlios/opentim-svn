@@ -1,0 +1,22 @@
+//
+// C:\SOFT\RELEASE\TIM300\STD01D\TRMUSER.QRY - generated 14.02.96
+// for TRM.DBF
+//
+window 18 76 0 0 
+column 1 WT
+column 2 Datum
+column 3 Von pict @K@!
+column 4 Bis pict @K@!
+column 16 Dauer
+column 5 Kommentar pict @K@S20
+column 8 Tarif pict @K@!
+column 7 Attr pict @K@!
+column 9 ParNr. pict @K@!
+column 13 Dienstl. pict @K@!
+column 17 Fahrtk. pict @K@!
+column 20 Sonstige pict @K@!
+column 18 S pict @K@!
+column 19 Status
+column 10 Partner
+mask TRM
+order 4

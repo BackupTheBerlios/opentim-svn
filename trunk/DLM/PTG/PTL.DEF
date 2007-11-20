@@ -1,0 +1,8 @@
+ddAddField("VnaMatch","C",9,0,"@k@!","",NIL,NIL,NIL,\
+  {|x|DbfPick(\
+    {oVen(), oPar(), oPlz()},\
+    "Referenz ausw„hlen ",\
+    "VENPICK",x,NIL,"AUF","VEN->IdJnl","VEN->VnaMatch"\
+  )}\
+)
+

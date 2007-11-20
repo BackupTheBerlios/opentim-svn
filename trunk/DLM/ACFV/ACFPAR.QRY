@@ -1,0 +1,12 @@
+//
+// ACFPAR.QRY - generated 12.02.2001
+// for ACF.DBF
+//
+window 15 80 0 0 
+column 1 Art.Nr pict @k@!
+column 13 Bezeichnung pict @K@S26
+column 15 %
+column 0 Preis EUR block ntom(ActExec("ACFPRIX"),2) skip .t.
+column 4 Bemerkung pict @K@S20
+column 6 Datum say ""
+order 2

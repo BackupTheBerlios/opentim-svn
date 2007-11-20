@@ -1,0 +1,9 @@
+//
+// PLS.QRY - generated 01/12/05
+// for PLS.DBF
+//
+column 1 Code pict @K@!
+column 2 Bezeichnung
+column 5 P pict @K@!
+column 3 Attrib pict @K@!
+mask PLS

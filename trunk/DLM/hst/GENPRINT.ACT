@@ -1,0 +1,8 @@
+// GENPRINT.ACT
+// [F7] on a GEN
+DlgDefine("HSTGEN.IdGen1",GEN->IdGen)
+DlgDefine("HSTGEN.IdGen2",GEN->IdGen)
+RepPrint("HSTGEN","HSTGEN",GEN->IdGen).or..t.
+DlgDefine("HSTGEN.IdGen1",space(LenIdGen()))
+DlgDefine("HSTGEN.IdGen2",space(LenIdGen()))
+

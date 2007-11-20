@@ -1,0 +1,38 @@
+//
+// generated 14.03.07
+// for DLS.DBF
+//
+
+
+string 9 38 DL-Nr.
+string 1 1 Datum
+string 9 23 User
+string 1 10 DL-Art
+string 9 9 Status
+string 9 1 Zahlart
+string 1 45 [F8] Anwesenheiten :
+string 5 1 Partner
+string 7 1 Beschreibung
+string 1 27 von
+string 1 33 bis
+string 1 39 Dauer
+string 3 1 Projekt
+
+get 2 2 1
+get 6 2 10 block padr(DbfPeek(oDla(),DLS->IdDla,"DLA->Name1",""),15) pict @K@s12
+get 3 2 27
+get 4 2 33
+get 15 2 39
+get 16 4 1 pict @K
+get 0 4 9 block padr(PrjName(DLS->IdPrj),35)
+get 10 6 1 pict @K@!
+get 0 6 9 block padr(ParName(DLS->IdPar),35)
+get 8 8 1 pict @k@s76
+get 9 10 1 pict @K@!
+get 7 10 9 pict @K@!
+get 5 10 23 pict @K@!
+get 1 10 38
+get 14 12 1 pict 78x18
+wait 5 34 2 45 1
+wait 6 39 32 1 60
+wait 6 38 32 41 61

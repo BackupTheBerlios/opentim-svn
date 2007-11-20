@@ -1,0 +1,18 @@
+//
+// RES.QRY - generated 23.10.06
+// for RES.DBF
+//
+column 1 Code pict @K@!
+column 2 Name 1
+column 7 Saldo
+column 5 Woche pict @K@!
+column 6 Monat pict @K@!
+column 3 Name 2
+column 4 Name 3
+column 9 Mo
+column 10 Di
+column 11 Mi
+column 12 Do
+column 13 Fr
+column 14 Sa
+column 8 So

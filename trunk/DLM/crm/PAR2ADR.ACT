@@ -1,0 +1,11 @@
+// PAR2ADR.ACT : RTF-Adressbuch aus Partnerstammdaten
+DlgDefine("NoEmpty","X")
+DlgDefine("exclude","X")
+DlgExec("PARFILT")
+DlgExec("PAR2ADR")
+DlgDefine("A","")
+DbfExport(\
+  {oPar(),oPlz()},2,"",".t.",DlgValue("ParFilter"),"PAR2ADR.EXP"\
+)
+// "!'H'$PAR->Attrib.and.!'X'$PAR->Attrib.and.!empty(PAR->RueNum+PAR->Tel)"
+AppShell("start c:\temp\par2adr.rtf","Word fr Windows wird gestartet...")

@@ -1,0 +1,33 @@
+// PAR2HTM.DLG
+
+
+
+before DlgDefault("New1",FirstOfMonth(UserDate()))
+before DlgDefault("New2",LastOfMonth(UserDate()))
+before DlgDefault("MsgStatus",space(5))
+
+before SetDlgTitle("Stand der Dinge als HTML")
+
+field name="New1" caption="Datum : von " attrib="N"
+field name="New2" caption=" bis "
+// field name="Closed" caption="Vor dem " caption2=" erledigte rauslassen"
+
+field block={||PAR->IdPar+" "+padr(ParName(),40)} \
+      caption="Partner : " \
+      when={||.f.} color="N/W"
+
+field name="MsgStatus" \
+      caption="Status " \
+      picture="@!" \
+      pick={|x|PickDbcAttrib("MSGCODE.DBC",x)}
+
+
+after SetTplLang(PAR->Langue)
+after DlgDefine("MsgFilter",\
+  "inRange(MSG->Since,DlgValue('New1'),DlgValue('New2'))"\
+)
+after DlgDefine("InFile",DbPath()+"\PARPDR.HTM")
+after DlgDefine("OutFile",".\TMP")
+// after Confirm("InFile = " + DlgValue("InFile"))
+after ActExec("HTMPARSE")
+after .f.

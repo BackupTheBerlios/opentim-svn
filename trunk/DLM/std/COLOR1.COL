@@ -1,0 +1,22 @@
+// Color codes to be used :          
+//   N  Black      N+  Gray          
+//   B  Blue       B+  Bright Blue   
+//   G  Green      G+  Bright Green  
+//   BG Cyan       BG+ Bright Cyan   
+//   R  Red        R+  Bright Red    
+//   RB Magenta    RB+ Bright Magenta
+//   GR Brown      GR+ Yellow        
+//   W  White      W+  Bright White  
+
+MainMenuColor      N/BG,W+/R,W/BG,R/BG
+EditMenuColor      N/W,W+/R,N+/W,R/W
+BrowseColor        W/B,N/W,N/N,N/N,W/R
+MessageColor       W+/B
+LegendColor        N/W
+StatusColor        N/BG
+WindowColor        N/W,W+/N+,N/N,N/N,W/N+
+FullScreenColor    W/B,N/W,N/N,W+/BG,N/W+
+TextColor          W/B,N/W,,,N+/W
+WaitColor          N/BG
+HelpColor          GR+/R
+

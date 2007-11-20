@@ -1,0 +1,12 @@
+//
+// F:\SOFT\TEST\TIM300\HEINEN\MVABUD.QRY - generated 13.09.95
+// for MVA.DBF
+//
+window 15 80 0 0 
+column 2 Jnl
+column 3 Dok.Nr
+column 5 Datum
+column 7 Bemerkung
+column 8 Per.
+column 9 ÿ
+column 10 Betrag

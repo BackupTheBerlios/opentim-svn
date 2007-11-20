@@ -1,0 +1,75 @@
+// MWSt-Erkl„rung
+title if(MemLang1=="D","MWSt-Erkl„rung","D‚claration TVA")
+before DlgDefault("IdGenTva",space(LenIdGen())) // TVA d‚ductible sur frais bancaires
+before DlgDefault("Long","X")
+before DlgDefault("AsRtf"," ")
+before DlgDefault("NoTvaComptable",MemNoTva)
+// before DlgDefault("IdGenTva",space(LenIdGen())) 
+field block={|x|SetPeriode(x)} \
+    picture="@k@!" \
+    caption=if(MemLang1=="D","Periode von-bis ","P‚riode de-… ") \
+    pick={|x|PickPerRange(x)}
+field caption=if(MemLang1=="D","MWSt-Nummer ","Mon nø TVA ") \
+    picture="@k@!"\
+    postedit={|x|GetNoTva(x,MemPays)}\
+    valid={||ValNoTva(MemNoTva)}\
+    block={|x|if(x==NIL,MemNoTva,MemNoTva:=x)}
+field name="NoTvaComptable" \
+      caption=if(MemLang1=="D","MWSt-Nummer Buchhalter ","Nø TVA comptable ") \
+      picture="@k@!"\
+      postedit={|x|GetNoTva(x,MemPays)}\
+      valid={||ValNoTva(MemNoTva)}
+field name="61" \
+      caption=if(MemLang1=="D",\
+        "Diverse Regularisierungen [61]  ",\
+        "R‚gulation diverses       [61]  "\
+      )
+field name="62" caption="                          [62]  "
+field name="IdGenTva" \
+    caption=if(MemLang1=="D",\
+      "Generalkonto MWSt Bankkosten    ",\
+      "Cpte g‚n‚ral TVA frais bancaires"\
+    )\
+    picture="@k@9"\
+    postedit={|x|GetIdGen(x)}\
+    pick={|x|PickGen(NIL,x)}
+field name="91" \
+    caption=if(MemLang1=="D",\
+      "Anzahlung                 [91]  ",\
+      "Acompte vers‚             [91]  "\
+    )
+// field name="reset" \
+    caption2=" alle Berechnungen neu starten" \
+    value=" " \
+    reader={|g|CbxReader(g)}
+field block={|x|SetTplIni(x)}  picture="@k@!" \
+    caption=if(MemLang1=="D",\
+      "Druckparametersatz ",\
+      "ParamŠtres imprimante "\
+    ) \
+    value=padr("DCLTVA",LenIdTpl()) \
+    pick={|x|PickTpl("INI",x)}
+// field name="Long" \
+    caption2=if(MemLang1=="D",\
+      " Langes Format",\
+      " long format"\
+    )\
+    reader={|g|CbxReader(g)}
+field name="AsRtf" \
+    caption2=if(MemLang1=="D",\
+      " als RTF-Datei",\
+      " comme fichier .rtf"\
+    )\
+    reader={|g|CbxReader(g)}
+field block={|x|SetPreview(x)} \
+    caption2=if(MemLang1=="D",\
+      " Seitenvorschau",\
+      " Pr‚visualisation"\
+    )\
+    value="X" \
+    reader={|g|CbxReader(g)}
+
+#include "ASPDF.DLG"
+
+after SetMntFormat("S12")
+// after Confirm("Die W„hrung ist : "+SetDevise())

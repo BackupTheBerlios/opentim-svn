@@ -1,0 +1,35 @@
+// Textdatei fr Winword, Excel,...
+OutputFile    "c:\temp\par.txt"
+Delimiter     chr(9)
+FieldUpdate   NameVorname trim1(PAR->Allo)+trim1(PAR->Vorname)+trim(PAR->Firme)
+FieldUpdate   Anrede      trim(PAR->Allo)
+FieldUpdate   Vorname     trim(PAR->Vorname)
+FieldUpdate   Name        trim(PAR->Firme)
+FieldUpdate   Strasse     trim(ParStreet())
+FieldUpdate   PLZ_Ort     ParCity()
+FieldUpdate   Land        trim(PAR->Pays)
+FieldUpdate   PLZ         trim(PAR->CP)
+FieldUpdate   Ort         trim(PLZ->Nom)
+FieldUpdate   Tel         trim(if(left(PAR->Tel,4)=="087/",substr(PAR->Tel,5),PAR->Tel))
+FieldUpdate   Fax         trim(if(left(PAR->Fax,4)=="087/",substr(PAR->Fax,5),PAR->Fax))
+
+// Siehe auch DOS2WIN.CVT
+convert "„" to "ä"
+convert "" to "Ä"
+convert "”" to "ö"
+convert "™" to "Ö"
+convert "" to "ü"
+convert "š" to "Ü"
+convert "á" to "ß"
+convert "…" to "à"
+convert "ƒ" to "â"
+convert "‚" to "é"
+convert "ˆ" to "ê"
+convert "Š" to "è"
+convert "Œ" to "î"
+convert "“" to "ô"
+convert "–" to "û"
+convert "—" to "ù"
+convert "‰" to "ë"
+convert "‡" to "ç"
+convert "ñ" to "±"

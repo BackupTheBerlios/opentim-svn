@@ -1,0 +1,10 @@
+// PICKART.ACT
+RETURN VnlPickArt() if \
+  VNL->Code$"RG".or.VNL->IdJnl$"VKA,VKB,VKR".or.!VEN->IdPar$"000004,000007"
+RETURN DbfPick(\
+ {oArt(),oGra(),oPar()},\
+ "Auswahl Artikel pro Lieferant: " + trim(ParName()),\
+ "ARTPAR",VNL->IdArt,NIL,\
+ VEN->IdPar,"ART->IdPar","ART->IdArt"\
+)
+

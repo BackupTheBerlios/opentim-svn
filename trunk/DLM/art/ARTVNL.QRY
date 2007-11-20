@@ -1,0 +1,24 @@
+//
+// ARTVNL.QRY - generated 10.10.95
+// for VNL.DBF
+//
+column 1 Jnl
+column 2 Dok.Nr
+column 4 Pos
+column 7 Desig
+column 8 Qte
+column 9 PrixU
+column 11 MontT
+column 12 _Date
+column 13 IdTax
+column 14 _TVAC
+column 15 Remise
+column 16 cMont
+column 17 cPrixA
+column 18 _Firme
+column 19 _Remarq
+column 20 Memo
+column 21 _Libell
+column 22 _ObjName
+column 24 Date
+order 2

@@ -1,0 +1,2 @@
+Confirm(MsgSure())
+Confirm(nText("   10.80","D",.t.))

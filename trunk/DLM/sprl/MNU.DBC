@@ -1,0 +1,81 @@
+// HauptmenÅ
+
+|~Stammdaten|~Kunden                    |PrtParEdit("K")
+|~Stammdaten|~Lieferanten               |PrtParEdit("L")
+// |~Stammdaten|alle Partner nach ~ID      |ParEdit(NIL,"Partner nach ID")
+// |~Stammdaten|alle Partner nach ~MWSt-Nr.|ParEdit("TVA","Partner nach MWSt-Nr")
+// |~Stammdaten|alle Partner nach A~dresse |ParEdit("ADR","Partner nach Adresse")
+|~Stammdaten||
+|~Stammdaten|~Generalkonten             |GenEdit()
+|~Stammdaten||
+|~Stammdaten|Artikelgr~uppen            |GraEdit()
+|~Stammdaten|~Artikel nach Nummer       |ArtEdit()
+|~Stammdaten|Artikel nach ~Bezeichnung  |ArtEdit("ART3","Artikel nach Bezeichnung")
+|~Stammdaten||
+|~Stammdaten|~Postleitzahlen            |PlzEdit()
+|~Stammdaten|~Bilanzposten              |DbfEdit({oBil()},"Bilanzposten")
+// |~Stammdaten|Ta~rife Dienstleistungen   |DbfEdit({oTac()},"Tarife Dienstleistungen")
+
+|~Journale|~AuftrÑge              |DocEdit("VKA","")
+// |~Journale|~AuftrÑge              |DocEdit("AUF","AuftrÑge")
+|~Journale|~Verkaufsrechnungen    |DocEdit("VKR","")
+|~Journale|~Einkaufsrechnungen    |DocEdit("EKR","")
+|~Journale||
+|~Journale|~KassenbÅcher          |DocEdit("KAS","KassenbÅcher")
+|~Journale|~Bankkonten            |DocEdit("BNK","Bankkonten")
+|~Journale|~ZahlungsauftrÑge      |DocEdit("ZAU","ZahlungsauftrÑge")
+|~Journale|~Saldenabgleich        |DocEdit("SAL","")
+|~Journale|~Diverse Buchungen     |DocEdit("DIV","Diverse Buchungen")
+|~Journale|~Jahresabschluss       |DocEdit("REP","")
+
+|E~xtras|~Archiv                       |PickArchive()
+|E~xtras|A~genda                       |TrmEdit()
+// |E~xtras|Agenda pers~înlich            |TrmEdit(UserId())
+// |E~xtras|~Dienstleistungsberichte      |TrmDlgList("Dienstleistungsberichte","SERV")
+|E~xtras||
+|E~xtras|~Betrag in Historik suchen    |DbfEdit(\
+  {oHst(),oPar(),oGen(),oVen(),oFin()},\
+  "Betrag in Historik suchen","HSTMONT"\
+)
+
+#if HasDgr() .and. MemLang1 == "D"
+|~Mahnungen|Offene Posten ~Kunden       |PrtParEdit("K","MAHN","Offene Posten Kunden")
+|~Mahnungen|Offene Posten ~Lieferanten  |PrtParEdit("L","MAHN","Offene Posten Lieferanten")
+|~Mahnungen|Offene Posten pro ~Journal  |JnlHstEdit("Offene Posten pro Journal")
+|~Mahnungen||
+|~Mahnungen|Mahnungen ~generieren       |ActExec("RAPAUTO")
+|~Mahnungen|Liste der ~Mahnungen        |RapEdit("Mahnungen")
+|~Mahnungen||
+|~Mahnungen|Mahngra~de                  |WinEdit(oDgr(),"Mahngrade")
+#endif
+#if HasDgr() .and. MemLang1 == "F"
+|~Rappels|Clients ~dÇbiteurs          |PrtParEdit("K","MAHN","clients dÇbiteurs",5)
+|~Rappels|Fournisseurs ~crÇditeurs    |PrtParEdit("L","MAHN","fournisseurs crÇditeurs",5)
+|~Rappels|paiements ~non lettrÇs      |JnlHstEdit("paiements non lettrÇs")
+|~Rappels||
+|~Rappels|~GÇnÇrer rappels...         |ActExec("RAPAUTO")
+|~Rappels|~Liste des rappels          |RapEdit("Rappels de paiement")
+|~Rappels||
+|~Rappels|~DegrÇs de rappel           |WinEdit(oDgr(),"DegrÇs de rappel")
+#endif
+#if ! HasDgr()
+|E~xtras||
+|E~xtras|Offene Posten ~Kunden         |PrtParEdit("K","MAHN","Offene Posten Kunden")
+|E~xtras|Offene Posten ~Lieferanten    |PrtParEdit("L","MAHN","Offene Posten Lieferanten")
+|E~xtras|Offene Posten pro ~Journal    |JnlHstEdit("Offene Posten pro Journal")
+|E~xtras|K~ontoauszÅge drucken         |HstAuto("K")
+#endif
+
+
+|~Programm|~BenutzermenÅ                 |AppRefresh("")
+|~Programm|~DruckmenÅ                    |AppRefresh("PRINT")
+|~Programm|~VerwaltermenÅ                |AppRefresh("BOSS")
+|~Programm||
+|~Programm|Datenbank-~Check              |ActExec("DBCHECK")
+|~Programm|~Login                        |Relogin()
+|~Programm|~Passwort Ñndern              |UsrChangePwd()
+|~Programm|Inf~o                         |AppAbout()
+// |~Programm|~Hilfe                        |WinHelp("INDEX")
+|~Programm||
+|~Programm|TIM be~enden          [Alt-F4]|AppNormEnd()
+

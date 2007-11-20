@@ -1,0 +1,28 @@
+// Rechnungsbuchkolonnen 
+V|KU|Customer
+V|5 |VAT due
+V|**|N/A
+V|..|Sales
+
+E|LI|Supplier
+E|6 |deductable VAT
+E|61|s.h. tollile tasutud
+E|62|s.h. teenuse importimsel
+// E|NA|nicht abzugsf„hige MWSt.
+E|**|N/A
+E|80|Purchases
+
+P|**|N/A
+
+ |KU|Kliendid
+ |LI|Hankijad
+ |EM|Net Salaries
+ |MA|Maksuamet
+ |CB|Pangakontod ja kassad
+ |OP|other operating payments
+
+ |IN|Rahak„ive investeeringutest
+
+ |FI|Other financing activities
+ |CR|Credits taken
+

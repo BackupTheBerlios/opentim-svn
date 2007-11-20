@@ -1,0 +1,90 @@
+// HTML-Text fÅr Listen
+Initialize     "<html><body><pre>"
+Reset          "</pre></body></html>"
+FormFeed       repl("=",80)+"<br>"
+// LineFeed       "<br>"+chr(13)+chr(10)
+Font 10cpi 10 12/72 ""
+Font 12cpi 12 12/72 ""
+Font 15cpi 15 12/72 ""
+Font 17cpi 17 12/72 ""
+Font 20cpi 20 12/72 ""
+BoldOn  "<b>"
+BoldOff "</b>"
+ItalOn  "<i>"
+ItalOff "</i>"
+
+convert "---" to "&mdash;"
+
+
+convert "ƒ" to "-"
+convert "≥" to "|"
+
+convert "¡" to "+"
+convert "¬" to "+"
+convert "…" to "+"
+convert "Õ" to "="
+convert "ª" to "+"
+convert "∫" to "|"
+convert "»" to "+"
+convert "º" to "+"
+convert "" to "&darr;"
+
+convert "Ñ" to "&auml;"
+convert "é" to "&Auml;"
+convert "†" to "&aacute;"
+convert "Ö" to "&agrave;"
+convert "É" to "&acirc;"
+
+convert "Å" to "&uuml;"
+convert "ö" to "&Uuml;"
+convert "ñ" to "&ucirc;"
+convert "£" to "&uacute;"
+convert "ó" to "&ugrave;"
+
+convert "î" to "&ouml;"
+convert "ô" to "&Ouml;"
+convert "ì" to "&ocirc;"
+convert "¢" to "&oacute;"
+convert "ï" to "&ograve;"
+
+convert "·" to "&szlig;"
+convert "¯" to "&deg;"
+convert "˝" to "&sup2;"
+convert "¸" to "&sup3;"
+convert "á" to "&ccedil;"
+
+convert "Ç" to "&eacute;"
+convert "ä" to "&egrave;"
+convert "à" to "&ecirc;"
+convert "â" to "&euml;"
+
+convert "å" to "&icirc;"
+convert "ç" to "&igrave;"
+convert "ã" to "&iuml;"
+
+convert "~o" to "&otilde;"
+convert "‰" to "&otilde;"
+convert "~O" to "&Otilde;"
+convert "Â" to "&Otilde;"
+convert "Æ" to "&laquo;"
+convert "Ø" to "&raquo;"
+convert "ë" to "&aelig;"
+convert "í" to "&Aelig;"
+convert "˘" to "&uml;"
+convert "˙" to "&middot;"
+
+
+
+// convert "[UL]" to "<UL>"
+// convert "[OL]" to "<OL>"
+// convert "[ul]" to "</UL>"
+// convert "[ol]" to "</OL>"
+// convert "[li]" to "<li>"
+// convert "[TT]" to "<TT>"
+// convert "[tt]" to "</tt>"
+// convert "[PRE]" to "<PRE>"
+// convert "[pre]" to "</pre>"
+
+convert chr(13)+chr(10)+chr(13)+chr(10) to chr(13)+chr(10)+chr(13)+chr(10)+"<p>"
+
+convert chr(255) to " "

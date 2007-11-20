@@ -1,0 +1,16 @@
+//
+// ARTIVT.QRY - generated 04.01.2000
+// for ART.DBF
+//
+column 18 Lfr. pict @K@!
+column 1 Gru pict @K@!
+column 34 Art.Nr pict @K@!
+column 5 Bezeichnung pict @K@S35
+column 46 Modell
+column 40 Lager
+column 10 Stckwert pict @K@! attr C
+column 0 GesWert block ntom(qton(ART->Lager)*val(ART->PrixR)) skip .t. expr val(ART->PrixR)*qton(ART->Lager) say ntom(nSum)
+column 28 LE pict @K
+mask ART
+order 4
+help ART

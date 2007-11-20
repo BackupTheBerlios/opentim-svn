@@ -1,0 +1,30 @@
+// VEN2RTF.DLG
+before SetDlgTitle("RTF-Druck")
+before DlgDefine("InFile",padr(if(VEN->IdJnl$"VKA,VKB","VKA","VKR")+"001"+PAR->Langue,8))
+before DlgDefine("OutFile",padr(DataRoot()+"\RTF\"+VEN->IdJnl+"\"+VEN->IdDoc,100))
+field block={||VEN->IdJnl+" "+VEN->IdDoc} \
+      caption=padr(utr("Document : ","Dokument : ","Document : "),15) \
+      when={||.f.} color="N/W"
+
+field block={||padr(PAR->IdPar+" "+ParName(),35)} \
+      caption=padr(utr("Customer : ","Kunde : ","Client : "),15) \
+      when={||.f.} color="N/W"
+field name="InFile" \
+      caption=padr("Vorlage",15) \
+      picture="@k@!"
+field caption="                [F3] um Vorlage zu bearbeiten"
+field name="OutFile" \
+      caption=padr("Ausgabedatei",15) \
+      picture="@k@s35"
+
+action key=-2 block={||AppShell(\
+  'start '+GetDlmPath(trim(getvar('InFile'))+'.RTF')\
+)}
+
+after ActExec("FPARSE",{\
+  trim(getvar("InFile")),\
+  "RTF",\
+  trim(getvar("OutFile")),\
+  "RTF"\
+})
+after .f.

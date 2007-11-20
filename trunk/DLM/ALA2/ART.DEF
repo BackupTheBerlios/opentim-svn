@@ -1,0 +1,78 @@
+// Anpassungen ART.DBF
+// ddAddIndex("ART->iGra+right(ART->IdPar,3)+upper(ART->RefExt)","Gruppe+Lfr+BestNr")
+ddAddIndex("left(ART->IdArt,1)+upper(ART->Name1)+ART->Liter","Bezeichnung",NIL,{|x|upper(x,1)})
+ddAddIndex("upper(ART->Match)+upper(ART->Name1)+ART->Liter","Match","!empty(ART->Match)",{|x|upper(x)})
+ddAddIndex("ART->IdPar+upper(ART->Match)","Lieferant+Match.",NIL,{|x|upper(x,LenIdPar())})
+ddAddField("Lager","C",LenQte(),0,"","",NIL,NIL,NIL,{|x|PickNum(x)},{||"E"$UsrAttrib()},{|x|GetQte(x,ART->QteForm)})
+ddAddField("Match","C",30,0,"@k@s10","",NIL,NIL,NIL)
+ddAddField("StkMin","C",LenQte(),0,"","",NIL,NIL,NIL,{|x|PickNum(x)},{||"S"$UsrAttrib()},{|x|GetQte(x,ART->QteForm)})
+ddAddField("Liter","C",10,0,"","",NIL,NIL,NIL,{|x|PickNum(x)},NIL,{|x|GetNum(x)})
+ddAddField("NB","M",10,0)
+ddAddField("AlaCount","C",3,0,"","",NIL,NIL,NIL,{|x|PickNum(x)},{||"E"$UsrAttrib()},{|x|GetNum(x)})
+ddAddField("idPPS","C",2,0,\
+  "@k@!",if(HasDlm("PPS"),NIL,"H"),\
+  NIL,NIL,NIL,\
+  {|x|PickDbcCode("PPS.DBC",x,"PPS-Kolonne")}\
+)
+ddAddField("IdGenE","C",LenIdGen(),0,\
+  "@k@!",NIL,\
+  NIL,NIL,NIL,\
+  {|x|PickGen(NIL,x)}\
+)
+ddAddField("IdGenK","C",LenIdGen(),0,\
+  "@k@!",NIL,\
+  NIL,NIL,NIL,\
+  {|x|PickGen(NIL,x)}\
+)
+
+// ddAddField("PrixRDev","C",LenMont(),0,\
+  "","",NIL,NIL,\
+  {||ART->PrixR:=ntom(val(ART->PrixRDev)*val(DevCours(ART->IdDev))),.t.},\
+  {|x|PickNum(x)},\
+  {||.t.},\
+  {|x|GetNum(x,max(ArtPuDecPos(),DevDecPos(ART->IdDev)))}\
+)
+// ddAddField("IdDev","C",3,0,"","",NIL,NIL,NIL,{|x|PickDev(x)},{||.t.})
+
+!HasDlm("ACFV").or.ddAddSpecial(\
+  {||ArtAcfEdit(NIL,NIL,".t.")},\
+  "~Partnerpreise          [F2]",\
+  -1\
+)
+
+ddAddSpecial(\
+  {||ArtVnaEdit(ART->IdArt)},\
+  "Fakturierungs~vorschl„ge   [F6]",\
+  -5\
+)
+ddAddSpecial(\
+  {||ArtAlaEdit(ART->IdArt)}, \
+  "~Komponenten               [F9]",\
+  -8\
+)
+ddAddSpecial(\
+  {||DbfEdit(\
+    {oAla(),oArt()},\
+    "Verwendung als Komponente : " + ART->IdArt+" "+trim(ART->Name1),\
+    "ALAART2",NIL,NIL,\
+    ART->IdArt,"ALA->IdArt2"\
+  )}, \
+  "~Verwendung /Komponente [Sh-F9]",\
+  -18\
+)
+ddAddSpecial({||ArtRename()},MsgMnuRename(),-31)
+// ddOnCreate("left(ART->IdArt,1)!='A'.or.(ART->QteForm:=':')!=NIL")
+// ddOnCreate("left(ART->IdArt,1)=='T'.or.(ART->Attrib:='S')!=NIL")
+//ddFldSetValidate("IdPar","\
+//  (empty(ART->IdPar)\
+//  .or.(\
+//     ParExist(ART->IdPar).and.(ART->IdDev:=PAR->IdDev)!=NIL\
+//  )).and.ph_refresh()\
+//")
+// ddFldSetPostEdit("Prix2",\
+  {|x|GetNum(x,max(ArtPuDecPos(),DevDecPos(ART->IdDev)))}\
+)
+ddFldSetSize("Attrib",8,0)
+ddFldSetWhen("DPA",".t.")
+// ddFldSetWhen("PrixR","!'M'$ART->Attrib")
+// ddFldSetWhen("Prix1","!'M'$ART->Attrib")

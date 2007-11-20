@@ -1,0 +1,3 @@
+F|Facture r‚currente |ActExec("TSKVENAP")
+R|Reminder           |Warning(StrParse(trim(TSK->Name)),NIL,NIL,NIL,"Reminder")
+A|Action             |xparse(trim(TSK->Name))

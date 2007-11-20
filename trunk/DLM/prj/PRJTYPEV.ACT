@@ -1,0 +1,5 @@
+// validate PRJ->Type or VEN->Type
+#static
+empty(argv[1]).or.!empty(DbcText("PRJTYPE.DBC",argv[1]))\
+  .or.!SetMsg(argv[1] + " : invalid project type!")
+ph_refresh()

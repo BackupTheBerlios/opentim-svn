@@ -1,0 +1,21 @@
+field name="Date1" \
+    caption="P‚riode du " \
+    default=FirstOfMonth(UserDate()) \
+    attrib="N"
+field name="Date2" \
+    caption="Etat au " \
+    value=UserDate()
+
+// field name="IdCtr" \
+    caption="Zentralisierungsart " \
+    picture="@!" \
+    value="V" \
+    pick={|x| PickCtr(x)}
+// field name="ParAttr" \
+    caption="Nur Partner mit Attribut " \
+    picture="!" \
+    value=" " \
+    pick={|x| PickDbcCode("PRA.DBC")}
+
+#include "PREVIEW.DLG"
+#include "TOCSV.DLG"

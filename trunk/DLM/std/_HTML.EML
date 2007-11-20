@@ -1,0 +1,10 @@
+[=DrvLoad("HTM")]
+Message-Id: <[=dtos(date())+strtran(time(),":")]@example.com>
+Date: [=dtocf(date(),"dddd, dd mmmm yyyy","E")] [=time()] +0200
+From: <me@example.com>
+To: [=dos2quoted(trim(getvar("ToName")))] <[=trim(getvar("ToAddr"))]>
+Subject: [=dos2quoted(trim(getvar("Subject")))]
+Mime-Version: 1.0
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: binary
+Content-Disposition: inline

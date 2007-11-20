@@ -1,0 +1,106 @@
+// VEN.DEF
+ddAddIndex("VEN->IdPar+dtos(VEN->Date)","IdPar+Date")
+// ddAddField("Kassiert","C",LenMont(),0,"","",NIL,NIL,NIL,{|x|PickNum(x)},NIL,{|x|GetNum(x)})
+ddAddIndex("VEN->VnaMatch+dtos(VEN->Date)","VnaMatch+Date")
+ddAddIndex("VEN->IdPar2+VEN->VnaMatch+dtos(VEN->Date)","IdPar2+Date")
+ddAddIndex("VEN->IdJnl+str(ft_woy(VEN->DatEch),2)+VEN->IdPar","IdJnl+DatEch") // VENPPS.REP
+
+ddAddField("VnaMatch","C",9,0,"","",NIL,NIL,NIL,\
+  {|x|PickDoc(NIL,x)}\
+)
+ddAddField("NB3","C",30,0,"@k@s10","")
+ddAddField("Time1","C",5,0,\
+  "",if(HasDlm("PRESTO"),"","H"),\
+  NIL,NIL,NIL,NIL,NIL,\
+  {|x|GetQte(x,":")}\
+)
+ddAddField("Time2","C",5,0,\
+  "",if(HasDlm("PRESTO"),"","H"),\
+  NIL,NIL,NIL,NIL,NIL,\
+  {|x|GetQte(x,":")}\
+)
+
+ddPreExit({|| \
+  VEN->Etat == DocStatClosed().or."E"$UsrAttrib().or.Confirm(\
+  MsgIdJnlDoc() + " : Dokument ist nicht registriert.",\
+  "Sind Sie sicher, dass Sie die Eingabe abbrechen wollen (J/N) ?", "N" \
+)})
+ddEditDetail("VEN->Etat!=DocStatNew().or.VenDetail()")
+ddPreCreate('DlgDefine("VnaMatch","")')
+ddOnCreate('(VEN->VnaMatch:=DlgValue("VnaMatch"))!=NIL')
+ddOnCreate('!empty(VEN->VnaMatch).or.(VEN->VnaMatch:=VEN->IdJnl+VEN->IdDoc)!=NIL')
+// ddPrintRecord({||ActExec("VENPRINT")})
+
+ddFldSetWhen("IdReg","VEN->Etat!=DocStatClosed().or.'E'$UsrAttrib()")
+// ddFldSetWhen("Etat","'E'$UsrAttrib()")
+
+
+
+
+
+ddAddSpecial({|| ActExec("VENAPPND") },\
+  "Fakturieren...        [Alt-F6]",\
+  -35, \
+  {||.t.} \
+)
+ddAddSpecial(\
+  {||DlgExec("JNLIDDOC")}, \
+  "~Letzte Dokumentnummer setzen  ",\
+  NIL,{||"S"$UsrAttrib()}\
+)
+ddAddSpecial({||VenRename()}, NIL, -31, {||"E"$UsrAttrib()} )
+
+ddAddSpecial(\
+  {||DbfEdit(\
+    {oVen(),oPar(),oPlz()},\
+    trim(ParName(VEN->IdPar)) + ": "+MnuItemName(),"VENPAR",\
+    NIL,\
+    NIL,\
+    VEN->IdPar,\
+    "VEN->IdPar",\
+    NIL,\
+    "VenCreate('" + PAR->IdPar + "')"\
+  )},\
+  "~Dokumente pro Partner     [F5]",\
+  -4 \
+)
+
+ddAddSpecial(\
+  {||DbfEdit(\
+    {oVen(),oPar(),oPlz()},\
+    VEN->VnaMatch+" : " + MnuItemName(),"VENMATCH",\
+    NIL,\
+    NIL,\
+    VEN->VnaMatch,\
+    "VEN->VnaMatch",\
+    NIL,\
+    NIL\
+  )},\
+  "~Dokumente pro Serie       [F2]",\
+  -1 \
+)
+
+!HasDlm("VNA").or.ddAddSpecial(\
+  {||DbfEdit(\
+    {oVna(),oVen(),oPar(),oArt()},\
+    "D‚tail des op‚rations /match " + VEN->VnaMatch,\
+    "VNAMATCH",NIL,"empty(VNA->Satis)",\
+    VEN->VnaMatch,"left(VNA->Match,9)"\
+  )}, \
+  "~op‚rations /match         [F6]",\
+  -5,\
+  {||.t.} \
+)
+!HasDlm("VNA").or.ddAddSpecial(\
+  {||DbfEdit(\
+    {oVna(),oVen(),oPar(),oArt()},\
+    "D‚tail des op‚rations /Document " + VEN->IdJnl+" "+VEN->IdDoc,\
+    "VNADOC",NIL,"empty(VNA->Satis)",\
+    VEN->IdJnl+VEN->IdDoc,"VNA->IdJnl+VNA->IdDoc"\
+  )}, \
+  "~op‚rations /document   [Sh-F6]",\
+  -15,\
+  {||.t.} \
+)
+
+

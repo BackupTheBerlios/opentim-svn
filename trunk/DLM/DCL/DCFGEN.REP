@@ -1,0 +1,48 @@
+initialize SetMntFormat("S12") // [set montant S10]
+// header1 MnuItemName()
+// header2 tr("Fiscal years ", "Steuerjahre ","Ann‚es fiscales") \
+//        + trim(DlgValue("range1")) \
+//        + tr(" and ", " und "," et ") + trim(DlgValue("range2"))
+// header3 tr("Amounts in ","Betr„ge in ","Montants en ")+SetDevise()
+area { oGen() }
+order 1
+filter {||len(trim(GEN->IdGen))==LenIdGen()}
+filter {||GEN->DclSel == DCF->DclSel}
+
+ValidateRecord {||\
+  setvar("Mont1",0)\
+  .and.setvar("Mont2",0)\
+  .and.setvar("Mont3",0)\
+  .and.ActExec('DCFCOMP')\
+  }
+
+group text={|x|tr("Total","Gesamt")} when={||.t.}
+
+column header=tr("Accnt","Konto","Compte") \
+       width=LenIdGen() \
+       text={||GEN->IdGen}
+column header=tr("Description","Bezeichnung","Description") \
+       width=30 \
+       text={||padr(GenName(NIL,TplLang()),30)}
+
+column header=padl(trim(DlgValue("range1")),LenMntF()) \
+       width=LenMntF() \
+       value={||DlgValue("Mont1")} \
+       text={|x|ntomf(x)} \
+       xsum={|x| ntomf(x) }
+
+column header=padl(trim(DlgValue("range2")),LenMntF()) \
+       width=LenMntF() \
+       value={||DlgValue("Mont2")} \
+       text={|x|ntomf(x)} \
+       xsum={|x| ntomf(x) }
+
+#if !empty(getvar("range3"))
+column header=padl(trim(DlgValue("range3")),LenMntF()) \
+       width=LenMntF() \
+       value={||DlgValue("Mont3")} \
+       text={|x|ntomf(x)} \
+       xsum={|x| ntomf(x) }
+#endif
+
+total text={||""} when={||.t.}

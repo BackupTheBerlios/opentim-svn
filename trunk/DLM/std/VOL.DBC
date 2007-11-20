@@ -1,0 +1,11 @@
+// Volumes : name | path | description | type| xbloc2url
+
+#exec SetDbcDelimiter("%")
+
+iserver%c:\fotos\public\        %Meine Fotos%\
+  image_server%={|v,x|"http:/"+"/photos.example.com/show/"+x}
+
+msgfiles%=AppPath()+"\msgfiles\"  %%%
+
+http %                          %http%\
+  http%={|v,x|"http:/"+x}

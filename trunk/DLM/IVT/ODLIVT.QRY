@@ -1,0 +1,13 @@
+//
+// ODLIVT.QRY - generated 02.01.2002
+// for ODL.DBF
+//
+window 18 80 4 0 
+column 4 Art. pict @K@!
+column 10 Anz. pict @K@!
+column 5 Bezeichnung skip .t.
+column 0 Ref. block ArtField(IdArt,{||ART->iGra+right(ART->IdPar,3)+left(ART->RefExt,8)}) skip .t.
+column 0 VK EUR block ArtField(IdArt,{||ART->TVACEUR}) skip .t.
+column 11 Stckwert skip .t.
+column 8 Gesamtwert pict @K@! skip .t.
+column 3 Pos skip .t.

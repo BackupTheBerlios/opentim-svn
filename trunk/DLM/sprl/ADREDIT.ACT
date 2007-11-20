@@ -1,0 +1,10 @@
+// ADREDIT.ACT : Stammdaten | Adressen
+DlgDefault("AdrType","   ")
+DlgDefine("AdrType",PickDbcCode("ADRTYPE.DBC",DlgValue("AdrType"),"Dienst"))
+DlgValue("AdrType")!=NIL
+DbfEdit(\
+  {oAdr(),oPlz(),oNat()},"Adressen",\
+  "ADR",NIL,\
+  "!'P'$ADR->Attrib.or.ADR->IdUsr==UserId()",\
+  DlgValue("AdrType"),"ADR->Type"\
+)

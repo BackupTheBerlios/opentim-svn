@@ -1,0 +1,14 @@
+//
+// DGR.QRY - generated 13.12.99
+// for DGR.DBF
+//
+window 12 76 0 0 
+column 1 Code pict @K@!
+column 4 Attr pict @K@!
+column 5 Maske pict @K@!
+column 2 DC pict @K@!
+column 3 Frist pict @K@!
+column 6 Text D pict @k@s15
+column 7 Text F pict @k@s15
+column 10 Kosten
+column 9 Formel fÅr Zinsen pict @k@s44

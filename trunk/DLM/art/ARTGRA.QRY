@@ -1,0 +1,15 @@
+//
+// C:\SOFT\RELEASE\TIM220\220D\ARTGRA.QRY - generated 10.04.98
+// for ART.DBF
+//
+window 18 80 0 0 
+column 5 Bezeichnung D pict @K@S25
+column 20 VK pict @K@!
+column 24 inkl.MWSt pict @K@!
+column 34 Art-Nr pict @K@!
+column 4 Bezeichnung F pict @K@S20
+column 6 Bezeichnung N pict @K@S20
+column 1 Gru pict @K@!
+column 19 Attrib pict @K@!
+column 30 Q pict !
+mask ART

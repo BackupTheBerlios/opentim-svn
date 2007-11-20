@@ -1,0 +1,11 @@
+//
+// MVAVNL.QRY - generated 19.05.1999
+// for MVA.DBF
+//
+window 10 56 4 5 
+column 1 Konto pict @K@!
+column 6 Bezeichnung pict @k@s20
+column 9 ÿ pict @K@!
+column 10 Betrag pict @K@!
+column 11 G-Kto
+order 2

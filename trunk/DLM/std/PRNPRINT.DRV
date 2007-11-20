@@ -1,0 +1,56 @@
+// Textmodus auf Windows-Standarddrucker
+// (c) 2002-2005 Luc Saffre
+Name           prnprint
+// Initialize   chr(27)+"@"+chr(27)+"p0"
+// ESC p 0/1 : turn proportional mode off/on
+Reset      ""
+FormFeed       chr(12)
+
+Font  5cpi  5 28/72 chr(27)+"c5 "
+Font 10cpi 10 11.689/61 chr(27)+"c10 "
+Font 12cpi 12 11.689/74 chr(27)+"c12 "
+Font 13cpi 13 11.689/80 chr(27)+"c13 "
+Font 15cpi 15 11.689/89 chr(27)+"c15 "          // 11.69-0.5
+Font 17cpi 17 11.689/105 chr(27)+"c17 "
+Font 20cpi 20 11.689/118 chr(27)+"c20 "
+
+BoldOn   chr(27)+"b1"
+BoldOff  chr(27)+"b0"
+ItalOn   chr(27)+"i1"
+ItalOff  chr(27)+"i0"
+UnderOn  chr(27)+"u1"
+UnderOff chr(27)+"u0"
+
+Option L  Landscape     chr(27)+"L" // prn2pdf-specific ctrl sequence
+Option 8  8LinesPerInch chr(27)+"l8 "
+Option 7  7LinesPerInch chr(27)+"l7 "
+Option 6  6LinesPerInch chr(27)+"l6 "
+
+
+// Option 1  11ZollPapier  chr(27)+"C"+chr(0)+chr(11)
+// Option 2  12ZollPapier  chr(27)+"C"+chr(0)+chr(12)
+
+
+// Option A  FontRoman     chr(27)+"k"+chr(0)
+// Option B  FontSansSerif chr(27)+"k"+chr(1)
+// Option C  FontCourier   chr(27)+"k"+chr(2)
+// Option D  FontPrestige  chr(27)+"k"+chr(3)
+
+// Option K  Kladde         chr(27)+"x"+chr(0)
+// Option Q  Quality        chr(27)+"x"+chr(1)
+
+// OnSelect SetPreview(" ")
+// OnSelect DlgDefault("PRN2PDF.out",padr(".\TEMP.PDF",128))
+// OnSelect SetPreview()!="X".or.!"E"$UsrAttrib().or.DlgExec("PRN2PDF")
+// OnSelect p_SetCopies(1)
+// OnSelect DlgDefault("Copies",1)
+// OnSelect DlgDefault("useWorldTransform",DrvHasOption("L"))
+OnSelect SetSpooler('\
+  AppShell(AppPath()+"\timtools prnprint"\
+    +iif(empty(p_setport()),""," -p"+p_setport())\
+    +" preview.prn",NIL,NIL,.f.)\
+  ')
+// OnSelect confirm(SetSpooler())
+//    +iif(DrvHasOption("L"),"","")\
+//    +iif(p_copies()==1,""," --copies "+ntrim(p_copies()))\
+

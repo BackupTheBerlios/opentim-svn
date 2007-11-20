@@ -1,0 +1,8 @@
+//
+// C:\SOFT\RELEASE\TIM220\STD01D\TPLINI.QRY - generated 18.07.97
+// for TPL.DBF
+//
+window 12 52 0 0 
+column 2 Name pict @K@!
+column 3 Bezeichnung
+mask TPL

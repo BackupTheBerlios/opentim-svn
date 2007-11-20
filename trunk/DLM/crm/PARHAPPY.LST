@@ -1,0 +1,15 @@
+[=DlgDefine("b",{||\
+  toStream(DrvCvtString(trim(ParName()))),\
+  toStream(','),\
+  toStream(substr(PAR->GebDat,7,2)),\
+  toStream('.'),\
+  toStream(substr(PAR->GebDat,5,2)),\
+  toStream('.'),\
+  toStream(substr(PAR->GebDat,1,4)),\
+  toStream(chr(13)+chr(10))\
+})]
+[=DbfScan(\
+  {oPar(),oPlz(),oNat()},1,NIL,NIL,\
+  "!empty(PAR->GebDat)",\
+  DlgValue("b")\
+)]

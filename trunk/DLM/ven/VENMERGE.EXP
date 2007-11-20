@@ -1,0 +1,9 @@
+// Datenquelle fr OpenOffice Umschl„ge
+
+OutputFile    "c:\temp\envelope.txt"
+Delimiter     chr(9)
+RecordBefore ParExist(VEN->IdPar)
+#include "PARCOLS.EXP"
+// #exec AddExpFlds(GetTable("PAR"))
+#include "DOS2WIN.CVT"
+// OnSuccess AppShell("excel.bat "+i_OutputFile(),NIL,.f.)

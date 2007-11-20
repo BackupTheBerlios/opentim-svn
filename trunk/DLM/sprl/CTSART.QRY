@@ -1,0 +1,10 @@
+//
+// CTSART.QRY - generated 13.03.03
+// for CTS.DBF
+//
+window 15 40 0 0 
+column 2 Per.
+column 3 Jnl
+column 4 Menge
+column 8 Anz expr Anz say str(nSum,6,0)
+column 5 Betrag

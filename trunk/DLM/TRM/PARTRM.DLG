@@ -1,0 +1,24 @@
+// propositions de commande
+title "šbersicht Dienstleistungen"
+field name="Date1" \
+      caption="Dienstleistungen vom " \
+      value=FirstOfMonth(UserDate()) \
+      attrib="N"
+field name="Date2" \
+     caption=" bis zum " \
+     value=UserDate()
+// field name="dtl" \
+//     caption2=" detailliert" \
+//     value="X" \
+//     reader={|g|CbxReader(g)}
+field block={|x|SetPreview(x)} \
+    caption2=" Seitenvorschau " \
+    value="X" \
+    reader={|g|CbxReader(g)}
+field block={|x|SetTplIni(x)} \
+    caption="Druckparametersatz " \
+    value=padr("LISTE",LenIdTpl()) \
+    picture="@k@!" \
+    pick={|x|PickTpl("INI",x)}
+
+

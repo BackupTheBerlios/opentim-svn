@@ -1,0 +1,70 @@
+// Historik Partnerkonten
+before SetDevise(DevDefault(MemPer1))
+before DlgDefault("IdCtrList",space(15))
+before DlgDefine("IdCtrList",padr(DlgValue("IdCtrList"),15))
+before DlgDefault("IdPar1",space(LenIdPar()))
+before DlgDefault("IdPar2",space(LenIdPar()))
+before DlgDefault("IdJnl",space(LenIdJnl()))
+before DlgDefault("Match",space(LenIdJnl()+6))
+before DlgDefault("Satis"," ")
+
+#include "PERIODE.DLG"
+// field block={|x|SetPeriode(x)} \
+    picture="@k@!" \
+    caption="Periode von-bis " \
+    pick={|x|PickPerRange(x)}
+// field caption="W„hrung  " \
+      block={|x|SetDevise(x)}\
+      picture="@k@!"\
+      pick={|x|PickDev(x)}\
+      valid={||DevExist(SetDevise())}
+field name="Match" \
+      caption=utr("Only transactions where Match starts with ",\
+                  "Nur Buchungen, deren Match mit ", \
+                  "Uniquement transactions avec Match ") \
+      caption2=utr(""," beginnt","") \
+      picture="@k@!"
+field name="IdJnl" \
+    caption=utr("Only","Nur","Seulement")+" Journal " \
+    picture="@k@!" \
+    pick={|x|DbfPick(\
+              {oJnl()},"Auswahl Journal","JNLPICK",\
+              x,\
+              "'G'$Attrib"\
+    )}
+field name="IdCtrList" picture="@k@!" \
+    caption=utr("Centralisation type(s)",\
+                "Zentralisierungart(en) ", \
+                "Code centralisateurs ") \
+    pick={|x| PickCtr(x)}
+field name="IdPar1" picture="@k@!" \
+    caption="nur Partner von " \
+    pick={|x| PickPar(CtrPrtList(trim(DlgValue("IdCtrList"))),x)} \
+    postedit={|x|GetIdPar(x)} \
+    attrib="N"
+field name="IdPar2" picture="@k@!" \
+    caption=" bis " \
+    pick={|x| PickPar(CtrPrtList(trim(DlgValue("IdCtrList"))),x)} \
+    postedit={|x|GetIdPar(x)}
+field name="Satis" \
+    caption2=utr(" only unmatched transactions",\
+                 " nur unlettrierte Buchungen",\
+                 " uniquement transactions non lettr‚es") \
+    reader={|g|CbxReader(g)}
+
+#include "PREVIEW.DLG"
+#include "ASPDF.DLG"
+// field block={|x|SetPreview(x)} \
+    caption2=" Seitenvorschau " \
+    value="X" \
+    reader={|g|CbxReader(g)}
+// field block={|x|SetRange(x)} \
+    caption=if(MemLang1=="D","Seiten von-bis ","Pages de-… ")
+// field block={|x|SetTplIni(x)}  picture="@k@!" \
+    caption="Druckparametersatz " \
+    value=padr("LISTE",LenIdTpl()) \
+    pick={|x|PickTpl("INI",x)}
+
+after AppSaveMem()
+
+

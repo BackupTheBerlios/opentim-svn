@@ -1,0 +1,11 @@
+#include "PARFILT.DLG"
+
+title MnuItemName()+" "+alltrim(PLS->IdPls)
+// title MnuItemName()"Mitglieder l”schen aus Liste "+alltrim(PLS->IdPls)
+
+after DbfDelete(NIL,\
+  "'End membership of '+trim(ParName(MBR->IdPar))",\
+  {oMbr(),oPar(),oPlz(),oNat()},2,\
+  PLS->IdPls,"MBR->IdPls=='"+PLS->IdPls+"'",\
+  "DbfPeek(oPar(),MBR->IdPar,getvar('ParFilter'),.f.)"\
+  ).and.ddGoBottom(.t.)

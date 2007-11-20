@@ -1,0 +1,20 @@
+document.setTitle("Woche vom [=dtoc(getvar("Date"))]")
+document.setPageSize(landscape(A4))
+
+
+th = TableHeader()
+th.addColumn(label="Tag",         width=25*mm,
+             style=styles.Normal)
+th.addColumn(label="SPU", style=styles.Normal)
+th.addColumn(label="SAN", style=styles.Normal)
+th.addColumn(label="KAM", style=styles.Normal)
+th.addColumn(label="Sonstige", style=styles.Normal)
+
+
+document.beginTable(header=th)
+
+[=DbfScan({oTrm()},1,dtos(getvar("Date")),".t.",".t.",\
+  {||fparse("WOCHE2.PDS")},6)]
+
+document.endTable()
+

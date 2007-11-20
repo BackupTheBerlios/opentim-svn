@@ -1,0 +1,13 @@
+% timdefs.tex - to be \input from venstd.tex
+\newenvironment{memo}
+{\begin{list}{}{
+  \setlength{\leftmargin}{2mm}
+  \setlength{\rightmargin}{2mm}
+  \setlength{\topsep}{0mm}
+  }\item[]\ignorespaces}
+{\unskip\end{list}}
+
+\newcommand{\unterschrift}{
+  \parbox[b]{3cm}{\vspace{10mm}\dotfill}
+}
+

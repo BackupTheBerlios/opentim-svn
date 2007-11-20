@@ -1,0 +1,14 @@
+//
+// MBRPAR.QRY - generated 08.02.06
+// for MBR.DBF
+//
+window 12 78 10 0 
+column 1 Liste pict @K@!
+column 9 Contact block padr(ParName(MBR->IdPar2),60) pict @k@s25
+column 7 Bemerkung pict @k@s20
+column 5 Bezeichnung pict @k@s15 skip .t.
+column 6 Attrib pict @K@! skip .t.
+column 11 Date skip .t. say ""
+column 10 User pict @K@! skip .t.
+order 2
+filter "PlsIsVisible(MBR->IdPls)"

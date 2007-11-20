@@ -1,0 +1,9 @@
+setvar("IdDoc",DbfPick(\
+  {oVen(),oPar(),oPlz()},\
+    "Welcher Auftrag?",\
+    "VENPICK",NIL,NIL,\
+    "AUF","VEN->IdJnl","VEN->VnaMatch"))
+RETURN 0 if getvar("IdDoc") == NIL
+Warning("Sorry, das ist noch nicht fertig.")
+RETURN 0
+

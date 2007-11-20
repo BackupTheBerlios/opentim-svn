@@ -1,0 +1,76 @@
+// [hidden] called from PLSEXEC.ACT
+OutputFile    AppPath()+"\temp\members.txt"
+Delimiter     chr(9)
+Confirm       off
+LineValidate  ParExist(MBR->IdPar)
+
+FieldUpdate   Anrede   trim(PAR->Allo)
+#if type("PAR->Vorname")=="C"
+FieldUpdate   Vorname  trim(PAR->Vorname)
+#endif
+FieldUpdate   Name     trim(PAR->Firme)
+FieldUpdate   Name2    trim(PAR->Name2)
+#if type("PAR->Vorname")=="C"
+FieldUpdate   VornameName  trim1(PAR->Vorname)+trim(PAR->Firme)
+#endif
+FieldUpdate   ParName   memotosql(trim(ParName()))
+
+
+
+// FieldUpdate   IdPar2    if(empty(MBR->IdPar2),\
+                "",if(ParExist(MBR->IdPar2),MBR->IdPar2,"!"))
+
+FieldUpdate   zuHaenden     if(empty(MBR->IdPar2),"",\
+  DbfPeek(oPar(),MBR->IdPar2,\
+    "trim1(PAR->Allo)+trim1(PAR->Vorname)+trim(PAR->Firme)",""))
+
+// FieldUpdate   Anrede2   trim(PAR->Allo)
+// FieldUpdate   VornameName2  trim1(PAR->Vorname)+trim(PAR->Firme)
+// FieldUpdate   Name22    trim(PAR->Name2)
+
+FieldUpdate   Strasse   memotosql(trim(ParStreet()))
+FieldUpdate   City      memotosql(trim(ParCity()))
+FieldUpdate   Tel       memotosql(trim(PAR->Tel))
+FieldUpdate   Fax       memotosql(trim(PAR->Fax))
+#if type("PAR->GSM")=="C"
+  FieldUpdate   GSM     memotosql(trim(PAR->GSM))
+#endif
+#if type("PAR->Email")=="C"
+  FieldUpdate   email    memotosql(trim(PAR->email))
+#endif
+//
+FieldUpdate   Land    trim(PAR->Pays)
+FieldUpdate   PLZ     trim(PAR->CP)
+FieldUpdate   Ort     trim(PlzName(PAR->Pays,PAR->CP))
+FieldUpdate   ID      PAR->IdPar
+FieldUpdate   Partnerart PAR->IdPrt
+FieldUpdate   Zahlart trim(PAR->IdMfc)
+FieldUpdate   Code1   trim(PAR->Code1)
+FieldUpdate   Code2   trim(PAR->Code2)
+FieldUpdate   Code3   trim(PAR->Code3)
+FieldUpdate   NB1     trim(PAR->NB1)
+FieldUpdate   NB2     trim(PAR->NB2)
+FieldUpdate   Sprache     trim(PAR->Langue)
+FieldUpdate   PG     trim(PAR->IdPgp)
+FieldUpdate   Waehrung  trim(PAR->IdDev)
+FieldUpdate   Regime    trim(PAR->IdReg)
+FieldUpdate   MWSt    memotosql(trim(PAR->NoTva))
+FieldUpdate   Sex    memotosql(trim(PAR->Sex))
+// #if type("PAR->IdGen")=="C"
+//   FieldUpdate   Kto      trim(PAR->IdGen)
+// #endif
+
+#include "DOS2WIN.CVT"
+
+// OnSuccess AppShell("excel.bat "+i_OutputFile(),NIL,.f.)
+// OnSuccess AppShell(if(empty(PLS->MasterDoc),\
+  "excel.bat "+i_OutputFile(),\
+  "start "+trim(PLS->MasterDoc)),NIL,.f.)
+
+
+
+// FieldUpdate   oldName        ParField(MBR->IdPar,cblock(trim1(PAR->Allo)+trim1(PAR->Vorname)+trim(PAR->Firme)))
+// FieldUpdate   oldAdresse     if(empty(PAR->Name2),"",trim(PAR->Name2)+chr(11))+if(empty(PAR->Name3),"","zu Hd. "+trim(PAR->Name3)+chr(11))+trim(ParStreet())
+// FieldUpdate   oldCity        ParCity()
+// FieldUpdate   oldBriefanrede if(empty(PAR->Name4),"Sehr geehrte Damen und Herren",trim(PAR->Name4))
+

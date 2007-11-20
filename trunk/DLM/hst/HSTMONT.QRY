@@ -1,0 +1,23 @@
+//
+// HSTMONT.QRY - generated 23.04.04
+// for HST.DBF
+//
+column 11 =utr("Amount","Betrag","Montant")
+column 6 =utr("Date","Datum","Date") say ""
+column 1 =utr("Accnt","Konto","Compte")
+column 7 Bezeichnung Konto
+column 2 =utr("IdPar","P-Kto","CptPar")
+column 3 Jnl pict @K@!
+column 4 IdDoc pict @K@!
+column 10 DC
+column 16 Tax pict @K@!
+column 9 Periode
+column 13 Match pict @K@!
+column 8 =utr("Remark","Bemerkung","Remarque")
+column 5 Pos
+column 12 =utr("Amnt FC","Betrag FW","MontDev")
+column 14 *
+column 15 Z
+column 9 Periode
+order 7
+help HST

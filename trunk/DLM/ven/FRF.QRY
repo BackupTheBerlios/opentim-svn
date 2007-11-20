@@ -1,0 +1,10 @@
+//
+// FRF.QRY - generated 28/04/2000
+// for FRF.DBF
+//
+column 1 Nø
+column 2 xlWhen pict @k@s40
+column 5 xnBase pict @k@s12
+column 6 xnTaxe pict @k@s10
+column 3 IdGen pict @K@!
+column 4 TVA pict @K@!

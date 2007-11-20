@@ -1,0 +1,25 @@
+//
+// VENBYDAY.QRY - generated 06.03.03
+// for VEN.DBF
+//
+window 16 78 0 0 
+column 35 von
+column 36 bis
+column 33 Team pict @k@!
+column 40 Fahrzeug pict @K@s10
+column 39 Operators pict @k@s16
+column 10 Baustelle pict @k@s20
+column 32 Referenz pict @K@!
+column 5 Ort pict @K@S20
+column 4 Kunde pict @K@S26
+column 2 Dok.Nr pict @K@!
+column 7 St pict !
+column 19 Per. pict @K@!
+column 37 Kontakt pict @k@s30
+column 38 Tel pict @k@s30
+column 28 W„ pict @K@!
+column 3 Part-Id pict @K@!
+column 6 Betrag pict @K@!
+column 32 Ref pict @K@!
+mask VENAUF
+order 4

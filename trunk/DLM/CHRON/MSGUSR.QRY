@@ -1,0 +1,16 @@
+//
+// MSGUSR.QRY - generated 27.01.03
+// for MSG.DBF
+//
+column 3 Datum say ""
+column 12 Partner pict @k@s25
+column 13 Type pict @k@!
+column 4 Titel pict @k@s30
+column 1 Autor pict @K@!
+column 5 Nr pict @k@!
+column 2 IdPrj pict @K@!
+column 11 Maske pict @K@!
+column 10 IdPar pict @K@!
+column 8 RepTo
+column 9 Top
+order 2

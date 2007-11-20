@@ -1,0 +1,18 @@
+// TEXPARSE.ACT
+MsgDisplay(MsgWorking())
+// DlgDefine("OutFile",".\"+trim(DlgValue("OutFile")))
+setvar("OutFile",trim(DlgValue("OutFile")))
+DrvLoad("TEX")
+FileDelete(DlgValue("OutFile")+".aux",.f.,.t.)
+FileDelete(DlgValue("OutFile")+".log",.f.,.t.)
+
+fparse(\
+  trim(DlgValue("InFile")),\
+  DlgValue("OutFile")+".TEX",\
+  "[]",NIL,.t.\
+)
+
+file(DlgValue("OutFile")+".TEX").or.!Warning(\
+  DlgValue("OutFile")+".TEX wurde nicht erstellt."\
+)
+ActExec(if(DlgValue("AsPdf")=="X","TEX2PDF","TEX2DVI"))

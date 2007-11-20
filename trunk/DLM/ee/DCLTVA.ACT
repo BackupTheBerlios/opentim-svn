@@ -1,0 +1,25 @@
+// DCLTVA.ACT : MWSt-Erkl„rung drucken
+
+
+// DlgDefault("61",0) // r‚gulations TVA en faveur de l'Etat
+// DlgDefault("62",0) // r‚gulations TVA en faveur du d‚clarant
+// DlgDefault("91",0) // Anzahlung
+WrnJnlOpen({||JNL->Alias=="VEN".and."G"$JNL->Attrib})
+!IndExist("REBUILD").or.(\
+  Confirm(if(MemLang1=="F",\
+    "Il faut d'abord reconstruire l'historique mensuel",\
+    "Die Sammelhistorik muss zuerst rekonstruiert werden"\
+  ),MsgContinue()).and.Rebuild(.f.,SetTplIni(),SetPreview())\
+)
+DlgExec("DCLTVA")
+MemPer1==MemPer2.or.pnQuarter(MemPer1)==pnQuarter(MemPer2)\
+  .or.!Warning(if(MemLang1=="D",\
+    "Der Periodenbereich muss innerhalb eines Quartals liegen !",\
+    "Les p‚riodes doivent se trouver dans le mˆme trimestre !"\
+))
+
+MsgDisplay(MsgWorking())
+ActExec("DCLTVA2")
+
+fprint("dcltva.lst","{}")
+

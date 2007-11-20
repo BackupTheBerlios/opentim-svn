@@ -1,0 +1,17 @@
+// Buchhaltungsdatn l”schen
+// before DlgDefault("IdJnlFin",space(LenIdJnl()))
+// field name="IdJnlFin" \
+    caption="Journal " \
+    picture="@k@!" \
+    pick={|x|DbfPick(\
+              {oJnl()},"Auswahl Journal","JNLPICK",\
+              x,\
+              "Alias=='FIN'.and.'G'$Attrib"\
+    )}
+field caption="Buchhaltungsdaten (VEN,FIN,HST) l”schen :"
+field block={|x|SetPeriode(x)} \
+    picture="@k@!" \
+    caption="Periode von-bis " \
+    pick={|x|PickPerRange(x)}
+after DelPerRange()
+after Rebuild()

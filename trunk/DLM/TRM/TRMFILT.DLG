@@ -1,0 +1,28 @@
+// Historik filtern
+before DlgDefault("Date1",ctod(""))
+before DlgDefault("Date2",ctod(""))
+before DlgDefault("IdPar",space(LenIdPar()))
+before DlgDefault("OnlyFact","X")
+title "Agenda filtern"
+field name="IdPar" \
+    caption="nur Partner " \
+    pick={|x| PickPar(NIL,x)}
+field name="Date1" \
+    caption="Termine von " \
+    attrib="N"
+field name="Date2" \
+    caption=" bis "
+field name="OnlyFact" reader={|x|CbxReader(x)} \
+      caption2=" nur fakturierbare Termine"
+
+after DlgDefine("TrmFilter",".t.")
+after empty(DlgValue("Date1")).or.DlgPlus("TrmFilter",\
+        ".and.InRange(TRM->Date,DlgValue('Date1'),DlgValue('Date2'))"\
+      )
+after empty(DlgValue("OnlyFact")).or.DlgPlus("TrmFilter",\
+        ".and.!empty(TRM->Fact)"\
+      )
+after empty(DlgValue("IdPar")).or.DlgPlus("TrmFilter",\
+        ".and.HST->IdPar=='"+DlgValue("IdPar")+"'"\
+      )
+

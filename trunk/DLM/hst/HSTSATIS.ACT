@@ -1,0 +1,11 @@
+// Lettrierungen rekonstruieren
+DlgExec("HSTSATIS")
+HstSatisfy(DlgValue("HstDate"))
+Warning(\
+  "Die Lettrierungen in Ihrer Datenbank entsprechen jetzt dem "\
+  +if(\
+    empty(DlgValue("HstDate")),\
+    "aktuellen Stand",\
+    "Stand vom "+dtoc(DlgValue("HstDate"))\
+  )\
+)

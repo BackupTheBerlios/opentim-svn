@@ -1,0 +1,13 @@
+//
+// C:\SOFT\RELEASE\TIM220\STD01D\USR.QRY - generated 12.11.96
+// for USR.DBF
+//
+column 1 UserId pict @K@!
+column 6 Name
+column 12 Attribute pict @K@!
+column 5 Level pict !
+column 7 Text (1)
+column 2 MenÅ pict @K@!
+column 8 Text (2)
+column 9 Text (3)
+column 3 Geb.Dat.

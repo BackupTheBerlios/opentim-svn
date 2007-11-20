@@ -1,0 +1,4 @@
+[=padr(alias(),3)] [=str(lastrec(),8,0)] [=str(header(),8,0)] \
+[=str(recsize(),8,0)] \
+[=iif(IsReadOnly(GetTableDef(alias())),"RO","  ")] \
+[=ddPath(GetTableDef(alias()))]

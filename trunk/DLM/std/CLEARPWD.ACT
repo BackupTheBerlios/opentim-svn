@@ -1,0 +1,3 @@
+Confirm("Alle Passw”rter auf leer setzen!",MsgSure())
+DbfScan({oUsr()},1,NIL,NIL,"!empty(USR->Password)",\
+  {||TryRecLock(cblock("(USR->Password:='')!=NIL"))})

@@ -1,0 +1,22 @@
+// Alle Journale
+before DlgDefault("BEF","X")
+before DlgDefault("EUR"," ")
+
+field block={|x|SetPeriode(x)} \
+    picture="@k@!" \
+    caption="Periode von-bis " \
+    pick={|x|PickPerRange(x)}
+field name="subttl" \
+    caption2=" Zwischensummen pro Periode " \
+    value=" " \
+    reader={|g|CbxReader(g)}
+field name="BEF" \
+    caption2=" Betr„ge in BEF" \
+    reader={|g|CbxReader(g)}
+field name="EUR" \
+    caption2=" Betr„ge in EUR" \
+    reader={|g|CbxReader(g)}
+
+#include "PREVIEW.DLG"
+
+after ActExec("PRINTJNL")

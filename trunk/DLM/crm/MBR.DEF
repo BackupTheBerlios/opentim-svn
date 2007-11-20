@@ -1,0 +1,14 @@
+// MBR.DEF
+ddAddSpecial(\
+  {||DlgExec("MBRAPPND")},\
+  "Massen~eintragung       [Ctrl-Num+]",\
+  400,\
+  {||indexord()<3}\
+)
+ddAddSpecial(\
+  {||DlgExec("MBRCLEAN")},\
+  "Massen~austragung       [Ctrl-Num-]",\
+  398,\
+  {||indexord()<3}\
+)
+ddFldSetValidate("IdPar",{||MbrParValidate()})

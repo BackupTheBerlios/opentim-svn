@@ -1,0 +1,103 @@
+{* MWSt-Erkl└rung}
+{set montant S12}
+{set apswidth 124}
+{set special P8}
+{etc if MemPer1==MemPer2}
+{etc do DlgDefine("p1"," ")}
+{etc do DlgDefine("p2","    ")}
+{etc do DlgDefine("p3",right(MemPer1,2))}
+{etc do DlgDefine("p4",ntrim(pnYear(MemPer1)))}
+{etc else}
+{etc do DlgDefine("p1",ntrim(pnQuarter(MemPer1)))}
+{etc do DlgDefine("p2",ntrim(pnYear(MemPer1)))}
+{etc do DlgDefine("p3","  ")}
+{etc do DlgDefine("p4","    ")}
+{etc endif}
+зддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+Ё DECLARANT :                                         Ё  I Informations g┌n┌rales
+{etc if DlgValue("Long")=="X"}
+Ё                                                     Ё
+{etc endif}
+Ё      {=padr(MemName1,40)                    }       Ё  DECLARATION A LA T.V.A. EN {=if(SetDevise()=="EUR","EUROS","FRANCS BELGES")}
+Ё                                                     Ё                зд©           здддд©
+Ё      {=padr(MemName2,40)                    }       Ё  Op┌rations du Ё{=DlgValue("p1")}Ё trimestre Ё{=DlgValue("p2")}Ё
+Ё                                                     Ё                юды           юдддды
+Ё      {=padr(MemName3,40)                    }       Ё                здд©      здддд©
+Ё                                                     Ё          ou du Ё{=DlgValue("p3")}Ё mois Ё{=DlgValue("p4")}Ё
+Ё                                                     Ё                юдды      юдддды
+Ё      {=padr(MemNoTva,40)                    }       Ё
+юддддддддддддддддддддддддддддддддддддддддддддддддддддды
+зддддддддддддддддддддддддддддддддддддддддддддддддддддд©  здддддддддддддддддддд©   здд© зддддддддддд©
+Ё   CADRE RESERVE A L'ADMINISTRATION                  Ё  ЁNЬ TVA du comptable Ё   Ё{=left(DlgValue("NoTvaComptable"),2)}Ё Ё{=padr(substr(DlgValue("NoTvaComptable"),4),11)}Ё
+Ё                                                     Ё  юдддддддддддддддддддды   юдды юддддддддддды
+Ё         A   B     J       M           A             Ё
+Ё   здддбдддбдддбдддбдддбдддбдддбдддбдддбдддбддд©     Ё  здддддддддддддддддддддддбддд©  зддддддддддддддддддддддддддддбддд©
+Ё   Ё 1 Ё 1 Ё {=if(SetDevise()=="BEF","0","1")} Ё       Ё       Ё               Ё     Ё  ЁDemande de restitution Ё   Ё  Ё Vignettes d'identification Ё   Ё
+Ё   цдддедддедддедддедддедддедддедддедддедддеддд╢     Ё  юдддддддддддддддддддддддаддды  юддддддддддддддддддддддддддддаддды
+Ё   Ё 2 Ё   Ё   Ё       Ё       Ё               Ё     Ё                                 зддддддддддддддддддддддддддддбддд©
+Ё   юдддадддадддадддадддадддадддадддадддадддаддды     Ё                                 Ё Formules de paiement       Ё   Ё
+Ё         C   D    Cde         PERIODE                Ё                                 юддддддддддддддддддддддддддддаддды
+юддддддддддддддддддддддддддддддддддддддддддддддддддддды
+{etc if DlgValue("Long")=="X"}
+
+{etc endif}
+{set apswidth 82}
+здддддддддддддддддддбдддддддддддддддддддбдддддддддддддддддддбддддддддддддддддддд©
+Ё II OPERATIONS     Ё III OPERATIONS    Ё IV  TAXES         Ё V  TAXES          Ё
+Ё    A LA SORTIE    Ё     A L'ENTREE    Ё     DUES          Ё    DEDUCTIBLES    Ё
+цддддддддддддддбддддеддддддддддддддбддддеддддддддддддддбддддеддддддддддддддбдддд╢
+Ё {=ntomf(DlgValue("00"))} Ё 00 Ё {=ntomf(DlgValue("81"))} Ё 81 Ё {=ntomf(DlgValue("54"))} Ё 54 Ё {=ntomf(DlgValue("59"))} Ё 59 Ё
+цддддддддддддддеддддеддддддддддддддеддддеддддддддддддддеддддеддддддддддддддедддд╢
+Ё {=ntomf(DlgValue("01"))} Ё 01 Ё {=ntomf(DlgValue("82"))} Ё 82 Ё {=ntomf(DlgValue("55"))} Ё 55 Ё {=ntomf(DlgValue("62"))} Ё 62 Ё
+цддддддддддддддеддддеддддддддддддддеддддеддддддддддддддеддддеддддддддддддддедддд╢
+Ё {=ntomf(DlgValue("02"))} Ё 02 Ё {=ntomf(DlgValue("83"))} Ё 83 Ё {=ntomf(DlgValue("56"))} Ё 56 Ё {=ntomf(DlgValue("64"))} Ё 64 Ё
+цддддддддддддддеддддеддддддддддддддеддддеддддддддддддддеддддеддддддддддддддедддд╢
+Ё {=ntomf(DlgValue("03"))} Ё 03 Ё {=ntomf(DlgValue("84"))} Ё 84 Ё {=ntomf(DlgValue("57"))} Ё 57 Ё {=space(12)            } Ё 66 Ё
+цддддддддддддддеддддеддддддддддддддеддддеддддддддддддддеддддеддддддддддддддедддд╢
+Ё {=ntomf(DlgValue("45"))} Ё 45 Ё {=ntomf(DlgValue("85"))} Ё 85 Ё {=space(12)            } Ё    Ё {=space(12)            } Ё    Ё
+цддддддддддддддеддддеддддддддддддддеддддеддддддддддддддеддддеддддддддддддддедддд╢
+Ё {=ntomf(DlgValue("46"))} Ё 46 Ё {=ntomf(DlgValue("86"))} Ё 86 Ё {=ntomf(DlgValue("61"))} Ё 61 Ё {=padr("VI SOLDE",12)  } Ё    Ё
+цддддддддддддддеддддеддддддддддддддеддддеддддддддддддддеддддеддддддддддддддедддд╢
+Ё {=ntomf(DlgValue("47"))} Ё 47 Ё {=ntomf(DlgValue("87"))} Ё 87 Ё {=ntomf(DlgValue("63"))} Ё 63 Ё {=ntomf(DlgValue("71"))} Ё 71 Ё
+цддддддддддддддеддддеддддддддддддддеддддеддддддддддддддеддддеддддддддддддддедддд╢
+Ё {=ntomf(DlgValue("48"))} Ё 48 Ё {=space(12)            } Ё    Ё {=space(12)            } Ё 65 Ё {=ntomf(DlgValue("72"))} Ё 72 Ё
+цддддддддддддддеддддеддддддддддддддеддддеддддддддддддддеддддеддддддддддддддедддд╢
+Ё {=ntomf(DlgValue("49"))} Ё 49 Ё {=space(12)            } Ё    Ё {=space(12)            } Ё    Ё VII ACOMPTE  Ё    Ё
+цддддддддддддддеддддеддддддддддддддеддддеддддддддддддддеддддеддддддддддддддедддд╢
+Ё {=space(12)            } Ё    Ё {=space(12)            } Ё    Ё {=space(12)            } Ё    Ё {=ntomf(DlgValue("91"))} Ё 91 Ё
+юддддддддддддддаддддаддддддддддддддаддддаддддддддддддддаддддаддддддддддддддадддды
+                                             здддддддддддддддддддддддддддддддддд©
+                                             Ё Total de contr⌠le : {=ntomf(DlgValue("ctrl"),0)} Ё
+                                             юдддддддддддддддддддддддддддддддддды
+{etc if DlgValue("Long")=="X"}
+
+{etc endif}
+{set apswidth 124}
+VIII   DATE et SIGNATURE(S)
+{etc if DlgValue("Long")=="X"}
+
+{etc endif}
+                                                      зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+       D┌claration certifi┌e sinc┼re et compl┼te :    Ё                                                                 Ё
+                                                      Ё                 Cadre r┌serv┌ ┘ l'administration                Ё
+{etc if DlgValue("Long")=="X"}
+                                                      Ё                                                                 Ё
+{etc endif}
+       Date : {=padr(dtoc(UserDate()),39)           } цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
+                                                      Ё                                                                 Ё
+{etc if DlgValue("Long")=="X"}
+                                                      Ё                                                                 Ё
+{etc endif}
+       T┌l┌phone nЬ : ......... / ..................  Ё                                                                 Ё
+                                                      Ё                                                                 Ё
+{etc if DlgValue("Long")=="X"}
+                                                      Ё                                                                 Ё
+{etc endif}
+       Signature(s) :                                 Ё       зддбддбддбддбддбддбддбддбддбддбддбддбддбддбддбддбдд©      Ё
+                                                      Ё       Ё     Ё        Ё        Ё        Ё        Ё        Ё      Ё
+                                                      Ё       юддаддаддаддаддаддаддаддаддаддаддаддаддаддаддаддадды      Ё
+{etc if DlgValue("Long")=="X"}
+                                                      Ё                                                                 Ё
+{etc endif}
+                                                      юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+       Nom et qualit┌ du (des) signataire(s) :

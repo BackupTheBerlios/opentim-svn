@@ -1,0 +1,51 @@
+[set montant Z12]
+[set apswidth 70]
+[set align c]
+Viertelj꼑rliche Liste der steuerfreien
+innergemeinschaftlichen Lieferungen von Gegenst꼗den
+und der gleichgestellten Handlungen
+컴컴컴컴컴컴컴컴컴컴
+DISKETTE
+MIT EINER EINZIGEN LISTE
+컴컴컴컴컴컴컴컴컴컴
+BEGLEITSCHREIBEN
+(in dreifacher Ausf갿rung anfertigen)
+컴컴컴컴컴컴컴컴컴컴
+
+[set align l]
+
+Name oder Bezeichnung und Anschrift des Steuerpflichtigen :
+
+          [=MemName1]
+          [=MemName2]
+          [=MemName3]
+
+
+Mehrwertsteuernummer : [=MemNoTva]
+
+Kontaktperson :
+
+Telefonnummer :
+
+Zeitraum, f걊 den die Liste ausgestellt worden ist : [=\
+  ntrim(pnQuarter(MemPer1))]. Quartal [=str(pnYear(MemPer1),4)]
+
+
+Anzahl der in der Liste angef갿rten Kundens꼝ze : [=ntrim(TvaParCount())]
+
+Gesamtbetrag  : [=ntomf(TvaBase())] [=SetDevise()]
+
+
+                                        F걊 die Richtigkeit :
+
+
+                                  (Datum)
+
+
+                           (Unterschrift)
+
+
+                   (Name und Eigenschaft)
+
+
+

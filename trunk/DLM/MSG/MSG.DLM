@@ -1,0 +1,2 @@
+// MSG - Korrespondenz
+CustData MSG

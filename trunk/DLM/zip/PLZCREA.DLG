@@ -1,0 +1,15 @@
+// PLZCREA.DLG : create City
+
+title utr("Create city","Stadt erstellen","Cr‚er ville")
+
+field name="IdNat" \
+      caption="Country     " \
+      picture="@k@!"
+field name="IdPlz" \
+      caption="id          " \
+      picture="@k@!"
+field name="Name"  caption="Bezeichnung " picture="@k@s30"
+
+validate NatExist(getvar("IdNat"))
+validate !empty(getvar("IdPlz")).or.!SetMsg("empty()")
+validate IsUnique(getvar("IdNat")+getvar("IdPlz")).or.!SetMsg("!isunique()")

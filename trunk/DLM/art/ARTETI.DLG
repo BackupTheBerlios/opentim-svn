@@ -1,0 +1,47 @@
+// Artikeletikett drucken
+// Dialogdatei [F2] auf ART, siehe ART.ACT
+before DlgDefine("DEM",ART->TVACDEM)
+before DlgDefine("HFL",ART->TVACHFL)
+before DlgDefine("BEF",ART->TVAC)
+before DlgDefine("IdPga",ART->IdPga)
+before DlgDefault("Text1",space(50))
+before DlgDefault("Text2",space(50))
+field name="Text1" \
+    caption="Zusatztext 1 " \
+    pick={|x|PickDbcString("ARTETI.DBC",x,"Zusatztext 1",50)} \
+    postedit={|x|padr(x,50)}
+field name="Text2" \
+    caption="           2 " \
+    pick={|x|PickDbcString("ARTETI.DBC",x,"Zusatztext 1",50)} \
+    postedit={|x|padr(x,50)}
+field name="DEM" \
+    caption="Preise : DM= " \
+    value=ART->TVACDEM \
+    postedit={|x| \
+      DlgDefine("HFL",ntom(round(val(x)*1.222,0),2)),\
+      DlgDefine("BEF",ntom(round(val(x)*22,-1),2)),\
+      ph_refresh(),\
+      GetNum(x,2,2)\
+    } \
+    pick={|x|PickNum(x)} \
+    attrib="N"
+field name="HFL" \
+    caption=", HFL= " \
+    value=ART->TVACHFL \
+    postedit={|x|GetNum(x,2,2)} \
+    pick={|x|PickNum(x)} \
+    attrib="N"
+field name="BEF" \
+    caption=", BF= " \
+    value=ART->TVAC \
+    postedit={|x|GetNum(x,2,2)} \
+    pick={|x|PickNum(x)}
+field name="IdPga" \
+      picture="@k@!"\
+      caption="Preisgruppe " \
+      value=ART->IdPga \
+      pick={|x|PickPga(x)}
+field name="LPT" \
+    caption="Druckerausgang " \
+    caption2=" (normalerweise nicht ver„ndern)" \
+    value="LPT2"

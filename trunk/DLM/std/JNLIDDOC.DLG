@@ -1,0 +1,29 @@
+// JNLIDDOC.DLG :
+before setvar("IdJnl",left(ddKeyValue(),LenIdJnl()))
+before JnlExist(getvar("IdJnl"))
+before setvar("IdDoc",\
+  DbfPeek(oJnl(),getvar("IdJnl"),"JNL->IdDoc",space(LenIdDoc())))
+title "Letzte Dokumentnummer setzen"
+field name="IdJnl" picture="@k@!" \
+  caption="Journal  " \
+  valid={|| \
+    setvar("IdDoc",DbfPeek(oJnl(),getvar("IdJnl"),"IdDoc",space(6)))\
+    .and.ph_refresh()\
+  } \
+  pick={|x|PickIdJnl(NIL,x)}\
+  when={||.f.} color="N/W" \
+  attrib="N"
+field caption=" : " \
+      block={||padr(JnlName(DlgValue("IdJnl")),20)} \
+      when={||.f.} color="N/W"
+field name="IdDoc" \
+    caption="Letzte Dokumentnummer  " \
+    pick={|x|PickDoc(DlgValue("IdJnl"),x)} \
+    caption="@k@!"
+validate empty(getvar("IdDoc")).or.len(alltrim(getvar("IdDoc")))==LenIdDoc().or.!SetMsg(\
+  getvar("IdDoc")+" : ungÅltige Dokumentnummer!")
+after DbfSetField(oJnl(),getvar("IdJnl"),"IdDoc",getvar("IdDoc"))
+after SetMsg(DlgValue("IdJnl") + " : Letzte Dokumentnummer jetzt " + \
+  if(empty(getvar("IdDoc")),"leer",getvar("IdDoc"))+"."\
+)
+after SetMnuDone()

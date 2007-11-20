@@ -1,0 +1,16 @@
+// Anpassungen HST.DBF
+ddAddIndex("HST->IdJnl+HST->Periode+HST->IdDoc+HST->Line","fr HSTJNL.REP")
+ddAddIndex("HST->Mont+dtos(HST->Date)","nach Betrag",NIL,{|x|ntom(qton(x))})
+ddAddIndex("HST->IdPar+HST->Periode+dtos(HST->Date)","fr FNLFILL","empty(HST->Satis)")
+#if .t.
+ddAddIndex("HST->Periode+dtos(HST->Date)","Periode+Datum") // user
+#endif
+#if .f.
+ddAddIndex(\
+  "HST->IdJnl+dtos(HST->Date)",\
+  "Offene /Journal",\
+  "HST->Satis==' '.and.!empty(HST->IdCtr)")
+#endif
+
+ddFldSetWhen("IdTax",'"E"$UsrAttrib()')
+ddPreDelete({||empty(HST->Mont).and."E"$UsrAttrib().and.ConfirmDelete()})

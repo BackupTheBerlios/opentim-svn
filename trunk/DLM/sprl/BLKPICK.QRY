@@ -1,0 +1,9 @@
+//
+// C:\SOFT\TEST\TIM300\HEINEN\BLKPICK.QRY - generated 28.12.95
+// for TXT.DBF
+//
+window 12 64 0 0 
+column 2 Name pict @K@!
+column 4 Titel
+column 6 Breite
+column 3 Spr pict @K@!

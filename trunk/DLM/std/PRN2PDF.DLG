@@ -1,0 +1,19 @@
+title "PRN2PDF"
+// field block={|x|SetPreview(x)} \
+    caption2=utr(" Preview"," Seitenvorschau"," Pr‚visualisation") \
+    value=if("P"$UsrAttrib(),"X"," ") \
+    reader={|g|CbxReader(g)}
+field name="PRN2PDF.out" \
+      default=padr(".\TEMP.PDF",128) \
+      valid={||!empty(getvar("PRN2PDF.out"))\
+        .or.!SetMsg(utr(\
+          "Outfile must not be empty!",\
+          "Name PDF-Datei darf nicht leer sein!",\
+          "Nom du fichier PDF : obligatoire !"))} \
+      picture="@k@s40" \
+      caption=utr("Output file ","Name PDF-Datei ","Nom du fichier PDF ")
+// field name="DoPause" \
+      caption2=utr(" Pause"," Pause"," Pause") \
+      value=" " \
+      reader={|g|CbxReader(g)}
+

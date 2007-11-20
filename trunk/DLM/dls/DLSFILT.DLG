@@ -1,0 +1,38 @@
+title "Dienstleistungen filtern"
+field name="IdUsr" caption="nur Therapeut  " \
+      default=UserId() pick={|x|PickUsr(x)} \
+      picture="@k@!"
+field name="Date1" caption="Periode vom  " \
+      value=FirstOfMonth(SkipMonth(UserDate(),-1)) \
+      attrib="N"
+field name="Date2" \
+      caption=" bis zum  " \
+      default=LastOfMonth(SkipMonth(UserDate(),-1))
+field name="Zahlart" caption="nur Zahlart  " \
+      default=space(1) \
+      pick={|x|PickDbcCode("DLSZAHL.DBC",x)} \
+      picture="@k@!"
+field name="Etat" caption="nur Status  " \
+      default=space(1) \
+      pick={|x|PickDbcCode("DLSETAT.DBC",x)} \
+      picture="@k@!"
+field name="IdPar" caption="nur Akte  " \
+      default=space(LenIdPar()) pick={|x|PickPar(NIL,x)} \
+      picture="@k@!"
+
+after DlgDefine("DlsFilter",".t.")
+
+after empty(DlgValue("IdUsr")).or.\
+  DlgPlus("DlsFilter",".and.DLS->IdUsr=='"+DlgValue("IdUsr")+"'")
+after empty(DlgValue("IdPar")).or.\
+  DlgPlus("DlsFilter",".and.DLS->IdPar=='"+DlgValue("IdPar")+"'")
+after empty(DlgValue("Zahlart")).or.\
+  DlgPlus("DlsFilter",".and.DLS->Zahlart=='"+DlgValue("Zahlart")+"'")
+after empty(DlgValue("Etat")).or.\
+  DlgPlus("DlsFilter",".and.DLS->Etat=='"+DlgValue("Etat")+"'")
+
+after empty(DlgValue("Date1")).or.\
+  DlgPlus("DlsFilter",".and.dtos(DLS->Date)>='"+dtos(DlgValue("Date1"))+"'")
+after empty(DlgValue("Date2")).or.\
+  DlgPlus("DlsFilter",".and.dtos(DLS->Date)<='"+dtos(DlgValue("Date2"))+"'")
+

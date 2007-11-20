@@ -1,0 +1,8 @@
+//
+// C:\SOFT\RELEASE\TIM300\STD01D\INIPICK.QRY - generated 19.03.96
+// for TXT.DBF
+//
+window 12 48 0 0 
+column 2 Name pict @K@!
+column 4 Titel pict @K@S32
+column 6 Breite

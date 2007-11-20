@@ -1,0 +1,18 @@
+// IBM Proprinter
+Name      IBM Proprinter
+Reset     ""
+FormFeed       chr(12)
+// 20021121 : alte Variante ? :
+// Font 10cpi 10 12/72  chr(18) // 18/180 inch character pitch
+// Font 12cpi 12 12/72  chr(18)+chr(27)+":"
+// Font 15cpi 15 12/72  chr(15)+chr(27)+":"
+Font 10cpi 10 12/72  chr(27)+"h"+chr(18) // 18/180 inch character pitch
+Font 12cpi 12 12/72  chr(27)+"h"+chr(15)
+Font 13cpi 13 12/72  chr(27)+"eH"+chr(0)+chr(2)+chr(7)
+Font 15cpi 15 12/72  chr(27)+"h"+chr(12)
+Font 17cpi 17 12/72  chr(27)+"eH"+chr(0)+chr(2)+chr(1)
+Font 20cpi 20 12/72  chr(27)+"h"+chr(9)
+Option 6 6LinesPerInch        "1" // interligne 7/72
+Option 8 8LinesPerInch        "0"
+BoldOn   "E"
+BoldOff  "F"

@@ -1,0 +1,5 @@
+
+DlgDefine('IdPar',if(indexord()==2,ddKeyValue(),PickPar()))
+RETURN .t. if DlgValue("IdPar") == NIL
+(TRM->IdPar:=DlgValue("IdPar"))!=NIL
+(TRM->Duree:='  0:15')!=NIL

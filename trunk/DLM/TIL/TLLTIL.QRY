@@ -1,0 +1,10 @@
+//
+// TLLTIL.QRY - generated 02.04.03
+// for TLL.DBF
+//
+window 18 70 0 0 
+column 2 Date say ""
+column 3 Mont
+column 4 Ist
+column 5 IstNZ
+column 6 IstAZ

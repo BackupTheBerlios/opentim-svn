@@ -1,0 +1,62 @@
+// Saldenliste Partner
+header1 "Saldenliste Partner"
+header2 DlgValue("FltText")
+header3 PerText()
+area { oPar(), oPlz() }
+order 2
+// index for="ParCtpSum(PAR->IdPar,'val(Umsatz)','"+DlgValue("IdCtr")+"')!=0" on="-ParCtpSum(PAR->IdPar,'val(Umsatz)','"+DlgValue("IdCtr")+"')"
+ValidateRecord {||DlgDefine("Saldo1",DbfSum(\
+                 {oHst(),oVen(),oFin(),oPar(),oGen()},\
+                 "HstDcMont(DlgValue('DC'),SetDevise())",\
+                 1,\
+                 PAR->IdPar+trim(PerStart(MemPer1)),\
+                 'HST->IdPar==PAR->IdPar.and.HST->Periode<MemPer1',\
+                 DlgValue("HstFilter")\
+               ))}
+ValidateRecord {||DlgDefine("Debit",DbfSum(\
+                 {oHst(),oVen(),oFin(),oPar(),oGen()},\
+                 "HstMont(SetDevise())",\
+                 1,\
+                 PAR->IdPar+MemPer1,\
+                 'HST->IdPar==PAR->IdPar.and.HST->Periode<=MemPer2',\
+                 DlgValue("HstFilter")+".and.HST->DC=='"+DlgValue("DC")+"'"\
+               ))}
+ValidateRecord {||DlgDefine("Credit",DbfSum(\
+                 {oHst(),oVen(),oFin(),oPar(),oGen()},\
+                 "HstMont(SetDevise())",\
+                 1,\
+                 PAR->IdPar+MemPer1,\
+                 'HST->IdPar==PAR->IdPar.and.HST->Periode<=MemPer2',\
+                 DlgValue("HstFilter")+".and.HST->DC!='"+DlgValue("DC")+"'"\
+               ))}
+// filter cblock(DlgValue("ParFilter"))
+filter {|| \
+  DlgValue("Debit")!=0.or.DlgValue("Credit")!=0.or.DlgValue("Saldo1")!=0 \
+}
+group text={|x|"alle"} align="L"
+column header="Nr." width=LenIdPar() text={||PAR->IdPar}
+column header="A" width=1 text={||PAR->IdPrt}
+column header="Name" width=25 text={||padr(ParName(),25)}
+column header="Straáe" width=35 \
+       text={||padr(trim1(ParStreet())+ParCity(),35)}
+column header="Beginnsaldo" \
+       width=LenMntF() \
+       value={||DlgValue("Saldo1")}  \
+       text={|x| ntomf(x) } \
+       xsum={|x| ntomf(x) }
+column header="Debit" \
+       width=LenMntF() \
+       value={||DlgValue("Debit")}  \
+       text={|x|ntomf(x)} \
+       xsum={|x| ntomf(x) }
+column header="Kredit" \
+       width=LenMntF() \
+       value={||DlgValue("Credit")}  \
+       text={|x|ntomf(x)} \
+       xsum={|x| ntomf(x) }
+column header="Endsaldo" \
+       width=LenMntF() \
+       value={||DlgValue("Saldo1")+DlgValue("Debit")-DlgValue("Credit")}  \
+       text={|x| ntomf(x) } \
+       xsum={|x| ntomf(x) }
+total when={||.t.} // text={||"Gesamt"}

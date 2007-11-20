@@ -1,0 +1,25 @@
+//
+// t:\data\luc\release\tim4\dlm\SPRL\GEN.MSK - generated 10.09.02
+// for GEN.DBF
+//
+
+box 3 0 20 78
+
+string 2 1 Konto
+string 5 44 MWSt.-Code
+string 7 44 Attribute
+string 4 44 Zentralisierungsart
+string 6 44 Rechnungsbuchkolonne
+string 10 44 interne Notizen
+string 8 44 W„hrung
+
+get 1 2 7
+get 6 2 14 pict @K@S30
+get 7 2 45 pict @K@S30
+get 9 4 66
+get 2 5 66
+get 11 6 66 pict @K@!
+get 4 7 66 pict @K@!
+get 13 8 66 pict @K@!
+get 8 11 45 pict 32x9
+wait 16 42 4 1 3

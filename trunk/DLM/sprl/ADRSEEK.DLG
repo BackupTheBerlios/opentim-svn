@@ -1,0 +1,10 @@
+// ADRSEEK.DLG : Adresse suchen
+before DlgDefault("AdrSearch",space(30))
+title "Adresse suchen"
+field name="AdrSearch" caption="Suchtext" \
+                   picture="@k@!" 
+after DlgDefine("AdrFilter","'"+eupper(trim(DlgValue("AdrSearch")))+"'$eupper(\
+  ADR->Name+' '+ADR->Vorname+' '+ADR->Memo\
+)")
+after !empty(DlgValue("AdrSearch")).or.DlgDefine("AdrFilter",".t.")
+// after ActExec("ADRSEEK")

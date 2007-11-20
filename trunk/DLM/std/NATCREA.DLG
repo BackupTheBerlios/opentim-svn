@@ -1,0 +1,8 @@
+// NATCREA.DLG : Land erstellen
+title "Land erstellen"
+field name="IdNat" caption="Code        " \
+                   picture="@k@!" \
+                   valid={||IsUnique(DlgValue("IdNat"))}
+field name="Name"  caption="Bezeichnung " picture="@k@s30"
+after !empty(DlgValue("IdNat"))
+after IsUnique(DlgValue("IdNat"))

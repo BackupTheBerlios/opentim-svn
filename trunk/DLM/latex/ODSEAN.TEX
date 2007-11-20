@@ -1,0 +1,81 @@
+% ODSEAN.TEX
+% Template to be used by TIM. Author Luc Saffre. PAC Systems Eupen
+%
+\documentclass[a4paper]{report}
+% input encoding
+\usepackage[cp850]{inputenc}
+% N.B.: Windows : ansinew
+%       Linux   : latin1
+
+% willadt :
+% \font\eanfont=WLEAN scaled [=ntrim(DlgValue("Scale"))]
+% \usepackage{barcodes}
+
+% Petr Orsag
+% see eantest.tex for comments
+\input ean13
+\X=[=ltrim(str(0.33*DlgValue("Scale")/100,6,3))]mm
+\font\ocrb=ocrb9 scaled [=ntrim(DlgValue("Scale")*10)]
+%\bcorr=0.015mm         % bar correction (?)
+
+
+
+% extensions for tabular environment :
+\usepackage{tabularx}
+\renewcommand{\tabularxcolumn}[1]{p{#1}}
+
+%
+% horizontal page layout
+%
+\setlength{\hoffset}{-1in}
+\setlength{\oddsidemargin}{3mm}
+\setlength{\textwidth}{170mm}
+
+%
+% vertical page layout
+%
+\setlength{\voffset}{-1in}  % header starts at (2.54 - 2 = 0.54) cm
+\setlength{\textheight}{235mm}
+\setlength{\topmargin}{2mm}
+\setlength{\headheight}{0mm}
+\setlength{\headsep}{0mm}
+
+\pagestyle{empty}
+
+\begin{document}
+
+
+\begin{tabularx}{\textwidth}{[=repl("X",DlgValue("ColCount"))]}
+[etc do DlgDefine("CellCount",0)]
+
+[etc do DlgDefine("LoopCmd","ForLoop(1,qton(ODL->Qte),cblock('")]
+[etc do DlgPlus("LoopCmd",'fparse("ODSEAN2.TEX")')]
+[etc do DlgPlus("LoopCmd","'))")]
+
+
+[etc do DrvLoad("")]
+[etc do DbfScan(\
+  {oOdl(),oArt()},\
+  1,\
+  ODS->IdJnl+ODS->IdDoc,\
+  "ODL->IdDoc==ODS->IdDoc.and.ODL->IdJnl==ODS->IdJnl",\
+  "ArtExist(ODL->IdArt).and.!empty(ART->EAN)",\
+  DlgValue("LoopCmd")\
+)]
+
+% filling up the last row
+[etc do DlgDefine("LastCell",\
+  (int(DlgValue("CellCount")/DlgValue("ColCount"))+1)*DlgValue("ColCount")\
+)]
+[etc do ForLoop(\
+  DlgValue("CellCount")+1,\
+  DlgValue("LastCell")-1,\
+  {||ToStream(" & ")}\
+)]
+
+% end of last row :
+[="\\"]
+
+\end{tabularx}
+
+\end{document}

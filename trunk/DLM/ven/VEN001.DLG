@@ -1,0 +1,34 @@
+// Rechnungsliste Deutschland
+field name="IdJnl" \
+    caption="Journal " \
+    picture="@k@!" \
+    value=space(LenIdJnl()) \
+    pick={|x|DbfPick(\
+              {oJnl()},"Auswahl Journal","JNLPICK",\
+              x,\
+              "Alias=='VEN'.and.'G'$Attrib"\
+    )}
+field block={|x|SetPeriode(x)} \
+    picture="@k@!" \
+    caption="Periode von-bis " \
+    pick={|x|PickPerRange(x)}
+field block={|x|SetTplIni(x)} picture="@k@!" \
+    caption="Druckparametersatz " \
+    value=padr("LISTE",LenIdTpl()) \
+    pick={|x|PickTpl("INI",x)}
+field block={|x|SetPreview(x)} \
+    caption2=" Seitenvorschau " \
+    value="X" \
+    reader={|g|CbxReader(g)}
+// field name="subttl" \
+    caption2=" Zwischensummen pro Periode " \
+    value=" " \
+    reader={|g|CbxReader(g)}
+//  field name="date1" \
+//      caption="Datum : vom " \
+//      value=ctod("") \
+//      attrib="N"
+//  field name="date2" \
+//      caption=" bis zum " \
+//      value=UserDate()
+after AppSaveMem()

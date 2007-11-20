@@ -1,0 +1,11 @@
+//
+// CTPPAR.QRY - generated 06.08.2001
+// for CTP.DBF
+//
+window 15 56 0 0 
+column 3 Per. pict @K@! expr 1 say "="+DevDefault(PerActive())
+column 4 Debit expr Db2Dev(DevDefault(PerActive()),CTP->Periode,val(CTP->Debit)) say ntom(nSum)
+column 5 Kredit expr Db2Dev(DevDefault(PerActive()),CTP->Periode,val(CTP->Credit)) say ntom(nSum)
+column 6 Saldo expr Db2Dev(DevDefault(PerActive()),CTP->Periode,val(CTP->Debit)-val(CTP->Credit)) say DcSolde("D",nSum)
+column 7 Umsatz expr Db2Dev(DevDefault(PerActive()),CTP->Periode,val(CTP->Umsatz)) say ntom(nSum)
+filter "right(CTP->Periode,1)!='ÿ'.and.pnYear(CTP->Periode)==year(UserDate())"

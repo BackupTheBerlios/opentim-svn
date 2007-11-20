@@ -1,0 +1,22 @@
+//
+// DLS.QRY - generated 19.05.07
+// for DLS.DBF
+//
+column 2 Datum say ""
+column 8 Bemerkung pict @k@s30
+column 5 Ther. pict @K@!
+column 10 IdPar pict @K
+column 0 Partner block padr(ParName(DLS->IdPar),20) skip .t.
+column 6 Dla pict @K@!
+column 0 Art der DL block padr(DbfPeek(oDla(),DLS->IdDla,"DLA->Name1",""),40) pict @k@s20 skip .t.
+column 9 Z pict @K@!
+column 17 IdPin pict @k@!
+column 0 Ticket block padr(PinName(DLS->IdPin),50) skip .t.
+column 18 Code pict @!
+column 19 Privat pict @!
+column 20 Mail pict @!
+column 21 Tel pict @!
+column 22 Ext pict @!
+column 1 DL-Nr.
+mask DLS
+order 2

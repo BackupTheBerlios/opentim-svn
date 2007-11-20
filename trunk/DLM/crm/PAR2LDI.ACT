@@ -1,0 +1,4 @@
+// TIM2LDI.ACT
+// http://groups.google.com/groups?selm=37C1FF01.A14293C4%40netscape.com&oe=UTF-8&output=gplain
+DrvLoad("TXTWIN")
+fparse("PAR2LDI.LDI","c:\temp\"+CfgDataBase()+".ldi")
