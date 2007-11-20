@@ -252,7 +252,7 @@ RETURN EndList()
 FUNCTION RfxScanChildren(cType,xlEval)
 local cIdRfx := RfxIdRfx()
 local xlFilter := "RFX->Type=='"+cType+"'";
-  +iif(alias()$"TPC,PAR","",".and.alias()$'NEW MTG'");
+  +iif(alias()$"PUB,TPC,PAR","",".and.alias()$'NEW MTG'");
   +".and.(alias()!='NEW'.or.empty(NEW->Status))"
 if TplLang() != "*"
   xlFilter += ".and.(!alias()$'NEW MSX'.or.FIELD->IdLng=='"+TplLang()+"')"

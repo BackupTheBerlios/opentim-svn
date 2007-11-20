@@ -15,7 +15,7 @@ sample.exe: sample.obj eidtools.lib eidtools.dll
 	alink /DEBUG sample.obj eidtools.lib 
 
 sample.obj: sample.prg
-	xpp /b /q $?
+	xpp /b /q /n /m $?
 
 eidtools.dll: eidtools.cpp eidtools.exp
 	cl /LD /Tc $< /link xpprt1.lib eidtools.exp beidlib.lib

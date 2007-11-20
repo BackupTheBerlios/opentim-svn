@@ -1,3 +1,3 @@
 LIBRARY eidtools.Dll 
 EXPORTS 
-    GET_EID = _GET_EID
+    EID_GET = _EID_GET
