@@ -114,7 +114,7 @@ FUNCTION volsplit(x)
 local vol
 local i
 local a := split(x,":",2)
-RETURN NIL If len(a) != 2
+RETURN NIL if len(a) != 2
 a[1] := lower(a[1])
 if saVol == NIL ; VolRefresh() ; endif
 for i := 1 to len(saVol)
@@ -597,12 +597,17 @@ RETURN NIL
 
 * #ifdef DEF_WWW
 
+FUNCTION root_suffix(cFilename,cSuffix)
+local n := rat(".",cFilename)
+RETURN left(cFilename,n-1)+cSuffix+substr(cFilename,n)
+
 FUNCTION pic2html(cName,cParams,cTitle)
 local s
 local cRefURL // := cName
 local nPos
 * local nPos := rat(".",cName)
 local cSrcURL
+local cFilename
 local cWidth
 local cStyle
 local cHeight
@@ -624,6 +629,7 @@ local a := { ;
 RETURN .f. if ! parse_kw(cParams,a)
 cName := DrvCvtString(cName)
 avol := volsplit(cName)
+RETURN !SetMsg(cName+" : invalid volume specifier!") if avol == NIL
 * default cAltText to cName
 if !empty(cWidth).and. "/" $ cWidth
   cWidth := ntrim(int(xparse("400*"+cWidth)))
@@ -631,7 +637,6 @@ endif
 if !empty(cHeight).and. "/" $ cHeight
   cHeight := ntrim(int(xparse("400*"+cHeight)))
 endif
-RETURN !SetMsg(cName+" : invalid volume specifier!") if avol == NIL
 cSrcUrl := eval(avol[1][VOL_URL],avol[1],trim(avol[2]))
 * confirm(sSrcUrl)
 * cSrcURL:=vol2url(cName)
@@ -650,6 +655,11 @@ if avol[1][VOL_TYPE] == "gallery2"
 elseif avol[1][VOL_TYPE] == "image_server"
 * elseif left(cName,7) == "iserver"
   cSrcURL := strtran(cSrcUrl,"/show/","/thumb/")
+elseif avol[1][VOL_TYPE] == "maketn"
+  cFilename := root_suffix(;
+    avol[1][VOL_PATH] + "\"+ strtran(avol[2],"/","\"), "_web")
+  cSrcUrl := root_suffix(cSrcUrl,"_web")
+  RETURN !SetMsg(cFilename + MsgFileExist()) if ! file(cFilename)
 endif
 s := '<a href="'+ cRefURL+'"'
 if cTitle != NIL
