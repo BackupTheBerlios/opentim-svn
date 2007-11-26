@@ -221,6 +221,9 @@ static sbOnParSatisfy := {||.t.}
     *   FIELD->Match ;
     * )}
   #endif
+  #ifdef DEF_IPB
+    static sbArtIdGen := {|cIdCtr|StdArtIdGen(cIdCtr)}
+  #endif DEF_IPB
   #ifdef DEF_PRIXR
     static sbVnlPrixR := {|| ;
       ntom( VenDb2Dev(ArtPrixR(VEN->Periode)), VnlPuDecPos() ) ;
@@ -3842,6 +3845,9 @@ RETURN .f.
   #ifdef DEF_PRIXR
   FUNCTION VnlPrixR()       ; RETURN eval(sbVnlPrixR)
   #endif DEF_PRIXR
+  #ifdef DEF_IPB
+  FUNCTION ArtIdGen()       ; RETURN eval(sbArtIdGen)
+  #endif DEF_IPB
   #ifdef DEF_INT
   FUNCTION VnlIntDefault()       ; RETURN eval(sbVnlIntDefault)
   #endif DEF_INT
@@ -5646,6 +5652,9 @@ AddIniCmd( { "TimTestAllow" , {|x| AddIfNotNil(saTimTestAllow,xparse(x)) } } )
   AddIniCmd( { "VenMatch" , {|x| ;
     (sbVenHstMatch := cblock(x)) != NIL ;
   } } )
+  #ifdef DEF_IPB
+    AddIniCmd( { "ArtIdGen" , {|x| (sbArtIdGen := xparse(x)) != NIL } } )
+  #endif DEF_IPB
   #ifdef DEF_PRIXR
     AddIniCmd( { "VnlPrixR" , {|x| (sbVnlPrixR := xparse(x)) != NIL } } )
   #endif DEF_PRIXR

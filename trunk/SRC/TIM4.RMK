@@ -145,5 +145,4 @@ eupper.obj : eupper.prg   tim4.ind
 dbesys.obj : dbesys.prg   tim4.ind
 
 tim4.exe : tim4.lnk tim4.rmk link.ind
-    s:\obj\$(CUST)
-    s:\BLINK\bin\blinker @tim4.LNK @LIB-BX.LNK
+    s:\BLINK\bin\blinker @tim4.LNK @LIB-BX.LNK output s:\obj\$(CUST)\tim4.exe

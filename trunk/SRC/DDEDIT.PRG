@@ -1358,8 +1358,10 @@ if saBar == NIL
                         when CanSkip()
       menu item MNU_036 block ddEditBack() key K_CTRL_UP ;
                         when CanSkip()
-      * menu item MNU_037 block ddEditReplace()  ;
-      *                   when CanSkip()
+      #ifdef DEF_REPLACE
+      menu item MNU_037 block ddEditReplace()  ;
+                        when CanSkip()
+      #endif
     #endif
   define menu MNU_010 in saBar
     * menu item MNU_012 block ddViewMode()
@@ -3636,6 +3638,8 @@ RETURN .t.
 FUNCTION ddCheckWhile ; RETURN (&sxcKey == scKeyValue)
 
 
+#ifdef DEF_REPLACE
+
 FUNCTION ddEditReplace()
 local cDecide := "Y"
 local fld
@@ -3673,6 +3677,7 @@ RETURN ddScan({||;
       "with "+utos(&xcWomit));
   )!=NIL).and.(!(cDecide$"AY").or.TryRecLock(blReplace))})
 
+#endif DEF_REPLACE
 
 FUNCTION ddLastReq    ; RETURN snLastRequest
 FUNCTION ddMode       ; RETURN snMode

@@ -386,9 +386,9 @@ memvar MemPickArtMode
   #xtranslate oEvl() => NIL
 #endif
 
-#ifndef DEF_ANA
-  #xtranslate oAna() => NIL
-#endif
+* #ifndef DEF_ANA
+*   #xtranslate oAna() => NIL
+* #endif
 
 #ifndef DEF_HST
   #xtranslate oHst() => NIL

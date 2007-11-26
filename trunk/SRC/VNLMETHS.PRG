@@ -1709,15 +1709,18 @@ RETURN .T.
 *RETURN .t.
 
 #ifdef DEF_GEN
-FUNCTION ArtIdGen(cIdCtr)
+
+FUNCTION StdArtIdGen(cIdCtr)
 RETURN ART->IdGen if cIdCtr == "V"
 if empty(cIdCtr)
   raise("cIdCtr is empty")
 endif
+* RETURN "" if !HasField(oArt(),"IdGen"+cIdCtr)
 RETURN &("ART->IdGen"+cIdCtr)
-#else
-FUNCTION ArtIdGen()
-RETURN ""
+
+* #else
+* FUNCTION ArtIdGen()
+* RETURN ""
 #endif
 
 #ifdef DEF_TAX
@@ -1774,12 +1777,11 @@ RETURN .f. if ! ParExist(VEN->IdPar)
         RETURN .f.
       endif
       #ifdef DEF_GEN
-        if empty(saIpb[IPB_GENBASE]) // cIdGen)
-          cIdGen := ArtIdGen(cIdCtr)
-          RETURN .f. if ! GenExist(cIdGen)
-        else
-          RETURN .f. if ! GenExist(saIpb[IPB_GENBASE])
+        cIdGen := ArtIdGen(cIdCtr)
+        if empty(cIdGen)
+          cIdGen := saIpb[IPB_GENBASE]
         endif
+        RETURN .f. if ! GenExist(cIdGen)
       #endif DEF_GEN
     #else
       cIdGen := ArtIdGen(cIdCtr)

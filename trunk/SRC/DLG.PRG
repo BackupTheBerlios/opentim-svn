@@ -586,6 +586,27 @@ if v != NIL
 endif
 RETURN .f.
 
+/**
+Collect a minimum value. Stores the value into variable cName if value
+is less than the currently stored value.
+**/
+FUNCTION MinCollect(cName,uValue)
+local v := VarLocate(cName)
+RETURN .f. if v == NIL
+if empty(v[VAR_VALUE]) .or. v[VAR_VALUE] > uValue
+  v[VAR_VALUE] := uValue
+endif
+RETURN .t.
+*
+FUNCTION MaxCollect(cName,uValue)
+local v := VarLocate(cName)
+RETURN .f. if v == NIL
+if empty(v[VAR_VALUE]) .or. v[VAR_VALUE] < uValue
+  v[VAR_VALUE] := uValue
+endif
+RETURN .t.
+
+
 FUNCTION DlgPush(cName)
 aadd(saVarStack,DlgValue(cName,.f.))
 RETURN .t.
