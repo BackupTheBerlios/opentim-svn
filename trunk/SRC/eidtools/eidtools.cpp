@@ -91,18 +91,25 @@ XPPRET XPPENTRY EID_GET(XppParamList paramList) {
 
     tBytes.length = 4096;
     tBytes.data = buffer;
+
+
+    // sprintf(s,"Card Number: %s\n\0x00", "foo");
+
     tStatus = BEID_Init("", 0, 0, &lHandle);
 
     // Read ID Data
     tStatus = BEID_GetID(&idData, &tCheck);
 
-    if(BEID_OK == tStatus.general)
+    if(tStatus.general == BEID_OK)
     {
-      sprintf(s,"Card Number: %s", idData.cardNumber);
+      sprintf(s,"Card Number: %s\r\n", idData.cardNumber);
       // PrintIDData(&idData);
-    }
+    } else 
+      sprintf(s,"BEID_GetId() returned %d\r\n", tStatus.general);
 
-/************ sp„ter
+
+
+/************ for later
 
     // Read Address Data
     tStatus = BEID_GetAddress(&adData, &tCheck);
@@ -136,11 +143,13 @@ tBytes.length, pf);
     memset(buffer, 0, sizeof(buffer));
     tBytes.length = 4096;
 
+   
 ********************/
 
    tStatus = BEID_Exit();
 
-   _conPutCL(chResult,s , sizeof(s) );
+    // _conPutCL(chResult,s , sizeof(s) );
+   _conPutC(chResult,s);
    _conReturn(paramList, chResult);
    _conRelease(chResult);
    return;

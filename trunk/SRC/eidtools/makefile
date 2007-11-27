@@ -23,3 +23,9 @@ eidtools.dll: eidtools.cpp eidtools.exp
 eidtools.exp eidtools.lib: eidtools.def 
 	aimplib $<
 
+clean:
+	del eidtools.lib eidtools.dll eidtools.obj sample.obj sample.exe
+	
+    
+    
+    
