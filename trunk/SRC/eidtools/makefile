@@ -24,7 +24,7 @@ eidtools.exp eidtools.lib: eidtools.def
 	aimplib $<
 
 clean:
-	del eidtools.lib eidtools.dll eidtools.obj sample.obj sample.exe
+	del eidtools.lib eidtools.dll eidtools.obj eidtools.exp sample.obj sample.exe
 	
     
     
