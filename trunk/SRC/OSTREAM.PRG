@@ -34,6 +34,7 @@ static slSecureRebuild := .f.
 static slQuickRebuild := .f.
 static slAsMail := .f.
 static slAsPdf := .f.
+static sbInputFilter := {|x|x}
 
 #define MAX_MEMOLEN 64000
 
@@ -2076,7 +2077,7 @@ RETURN c
 **
 ** TplParse() - see also fparse()
 **
-FUNCTION TplParse(cMemo,cSource,lAllowInt,lFlatLongLines)
+FUNCTION TplParse(cMemo,cSource,lAllowInt,lFlatLongLines,lInline)
 local c
 local nPos1
 local nPos2
@@ -2094,6 +2095,7 @@ local cSaveSource := scSource
 local aIfStack := saIfStack
 RETURN .f. if cMemo == NIL
 RETURN .f. if ! ChkMemoLen(cMemo)
+default lInline to .t.
 default lAllowInt to .t.
 default lFlatLongLines to .t.
 // LogDebug("TplParse() : " + valtype(cMemo) + " " + ntrim(len(cMemo)))
@@ -2152,11 +2154,16 @@ do while (nPos1 := at(scTagBegin,cMemo)) != 0 .and. snPrnStatus != PRN_ABORT
     if substr(cMemo,2,1) == "="
       if slPStream
         c := substr(cMemo,3,nPos2-3)
+        c := eval(sbInputFilter,c)
         c := strtran(c,CR_LF," ") // 20070425
         #ifdef DEF_OLDPARSE
-          // nur fÅr CPAS, damit bestehende Druckmasken nicht angepasst
+          // nur fÅr GX, damit bestehende Druckmasken nicht angepasst
           // zu werden brauchen.
-          cRetVal := ExprParse(c)
+          if lInline
+            cRetVal := ExprParse(c)
+          else
+            cRetVal := xparse(c)
+          endif
         #else
           cRetVal := xparse(c)
         #endif
@@ -2175,7 +2182,7 @@ do while (nPos1 := at(scTagBegin,cMemo)) != 0 .and. snPrnStatus != PRN_ABORT
       **
       **
       if nPos1 == 0
-        cRetVal := left(cMemo,nPos2)
+        cRetVal := left(cMemo,nPos2) // take input without change
       else
         cIdTca := substr(cMemo,2,nPos1-2)
         cParam := substr(cMemo,nPos1+1,nPos2-nPos1-1)
@@ -2308,7 +2315,7 @@ elseif cIdTca == "etc"
     if slPStream
       soLoop := splitws(p,2)
       aadd(soLoop,"") // LOOP_NAME, LOOP_EXPR, LOOP_TEXT (LOOP_ALEN)
-      LogDebug("loop: "+p+" {|xlEval|"+utos(c)+"}")
+      * LogDebug("loop: "+p+" {|xlEval|"+utos(c)+"}")
     endif
     RETURN NIL
   elseif cIdTcs == "exit"    ; snPrnStatus := PRN_EXIT ; c:= NIL
@@ -2566,13 +2573,16 @@ RETURN cBlock
 ** eingelesen.
 **
 FUNCTION fparse(cInFile,cOutFile,cCmdTags,;
-  lAllowInt,lOverWrite,lAppend,nBytes,cDrvName;
+  lAllowInt,lOverWrite,lAppend,nBytes,cDrvName,lInline;
 )
 local lOkay := .t.
 * local fdout
 local cFileName
 local fdin
 local cDllPath := GetDlmPath(cInFile)
+local bInputFilter := SetInputFilter()
+* local lXmlInput := SetXmlInput()
+* local lRtfInput := SetRtfInput()
 if cDllPath == NIL
   SetMsg(cInFile+MsgFileExist())
   RETURN .f.
@@ -2602,10 +2612,12 @@ endif
 #endif DEF_DEBUG
 * default lTrap to slTrap
 * slTrap := lTrap
+* SetXmlInput(.f.)
+* SetRtfInput(.f.)
 default nBytes to 200
 lOkay := parse( ;
   {||freader(fdin,nBytes)}, ;
-  cCmdTags, lAllowInt, cInFile;
+  cCmdTags, lAllowInt, cInFile, lInline;
 )
 fclose(fdin)
 if cOutFile != NIL
@@ -2613,6 +2625,9 @@ if cOutFile != NIL
 endif
 * slTrap := lSaveTrap
 * snSrcLine := 1
+* SetXmlInput(lXmlInput)
+* SetRtfInput(lRtfInput)
+SetInputFilter(bInputFilter)
 RETURN lOkay
 
 *#define IS_FD      1
@@ -2697,7 +2712,7 @@ RETURN a
   
 
 
-STATIC FUNCTION parse(bReader,cCmdTags,lAllowInt,cSource)
+STATIC FUNCTION parse(bReader,cCmdTags,lAllowInt,cSource,lInline)
 local aLoop, b
 local aIfStack := saIfStack
 local cSaveSource := scSource
@@ -2724,6 +2739,7 @@ if cCmdTags != NIL
 endif
 scSource := cSource
 snSrcLine := 1
+default lInline to .t.
 do while (cBlock := eval(bReader)) != NIL
   if snPrnStatus != PRN_CONTINUE
     lOkay := .f.
@@ -2825,11 +2841,16 @@ do while (cBlock := eval(bReader)) != NIL
         #endif DEF_DEBUG
         if slPStream
           c := flatlonglines(substr(cMemo,3,nPos2-3))
+          c := eval(sbInputFilter,c)
           c := strtran(c,CR_LF," ") // 20030320
           #ifdef DEF_OLDPARSE
-            // nur fÅr CPAS, damit bestehende Druckmasken nicht angepasst
+            // nur fÅr GX, damit bestehende Druckmasken nicht angepasst
             // zu werden brauchen.
-            cRetVal := ExprParse(c)
+            if lInline
+              cRetVal := ExprParse(c)
+            else
+              cRetVal := xparse(c)
+            endif
           #else
             cRetVal := xparse(c)
           #endif
@@ -2840,9 +2861,10 @@ do while (cBlock := eval(bReader)) != NIL
         cRetVal := NIL
       else
         c := flatlonglines(substr(cMemo,2,nPos2-2))
+        c := eval(sbInputfilter,c)
         a := splitws(c,3)
         if len(a) <= 1
-          cRetVal := left(cMemo,nPos2)
+          cRetVal := left(cMemo,nPos2) // leave unchanged
         elseif len(a) == 2
           cRetVal := TcsEval(a[1],a[2],"") // 20030326
         else
@@ -3222,4 +3244,26 @@ FUNCTION SetAsPdf(x) // getvar("asPDF")
 RETURN slAsPdf if x == NIL
 slAsPdf := x
 RETURN .t.
+
+FUNCTION SetInputFilter(x)
+RETURN sbInputFilter if x == NIL
+LogDebug("SetInputfilter()")
+sbInputFilter := x
+RETURN .t.
+
+FUNCTION rtf2dos(cExpr)
+cExpr := strtran(cExpr,"\{",'{')
+cExpr := strtran(cExpr,"\}",'}')
+RETURN cExpr
+
+FUNCTION xml2dos(cExpr)
+cExpr := strtran(cExpr,"&quot;",'"')
+cExpr := strtran(cExpr,"&lt;",'<')
+cExpr := strtran(cExpr,"&gt;",'>')
+cExpr := strtran(cExpr,"&amp;",'&')
+cExpr := strtran(cExpr,"&apos;","'")
+RETURN cExpr
+
+
+
 

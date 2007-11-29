@@ -19,6 +19,9 @@ UnderOff "\ul0 "
 ItalOn  "\i "
 ItalOff "\i0 "
 
+inputFilter {|x|rtf2dos(x)}
+// convert {|x|dos2rtf(x)}
+
 convert "„" to "\'e4"
 convert "‰" to "\'eb"
 convert "‹" to "\'ef"

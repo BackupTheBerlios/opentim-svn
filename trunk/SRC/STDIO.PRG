@@ -63,7 +63,8 @@ static slMustLoginAgain     := .f.
 
 * #ifdef DEF_IE10
 static slTrapErrors  := .t. // .f. if danger of having Internal Error 10
-static slXmlInput  := .f.
+* static slXmlInput  := .f.
+* static slRtfInput  := .f.
 * #endif
 
 #ifdef DEF_VERBOSE
@@ -108,10 +109,11 @@ RETURN slTrapErrors if x == NIL
 slTrapErrors := x
 RETURN .t.
 
-FUNCTION SetXmlInput(x)
-RETURN slXmlInput if x == NIL
-slXmlInput := x
-RETURN .t.
+* FUNCTION SetXmlInput(x)
+* RETURN slXmlInput if x == NIL
+* slXmlInput := x
+* RETURN .t.
+
 
 * #endif
 
@@ -742,6 +744,7 @@ RETURN NIL
 * SetBreakTrap(lBreakTrap)
 * RETURN c
 
+
 /**
 20010528:
 **/
@@ -766,13 +769,7 @@ local lBreakTrap := SetBreakTrap()
     )
   endif
 #endif DEF_GPF
-if slXmlInput
-  cExpr := strtran(cExpr,"&quot;",'"')
-  cExpr := strtran(cExpr,"&lt;",'<')
-  cExpr := strtran(cExpr,"&gt;",'>')
-  cExpr := strtran(cExpr,"&amp;",'&')
-  cExpr := strtran(cExpr,"&apos;","'")
-endif
+* cExpr := eval(sbInputFilter,cExpr)
 #ifdef __XPP__
   cExpr := strtran(cExpr,chr(141)," ")
 #endif __XPP__

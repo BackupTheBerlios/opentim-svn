@@ -11,6 +11,8 @@ ItalOn  "<i>"
 ItalOff "</i>"
 
 convert {|x| dos2xml(x)}
+inputFilter {|x|xml2dos(x)}
+
 
 //convert "'" to "&apos;"
 //convert '"' to "&quot;"

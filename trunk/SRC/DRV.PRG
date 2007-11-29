@@ -181,6 +181,7 @@ if a == NIL
   aadd(a, { "LineFeed"     , {|x| scDrvLineFeed  := EvalMac(x), .t. } })
   aadd(a, { "Font"         , {|x| DrvAddFont(x)                     } })
   aadd(a, { "convert"      , {|x| CvtCollect(saCvtList,x)           } })
+  aadd(a, { "inputFilter"  , {|x| SetInputFilter(xparse(x))         } })
   aadd(a, { "Option"       , {|x| DrvGetSpecial(x)                  } })
   aadd(a, { "OnSelect"     , {|x| AddIfNotNil(saOnSelect,cblock(x))   } })
   aadd(a, { "OnJobBegin"   , {|x| AddIfNotNil(saJobBegin,cblock(x))   } })
