@@ -158,7 +158,7 @@ MnuAddTitle(utr("~Tools","E~xtras","~Outils"))
 #if HasDlm("PRJ")
   MnuAddItem("Pro~jects                      ",{||DbfEdit(\
     {oPrj(),oPar()},MnuItemName(),"PRJ") })
-  MnuAddItem("~Scheduled projects            ",{||DbfEdit(\
+  // MnuAddItem("~Scheduled projects            ",{||DbfEdit(\
     {oPrj(),oPar()},MnuItemName(),"PRJSTATS",NIL,".t.",\
     "S","PRJ->Status") \
     })

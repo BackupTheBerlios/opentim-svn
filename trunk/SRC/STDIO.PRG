@@ -752,6 +752,7 @@ local lBreakTrap := SetBreakTrap()
 #ifdef DEF_DEBUG
   if valtype(cExpr) == "C"
     ** rpt_write("xparse() (" + ntrim(len(cExpr)) + " chars) " + cExpr)
+    rpt_write("xparse() " + cExpr)
   else
     Warning("xparse() : argument error")
   endif
