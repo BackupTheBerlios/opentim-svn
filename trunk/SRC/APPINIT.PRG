@@ -254,7 +254,9 @@ set softseek off
   #endif
   set key K_ALT_F12 to PopAdder
 #endif
-set key K_ALT_F1 to DebugBreak
+#ifdef DEF_DEBUG
+  set key K_ALT_F1 to DebugBreak
+#endif
 #ifdef DEF_HELP
   * set key K_ALT_F1 to WinHelp(NIL)
   set key K_ALT_F1 to CallHelp

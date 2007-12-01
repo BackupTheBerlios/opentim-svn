@@ -3846,7 +3846,7 @@ RETURN .f.
   FUNCTION VnlPrixR()       ; RETURN eval(sbVnlPrixR)
   #endif DEF_PRIXR
   #ifdef DEF_IPB
-  FUNCTION ArtIdGen()       ; RETURN eval(sbArtIdGen)
+  FUNCTION ArtIdGen(cIdCtr)       ; RETURN eval(sbArtIdGen,cIdCtr)
   #endif DEF_IPB
   #ifdef DEF_INT
   FUNCTION VnlIntDefault()       ; RETURN eval(sbVnlIntDefault)

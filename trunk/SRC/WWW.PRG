@@ -4120,6 +4120,14 @@ RETURN DbfToHtml( ;
   "empty(NEW->Status).and.NEW->IdLng==MSX->IdLng.and.!empty(NEW->Date)",;
   "ul",15,.t.)
 
+FUNCTION ListSrcs()
+RETURN !SetMsg("Only for MSX") if alias()!="MSX"
+RETURN DbfToHtml( ;
+  MsxLabel(),trim(MsxTitle()),;
+  {oSrc()},4,MSX->IdMsx,NIL,;
+  ".t.",;
+  "ul",15,.t.)
+
 FUNCTION ListNgrNews(cIdNgr)
 cIdNgr := padr(cIdNgr,LEN_IDNGR)
 * if MSX->IdLng != MemLang1
