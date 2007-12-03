@@ -1757,6 +1757,17 @@ elseif wwin[WIN_WAITKEY] == 5 // snParWaitKey == K_F5
                   window   wwin ;
                   query    "VENPAR"
     close area
+elseif wwin[WIN_WAITKEY] == 15 // snParWaitKey == K_F5
+    b := oVen()
+    open area b, oPar()
+      ddSetOrder(ORD_VEN_PAR)
+      edit data b key VEN->IdPar  ;
+                  value    cIdPar   ;
+                  start    bottom ;
+                  mode     wait ;
+                  window   wwin ;
+                  query    "VENPARD"
+    close area
                                                   #endif DEF_VEN
                                                   #ifdef DEF_PIN
 elseif wwin[WIN_WAITKEY] == 38 // CUST PAC

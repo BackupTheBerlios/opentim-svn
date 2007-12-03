@@ -1,6 +1,6 @@
 //
-// HSTGEND.QRY - generated 03.05.2004
-// for HST.DBF
+// HSTGEND.QRY - generated 03.12.07
+// for HST.FOX
 //
 window 15 80 0 0 
 column 6 =utr("Date","Datum","Date") say ""
@@ -14,14 +14,11 @@ column 13 Match pict @K@!
 column 12 =utr("Amnt FC","Betrag FW","MontDev")
 column 22 FW pict @K@!
 column 9 Per.
-column 0 =utr("Amount","Betrag","Montant")+".BEF" block ntom(HstMont("BEF"),0) skip .t. expr HstMont("BEF")*if(HST->DC=="D",1,-1)
-column 0 =utr("Amount","Betrag","Montant")+".DEM" block ntom(HstMont("DEM"),2) skip .t. expr HstMont("DEM")*if(HST->DC=="D",1,-1)
 column 5 Pos
 column 15 Z
 column 2 =utr("IdPar","P-Kto","CptPar")
 column 20 Partner
 column 21 =utr("Remark","Bemerkung","Remarque")
 column 16 MWS pict @K@!
-
 order 3
 help HSTGEN

@@ -3,10 +3,10 @@
 MnuAddTitle(utr("~VAT","~MWSt","~TVA"))
 #endif
 #if HasDlm("SPRL").and.HasDlm("EE")
-MnuAddItem("~KMD overview              ",{||RepPrint("PERKMD","PERKMD","KMD overview")})
+MnuAddItem("~KMD overview",{||RepPrint("PERKMD","PERKMD",MnuItemName())})
 #endif
 #if HasDlm("SPRL")
-MnuAddItem("~RechnungsbÅcher           ",{|| RepPrint("HSTVEN","HSTVEN","RechnungsbÅcher")})
+MnuAddItem("~RechnungsbÅcher",{|| RepPrint("HSTVEN","HSTVEN",MnuItemName())})
 MnuAddItem("MWSt.-Erk~lÑrung           ",{|| ActExec("DCLTVA") })
 MnuAddItem("Kundenliste ~Intracom      ",{|| DlgExec("LSTTVAI") })
 MnuAddItem("Kundenliste ~MWSt          ",{|| DlgExec("LSTTVAA") })

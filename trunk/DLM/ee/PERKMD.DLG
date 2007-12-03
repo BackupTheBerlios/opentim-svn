@@ -4,6 +4,7 @@ title if(MemLang1=="D","MWSt-Erkl„rung","D‚claration TVA")
     picture="@k@!" \
     caption=if(MemLang1=="D","Periode von-bis ","P‚riode de-… ") \
     pick={|x|PickPerRange(x)}
+before setvar("PRN2PDF.out",padr(AppPath()+"\pdf\kmd-overview.pdf",200))
 #include "PERIODE.DLG"
 #include "PREVIEW.DLG"
 #include "ASPDF.DLG"

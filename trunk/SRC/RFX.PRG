@@ -561,6 +561,9 @@ elseif alias() == "PUB"
 elseif alias() == "DLS"
   RETURN .f. if ! RfxRefUpdate({'Memo'})
   RETURN .f. if ! RfxKwdUpdate("D",{'NB',"Memo"})
+elseif alias() == "PIN"
+  RETURN .f. if ! RfxRefUpdate({'Memo'})
+  RETURN .f. if ! RfxKwdUpdate("D",{'Short',"Memo"})
 elseif alias() == "MTG"
   RETURN .f. if ! RfxRefUpdate({'Abstract1','Body1'})
 elseif alias() == "AUT"
