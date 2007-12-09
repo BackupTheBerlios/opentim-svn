@@ -717,7 +717,7 @@ RETURN lExist
 ** locates specified tpl and parses it to printer (using PrnStream())
 **
 FUNCTION PrintTemplate(cTplType,cIdTpl,cPreview,bTitBlock,;
-  bPrePrint,cIdOpt)
+  bPrePrint,cIdOpt,lDlg,lAsPdf,lAsMail)
 local tpl
 if (tpl := TplValue(cTplType,cIdTpl,{|| TplInfo()})) == NIL
   SetMsg(cTplType+":"+cIdTpl+" : unbekannte Druckmaske!")
@@ -733,7 +733,7 @@ else
   if OpenPrinter( ;
     cIdOpt,cPreview, ;
     tpl[TPL_WIDTH],bTitBlock, ;
-    NIL,bPrePrint,tpl[TPL_IDDLG] ;
+    NIL,bPrePrint,tpl[TPL_IDDLG], lDlg, lAsPdf, lAsMail ;
   )
     p_MsgDisplay(tpl[TPL_NAME])
     TplParse(hardcr(tpl[TPL_MEMO]))

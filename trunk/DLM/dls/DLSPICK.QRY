@@ -1,6 +1,6 @@
 //
-// DLSPICK.QRY - generated 24.10.06
-// for DLS.DBF
+// DLSPICK.QRY - generated 05.12.07
+// for DLS.FOX
 //
 window 30 76 0 0 
 column 2 Datum say ""
@@ -19,5 +19,5 @@ column 0 Art der DL block padr(DbfPeek(oDla(),DLS->IdDla,"DLA->Ref",""),10) pict
 column 10 IdPar pict @K@!
 column 0 Bezeichnung block padr(ParName(DLS->IdPar),20) skip .t.
 mask DLS
-order 3
+order 2
 help DLS

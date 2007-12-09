@@ -7,4 +7,5 @@ c := EID_GET()
 *    ? i, asc(substr(c,i,1))
 * next i
 ? c
+memowrit("SAMLE.OUT",c)
 RETURN

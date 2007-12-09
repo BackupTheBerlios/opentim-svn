@@ -256,6 +256,7 @@ set softseek off
 #endif
 #ifdef DEF_DEBUG
   set key K_ALT_F1 to DebugBreak
+  set key K_ALT_F9 to ShowCallStack
 #endif
 #ifdef DEF_HELP
   * set key K_ALT_F1 to WinHelp(NIL)
@@ -405,9 +406,6 @@ MemLang3 :=  padr(MemLang3,LenIdLng())
   MemLang4 :=  padr(MemLang4,LenIdLng())
 #endif
 AppSaveMem()
-#ifdef DEF_DEBUG
-  set key K_ALT_F9 to ShowCallStack
-#endif DEF_DEBUG
 slMustLogin := .f.
 RETURN .f. if ! MnuLoad(UsrIdMnu())
 RETURN .t.

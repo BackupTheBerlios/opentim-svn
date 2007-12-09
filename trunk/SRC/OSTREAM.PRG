@@ -359,13 +359,15 @@ FUNCTION OpenPrinter( ;
   bPrePrint, ;
   cIdDlg, ;
   lDlg, ;
-  lAsPdf ;
+  lAsPdf, ;
+  lAsMail ;
 )
 local cMsg := ""
 if snPrnStatus == PRN_CONTINUE
   RETURN !SetMsg("Cannot open 2 printer streams at once")
 endif
 default lAsPdf to .f.
+default lAsMail to .f.
 snPrnStatus := PRN_IDLE // sonst arbeitet StrParse() manchmal nicht
                         // w„hrend DlgExec() [20000323]
 SetTplIni(cIdTplIni)
@@ -375,7 +377,7 @@ if cRange != NIL
   SetRange(cRange)
 endif
 slAsPdf := lAsPdf
-slAsMail := .f.
+slAsMail := lAsMail
 if empty(cIdDlg)
   if cPreview == NIL
     SetPreview(if(USRATTR_P $ UsrAttrib(), BUTTON_ON, BUTTON_OFF))
@@ -473,7 +475,6 @@ BeginOStream({|x| PrnStream(x)},NIL,"Printer") // sbWriter
 if nWidth != NIL
   p_SetWidth(nWidth)
 endif
-
 *if empty(scPort)
 *  p_SetCapture(alltrim(scTplIni)+".TXT")
 *  * scDoCapture := BUTTON_ON
@@ -487,7 +488,6 @@ snVPos    := 0     // current vertical position (points)
                    // current page
 snMaxVPos := snPapHeight - snBMargin
 scTime := time()
-
 if ! DrvOnSelect()
   EndOStream()
   snPrnStatus := PRN_ABORT

@@ -1376,7 +1376,7 @@ local b := oVen()
 local jnl
 default xlFilter to ".t."
 RuptInit()
-open area b, oPar()
+open area b, oPar(), oPrj()
   TestTried()
   lOkay := .t.
   go top

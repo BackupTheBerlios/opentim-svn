@@ -157,7 +157,7 @@ if rpt[RPT_TOCSV]
   rpt[RPT_PRINTLINE] := {|cLine|fwrite(fd,dos2latin1(cLine)+CR_LF),.t.}
 else
   RETURN .f. if ! OpenPrinter(SetTplIni(),SetPreview(),;
-    NIL,NIL,NIL,NIL,NIL,NIL,SetAsPdf())
+    NIL,NIL,NIL,NIL,NIL,NIL,SetAsPdf(),SetAsMail())
 endif
 // rpt[RPT_TOCSV] := (getvar("ToCSV")==BUTTON_ON)
 lOkay := _Report(cTitle==NIL)

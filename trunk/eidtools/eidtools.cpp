@@ -103,7 +103,27 @@ XPPRET XPPENTRY EID_GET(XppParamList paramList) {
     if(tStatus.general == BEID_OK)
     {
       sprintf(s,"Card Number: %s\r\n", idData.cardNumber);
-      // PrintIDData(&idData);
+      sprintf(s,"Chip Number: %s\r\n", idData.chipNumber);
+      sprintf(s,"%-25s: %s - %s\n", "Validity",
+              idData.validityDateBegin,
+              idData.validityDateEnd);
+      sprintf(s,"Delivery Municipality: %s\r\n", idData.municipality);
+      sprintf(s,"National Number: %s\r\n", idData.nationalNumber);
+      sprintf(s,"Name: %s\r\n", idData.name);
+      sprintf(s,"First name 1:  %s\r\n", idData.firstName1);
+      sprintf(s,"First name 2:  %s\r\n", idData.firstName2);
+      sprintf(s,"First name 3:  %s\r\n", idData.firstName3);
+      sprintf(s,"Nationality: %s\r\n", idData.nationality);
+      sprintf(s,"Birthplace: %s\r\n", idData.birthLocation);
+      sprintf(s,"Birthdate: %s\r\n", idData.birthDate);
+      sprintf(s,"Gender: %s\r\n", idData.sex);
+      sprintf(s,"Noble Condition: %s\r\n", idData.nobleCondition);
+      sprintf(s,"%-25s: %d\n", "Document Type", idData.documentType);
+      sprintf(s,"Special Status: Whitecane: %s, Yellowcane: %s, Extendedminority: %s\n",
+              idData.whiteCane ? "TRUE" : "FALSE",
+              idData.yellowCane ? "TRUE" : "FALSE",
+              idData.extendedMinority ? "TRUE" : "FALSE");
+      sprintf(s,"\n");
     } else 
       sprintf(s,"BEID_GetId() returned %d\r\n", tStatus.general);
 

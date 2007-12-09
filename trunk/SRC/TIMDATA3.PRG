@@ -1460,7 +1460,7 @@ ddFld EaMatch  ,C, LenIdJnl()+LEN_IDDOC,0 picture PIC_ID ;
 ddFld _Par1=2  ,C, 1,0 attrib V ;
                        block if(empty(MVI->IdPar2) .or. MVI->IdPar2==MVI->IdPar," ","")
 ddFld Blockiert,C, 1,0 picture PIC_ID when UsrLevel() <= "B"
-
+*
 action b key K_SH_F4   prompt MnuArtPage() ;
                        block BudPage(MVI->DC, MVI->IdBud)
 action b key K_SH_F5   prompt MnuParPage() block ParPage(MVI->IdPar)
