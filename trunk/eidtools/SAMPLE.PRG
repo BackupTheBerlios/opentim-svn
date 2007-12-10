@@ -3,13 +3,11 @@ local a,i
 local c := ""
 ? "Gonna call EID_GET()..."
 a := EID_GET()
-* ? "len(c) is ", len(c)
 for i := 1 to len(a)
   c += ltrim(str(i)) + " : " + utos(a[i]) + chr(13)+chr(10)
-*    ? i, asc(substr(c,i,1))
 next i
 ? c
-memowrit("SAMLE.OUT",c)
+memowrit("SAMPLE.OUT",c)
 RETURN
 
 ** simplified utos() works only for NIL and CHAR

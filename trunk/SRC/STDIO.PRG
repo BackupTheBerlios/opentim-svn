@@ -772,6 +772,7 @@ local lBreakTrap := SetBreakTrap()
 * cExpr := eval(sbInputFilter,cExpr)
 #ifdef __XPP__
   cExpr := strtran(cExpr,chr(141)," ")
+  cExpr := strtran(cExpr,chr(13)+chr(10)," ")
 #endif __XPP__
 if ! slTrapErrors
   RETURN &cExpr

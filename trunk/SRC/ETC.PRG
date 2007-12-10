@@ -40,6 +40,51 @@ static sbOnDecExceed := {|cMont,nMaxDec| ;
 *   );
 * }
 
+
+#ifdef DEF_EID
+
+#define EID_ERROR      1
+#define EID_CARDNUMBER 2
+#define EID_CHIPNUMBER 3
+#define EID_VALIDITY_BEGIN 4
+#define EID_VALIDITY_END 5
+
+#define EID_DELIVERY_MUNICIPALTIY  6
+#define EID_NATIONAL_NUMBER 7
+#define EID_NAME 8
+#define EID_FIRSTNAME1 9
+#define EID_FIRSTNAME2 10
+#define EID_FIRSTNAME3 11
+#define EID_NATIONALITY 12
+#define EID_BIRTHPLACE 13
+#define EID_BIRTHDATE 14
+#define EID_GENDER 15
+#define EID_NOBLE_CONDITION 16
+#define EID_DOCTYPE 17
+#define EID_WHITECANE 18
+#define EID_YELLOWCANE 19
+#define EID_EXTENDED_MINORITY 20
+
+#define EID_STREET 21
+#define EID_NUMBER 22
+#define EID_BOX 23
+#define EID_ZIP 24
+#define EID_MUNICIPALTIY 25
+#define EID_COUNTRY 26
+
+#define EID_ALEN       26
+
+request EID_GET
+
+* FUNCTION ParGetEid()
+* local a := EID_GET()
+* RETURN .f. if ! Confirm("EID_GET() returned: "+utos(a),MsgContinue())
+* RETURN Warning("Das war bisher alles...")
+
+#endif DEF_EID
+
+
+
 FUNCTION SetOnDecExceed(b)
 RETURN sbOnDecExceed if b == NIL
 sbOnDecExceed := b
@@ -2513,3 +2558,5 @@ RETURN nQte
 *  {|v|"Total Monat "+ntrim(v)+":"})
 *r_forloop(dDate1,dDate2,1,NIL,{|n,v|srvline(v)})
 **r_close()
+
+
