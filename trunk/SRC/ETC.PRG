@@ -74,12 +74,58 @@ static sbOnDecExceed := {|cMont,nMaxDec| ;
 
 #define EID_ALEN       26
 
-request EID_GET
+* request EID_GET
 
-* FUNCTION ParGetEid()
-* local a := EID_GET()
-* RETURN .f. if ! Confirm("EID_GET() returned: "+utos(a),MsgContinue())
-* RETURN Warning("Das war bisher alles...")
+FUNCTION EID_GET_TEST
+local a := array(EID_ALEN)
+a[1 ] := NIL
+a[2 ] := "640069343191"
+a[3 ] := "534C494E336611296CFF346E31071028"
+a[4 ] := "20050413"
+a[5 ] := "20100413"
+a[6 ] := "Eupen"
+a[7 ] := "54051402050"
+a[8 ] := "Mustermann"
+a[9 ] := "Maria Ingrid"
+a[10] := ""
+a[11] := "M"
+a[12] := "be"
+a[13] := "Eupen"
+a[14] := "19640514"
+a[15] := "F"
+a[16] := ""
+a[17] := 1
+a[18] := .f.
+a[19] := .f.
+a[20] := .f.
+a[21] := "Meyergasse 62"
+a[22] := ""
+a[23] := ""
+a[24] := "4700"
+a[25] := "Eupen"
+a[26] := "be"
+RETURN a
+
+FUNCTION GetEid(lTest)
+local a := EID_GET()
+* local a := EID_GET_TEST()
+RETURN a if a[EID_ERROR] != NIL
+a[EID_NATIONALITY] := eid2nat(a[EID_NATIONALITY])
+a[EID_COUNTRY] := eid2nat(a[EID_COUNTRY])
+RETURN a
+
+FUNCTION eid2nat(x)
+local cIdNat := NIL
+open area oNat()
+  go top
+  do while ! eof() .and. cIdNat == NIL
+    if upper(trim(NAT->IsoCode)) == upper(trim(x))
+      cIdNat := NAT->IdNat
+    endif
+    skip
+  enddo
+close area
+RETURN cIdNat
 
 #endif DEF_EID
 
