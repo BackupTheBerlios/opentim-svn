@@ -566,7 +566,12 @@ RETURN .f.
 * NISS : No. d'identification de securit'e sociale
 
 FUNCTION NissValidate(cNATREG)
-local xtest := substr(cnatreg,1,6)+substr(cnatreg,8,3)
+* local xtest := substr(cnatreg,1,6)+substr(cnatreg,8,3)
+local xtest := strtran(trim(cnatreg),"-","")
+local cCheck
+xtest := strtran(xtest,"=","")
+cCheck := right(xtest,2)
+xtest := left(xtest,9)
 if substr(cnatreg,7,1) == "="
   xtest := "2"+xtest
 endif
@@ -575,9 +580,15 @@ xtest := abs((xtest-97*(int(xtest/97)))-97)
 if xtest == 0
    xtest := 97
 endif
-if xtest<>int(val(substr(cnatreg,12,2)))
+if xtest<>int(val(cCheck))
+* if xtest<>int(val(substr(cnatreg,12,2)))
   RETURN !SetMsg("Fehlerhafte Nationalregisternummer")
 endif
 RETURN .t.
 
-
+* FUNCTION NissFormat(cNatReg,dGebDat)
+* x := strtran(x,"-","")
+* x := strtran(x,"=","")
+* x := left(x,6) + "-" + substr(x,7,3) ;
+*      + iif(year(dGebDat)<2000,"-","=") + substr(x,10,2)
+* RETURN x

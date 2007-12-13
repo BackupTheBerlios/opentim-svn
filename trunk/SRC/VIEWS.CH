@@ -81,7 +81,8 @@
 #define MSK_IDMSK    7
 #define MSK_VOFFSET  8
 #define MSK_VSIZE    9
-#define MSK_ALEN     9
+#define MSK_IMAGES   10 // {nTop, nLeft, nWidth, nHeight, xcFilename}
+#define MSK_ALEN     10
 
 #define COLATTR_S "S" // no settle after typeout
 #define COLATTR_R "R" // read-only

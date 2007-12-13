@@ -1177,23 +1177,23 @@ do while snRequest == DDEDIT_PAGE // .or. lOnce
     else
       Alarm()
     endif
-  elseif nKey == K_UP
-  * Wenn ich Pfeilnachoben drÅcke, will ich mehr von dem sehen, was
-  * oberhalb dem momentan sichtbaren Bereich steht, also wird der
-  * Bildschirm nach unten gescrollt.
-    if MskScroll(-1)
-      ScrPaint(msk)
-      ph_refresh()
-    else
-      Alarm()
-    endif
-  elseif nKey == K_DOWN
-    if MskScroll(1)
-      ScrPaint(msk)
-      ph_refresh()
-    else
-      Alarm()
-    endif
+  *elseif nKey == K_UP
+  ** Wenn ich Pfeilnachoben drÅcke, will ich mehr von dem sehen, was
+  ** oberhalb dem momentan sichtbaren Bereich steht, also wird der
+  ** Bildschirm nach unten gescrollt.
+  *  if MskScroll(-1)
+  *    ScrPaint(msk)
+  *    ph_refresh()
+  *  else
+  *    Alarm()
+  *  endif
+  *elseif nKey == K_DOWN
+  *  if MskScroll(1)
+  *    ScrPaint(msk)
+  *    ph_refresh()
+  *  else
+  *    Alarm()
+  *  endif
   elseif nKey != 0
     if ddDoCommand(nKey)
       slIsEof := eof().or.bof()

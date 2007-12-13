@@ -151,7 +151,7 @@ RETURN eval(a[1][VOL_URL],a[1],trim(a[2]))
 FUNCTION vol2loc(x)
 local a:= volsplit(x)
 RETURN x if a==NIL
-RETURN a[1][VOL_PATH] + strtran(a[2],"/","\")
+RETURN a[1][VOL_PATH] + strtran(trim(a[2]),"/","\")
 
 
 FUNCTION loc2vol(x)

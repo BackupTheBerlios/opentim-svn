@@ -94,6 +94,8 @@ static scWebBrowser := NIL
 
 static slFixY2K := .t.
 static sbParName := {|| trim1(PAR->Allo) + trim(PAR->Firme) }
+static sbParLogo := {|| "" }
+// iif(empty(PAR->NB2),"",AppPath()+"\photos\"+trim(PAR->NB2)+".jpg")
 static sbParCity := {||PlzString(PAR->Pays,PAR->CP)}
 static saDevDefault := { "BEF", "EUR" }
 // static sbDevToggle := {|| .f. }
@@ -4866,6 +4868,9 @@ RETURN eval(sbPerDevFixed,cPeriode,cIdDev)
 FUNCTION ParName(cIdPar)
 RETURN ParField(cIdPar, sbParName )
 
+FUNCTION ParLogo(cIdPar)
+RETURN ParField(cIdPar, sbParLogo )
+
 * FUNCTION BlkParName ; RETURN sbParName
 * FUNCTION BlkParCity ; RETURN sbParCity
 
@@ -5707,6 +5712,7 @@ AddIniCmd( { "LenIdDoc" , {|x| snLenIdDoc := val(x),.t. } } )
 AddIniCmd( { "LenIdCtr" , {|x| (snLenIdCtr := xparse(x))!=NIL } } )
 AddIniCmd( { "LenQte"   , {|x| snLenQte := val(x),.t. } } )
 AddIniCmd( { "ParName" , {|x| (sbParName := xparse(x)) != NIL } } )
+AddIniCmd( { "ParLogo" , {|x| (sbParLogo := cblock(x)) != NIL } } )
 AddIniCmd( { "ParCity" , {|x| (sbParCity := xparse(x)) != NIL } } )
 AddIniCmd( { "FixY2K"  , {|x| (slFixY2K := xparse(x)) != NIL } } )
 // AddIniCmd( { "DevToggle" , {|x| (sbDevToggle := xparse(x)) != NIL } } )

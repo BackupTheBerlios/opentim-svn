@@ -42,23 +42,34 @@ dispbegin()
     BoxRefresh( msk[MSK_BOXES][i] )
   next i
   for i := 1 to len( msk[MSK_STRINGS] )
-    if MskVisible(msk[MSK_STRINGS][i][AS_ROW])
+    *if MskVisible(msk[MSK_STRINGS][i][AS_ROW])
       *cText := msk[MSK_STRINGS][i][AS_TEXT]
       *if left(cText,1) == "="
       *  cText := xparse(substr(cText,2))
       *endif
       #ifdef DEF_VIDSTR
         ft_vidstr( ;
-          msk[MSK_STRINGS][i][AS_ROW] - msk[MSK_VOFFSET], ;
+          msk[MSK_STRINGS][i][AS_ROW], ;
           msk[MSK_STRINGS][i][AS_COL], ;
           xstr(msk[MSK_STRINGS][i][AS_TEXT]);
         )
       #else
-        @ msk[MSK_STRINGS][i][AS_ROW] - msk[MSK_VOFFSET], ;
+        @ msk[MSK_STRINGS][i][AS_ROW], ;
           msk[MSK_STRINGS][i][AS_COL]  ;
           say xstr(msk[MSK_STRINGS][i][AS_TEXT])
       #endif
-    endif
+      * #ifdef DEF_VIDSTR
+      *   ft_vidstr( ;
+      *     msk[MSK_STRINGS][i][AS_ROW] - msk[MSK_VOFFSET], ;
+      *     msk[MSK_STRINGS][i][AS_COL], ;
+      *     xstr(msk[MSK_STRINGS][i][AS_TEXT]);
+      *   )
+      * #else
+      *   @ msk[MSK_STRINGS][i][AS_ROW] - msk[MSK_VOFFSET], ;
+      *     msk[MSK_STRINGS][i][AS_COL]  ;
+      *     say xstr(msk[MSK_STRINGS][i][AS_TEXT])
+      * #endif
+    *endif
   next i
 dispend()
 RETURN NIL
@@ -86,29 +97,39 @@ dispbegin()
 dispend()
 if ad[AD_WAITBLOCK] != NIL
   for i := 1 to len(msk[MSK_WAITWINLIST])
-    if MskVisible(msk[MSK_WAITWINLIST][i][WIN_TOP])
-      if MskVisible(msk[MSK_WAITWINLIST][i][WIN_TOP]+msk[MSK_WAITWINLIST][i][WIN_HEIGHT])
-        eval(ad[AD_WAITBLOCK],WinMskOffset(msk[MSK_WAITWINLIST][i],msk))
-      endif
-    endif
+    * if MskVisible(msk[MSK_WAITWINLIST][i][WIN_TOP])
+    *   if MskVisible(msk[MSK_WAITWINLIST][i][WIN_TOP]+msk[MSK_WAITWINLIST][i][WIN_HEIGHT])
+        * eval(ad[AD_WAITBLOCK],WinMskOffset(msk[MSK_WAITWINLIST][i],msk))
+        eval(ad[AD_WAITBLOCK],msk[MSK_WAITWINLIST][i])
+    *   endif
+    * endif
   next i
 endif
+for i := 1 to len( msk[MSK_IMAGES] )
+  ShowImg(NIL,msk[MSK_IMAGES][i])
+next i
 RETURN NIL
 
-FUNCTION WinMskOffset(win,msk)
-local a := aclone(win)
-a[WIN_TOP] -= msk[MSK_VOFFSET]
-RETURN a
+* FUNCTION WinMskOffset(win,msk)
+* local a := aclone(win)
+* a[WIN_TOP] -= msk[MSK_VOFFSET]
+* RETURN a
 
 FUNCTION BoxRefresh( a )
-RETURN NIL if ! MskVisible(a[AB_TOP])
-RETURN NIL if ! MskVisible(a[AB_BOTTOM])
+* RETURN NIL if ! MskVisible(a[AB_TOP])
+* RETURN NIL if ! MskVisible(a[AB_BOTTOM])
 dispbox( ;
-  a[AB_TOP] - CurMsk(MSK_VOFFSET), ;
+  a[AB_TOP], ;
   a[AB_LEFT], ;
-  a[AB_BOTTOM] - CurMsk(MSK_VOFFSET), ;
+  a[AB_BOTTOM], ;
   a[AB_RIGHT] ;
 )
+*dispbox( ;
+*  a[AB_TOP] - CurMsk(MSK_VOFFSET), ;
+*  a[AB_LEFT], ;
+*  a[AB_BOTTOM] - CurMsk(MSK_VOFFSET), ;
+*  a[AB_RIGHT] ;
+*)
 RETURN NIL
 
 * FUNCTION ismemopic(c)
@@ -120,7 +141,7 @@ RETURN NIL
 FUNCTION FldRefresh( ad, mskget, lEdit, msk )
 local ag,fld
 local s
-RETURN NIL if ! MskVisible(mskget[MSKGET_ROW])
+* RETURN NIL if ! MskVisible(mskget[MSKGET_ROW])
 if mskget[MSKGET_FLDHANDLE] == 0
   s := &(mskget[MSKGET_BLOCK])
   if IsMemoPicture(mskget[MSKGET_PICTURE])
@@ -133,16 +154,22 @@ if mskget[MSKGET_FLDHANDLE] == 0
       scGrayColor  ;
     )
   else
-    @ mskget[MSKGET_ROW] - msk[MSK_VOFFSET], mskget[MSKGET_COL] ;
+    @ mskget[MSKGET_ROW], mskget[MSKGET_COL] ;
       say (s) ;
       color (scGrayColor)
+    * @ mskget[MSKGET_ROW] - msk[MSK_VOFFSET], mskget[MSKGET_COL] ;
+    *   say (s) ;
+    *   color (scGrayColor)
   endif
 else
   ag := ad[AD_FIELDS][mskget[MSKGET_FLDHANDLE]]
   RETURN NIL if FLDATTR_H $ ag[AG_ATTRIB]
-  fld := ag2get(ag, mskget[MSKGET_ROW] - msk[MSK_VOFFSET],;
+  fld := ag2get(ag, mskget[MSKGET_ROW],;
                     mskget[MSKGET_COL],;
                     mskget[MSKGET_PICTURE])
+  *fld := ag2get(ag, mskget[MSKGET_ROW] - msk[MSK_VOFFSET],;
+  *                  mskget[MSKGET_COL],;
+  *                  mskget[MSKGET_PICTURE])
   if lEdit
     if FldCanEdit(fld)
       fld:colorSpec := scEditColor
@@ -187,12 +214,16 @@ local i
 dispbegin()
   for i := 1 to len( msk[MSK_GETS] )
     if msk[MSK_GETS][i][MSKGET_FLDHANDLE] == 0
-      if MskVisible(msk[MSK_GETS][i][MSKGET_ROW])
-        @ msk[MSK_GETS][i][MSKGET_ROW] - msk[MSK_VOFFSET], ;
+      *if MskVisible(msk[MSK_GETS][i][MSKGET_ROW])
+        @ msk[MSK_GETS][i][MSKGET_ROW], ;
           msk[MSK_GETS][i][MSKGET_COL] ;
           say &(msk[MSK_GETS][i][MSKGET_BLOCK]) ;
           color (scGrayColor)
-      endif
+        *@ msk[MSK_GETS][i][MSKGET_ROW] - msk[MSK_VOFFSET], ;
+        *  msk[MSK_GETS][i][MSKGET_COL] ;
+        *  say &(msk[MSK_GETS][i][MSKGET_BLOCK]) ;
+        *  color (scGrayColor)
+      *endif
     endif
   next i
 dispend()

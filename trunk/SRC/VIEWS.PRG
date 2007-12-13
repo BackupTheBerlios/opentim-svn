@@ -189,6 +189,8 @@ do while (cLine := mreadline(fd)) != NIL
       lOkay := StrRead(ad,alltrim(substr(cLine,7)))
     elseif left(cLine,3) == "box"
       lOkay := BoxRead(ad,substr(cLine,4))
+    elseif left(cLine,5) == "image"
+      lOkay := ImgRead(ad,substr(cLine,6))
     elseif left(cLine,4) == "wait"
       lOkay := MskWaitRead(ad,substr(cLine,5))
     elseif left(cLine,5) == "vsize"
@@ -281,6 +283,16 @@ RETURN .f. if len(aBox) != 4
 aadd( saCurMsk[MSK_BOXES], { ;
                                 val(aBox[1]), val(aBox[2]), ;
                                 val(aBox[3]), val(aBox[4]) ;
+                              } )
+RETURN .t.
+
+static FUNCTION ImgRead(ad,cLine)
+local aBox := ListAsArray(alltrim(cLine)," ")
+RETURN .f. if len(aBox) != 5
+aadd( saCurMsk[MSK_IMAGES], { ;
+                                val(aBox[1]), val(aBox[2]), ;
+                                val(aBox[3]), val(aBox[4]), ;
+                                aBox[5] ;
                               } )
 RETURN .t.
 
@@ -822,6 +834,17 @@ for i := 1 to len( a )
   )
 next i
 fwrite( fd, CR_LF )
+a := saCurMsk[MSK_IMAGES]
+for i := 1 to len( a )
+  fwrite( fd, "image " ;
+    + ntrim(a[i][1]) + " " ;
+    + ntrim(a[i][2]) + " " ;
+    + ntrim(a[i][3]) + " " ;
+    + ntrim(a[i][4]) + " " ;
+    + a[i][5] + CR_LF ;
+  )
+next i
+fwrite( fd, CR_LF )
 a := saCurMsk[MSK_STRINGS]
 for i := 1 to len( a )
   fwrite( fd, "string " ;
@@ -1158,9 +1181,10 @@ FUNCTION MskNew(cIdMsk)
 local a := array(MSK_ALEN)
 a[MSK_IDMSK]   := cIdMsk
 a[MSK_BOXES]   := {}
+a[MSK_IMAGES]   := {}
 a[MSK_STRINGS] := {}
 a[MSK_GETS]    := {}
-a[MSK_VOFFSET] := 0
+a[MSK_VOFFSET] := 0 // no longer used 20071212
 a[MSK_VSIZE]   := 0
 a[MSK_WAITWINLIST] := {}
 if len(saMskStack) > LEN_MSKSTACK
@@ -1196,16 +1220,16 @@ saQryStack := {}
 saMskStack := {}
 RETURN NIL
 
-FUNCTION MskVisible(nRow)
-nRow -= saCurMsk[MSK_VOFFSET]
-RETURN .f. if nRow < 1 .or. nRow > (maxrow()-2)
-RETURN .t.
+* FUNCTION MskVisible(nRow)
+* nRow -= saCurMsk[MSK_VOFFSET]
+* RETURN .f. if nRow < 1 .or. nRow > (maxrow()-2)
+* RETURN .t.
 
-FUNCTION MskScroll(nScroll)
-* a negative number scrolls down
-RETURN .f. if saCurMsk[MSK_VOFFSET] + nScroll < 0
-RETURN .f. if saCurMsk[MSK_VOFFSET] + nScroll > saCurMsk[MSK_VSIZE]
-saCurMsk[MSK_VOFFSET] += nScroll
-* scroll(1,0,22,79,nScroll)
-scroll(1,0,maxrow()-2,maxcol(),nScroll)
-RETURN .t.
+*FUNCTION MskScroll(nScroll)
+** a negative number scrolls down
+*RETURN .f. if saCurMsk[MSK_VOFFSET] + nScroll < 0
+*RETURN .f. if saCurMsk[MSK_VOFFSET] + nScroll > saCurMsk[MSK_VSIZE]
+*saCurMsk[MSK_VOFFSET] += nScroll
+** scroll(1,0,22,79,nScroll)
+*scroll(1,0,maxrow()-2,maxcol(),nScroll)
+*RETURN .t.

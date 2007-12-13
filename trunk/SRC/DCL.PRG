@@ -480,15 +480,40 @@ elseif wwin[WIN_WAITKEY] == 24    // wie ParMbrEdit()
 endif
 RETURN NIL
 
-FUNCTION ParOnPxs(xlEval,uReturn)
-open area oPxs(), oPar()
-  seek PAR->IdPar in PXS
-  if ! eof()
-    uReturn := xparse(xlEval)
-  endif
-close area
+/**
+  switches to PXT (if necessary) and execute xlEval
+**/
+FUNCTION ParOnPxt(xlEval,uReturn)
+local b := ParPxtTable()
+if alias() == b[AD_NAME]
+  uReturn := xparse(xlEval)
+else
+  open area b, oPar()
+    seek PAR->IdPar
+    if ! eof()
+      uReturn := xparse(xlEval)
+    endif
+  close area
+endif
 RETURN uReturn
 
+/**
+  switches to PAR (if necessary) and execute xlEval
+**/
+FUNCTION PxtOnPar(xlEval,uReturn)
+local b := ParPxtTable()
+local cIdPar := FIELD->IdPar
+if alias() == "PAR"
+  uReturn := xparse(xlEval)
+else
+  open area oPar(), b
+    seek cIdPar
+    if ! eof()
+      uReturn := xparse(xlEval)
+    endif
+  close area
+endif
+RETURN uReturn
 
 #else
 

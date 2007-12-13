@@ -61,6 +61,9 @@ if nFullBottom != NIL ; snFullBottom := nFullBottom ; endif
 if nFullDelta != NIL ; snFullDelta:= nFullDelta ; endif
 RETURN .t.
 
+FUNCTION GetWinFont()
+RETURN soFont
+
 
 FUNCTION SelectFont()
 local oFont
@@ -254,6 +257,22 @@ PROCEDURE AppSys()
 
 RETURN
 
+FUNCTION hw2size(nHeight,nWidth)
+RETURN { nWidth * soFont:width, nHeight * soFont:height }
+
+FUNCTION tl2pos(nTop,nLeft)
+local aSizeDesktop := AppDesktop():currentSize()
+local a
+* LogConsole("tl2pos("+utos(nTop)+","+utos(nLeft)+")")
+default nTop to maxrow() / 5
+default nLeft to maxcol() / 5
+a := { nLeft * soFont:width, ;
+  aSizeDesktop[2] - nTop * soFont:height }
+* LogConsole("tl2pos("+utos(nTop)+","+utos(nLeft)+") -> "+utos(a))
+RETURN a
+
+
+
 
 #ifdef DEF_GUI
 
@@ -282,21 +301,6 @@ oDlg:create()
 oDlg:showModal()
 Warning("open window: "+cTitle)
 RETURN .t.
-
-FUNCTION hw2size(nHeight,nWidth)
-RETURN { nWidth * soFont:width, nHeight * soFont:height }
-
-FUNCTION tl2pos(nTop,nLeft)
-local aSizeDesktop := AppDesktop():currentSize()
-local a
-LogConsole("tl2pos("+utos(nTop)+","+utos(nLeft)+")")
-default nTop to maxrow() / 5
-default nLeft to maxcol() / 5
-a := { nLeft * soFont:width, ;
-  aSizeDesktop[2] - nTop * soFont:height }
-LogConsole("tl2pos("+utos(nTop)+","+utos(nLeft)+") -> "+utos(a))
-RETURN a
-
 
 FUNCTION maxrow ; RETURN snRows
 FUNCTION maxcol ; RETURN snCols

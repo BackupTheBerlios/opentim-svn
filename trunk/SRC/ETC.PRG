@@ -112,6 +112,9 @@ local a := EID_GET()
 RETURN a if a[EID_ERROR] != NIL
 a[EID_NATIONALITY] := eid2nat(a[EID_NATIONALITY])
 a[EID_COUNTRY] := eid2nat(a[EID_COUNTRY])
+a[EID_BIRTHDATE] := stod(a[EID_BIRTHDATE])
+a[EID_VALIDITY_BEGIN] := stod(a[EID_VALIDITY_BEGIN])
+a[EID_VALIDITY_END] := stod(a[EID_VALIDITY_END])
 RETURN a
 
 FUNCTION eid2nat(x)
@@ -2604,5 +2607,7 @@ RETURN nQte
 *  {|v|"Total Monat "+ntrim(v)+":"})
 *r_forloop(dDate1,dDate2,1,NIL,{|n,v|srvline(v)})
 **r_close()
+
+
 
 
