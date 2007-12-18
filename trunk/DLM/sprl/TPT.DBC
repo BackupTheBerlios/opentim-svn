@@ -11,6 +11,7 @@ GEN|STD|Druckmasken fr Generalkonten
 FIN|STD|Druckmasken fr Finanzdokumente
 MSG|STD|Druckmasken fr Korrespondenz
 TRM|STD|Druckmasken fr Termine
+PRJ|STD|Druckmasken fr Projekte
 LIC|STD|Licenses         
 LST|LST|Allgemeine Listen
 INC|INI|Textblocks fr {etc include}

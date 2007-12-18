@@ -43,6 +43,9 @@ static sbOnDecExceed := {|cMont,nMaxDec| ;
 
 #ifdef DEF_EID
 
+// uncomment the following line to simulate a card reader:
+// #define SIMULATE_CARD_READER
+
 #define EID_ERROR      1
 #define EID_CARDNUMBER 2
 #define EID_CHIPNUMBER 3
@@ -76,6 +79,8 @@ static sbOnDecExceed := {|cMont,nMaxDec| ;
 
 * request EID_GET
 
+#ifdef SIMULATE_CARD_READER
+
 FUNCTION EID_GET_TEST
 local a := array(EID_ALEN)
 a[1 ] := NIL
@@ -106,24 +111,64 @@ a[25] := "Eupen"
 a[26] := "be"
 RETURN a
 
+#endif SIMULATE_CARD_READER
+
 FUNCTION GetEid(lTest)
-local a := EID_GET()
-* local a := EID_GET_TEST()
+#ifdef SIMULATE_CARD_READER
+  local a := EID_GET_TEST()
+#else
+  local a := EID_GET()
+#endif
+// Confirm("foo "+utos(a[EID_ERROR]))
 RETURN a if a[EID_ERROR] != NIL
 a[EID_NATIONALITY] := eid2nat(a[EID_NATIONALITY])
 a[EID_COUNTRY] := eid2nat(a[EID_COUNTRY])
 a[EID_BIRTHDATE] := stod(a[EID_BIRTHDATE])
 a[EID_VALIDITY_BEGIN] := stod(a[EID_VALIDITY_BEGIN])
 a[EID_VALIDITY_END] := stod(a[EID_VALIDITY_END])
+if a[EID_GENDER] == "F"
+  a[EID_GENDER] := "W"
+endif
+if year(a[EID_BIRTHDATE]) < 1800
+  raise("Geboren im 18. Jahrhundert!?")
+elseif year(a[EID_BIRTHDATE]) < 1900
+  a[EID_NATIONAL_NUMBER] := left(a[EID_NATIONAL_NUMBER],6);
+    + "*" + substr(a[EID_NATIONAL_NUMBER],7)
+elseif year(a[EID_BIRTHDATE]) < 2000
+  a[EID_NATIONAL_NUMBER] := left(a[EID_NATIONAL_NUMBER],6);
+    + " " + substr(a[EID_NATIONAL_NUMBER],7)
+elseif year(a[EID_BIRTHDATE]) < 2100
+  a[EID_NATIONAL_NUMBER] := left(a[EID_NATIONAL_NUMBER],6);
+    + "=" + substr(a[EID_NATIONAL_NUMBER],7)
+else
+  raise("Geboren im 22. Jahrhundert!?")
+endif
+a[EID_NATIONAL_NUMBER] := left(a[EID_NATIONAL_NUMBER],10);
+    + "-" + substr(a[EID_NATIONAL_NUMBER],11)
+a[EID_NAME] := utf2dos(a[EID_NAME])
+a[EID_FIRSTNAME1] := utf2dos(a[EID_FIRSTNAME1])
+a[EID_FIRSTNAME2] := utf2dos(a[EID_FIRSTNAME2])
+a[EID_FIRSTNAME3] := utf2dos(a[EID_FIRSTNAME3])
+a[EID_BIRTHPLACE] := utf2dos(a[EID_BIRTHPLACE])
+a[EID_NOBLE_CONDITION] := utf2dos(a[EID_NOBLE_CONDITION])
+a[EID_DELIVERY_MUNICIPALTIY] := utf2dos(a[EID_DELIVERY_MUNICIPALTIY])
+a[EID_MUNICIPALTIY] := utf2dos(a[EID_MUNICIPALTIY])
+a[EID_STREET] := utf2dos(a[EID_STREET])
+if empty(a[EID_NUMBER]) .and. empty(a[EID_BOX])
+  a[EID_NUMBER] := alltrim(Str2RueNum(a[EID_STREET]))
+  a[EID_BOX]    := alltrim(Str2RueBte(a[EID_STREET]))
+  a[EID_STREET] := alltrim(Str2Rue(a[EID_STREET]))
+endif
 RETURN a
 
 FUNCTION eid2nat(x)
-local cIdNat := NIL
+local cIdNat := x
 open area oNat()
   go top
-  do while ! eof() .and. cIdNat == NIL
+  do while ! eof()
     if upper(trim(NAT->IsoCode)) == upper(trim(x))
       cIdNat := NAT->IdNat
+      exit
     endif
     skip
   enddo
@@ -2063,12 +2108,10 @@ FUNCTION latin2utf8(cStr)
   0     0000 0000 -> 0000 0000               chr(0)
   ...  pure ASCII (no conversion)
   127   0111 1111 -> 0111 1111               chr(127)
-
   128   1000 0000 -> 110 00010 + 10 000000   chr(194)+chr(128)
   129   1000 0001 -> 110 00010 + 10 000001   chr(194)+chr(129)
   ...
   191   1011 1111 -> 110 00010 + 10 111111   chr(194)+chr(191)
-
   192   1100 0000 -> 110 00011 + 10 000000   chr(195)+chr(128)
   193   1100 0001 -> 110 00011 + 10 000001   chr(195)+chr(129)
   ...
@@ -2077,7 +2120,6 @@ FUNCTION latin2utf8(cStr)
 local i
 local result := ""
 local n
-* cStr := dos2latin1(cStr)
 for i := 1 to len(cStr)
   n := asc(substr(cStr,i,1))
   if n <= 127
@@ -2089,6 +2131,32 @@ for i := 1 to len(cStr)
   endif
 next i
 RETURN result
+
+FUNCTION utf2latin(cStr)
+local i := 1
+local result := ""
+local n
+do while i <= len(cStr)
+  n := asc(substr(cStr,i,1))
+  if n <= 127
+    result += chr(n)
+  elseif n == 194
+    i += 1
+    n := asc(substr(cStr,i,1))
+    result += chr(n)
+  elseif n == 195
+    i += 1
+    n := asc(substr(cStr,i,1))
+    result += chr(n+64)
+  else
+    result += "?"
+  endif
+  i += 1
+enddo
+RETURN result
+
+FUNCTION utf2dos(x)
+RETURN latin2dos(utf2latin(x))
 
 
 FUNCTION dos2xml(c)
@@ -2609,5 +2677,69 @@ RETURN nQte
 **r_close()
 
 
+#define ROW_LABEL 1
+#define ROW_FIELD 2
+#define ROW_VALUE 3
 
-
+** http://tim.saffre-rumma.ee/src/23.html
+FUNCTION TagUpdate(aData,cTitle,lDlg)
+// { label, datafield, suggested new value }
+* local cHeader := ""
+local i
+local aIndexes := {}
+local aTagged := {}
+* local nLabelWidth := 5
+* local nValueWidth
+local aActions := {}
+local aChanges := {}
+local lMatch
+local cChangeTxt
+local uOldValue
+local nUpdates := 0
+default lDlg to .t.
+*default aHeaders to { "Datenfeld", ;
+*                      "Alter Wert", ;
+*                      "ersetzen durch:" }
+for i := 1 to len(aData)
+  cChangeTxt := NIL
+  uOldValue := &(aData[i][ROW_FIELD])
+  if valtype(uOldValue) $ "DLN"
+    lMatch := uOldValue == aData[i][ROW_VALUE]
+  else
+    uOldValue := trim(uOldValue)
+    if aData[i][ROW_VALUE] == NIL
+      lMatch := .t.
+    else
+      lMatch := uOldValue == trim(aData[i][ROW_VALUE])
+    endif
+  endif
+  if ! lMatch
+    cChangeTxt := aData[i][ROW_LABEL] + " " + utos(uOldValue) ;
+                  + " -> "+utos(aData[i][ROW_VALUE])
+    aadd(aTagged, .t.)
+    aadd(aIndexes,i)
+    aadd(aChanges,cChangeTxt)
+    nUpdates += 1
+  endif
+  * nLabelWidth := max(nLabelWidth,len(aData[i][ROW_LABEL]))
+next i
+RETURN !SetMsg("Nichts zu aktualisieren.") if nUpdates == 0
+if lDlg
+  aadd(aActions, { K_SPACE , {|row,i| ;
+    aTagged[i] := ! aTagged[i], ;
+    K_DOWN ;
+  } } )
+  browse array aIndexes using {|row,i| ;
+      iif(aTagged[i],BUTTON_ON,BUTTON_OFF);
+      +" "+padr(aChanges[i],maxcol()-6);
+    } ;
+    title (cTitle) ;
+    actions aActions
+  RETURN .f. if LastChoice() == 0
+endif
+for i := 1 to len(aTagged)
+  if aTagged[i]
+    &(aData[aIndexes[i]][ROW_FIELD]) := aData[aIndexes[i]][ROW_VALUE]
+  endif
+next i
+RETURN .t.

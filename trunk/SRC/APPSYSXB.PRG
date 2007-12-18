@@ -40,7 +40,7 @@ static scFontName := "System VIO"
 static scFontName := "Lucida Console" // no box characters ?
 // "Courier New"
 #endif
-static slFullscreen := .f.
+static slFullScreen := .f.
 static saPos
 static soFullFont := NIL
 static soFont
@@ -62,6 +62,7 @@ if nFullDelta != NIL ; snFullDelta:= nFullDelta ; endif
 RETURN .t.
 
 FUNCTION GetWinFont()
+RETURN soFullFont if slFullScreen
 RETURN soFont
 
 

@@ -485,6 +485,7 @@ RETURN NIL
 **/
 FUNCTION ParOnPxt(xlEval,uReturn)
 local b := ParPxtTable()
+RETURN uReturn if b == NIL
 if alias() == b[AD_NAME]
   uReturn := xparse(xlEval)
 else
@@ -501,12 +502,11 @@ RETURN uReturn
   switches to PAR (if necessary) and execute xlEval
 **/
 FUNCTION PxtOnPar(xlEval,uReturn)
-local b := ParPxtTable()
 local cIdPar := FIELD->IdPar
 if alias() == "PAR"
   uReturn := xparse(xlEval)
 else
-  open area oPar(), b
+  open area oPar(), GetTable(alias())
     seek cIdPar
     if ! eof()
       uReturn := xparse(xlEval)

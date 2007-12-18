@@ -22,7 +22,7 @@
 
 static snItem  := 1
 static saItems := NIL
-static sbBlock := NIL
+* static sbBlock := NIL
 static snLastChoice := 0
 // static slUpdated := .f.
 static snLastKey := 0
@@ -47,7 +47,7 @@ FUNCTION aBrowse( aItems, bBlock, nItem , lArrange, ;
 #else
   local nSaveItem := snItem
   local aOldItems := saItems
-  local bOldBlock := sbBlock
+  * local bOldBlock := sbBlock
   local nCursor
   local column
   local b
@@ -81,7 +81,7 @@ default lWrap to .f.
 default lArrange to .T.
 default nFrame to DBLFRAME
 snItem  := nItem
-sbBlock := bBlock
+* sbBlock := bBlock
 if win == NIL
   if nHeight < 10 .and. bCreate != NIL
     nHeight := 10
@@ -98,7 +98,7 @@ if win == NIL
     nWidth  := len(cTitle) // eval( bBlock, saItems[1] ) )
     for i := 1 to len(saItems)
       * if len( eval( bBlock, saItems[i] ) ) > nWidth
-      nWidth := max( nWidth, len( eval( bBlock, saItems[i] ) ) )
+      nWidth := max( nWidth, len( eval( bBlock, saItems[i], i ) ) )
       * endif
     next i
     nWidth := min(nWidth,maxcol()-4)
@@ -120,7 +120,7 @@ endif
     oDlg:drawingArea:currentSize())
   oListBox:markMode := XBPLISTBOX_MM_SINGLE
   for i := 1 to len(aItems)
-    oListBox:addItem( eval(bBlock,aItems[i]) )
+    oListBox:addItem( eval(bBlock,aItems[i],i) )
     // LogConsole(eval(bBlock,aItems[i]))
   next i
   oListBox:ItemSelected := {|uNIL1, uNIL2, self| ;
@@ -148,7 +148,7 @@ endif
             if( ;
               snItem > len(saItems), ;
               space(nWidth), ;
-              padr( eval(sbBlock, saItems[snItem]), nWidth ) ;
+              padr( eval(bBlock,saItems[snItem],snItem), nWidth ) ;
             ) } ;
   )
   b:addColumn(column)
@@ -228,9 +228,9 @@ endif
       for i := 1 to len(aActions)
         if aActions[i][1] == nKey
           if snItem > len(saItems)
-            nKey := eval(aActions[i][2],NIL)
+            nKey := eval(aActions[i][2],NIL,snItem)
           else
-            nKey := eval(aActions[i][2],saItems[snItem])
+            nKey := eval(aActions[i][2],saItems[snItem],snItem)
           endif
           b:refreshCurrent()
           exit
@@ -287,7 +287,7 @@ endif
         endif
       else
         if bEnter != NIL
-          eval(bEnter,saItems[snItem])
+          eval(bEnter,saItems[snItem],snItem)
           b:refreshCurrent()
         else
           exit
@@ -297,7 +297,7 @@ endif
       #ifdef __XPP__
         b:forceStable()
       #endif
-      eval(bSpace,saItems[snItem])
+      eval(bSpace,saItems[snItem],snItem)
       #ifdef __XPP__
         b:refreshAll()
         b:forceStable()
@@ -371,7 +371,7 @@ endif
           SetMsg("Positionieren : " + scPosit)
           if bPosit == NIL
             for i := 1 to len(saItems)
-              if upper(left(eval(bBlock,saItems[i]),len(scPosit))) == scPosit
+              if upper(left(eval(bBlock,saItems[i],i),len(scPosit))) == scPosit
                 exit
               endif
             next i
@@ -392,7 +392,7 @@ endif
           if upper(chr(nKey)) == aHot[i]
             snItem   := i
             if bSpace != NIL
-              eval(bSpace,saItems[snItem])
+              eval(bSpace,saItems[snItem],snItem)
             endif
             SetRowPos(b,i)
             exit
@@ -412,7 +412,7 @@ endif
   snLastKey := nKey
   snItem  := nSaveItem
   saItems := aOldItems
-  sbBlock := bOldBlock
+  * sbBlock := bOldBlock
   setcursor(nCursor)
   RETURN snItem
 

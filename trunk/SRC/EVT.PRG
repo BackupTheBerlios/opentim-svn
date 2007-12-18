@@ -386,6 +386,30 @@ if ddRecLock()
 endif
 RETURN uReturn
 
+** http://tim.saffre-rumma.ee/src/22.html
+FUNCTION TryRecLockM(aAliases,bTry)
+local uReturn := .f.
+local aLocked := {}
+local i
+local lOkay := .t.
+for i := 1 to len(aAliases)
+  select (aAliases[i])
+  if ddRecLock()
+    aadd(aLocked,alias())
+  else
+    lOkay := .f.
+    exit
+  endif
+next i
+if lOkay
+  uReturn := eval(bTry)
+endif
+for i := 1 to len(aLocked)
+  select (aLocked[i])
+  unlock record
+next i
+RETURN uReturn
+
 
 #ifdef DEF_JNL // die sind nÑmlich auch fÅr DEF_MVI nîtig
 

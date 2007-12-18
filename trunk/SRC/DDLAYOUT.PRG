@@ -495,10 +495,10 @@ RETURN NIL
 FUNCTION ImgMove(ad,a)
 local cScr
 do while .t.
-  cScr := savescreen( a[1], a[2], a[3], a[4] )
+  cScr := savescreen( a[1], a[2], a[1]+a[3], a[2]+a[4] )
   ShowImg( ad, a, scItemColor )
   nKey := WaitKeySet()
-  restscreen( a[1], a[2], a[3], a[4] , cScr )
+  restscreen( a[1], a[2], a[1]+a[3], a[2]+a[4] , cScr )
   if nKey == K_DOWN
     a[1] ++
   elseif nKey == K_UP
