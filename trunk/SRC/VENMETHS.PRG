@@ -1188,7 +1188,8 @@ FUNCTION MsgArcPeriode() ; RETURN "Dokument ignorieren weil archiviert"
 
 **
 **
-FUNCTION VenPreClose(jnl,ifc,aMvt,aMvs,aCts,aQts,aVna,aHsi,aVnl,aMva,aAfter)
+STATIC FUNCTION VenPreClose(jnl,ifc,aMvt,aMvs,aCts,aQts,;
+                            aVna,aHsi,aVnl,aMva,aAfter)
 local x
 local lOkay := .f.
 #ifdef DEF_INT

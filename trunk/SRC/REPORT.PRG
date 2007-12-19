@@ -199,6 +199,7 @@ if (rpt := RptLoad(cIdRep)) == NIL
   rpt := rptSave
   RETURN .f.
 endif
+// Confirm(utos(rpt[RPT_AREA]))
 lOkay := _Report(cTitle==NIL)
 rpt := rptSave
 RETURN lOkay
