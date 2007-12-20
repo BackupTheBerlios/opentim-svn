@@ -129,10 +129,8 @@ static snClnCurrent := 0
 
  
 FUNCTION RepPrint(cIdRep,cIdDlg,cTitle,cTplIni,cPreview)
-local cOutFile := "TMP.CSV"
 local rptSave := rpt
 local lOkay := .t.
-local fd
 if cTitle != NIL
   SetDlgTitle(cTitle)
 endif
@@ -150,23 +148,13 @@ if (rpt := RptLoad(cIdRep)) == NIL
   rpt := rptSave
   RETURN .f.
 endif
-if rpt[RPT_TOCSV]
-  if (fd := fcreate(cOutFile)) == -1
-    RETURN !SetMsg(cOutFile+MsgDosError(doserror()))
-  endif
-  rpt[RPT_PRINTLINE] := {|cLine|fwrite(fd,dos2latin1(cLine)+CR_LF),.t.}
-else
+if ! rpt[RPT_TOCSV]
   RETURN .f. if ! OpenPrinter(SetTplIni(),SetPreview(),;
     NIL,NIL,NIL,NIL,NIL,NIL,SetAsPdf(),SetAsMail())
 endif
 // rpt[RPT_TOCSV] := (getvar("ToCSV")==BUTTON_ON)
 lOkay := _Report(cTitle==NIL)
-if rpt[RPT_TOCSV]
-  fclose(fd)
-  if lOkay
-    AppShell("excel.bat " + cOutFile)
-  endif
-else
+if !rpt[RPT_TOCSV]
   PrnFlush()
   close printer
   if LstError() != PRN_DONE
@@ -186,7 +174,7 @@ endif
 rpt := rptSave
 RETURN lOkay
 
-FUNCTION RepExec(cIdRep,cIdDlg,cTitle)
+FUNCTION RepExec(cIdRep,cIdDlg,cTitle,lToCSV)
 local rptSave := rpt
 local lOkay
 if cIdDlg != NIL
@@ -195,7 +183,7 @@ if cIdDlg != NIL
   endif
   RETURN .f. if ! DlgExec(cIdDlg)
 endif
-if (rpt := RptLoad(cIdRep)) == NIL
+if (rpt := RptLoad(cIdRep,lToCSV)) == NIL
   rpt := rptSave
   RETURN .f.
 endif
@@ -220,6 +208,8 @@ RETURN .t.
 **
 **
 STATIC FUNCTION _Report(lEmbedded,nLIndent)
+local cOutFile := "TMP.CSV"
+local fd
 local nForValue
 local i
 local j
@@ -228,7 +218,16 @@ local nRecNo2
 local lOkay
 local lStop
 local nOldLMargin := p_setlmargin()
+if rpt[RPT_TOCSV]
+  if (fd := fcreate(cOutFile)) == -1
+    RETURN !SetMsg(cOutFile+MsgDosError(doserror()))
+  endif
+  rpt[RPT_PRINTLINE] := {|cLine|fwrite(fd,dos2latin1(cLine)+CR_LF),.t.}
+endif
 if ! DoEvents(rpt[RPT_BEFORE])
+  if fd != -1
+    fclose(fd)
+  endif
   RETURN .f.
 endif
 // compute column widths :
@@ -481,6 +480,12 @@ endif
 if nLIndent != NIL
   p_setlmargin(nOldLMargin)
 endif
+if rpt[RPT_TOCSV]
+  fclose(fd)
+  if lOkay
+    AppShell("excel.bat " + cOutFile)
+  endif
+endif
 RETURN lOkay
 
 
@@ -546,11 +551,10 @@ RETURN xeval(rpt[RPT_POSTTTL])
 
 
 
-STATIC FUNCTION RptLoad(cIdRpt) // cFileName)
+STATIC FUNCTION RptLoad(cIdRpt,lToCSV) // cFileName)
 local a := {}
 local j
 * local ttl
-DlgDefault("ToCSV",BUTTON_OFF)
 rpt := array(RPT_ALEN)
 rpt[RPT_ORDER]   := 1
 rpt[RPT_TOTALS]  := {}
@@ -564,7 +568,12 @@ rpt[RPT_AFTER]   := {}
 rpt[RPT_RECNOS]  := NIL
 rpt[RPT_FORLOOP]  := NIL
 rpt[RPT_PRINTLINE]   := {|cLine|PrintLine(cLine)}
-rpt[RPT_TOCSV]   := getvar("ToCSV") == BUTTON_ON
+if lToCSV != NIL
+  rpt[RPT_TOCSV]   := lToCSV
+else
+  DlgDefault("ToCSV",BUTTON_OFF)
+  rpt[RPT_TOCSV]   := getvar("ToCSV") == BUTTON_ON
+endif
 rpt[RPT_WHILE]   := {||.t.}
 rpt[RPT_DETAIL]  := {||.t.}
 rpt[RPT_START]   := ""
@@ -609,7 +618,7 @@ aadd(a, { "index",      {|x| NdxFetch(x) } } )
 aadd(a, { "before",     {|x| AddIfNotNil(rpt[RPT_BEFORE],cblock(x)) } } )
 aadd(a, { "after",      {|x| AddIfNotNil(rpt[RPT_AFTER],cblock(x)) } } )
 aadd(a, { "PrintLine",  {|x| (rpt[RPT_PRINTLINE]  := xparse(x)) != NIL } })
-// aadd(a, { "ToCSV",      {|x| (rpt[RPT_TOCSV]  := xparse(x)) != NIL } })
+aadd(a, { "ToCSV",      {|x| (rpt[RPT_TOCSV]  := xparse(x)) != NIL } })
 RETURN NIL if ! IniLoad(a,cIdRpt+".REP")
 RETURN rpt
 
@@ -654,8 +663,6 @@ RETURN .t.
 FUNCTION ClnFetch(x)
 local a := {}
 local cln := array(CLN_ALEN)
-local i
-local c
 * cln[CLN_XSUM] := {|x|ntomf(x)}
 cln[CLN_WHEN] := {||.t.}
 aadd(a, { "header", {|x| (cln[CLN_HEADER] := ListAsArray( ;
@@ -682,6 +689,39 @@ aadd(a, { "decpos",   {|x| (cln[CLN_DECPOS]   := xparse(x)) != NIL } })
 * aadd(a, { "group",  {|x| (cln[CLN_GROUP]  := xparse(x)) != NIL } })
 * aadd(a, { "align",  {|x| (cln[CLN_ALIGN]  := xparse(x)) != NIL } })
 RETURN .f. if ! IniParse(a,x)
+RETURN _addcol(cln)
+
+FUNCTION RptAddColumn(acHeader,nWidth,bWhen,bValue,bText,bxSum,;
+                      cType,nDecPos)
+local cln := array(CLN_ALEN)
+cln[CLN_HEADER] := acHeader
+* cln[CLN_WIDTH] := nWidth
+cln[CLN_WIDTH] := utos(nWidth)
+cln[CLN_WHEN] := bWhen
+cln[CLN_VALUE] := bValue
+cln[CLN_TEXT] := bText
+cln[CLN_XSUM] := bxSum
+cln[CLN_TYPE] := cType
+cln[CLN_DECPOS] := nDecPos
+**// default cln[CLN_DECPOS] to DevDecPos()
+** if rpt[RPT_TOCSV]
+**   if cln[CLN_TYPE] == NIL
+**     default cln[CLN_TEXT] to {|x|ntom(x)}
+**   else
+**     default cln[CLN_TEXT] to {|x|val2csv(cType,x)}
+**   endif
+** elseif cln[CLN_VALUE] != NIL
+**   default cln[CLN_TEXT] to {|x|ntomf(x)}
+**   default cln[CLN_WIDTH] to "LenMntF()"
+**   * default cln[CLN_WIDTH] to LenMntF()
+** endif
+** default cln[CLN_XSUM] to cln[CLN_TEXT]
+** // default cln[CLN_XSUM] to {|x|ntomf(x)}
+** default cln[CLN_WHEN] to {||.t.}
+RETURN _addcol(cln)
+
+STATIC FUNCTION _addcol(cln)
+local c
 if cln[CLN_TYPE] == NIL
   if cln[CLN_VALUE] == NIL
     cln[CLN_TYPE] := GTYPE_CHAR
@@ -717,37 +757,9 @@ default cln[CLN_XSUM] to {|x|ntomf(x)}
 aadd(rpt[RPT_COLUMNS], cln)
 RETURN .t.
 
-FUNCTION RptAddColumn(acHeader,nWidth,bWhen,bValue,bText,bxSum,;
-                      cType,nDecPos)
-local cln := array(CLN_ALEN)
-cln[CLN_HEADER] := acHeader
-* cln[CLN_WIDTH] := nWidth
-cln[CLN_WIDTH] := utos(nWidth)
-cln[CLN_WHEN] := bWhen
-cln[CLN_VALUE] := bValue
-cln[CLN_TEXT] := bText
-cln[CLN_XSUM] := bxSum
-cln[CLN_TYPE] := cType
-cln[CLN_DECPOS] := nDecPos
-// default cln[CLN_DECPOS] to DevDecPos()
-if rpt[RPT_TOCSV]
-  * default cln[CLN_TEXT] to {|x|val2csv(cType,x)}
-  default cln[CLN_TEXT] to {|x|ntom(x)}
-elseif cln[CLN_VALUE] != NIL
-  default cln[CLN_TEXT] to {|x|ntomf(x)}
-  default cln[CLN_WIDTH] to "LenMntF()"
-  * default cln[CLN_WIDTH] to LenMntF()
-endif
-default cln[CLN_XSUM] to cln[CLN_TEXT]
-// default cln[CLN_XSUM] to {|x|ntomf(x)}
-default cln[CLN_WHEN] to {||.t.}
-aadd(rpt[RPT_COLUMNS], cln)
-RETURN .t.
-
 FUNCTION TtlFetch(x)
 local a := {}
 local ttl := array(TTL_ALEN)
-local i
 ttl[TTL_TEXT]  := {|x|" ("+ltrim(str(x))+" records)"}
 ttl[TTL_WHEN]  := {||.t.}
 ttl[TTL_FOR]   := {||.t.}
