@@ -664,7 +664,6 @@ FUNCTION ClnFetch(x)
 local a := {}
 local cln := array(CLN_ALEN)
 * cln[CLN_XSUM] := {|x|ntomf(x)}
-cln[CLN_WHEN] := {||.t.}
 aadd(a, { "header", {|x| (cln[CLN_HEADER] := ListAsArray( ;
   xparse(x),";" ;
 )) != NIL } })
@@ -722,6 +721,7 @@ RETURN _addcol(cln)
 
 STATIC FUNCTION _addcol(cln)
 local c
+default cln[CLN_WHEN] to {||.t.}
 if cln[CLN_TYPE] == NIL
   if cln[CLN_VALUE] == NIL
     cln[CLN_TYPE] := GTYPE_CHAR
@@ -736,7 +736,8 @@ if rpt[RPT_TOCSV]
   * default cln[CLN_TEXT] to &("{|x|ntom(x,"+ntrim(cln[CLN_DECPOS]);
   *   +","+cln[CLN_WIDTH])}
   if cln[CLN_TEXT] == NIL
-    c := "{|x|komma(ntom(x,"+ntrim(cln[CLN_DECPOS])+","+cln[CLN_WIDTH]+"))}"
+    c := "{|x|ntom(x,"+ntrim(cln[CLN_DECPOS])+","+cln[CLN_WIDTH]+")}"
+    * c := "{|x|komma(ntom(x,"+ntrim(cln[CLN_DECPOS])+","+cln[CLN_WIDTH]+"))}"
     cln[CLN_TEXT] := &c
     * if cln[CLN_VALUE] != NIL
     *   c := "{|x|val2csv('"+GTYPE_AMOUNT+"',ntomf(x,cln[CLN_DECPOS],"+cln[CLN_WIDTH]+")}"
@@ -1063,9 +1064,10 @@ for i := 1 to len(rpt[RPT_COLUMNS])
       lFound := .t.
     endif
     if lDetail
-      * cLine += xeval(rpt[RPT_COLUMNS][i][CLN_TEXT],nValue)
       cText := xeval(cln[CLN_TEXT],nValue)
     endif
+  * elseif rpt[RPT_TOCSV]
+  *   cText := ""
   else
     cText := space(&(cln[CLN_WIDTH]))
   endif

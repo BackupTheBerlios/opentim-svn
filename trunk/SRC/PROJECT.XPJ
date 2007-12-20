@@ -1,5 +1,5 @@
 [PROJECT]
-    DEBUG         = yes
+    DEBUG         = no
     VERSION       = 2.0
     GUI           = yes
     INCLUDE       = T:\DATA\LUC\PRG\TIM4

@@ -645,7 +645,7 @@ open area b, oPar(), oPlz(), oNat(), oPrj()
               lOkay := .f.
             endif
           endif
-          VEN->Etat    := DocStatOpen()
+          VEN->Etat    := iif(len(aVna)==0,DocStatNew(),DocStatOpen())
           // ... denn sonst wÅrde TIM
           // nochmal die FakturierungsvorschlÑge anzeigen...
           if lOkay .and. ! lDlg
@@ -678,6 +678,7 @@ open area b, oPar(), oPlz(), oNat(), oPrj()
     endif
   close area
   if lOkay .and. lDlg
+    * if len(aVna) == 0 .or. IFCATTR_F $ ifc[IFC_ATTRIB]
     if IFCATTR_F $ ifc[IFC_ATTRIB]
       ddSendKey(K_F3)
     else
