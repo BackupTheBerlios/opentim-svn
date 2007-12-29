@@ -3487,7 +3487,7 @@ if cType == GTYPE_MEMO
   * RETURN '"'+dos2latin1(strtran(strtran(v,CR_LF,chr(10)),'"','""'))+'"'
   RETURN '"'+dos2latin1(strtran(strtran(v,chr(141)," "),'"','""'))+'"'
 elseif cType == GTYPE_CHAR
-  RETURN '"'+strtran(dos2latin1(alltrim(v)),'"','""')+'"'
+  RETURN '"'+iif(slExcelUser,"","'")+strtran(dos2latin1(alltrim(v)),'"','""')+'"'
 elseif cType == GTYPE_DATE
   if slExcelUser
     RETURN dtocf(v,"yyyy-mm-dd")
@@ -3496,32 +3496,34 @@ elseif cType == GTYPE_DATE
   * RETURN dtocf(v,"dd/mm/yyyy")
 elseif cType == GTYPE_NUMERIC
   default nDecPos to SetDecPos()
-  RETURN ltrim(ntom(v,nDecPos,20)) if slExcelUser
-  RETURN '"'+komma(trim(ntom(v,nDecPos,20)))+'"'
+  * RETURN ltrim(ntom(v,nDecPos,20)) if slExcelUser
+  RETURN '"'+komma(ltrim(ntom(v,nDecPos,20)))+'"'
 elseif cType == GTYPE_AMOUNT
-  if slExcelUser
-    if "," $ v
-      raise("invalid amount "+utos(v)+cSrc)
-    endif
-    RETURN alltrim(v)
+  if "," $ v
+    raise("invalid amount "+utos(v)+cSrc)
   endif
+  * if slExcelUser
+  *   RETURN alltrim(v)
+  * endif
   RETURN '"'+komma(alltrim(v))+'"'
 elseif cType == GTYPE_QTY
-  if slExcelUser
-    * RETURN strtran(alltrim(v),",",".") if "," $ v
-    if "," $ v
-      raise("invalid quantity "+utos(v)+cSrc)
-    endif
-    RETURN alltrim(v)
+  if "," $ v
+    raise("invalid quantity "+utos(v)+cSrc)
   endif
+  * if slExcelUser
+  *   * RETURN strtran(alltrim(v),",",".") if "," $ v
+  *   RETURN alltrim(v)
+  * endif
   * RETURN komma(alltrim(v))
   RETURN '"'+komma(alltrim(v))+'"'
+else
+  raise("Invalid type "+utos(cType))
 endif
 RETURN utos(v)
 
 FUNCTION csvsep
-RETURN ","
-* RETURN iif(slExcelUser,",",";")
+* RETURN ","
+RETURN iif(slExcelUser,";",",")
 
 
 #endif DEF_PRINT

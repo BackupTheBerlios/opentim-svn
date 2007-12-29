@@ -5,7 +5,7 @@
 Kassenauszug [= FIN->IdJnl] [= FIN->IdDoc]
 Auszugdatum [= dtocf(FIN->Date)]
 
-Alter Saldo    [=ntomf(val(FIN->Mont1)] TOTAL
+Alter Saldo    [=ntomf(val(FIN->Mont1))] TOTAL
 
 [tab define ³ÄÅ]
 [=p_addColumn(3,"TR","Pos","[=FNL->Line]")]
@@ -16,6 +16,6 @@ Alter Saldo    [=ntomf(val(FIN->Mont1)] TOTAL
 [fin fnllist "[tab exec]"]
 [tab end]
 
-Neuer Saldo    [=ntomf(val(FIN->Mont2)] TOTAL
+Neuer Saldo    [=ntomf(val(FIN->Mont2))] TOTAL
 
 
