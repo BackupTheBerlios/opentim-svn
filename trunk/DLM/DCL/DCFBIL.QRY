@@ -1,0 +1,16 @@
+//
+// DCFBIL.QRY - generated 07.01.08
+// for DCF.FOX
+//
+window 30 76 0 0 
+column 9 Dcl pict @K@!
+column 1 Dcf pict @K@!
+column 4 ="Description "+MemLang1 pict @K@S30
+column 2 DC pict @K@!
+column 7 Type pict @k@!
+column 3 Attrib pict @K@!
+column 5 ="Description "+MemLang2 pict @K@S30
+column 6 ="Description "+MemLang3 pict @K@S40 IfExpr !empty(MemLang3)
+column 10 CljList pict @k@!@s5
+column 11 UAI pict @k@!
+order 2

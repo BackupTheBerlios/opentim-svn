@@ -78,6 +78,12 @@ RETURN DbfEdit( ;
 
 FUNCTION DclWait() ; RETURN NIL
 
+FUNCTION BilDcfCount(cIdDcl)
+local nCount := DbfSum({oDcf()},"1",2, ;
+  FIELD->IdBil+cIdDcl,;
+  "DCF->IdBil+DCF->IdDcl=='"+FIELD->IdBil+cIdDcl+"'")
+RETURN nCount
+
 **
 ** DCF : Declaration Fields
 **
@@ -91,6 +97,7 @@ define data b    ;
   editprint ActExec("DCFPRINT") ;
   wait {|x| DcfWait(x)}
 ddIndex b on DCF->IdDcl+DCF->IdDcf
+ddIndex b on DCF->IdBil+DCF->IdDcl+DCF->IdDcf
 ddFld IdDcf   ,C, LEN_IDDCF,0 picture PIC_ID
 ddFld DC      ,C, 1,0  picture PIC_ID ;
                        valid empty(DCF->DC).or.DcValidate(DCF->DC)
@@ -332,6 +339,11 @@ endif
 RETURN .t.
 
 
+FUNCTION HasDcl() ; RETURN .t.
+
+#else
+
+FUNCTION HasDcl() ; RETURN .f.
 
 #endif DEF_DCL
 

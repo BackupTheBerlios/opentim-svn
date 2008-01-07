@@ -8,6 +8,7 @@ field name="Detail" \
     reader={|g|CbxReader(g)}
       
 #include "PREVIEW.DLG"
+before setvar("PRN2PDF.out",padr(AppPath()+"\pdf\dcl"+DCL->IdDcl+".pdf",200))
 #include "ASPDF.DLG"
 
 after AppSaveMem()

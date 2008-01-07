@@ -2455,15 +2455,17 @@ open area oGen()
 close area
 RETURN NIL
 
-FUNCTION GenCtgMont(cFormat,cIdGen)
+FUNCTION GenCtgMont(cFormat,cIdGen,cPer1,cPer2)
 local nDebit  := 0
 local nCredit := 0
+default cPer1 to MemPer1
+default cPer2 to MemPer2
 * RETURN 0 if ! LstContinue()
 open area oCtg()
-  softseek cIdGen + MemPer1
+  softseek cIdGen + cPer1
   do while ! eof() .and. CTG->IdGen == cIdGen ;
-                   .and. CTG->Periode <= MemPer2
-    if ChkPeriode(CTG->Periode) == 0 // ... wegen der CHR_255...
+                   .and. CTG->Periode <= cPer2
+    if ChkPeriode(CTG->Periode,cPer1,cPer2) == 0 // ... wegen der CHR_255...
       nDebit  += val(CTG->Debit)
       nCredit += val(CTG->Credit)
     endif

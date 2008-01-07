@@ -282,12 +282,14 @@ RETURN y2p(year(UserDate())) + strtran(str(val(c),LEN_PERIODE-2,0)," ","0")
 **
 ** ChkPeriode
 **
-FUNCTION ChkPeriode(cPeriode)
-* RETURN -2 if cPeriode < PerStart(MemPer1)
-if ! empty(MemPer1) .and. cPeriode < MemPer1
+FUNCTION ChkPeriode(cPeriode,cPer1,cPer2)
+default cPer1 to MemPer1
+default cPer2 to MemPer2
+* RETURN -2 if cPeriode < PerStart(cPer1)
+if ! empty(cPer1) .and. cPeriode < cPer1
   RETURN -1
 endif
-if ! empty(MemPer2) .and. cPeriode > MemPer2
+if ! empty(cPer2) .and. cPeriode > cPer2
   RETURN 1
 endif
 RETURN 0
@@ -303,7 +305,7 @@ FUNCTION WrnPer1
   RETURN " : changement devise de base au sein de la p‚riode !"
 #endif
 #ifdef LG_EN
-  RETURN " : base currency changes within this period !"
+  RETURN " : base currency changes within this period range !"
 #endif
 
 

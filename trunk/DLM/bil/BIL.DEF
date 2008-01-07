@@ -2,3 +2,15 @@
 ddAddSpecial({||ActExec("BILNEWID")}, MsgMnuRename(), -31 )
 ddAddField("Num","C",5,0)
 ddAddField("Code","C",10,0)
+!HasDcl().or.ddAddSpecial(\
+  {||DbfEdit(\
+    {oDcf(),oDcl(),oBil()},\
+    "Bilanzposten pro Bilanzkonto : " + FIELD->IdBil ,\
+    "DCFBIL",NIL,\
+    ".t.",\
+    FIELD->IdBil\
+  )}, \
+  "~Bilanzposten/Konto    [F5]",\
+  -4\
+)
+

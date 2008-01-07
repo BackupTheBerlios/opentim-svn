@@ -603,7 +603,7 @@ fclose(fd)
 RETURN .T.
 
 FUNCTION CopyRight()
-RETURN "(c) 1993-2001 PAC Systems, (c) 2001-2007 Rumma & Ko"
+RETURN "(c) 1993-2001 PAC Systems, (c) 2001-2008 Rumma & Ko"
 
 
 ** #ifdef DEF_FFCOPYRIGHT
@@ -1659,7 +1659,9 @@ RETURN DrvCvtString(c)
 *#else
 
 FUNCTION FileDelete(cFilename,lConfirm,lOnlyIfExists)
-local cDllPath := GetDlmPath(cFilename)
+local cDllPath
+cFilename := trim(cFilename)
+cDllPath := GetDlmPath(cFilename)
 default lOnlyIfExists to .f.
 if cDllPath == NIL
   if lOnlyIfExists
@@ -1678,8 +1680,7 @@ if ! lf_ferase(cDllPath)
 #else
 if ferase(cDllPath) != 0
 #endif
-  SetMsg(cDllPath + MsgDosError(ferror()))
-  RETURN .f.
+  RETURN ! SetMsg(cDllPath + MsgDosError(ferror()))
 endif
 RETURN .t.
 

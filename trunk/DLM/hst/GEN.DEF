@@ -20,4 +20,15 @@ ddAddIndex("upper(GEN->Match)","Matchcode",NIL,{|x|upper(x)})
 !HasDlm("DCL").or.ddAddIndex("GEN->DclSel+GEN->IdGen","DclSel","!empty(GEN->DclSel)")
 ddAddSpecial({||GenRename()}, MsgMnuRename(), -31 )
 ddPrintRecord({||ActExec("GENPRINT")})
+!HasDcl().or.ddAddSpecial(\
+  {||DbfEdit(\
+    {oDcf(),oDcl(),oBil()},\
+    "Bilanzposten pro Bilanzkonto : " + FIELD->IdBil ,\
+    "DCFBIL",NIL,\
+    ".t.",\
+    FIELD->IdBil\
+  )}, \
+  "~Bilanzposten/Konto       [F8]",\
+  -7\
+)
 

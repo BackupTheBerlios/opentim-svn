@@ -995,14 +995,16 @@ local nCount := 0
 local nKrlCount := 0
 local nKtgCount := 0
 local nKrgCount := 0
+local nTodo
 open area oKtg(),oArt()
   ddSetOrder(ORD_KTG_2)
   lOkay := .t.
   go top
   do while lOkay .and. ! eof()
     if TaskInter() ; lOkay := .f. ; exit ; endif
-    if KTG->Etat != ETAT_CLOSED
+    if KTG->Etat != ETAT_CLOSED // .and. t2hours(KTG->QteRest) > 0
       nCount := 0
+      nTodo := 0
       if ddRecLock()
         open area oKrl()
           ddSetOrder(ORD_KRL_2)
@@ -1039,6 +1041,7 @@ open area oKtg(),oArt()
               endif
             else
               skip
+              nTodo += 1
             endif
           enddo
         close area
@@ -1078,6 +1081,11 @@ close area
 RETURN .f. if ! lOkay
 SetMsg(ntrim(nKrgCount)+" Rechnungen erstellt (";
  +ntrim(nKrlCount)+" Einheiten zugewiesen)." )
+if nTodo > 0
+  Warning(ntrim(nTodo) + ;
+    " Forfaits konnten keinem Kontingent zugewiesen werden!",;
+    "Stammdaten Kontingente prÅfen und dann neu fakturieren!")
+endif
 RETURN lOkay
 
 * 20060516
@@ -1620,7 +1628,6 @@ open area oSes()
   endif
 close area
 RETURN lOkay
-
 
 #endif DEF_KITZ
 
