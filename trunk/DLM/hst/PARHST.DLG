@@ -58,6 +58,7 @@ field name="DC" \
 //      caption=" bis zum " \
 //      value=UserDate()
 
+before setvar("PRN2PDF.out",padr(AppPath()+"\pdf\parhst.pdf",200))
 #include "ASPDF.DLG"
 
 after SetSolde("2")

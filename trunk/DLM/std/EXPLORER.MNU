@@ -26,6 +26,12 @@ MnuAddItem("~CTT.DBF                     ",{||DbfEdit({oCtt()})})
 MnuAddItem("~CTG.DBF                     ",{||DbfEdit({oCtg()})})
 MnuAddItem("~CTP.DBF                     ",{||DbfEdit({oCtp()})})
 
+#if GetTableDef("KRL")!=NIL
+MnuAddTitle("~Kitz")
+MnuAddItem("~SES.DBF : Sitzungen",{||DbfEdit({oSes(),oPar(),oPrj()})})
+MnuAddItem("~KRL.DBF : Rechnungszeilen",{||DbfEdit({oKrl(),oKrg(),oPar(),oPrj()})})
+#endif
+
 #if HasDlm("WWW")
 MnuAddTitle("~Web")
 MnuAddItem("~RFX.DBF : X-references ",{||DbfEdit({oRfx(),oArt(),oMsx(),oNew(),oPar(),oVoc()})})

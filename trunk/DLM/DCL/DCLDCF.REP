@@ -40,6 +40,19 @@ filter {|| "A"$DCF->Attrib\
            .or.abs(DlgValue("Mont3"))>DevTolerance()\
        }
 
+group key={||left(DCF->IdDcf,4) } \
+  text={|| \
+    +padr(left(DCF->IdDcf,4),LenIdDcf()+1)\
+    +DbfPeek(oDcf(),\
+      DCF->IdDcl+padr(left(DCF->IdDcf,4),LenIdDcf()),\
+      "trim(LngExpr('DCF->Name'))",\
+      "") \
+  } \
+  when={|nCount,nDtlCount|nDtlCount>1} \
+  afterTotals={||PrintLine()}\
+  before={||PrintLine()}\
+  format="B"
+
 group key={||left(DCF->IdDcf,3) } \
   text={|| \
     +padr(left(DCF->IdDcf,3),LenIdDcf()+1)\
@@ -92,21 +105,24 @@ column header=tr("Description","Bezeichnung",\
 column header=padl(trim(DlgValue("range1")),LenMntF()) \
        width=LenMntF() \
        value={||getvara("values",1,0)} \
-       text={|x|ntomf(x)} \
-       xsum={|x| ntomf(x) }
+       type="T"
+       // text={|x|ntomf(x)} \
+       // xsum={|x| ntomf(x) }
 
 column header=padl(trim(DlgValue("range2")),LenMntF()) \
        width=LenMntF() \
        value={||getvara("values",2,0)} \
-       text={|x|ntomf(x)} \
-       xsum={|x| ntomf(x) }
+       type="T"
+       // text={|x|ntomf(x)} \
+       // xsum={|x| ntomf(x) }
 
 #if !empty(getvar("range3"))
 column header=padl(trim(DlgValue("range3")),LenMntF()) \
        width=LenMntF() \
        value={||getvara("values",3,0)} \
-       text={|x|ntomf(x)} \
-       xsum={|x| ntomf(x) }
+       type="T"
+       // text={|x|ntomf(x)} \
+       // xsum={|x| ntomf(x) }
 #endif
 
 

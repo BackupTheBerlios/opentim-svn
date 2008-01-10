@@ -125,13 +125,11 @@ column header=tr("Opening bal","Beginnsaldo","Solde init") \
 column header="Debit" \
        width=LenMntF() \
        value={||DlgValue("D")}  \
-       text={|x|ntomf(x)} \
-       xsum={|x| ntomf(x) }
+       type="T" //  text={|x|ntomf(x)} xsum={|x| ntomf(x) }
 column header=tr("Credit","Kredit","Cr‚dit") \
        width=LenMntF() \
        value={||DlgValue("C")}  \
-       text={|x|ntomf(x)} \
-       xsum={|x| ntomf(x) }
+       type="T" //  text={|x|ntomf(x)} xsum={|x| ntomf(x) }
 
 column header=if(getvar("ShowSaldo1") == "X",\
                  tr("final balance","Endsaldo","Solde final"), \

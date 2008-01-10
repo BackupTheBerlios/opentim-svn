@@ -1,5 +1,5 @@
 ** Copyright (c) 1992-2001 PAC Systems
-** Copyright (c) 2001-2007 Luc Saffre
+** Copyright (c) 2001-2008 Luc Saffre
 **
 ** This file is part of TIM.
 **
@@ -112,8 +112,13 @@ RETURN (ntomf(c - d,nDecPos) + "  ") if d == c
 RETURN (ntomf(c - d,nDecPos) + " " + DC_CREDIT)
 
 FUNCTION solde2(d,c,nDecPos)
+if RptToCsv()
+  RETURN val2csv("N",d - c,NIL,nDecPos) + csvsep() if d > c
+  RETURN csvsep() + val2csv("N",c - d,NIL,nDecPos)
+endif
 RETURN ntomf(d - c,nDecPos) + space(snLenMntF + 1) if d > c
 RETURN space(snLenMntF + 1) + ntomf(c - d,nDecPos)
+
 
 FUNCTION saldo(n1,n2)
 RETURN ntomf(n1 - n2) if n1 > n2

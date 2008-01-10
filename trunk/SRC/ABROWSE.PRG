@@ -1,7 +1,7 @@
 ** ABROWSE.PRG : Browse an array using a specified code block
 
 ** Copyright (c) 1992-2001 PAC Systems
-** Copyright (c) 2001-2007 Luc Saffre
+** Copyright (c) 2001-2008 Luc Saffre
 **
 ** This file is part of TIM.
 **

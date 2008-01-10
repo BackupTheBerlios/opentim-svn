@@ -28,6 +28,8 @@ field name="subttl" \
     reader={|g|CbxReader(g)}
 
 #include "PREVIEW.DLG"
+
+before setvar("PRN2PDF.out",padr(AppPath()+"\pdf\hstven.pdf",200))
 #include "ASPDF.DLG"
 
 after AppSaveMem()

@@ -1,5 +1,5 @@
 ** Copyright (c) 1992-2001 PAC Systems
-** Copyright (c) 2001-2007 Luc Saffre
+** Copyright (c) 2001-2008 Luc Saffre
 **
 ** This file is part of TIM.
 **
@@ -128,7 +128,7 @@ static snGrpCurrent
 static snClnCurrent := 0
 
  
-FUNCTION RepPrint(cIdRep,cIdDlg,cTitle,cTplIni,cPreview)
+FUNCTION RepPrint(cIdRep,cIdDlg,cTitle,cTplIni,cPreview,lToCsv)
 local rptSave := rpt
 local lOkay := .t.
 if cTitle != NIL
@@ -144,7 +144,7 @@ endif
 if cIdDlg != NIL
   RETURN .f. if ! DlgExec(cIdDlg)
 endif
-if (rpt := RptLoad(cIdRep)) == NIL
+if (rpt := RptLoad(cIdRep,lToCsv)) == NIL
   rpt := rptSave
   RETURN .f.
 endif
@@ -891,8 +891,10 @@ for j := rpt[RPT_TEXTCOLUMNS] to len(rpt[RPT_COLUMNS])
   endif
 next j
 snClnCurrent := 0
-if FORMAT_BOLD $ grp[GRP_FORMAT]
-  cLine := Tagged("B") + cLine + Tagged("b")
+if ! rpt[RPT_TOCSV]
+  if FORMAT_BOLD $ grp[GRP_FORMAT]
+    cLine := Tagged("B") + cLine + Tagged("b")
+  endif
 endif
 RETURN .f. if ! eval(rpt[RPT_PRINTLINE],cLine)
 * PrintLine(cLine)
@@ -944,7 +946,7 @@ for i := 1 to nTitHeight
   for j := 1 to len(rpt[RPT_COLUMNS])
     if i <= len(rpt[RPT_COLUMNS][j][CLN_HEADER])
       * if rpt[RPT_COLUMNS][j][CLN_WIDTH] == 0
-      if rpt[RPT_COLUMNS][j][CLN_WIDTH] == NIL
+      if rpt[RPT_TOCSV] .or. rpt[RPT_COLUMNS][j][CLN_WIDTH] == NIL
         c += rpt[RPT_COLUMNS][j][CLN_HEADER][i]
       elseif rpt[RPT_COLUMNS][j][CLN_VALUE] == NIL
         c += padr( ;
@@ -1318,4 +1320,11 @@ FUNCTION MsgContinue()
   RETURN "Continue (Y/N) ?"
 #endif
 
+FUNCTION RptToCsv(x)
+RETURN .f. if rpt == NIL
+if x != NIL
+  rpt[RPT_TOCSV] := x
+  RETURN .t.
+endif
+RETURN rpt[RPT_TOCSV]
 

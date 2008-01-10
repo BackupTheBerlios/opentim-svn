@@ -36,6 +36,7 @@ field name="HSTGEN.SumByJnl"\
     default=" " \
     reader={|g|CbxReader(g)}
 
+before setvar("PRN2PDF.out",padr(AppPath()+"\pdf\hstgen.pdf",200))
 #include "ASPDF.DLG"
 #include "TOCSV.DLG"
 

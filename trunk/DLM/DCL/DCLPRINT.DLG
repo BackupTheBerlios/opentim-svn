@@ -10,6 +10,7 @@ field name="Detail" \
 #include "PREVIEW.DLG"
 before setvar("PRN2PDF.out",padr(AppPath()+"\pdf\dcl"+DCL->IdDcl+".pdf",200))
 #include "ASPDF.DLG"
+#include "TOCSV.DLG"
 
 after AppSaveMem()
 
