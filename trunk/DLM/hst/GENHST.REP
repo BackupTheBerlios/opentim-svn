@@ -7,7 +7,9 @@ before SetMntFormat("Z12")
                      PerStart(MemPer1),\
                      MemPer1))
 
-header1 MnuItemName()
+header1 tr("General Account Balances",\
+           "Saldenliste Generalkonten",\
+           "Balance des comptes g‚n‚raux")
 // header1 tr(\
   "General Account Balances",\
   "Saldenliste Generalkonten",\

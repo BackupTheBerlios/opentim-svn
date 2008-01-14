@@ -96,6 +96,8 @@ total for={||ChkPeriode(HST->Periode)<0} \
 total for={||ChkPeriode(HST->Periode)==0} \
       text={||tr("Total","Summe","Total")} \
       when={|nCount,nDtlCount|nDtlCount>1}
-total text={||tr("Final balance","Endsaldo","Solde final")} \
+total text={||tr("Final balance","Endsaldo","Solde final") \
+              + " " + HST->IdPar+" " ParName(HST->IdPar)\
+           } \
       when={|nCount,nDtlCount|nCount>0}
 

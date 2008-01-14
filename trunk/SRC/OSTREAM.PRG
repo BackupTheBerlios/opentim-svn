@@ -33,6 +33,8 @@ static slActivePps := .f.
 static slSecureRebuild := .f.
 static slQuickRebuild := .f.
 static slAsMail := .f.
+static slBatch := .f.
+static slPause := .f. // pause after AppShell()
 static slAsPdf := .f.
 static sbInputFilter := {|x|x}
 
@@ -3240,6 +3242,16 @@ RETURN lOkay
 FUNCTION SetAsMail(x) // getvar("asMail")
 RETURN slAsMail if x == NIL
 slAsMail := x
+RETURN .t.
+
+FUNCTION SetBatch(x)
+RETURN slBatch if x == NIL
+slBatch := x
+RETURN .t.
+
+FUNCTION SetPause(x)
+RETURN slPause if x == NIL
+slPause := x
 RETURN .t.
 
 FUNCTION SetAsPdf(x) // getvar("asPDF")

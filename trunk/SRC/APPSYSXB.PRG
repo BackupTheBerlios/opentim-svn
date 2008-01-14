@@ -322,6 +322,7 @@ RETURN (nButton == XBPMB_RET_YES)
 
 FUNCTION Warning(cMemo,txt2,cHelp,lConsole,cTitle,lCenter)
 if txt2 != NIL ; cMemo += CR_LF + txt2 ; endif
+RETURN .t. if SetBatch()
 MsgBox(cMemo,cTitle)
 RETURN .t.
 

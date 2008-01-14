@@ -347,6 +347,7 @@ local nCut
 local cLine
 local fd := mopen(cFileName)
 local saveArgv
+local lSetBatch := SetBatch()
 if fd == NIL
   Warning(SetMsg())
   RETURN .f.
@@ -409,6 +410,7 @@ ARGV = saveArgv
 #ifdef DEF_DEBUG
   rpt_write(cFilename + " returns " + utos(lOkay))
 #endif
+SetBatch(lSetBatch)
 RETURN lOkay
 
 

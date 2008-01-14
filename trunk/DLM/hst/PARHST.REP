@@ -1,5 +1,6 @@
 // Saldenliste Partner
-header1 "Saldenliste Partner"
+header1 tr("Partner Account Balances","Saldenliste Partner",\
+           "Balance comptes particuliers",NIL,"Partnerite kontode saldod")
 header2 DlgValue("FltText")
 header3 PerText()
 area { oPar(), oPlz() }

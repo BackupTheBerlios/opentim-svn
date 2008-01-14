@@ -457,7 +457,6 @@ local nKey
 default cHelp to "WARNING"
 default cTitle to TXT_042
 default lCenter to .t.
-Alarm()
 if txt2 != NIL
   if !empty(cMemo)
     cMemo += CR_LF
@@ -476,6 +475,8 @@ nLen += 5
     SendConsole(cTitle + " : " + cMemo)
   endif
 #endif DEF_CONSOLE
+RETURN .t. if SetBatch()
+Alarm()
 open window (cTitle) size nHeight+3 , nLen+4 help (cHelp)
   for i := 1 to nHeight
     if lCenter

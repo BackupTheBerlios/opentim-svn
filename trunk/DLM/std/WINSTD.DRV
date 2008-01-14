@@ -25,34 +25,19 @@ Option 8  8LinesPerInch chr(27)+"l8 "
 Option 7  7LinesPerInch chr(27)+"l7 "
 Option 6  6LinesPerInch chr(27)+"l6 "
 
-// OnSelect SetPreview(" ")
-// OnSelect DlgDefault("PRN2PDF.out",padr(".\TEMP.PDF",128))
-// OnSelect SetPreview()!="X".or.!"E"$UsrAttrib().or.DlgExec("PRN2PDF")
 OnSelect !(SetAsMail().or.SetAsPdf()).or.p_SetCopies(1)
-// OnSelect DlgDefault("asPDF"," ")
 OnSelect SetAsMail().or.SetAsPdf().or.SetSpooler('\
   AppShell(AppPath()+"\timtools prnprint"\
     +iif(empty(p_setport()),""," -p"+p_setport())\
-    +" preview.prn",NIL,NIL,.f.)\
+    +" preview.prn")\
   ')
-// OnSelect empty(getvar("asPDF")).or.DlgDefault("PRN2PDF.out",padr(".\TEMP.PDF",128))
-// OnSelect empty(getvar("asPDF")).or.SetPreview()!="X".or.!"E"$UsrAttrib().or.DlgExec("PRN2PDF")
 OnSelect !SetAsPdf().or.p_SetCopies(1)
-OnSelect !SetAsPdf().or.FileDelete(getvar("PRN2PDF.out"),.f.,.t.)
+OnSelect !SetAsPdf().or.FileDelete(trim(getvar("PRN2PDF.out")),.f.,.t.)
 OnSelect !SetAsPdf().or.SetSpooler('AppShell("'\
     +AppPath()+"\timtools prn2pdf "\
-    +iif(SetAsMail(),"-b ","")+"-o "\
+    +iif(SetBatch().or.SetAsMail(),"-b ","")+"-o "\
     +trim(getvar("PRN2PDF.out"))\
     +' preview.prn")')
-// OnSuccess empty(getvar("asPDF"))\
-  .or.empty(getvar("asMail"))\
-  .or.(\
-    FileDelete(".\tmp.eml",.f.,.t.)\
-    .and.fparse(getvar("mailtpl"),".\tmp.eml",NIL,NIL,.t.,NIL,NIL,"EML")\
-    .and.AppShell(\
-      AppPath()+"\timtools sendmail "\
-      +"--host "+trim1(getvar("mailhost")) \
-      +".\tmp.eml "+trim(getvar("PRN2PDF.out"))))
 OnSelect !SetAsMail().or.empty(getvar("mailhost"))\
   .or.empty(getvar("mailto"))\
   .or.AddSpooler('\
@@ -62,7 +47,8 @@ OnSelect !SetAsMail().or.empty(getvar("mailhost"))\
       AppPath()+"\timtools sendmail -e cp850 "\
       +"--host "+trim1(getvar("mailhost")) \
       +".\tmp.eml "\
-      +iif(SetAsPdf(),trim(getvar("PRN2PDF.out")),""))\
+      +iif(SetAsPdf(),trim(getvar("PRN2PDF.out")),"")\
+      )\
   ')
 OnSelect !SetAsMail().or.!empty(getvar("mailhost"))\
   .or.empty(getvar("mailto"))\

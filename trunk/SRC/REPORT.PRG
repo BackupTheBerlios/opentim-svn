@@ -160,15 +160,9 @@ if !rpt[RPT_TOCSV]
   if LstError() != PRN_DONE
     lOkay := .f.
   elseif p_curpage() == 0
-    #ifdef LG_GERMAN
-      Warning("Nichts zu drucken.")
-    #endif
-    #ifdef LG_FRENCH
-      Warning("Rien … imprimer.")
-    #endif
-    #ifdef LG_EN
-      Warning("Nothing to print.")
-    #endif
+      Warning(utrp("Nothing to print.",;
+                   "Nichts zu drucken.",;
+                   "Rien … imprimer."))
   endif
 endif
 rpt := rptSave

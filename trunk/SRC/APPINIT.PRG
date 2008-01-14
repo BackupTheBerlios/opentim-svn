@@ -611,8 +611,10 @@ default cTitle to cCommand
 * default cTitle to DlgTitle()
 default cTitle to "DOS Shell"
 * default cCommand to "COMMAND.COM"
-default lPause to (USRATTR_E $ UsrAttrib()) // .f.
-default lConfirm to .f.
+* default lPause to (USRATTR_E $ UsrAttrib()) // .f.
+default lPause to SetPause()
+* default lConfirm to .f.
+default lConfirm to SetPause()
 if lConfirm
   RETURN .f. if ! Confirm(cCommand)
 endif

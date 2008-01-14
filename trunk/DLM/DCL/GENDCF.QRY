@@ -1,0 +1,16 @@
+//
+// GENDCF.QRY - generated 10.01.08
+// for GEN.FOX
+//
+window 15 76 0 0 
+column 1 Konto pict @K@!
+column 6 ="Description "+MemLang1 pict @K@S40
+column 7 ="Description "+MemLang2 pict @K@S20
+column 2 MWS pict @K@!
+column 4 Attrib pict @K@!
+column 9 Z pict @K@!
+column 10 Bezeichnung NL pict @K@S29
+column 11 Ko pict @K@!
+column 12 UAI pict @K@!
+mask GEN
+order 1

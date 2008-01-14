@@ -109,7 +109,7 @@ local nKey
 #endif DEF_GUI
 RETURN .f. if ! DlgLoad(cIdDlg)
 default lPermanent to .f.
-default lDlg to .t.
+default lDlg to !SetBatch()
 for i := 1 to len(saDlgBefore)
   if ! xparse(saDlgBefore[i])
     lOkay := .f.
@@ -449,9 +449,15 @@ endif
 if IsMemoPicture(fld[DLGGET_PICTURE])
   fld[DLGGET_WIDTH] := val(left(fld[DLGGET_PICTURE],2))
   fld[DLGGET_HEIGHT] := val(substr(fld[DLGGET_PICTURE],4))
+  fld[DLGGET_READER]   := {|g|MemoReader(g)}
 else
   fld[DLGGET_HEIGHT] := 1
   fld[DLGGET_WIDTH] := NIL
+  * if fld[DLGGET_READER] == NIL
+  *   if valtype(eval(fld[DLGGET_BLOCK])) == GTYPE_LOGICAL
+  *     fld[DLGGET_READER]   := {|g|CbxReader(g)}
+  *   endif
+  * endif
 endif
 aadd( saDlgFields, fld )
 RETURN .t.

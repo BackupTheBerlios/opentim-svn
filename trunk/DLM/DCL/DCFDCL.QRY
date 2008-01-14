@@ -1,9 +1,10 @@
 //
-// DCFDCL.QRY - generated 19.06.05
-// for DCF.DBF
+// DCFDCL.QRY - generated 10.01.08
+// for DCF.FOX
 //
 window 30 76 0 0 
 column 1 Code pict @K@!
+column 8 IdGen pict @K@!
 column 11 UAI pict @k@!
 column 4 ="Description "+MemLang1 pict @K@S30
 column 2 DC pict @K@!

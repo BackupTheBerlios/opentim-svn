@@ -79,7 +79,7 @@ RETURN DbfEdit( ;
 FUNCTION DclWait() ; RETURN NIL
 
 FUNCTION BilDcfCount(cIdDcl)
-local nCount := DbfSum({oDcf()},"1",2, ;
+local nCount := DbfSum({oDcf()},"1",3, ;
   FIELD->IdBil+cIdDcl,;
   "DCF->IdBil+DCF->IdDcl=='"+FIELD->IdBil+cIdDcl+"'")
 RETURN nCount
@@ -97,6 +97,7 @@ define data b    ;
   editprint ActExec("DCFPRINT") ;
   wait {|x| DcfWait(x)}
 ddIndex b on DCF->IdDcl+DCF->IdDcf
+ddIndex b on DCF->IdGen+DCF->IdDcl+DCF->IdDcf
 ddIndex b on DCF->IdBil+DCF->IdDcl+DCF->IdDcf
 ddFld IdDcf   ,C, LEN_IDDCF,0 picture PIC_ID
 ddFld DC      ,C, 1,0  picture PIC_ID ;
@@ -108,8 +109,17 @@ ddFld Name2   ,C,70,0 picture "@K@S40"
 ddFld Name3   ,C,70,0 picture "@K@S40"
 ddFld Type    ,C, 2,0 picture "@k@!" ;
                       pick PickDbcCode("DCFTYPE.DBC",DCF->Type)
-ddFld DclSel  ,C, LEN_IDDCF,0 picture PIC_ID ;
-                      pick PickDbcCode("DCLSEL.DBC",DCF->DclSel)
+* ddFld DclSel  ,C, LEN_IDDCF,0 picture PIC_ID ;
+*                       pick PickDbcCode("DCLSEL.DBC",DCF->DclSel)
+ddFld IdGen   ,C, LenIdGen(),0 picture PIC_ID ;
+                  pick DbfPick( ;
+                    {oGen()},;
+                    DCF->IdDcf + " : Generalkonten", ;
+                    "GENPICK", ;
+                    DCF->IdGen,;
+                    NIL,NIL,NIL, ;
+                    "GEN->IdGen",;
+                  )
 ddFld IdDcl   ,C, 3,0 picture PIC_ID
 ddFld CljList ,C,20,0 picture "@k@!@s5" ;
                       pick PickClj(space(LenIdCtr()),DCF->CljList)
@@ -123,9 +133,17 @@ ddFld IdBil   ,C, LenIdBil(),0 picture PIC_ID ;
                     "BIL->IdBil",;
                   )
 action b key K_ENTER   prompt "General accounts [Enter]" ;
-         block BilGenEdit(DCF->IdBil)
+         block DcfGenEdit()
 ddEndDef()
 RETURN b
+
+FUNCTION DcfGenEdit()
+RETURN BilGenEdit(DCF->IdBil) if empty(DCF->IdGen)
+RETURN DbfEdit( ;
+  {oGen()},trim(DcfName()),"GENDCF",;
+  NIL,NIL,;
+  trim(DCF->IdGen),"left(GEN->IdGen,"+ntrim(len(trim(DCF->IdGen)))+")" ;
+)
 
 FUNCTION DcfWait() ; RETURN NIL
 
@@ -185,6 +203,9 @@ RETURN ".t."
 * RETURN .t.
 
 FUNCTION DcfGenFilter()
+if empty(DCF->IdBil)
+  RETURN "left(GEN->IdGen,"+ntrim(len(trim(DCF->IdGen)))+")=='"+trim(DCF->IdGen)+"'"
+endif
 RETURN "left(GEN->IdBil,"+ntrim(len(trim(DCF->IdBil)))+")=='"+trim(DCF->IdBil)+"'"
 * if !empty(DCF->DclSel)
 *   RETURN "GEN->DclSel$'"+trim(DCF->DclSel)+"'"
@@ -245,8 +266,13 @@ if !empty(r3)
 endif
 cStart := PerStart(cStart)
 open area oGen()
-  ddSetOrder(ORD_GEN_BIL)
-  softseek trim(DCF->IdBil)
+  if empty(DCF->IdGen)
+    ddSetOrder(ORD_GEN_BIL)
+    softseek trim(DCF->IdBil)
+  else
+    ddSetOrder(1)
+    softseek trim(DCF->IdGen)
+  endif
   do while lOkay .and. !eof().and.&xlGenFilter
     open area oHst(),oGen(),oPar(),oVen(),oFin()
       ddSetOrder(3)

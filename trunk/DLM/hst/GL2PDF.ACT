@@ -1,0 +1,70 @@
+// General Ledger to PDF
+DlgExec("GL2PDF")
+SetPeriode(ntrim(getvar("year")))
+SetDevise(DevDefault(MemPer1))
+setvar("GL2PDF.path",trim(getvar("GL2PDF.path")))
+right(getvar("GL2PDF.path"),1)=="\".or.\
+  DlgPlus("GL2PDF.path","\"+ntrim(getvar("year"))+"\")
+SetBatch(.t.)
+// HSTVEN und HSTFIN : Journale
+setvar("b",{||\
+  setvar("HstVenCols",CtrHstCols(JNL->IdCtr)),\
+  setvar("IdJnlVen",JNL->IdJnl),\
+  setvar("IdJnlFin",JNL->IdJnl),\
+  setvar("subttl","X"),\
+  SetAsPdf(.t.),\
+  setvar("PRN2PDF.out",trim(getvar("GL2PDF.path"))+"JNL-"+trim(JNL->IdJnl)+".pdf"),\
+  RepPrint("HST"+JNL->Alias,NIL,"foo",\
+           CtrTplIni(JNL->IdCtr)," ",.f.)\
+})
+empty(getvar("GL2PDF.Journale")).or.DbfScan({oJnl()},2,NIL,NIL,\
+        "JNL->Alias$'VEN,FIN'.and.'G'$JNL->Attrib",\
+        getvar("b"))
+
+// GENHST: Saldenliste Generalkonten
+setvar("ShowSaldo1","X")
+setvar("GenFilter",".t.")
+setvar("IdGen1","")
+setvar("IdGen2","")
+setvar("PRN2PDF.out",trim(getvar("GL2PDF.path"))+"GENHST.pdf")
+empty(getvar("GL2PDF.Salden")).or.\
+  RepPrint("GENHST",NIL,"foo")
+
+// HSTGEN: Historik Generalkonten
+setvar("PRN2PDF.out",trim(getvar("GL2PDF.path"))+"HSTGEN.pdf")
+setvar("HSTGEN.IdGen1",space(LenIdGen()))
+setvar("HSTGEN.IdGen2",space(LenIdGen()))
+setvar("HSTGEN.IdJnl",space(LenIdJnl()))
+setvar("HSTGEN.HstFilter","")
+setvar("HSTGEN.SumByJnl"," ")
+empty(getvar("GL2PDF.Historiken")).or.\
+  RepPrint("HSTGEN",NIL,"foo")
+
+// PARHST: Saldenliste Partnerkonten
+setvar("ParFilter",".t.")
+setvar("IdJnl",space(LenIdJnl()))
+setvar("b",{||\
+  setvar("PRN2PDF.out",\
+    trim(getvar("GL2PDF.path"))+"PARHST-"+CTR->IdCtr+".pdf"),\
+  setvar("IdCtr",CTR->IdCtr),\
+  setvar("DC",CTR->DC),\
+  setvar("HstFilter","HST->IdCtr=="+utos(CTR->IdCtr)),\
+  setvar("FltText",trim(CTR->Name)),\
+  RepPrint("PARHST",NIL,"foo")})
+empty(getvar("GL2PDF.Salden")).or.\
+  DbfScan({oCtr()},1,NIL,NIL,".t.",getvar("b"))
+
+// HSTPAR: Historik Partnerkonten
+setvar("IdPar1",space(LenIdPar()))
+setvar("IdPar2",space(LenIdPar()))
+setvar("IdJnl",space(LenIdJnl()))
+setvar("Match",space(LenIdJnl()+6))
+setvar("Satis"," ")
+setvar("b",{||\
+  setvar("PRN2PDF.out",\
+    trim(getvar("GL2PDF.path"))+"HSTPAR-"+CTR->IdCtr+".pdf"),\
+  setvar("IdCtrList",CTR->IdCtr),\
+  RepPrint("HSTPAR",NIL,"foo")})
+empty(getvar("GL2PDF.Historiken")).or.\
+  DbfScan({oCtr()},1,NIL,NIL,".t.",getvar("b"))
+
