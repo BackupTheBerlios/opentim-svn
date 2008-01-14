@@ -5421,14 +5421,6 @@ RETURN .f.
 
 #endif DEF_RSV
 
-/**
-  Wenn 0 Nachkommastellen : -> 0.5
-  Wenn 2 Nachkommastellen : -> 0.005
-**/
-FUNCTION Tolerance(nDecPos)
-RETURN 0.5 / (10 ** nDecPos)
-
-
 FUNCTION MsgExpertOnly()
 #ifdef LG_GERMAN
   RETURN " : nur fÅr Experten !"

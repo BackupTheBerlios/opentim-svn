@@ -1,5 +1,7 @@
 title "General Ledger to PDF"
-field name="year" default=year(userdate())-1 caption="Jahr "
+field name="year" default=year(userdate())-1 \
+      caption="Jahr " \
+      picture="9999"
 field name="GL2PDF.path" \
       value=padr(AppPath()+"\pdf",200) \
       picture="@k@s30" \

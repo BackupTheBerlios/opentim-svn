@@ -45,6 +45,19 @@ do while left(r,1) == "*" .and. nDec > 0 ;
 enddo
 RETURN r
 
+/**
+  Wenn 0 Nachkommastellen : -> 0.5
+  Wenn 2 Nachkommastellen : -> 0.005
+**/
+FUNCTION Tolerance(nDecPos)
+RETURN 0.5 / (10 ** nDecPos)
+
+** workaround for floating point numeric precision
+FUNCTION is0(nMont)
+RETURN abs(nMont) < Tolerance(snDec)
+
+
+
 **
 ** ntomf() - Numeric to Montant (formatted)
 **

@@ -118,5 +118,7 @@ total for={||ChkPeriode(HST->Periode)<0} \
 
 total for={||ChkPeriode(HST->Periode)==0} \
       text={||tr("Total ","Summe ","Total ")+PerText(cblock(".f."))}
-total text={||tr("Final balance","Endsaldo","Solde final")} when={||.t.}
+total text={||tr("Final balance","Endsaldo","Solde final") \
+           + " " + trim1(HST->IdGen) + GenName(HST->IdGen) } \
+      when={||.t.}
 

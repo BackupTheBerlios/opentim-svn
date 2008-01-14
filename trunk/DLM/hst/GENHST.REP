@@ -1,15 +1,8 @@
-// Saldenliste Generalkonten
-before SetSolde("2")
-// #exec SetMntFormat("S10")
-before SetMntFormat("Z12")
-
-#exec setvar("Start",if(getvar("ShowSaldo1")=="X",\
-                     PerStart(MemPer1),\
-                     MemPer1))
-
 header1 tr("General Account Balances",\
            "Saldenliste Generalkonten",\
-           "Balance des comptes g‚n‚raux")
+           "Balance des comptes g‚n‚raux",\
+           NIL,\
+           "šldkontode saldod")
 // header1 tr(\
   "General Account Balances",\
   "Saldenliste Generalkonten",\
@@ -17,6 +10,14 @@ header1 tr("General Account Balances",\
 )
 header2 PerText() + " ("+SetDevise()+")"
 header3 if(empty(DlgValue("GenFilter")),"",DlgValue("GenFilter"))
+
+before SetSolde("2")
+// #exec SetMntFormat("S10")
+before SetMntFormat("Z12")
+#exec setvar("Start",if(getvar("ShowSaldo1")=="X",\
+                     PerStart(MemPer1),\
+                     MemPer1))
+
 area { oGen() }
 order 1
 
@@ -72,7 +73,7 @@ ValidateRecord {||\
 #endif
 filter {||len(trim(GEN->IdGen))==LenIdGen()}
 filter {|| \
-  DlgValue("D")!=0.or.DlgValue("C")!=0.or.DlgValue("Saldo1")!=0 \
+  !is0(getvar("D")).or.!is0(getvar("C")).or.!is0(getvar("Saldo1")) \
 }
 
 group key={||left(GEN->IdGen,4)} \

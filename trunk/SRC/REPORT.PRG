@@ -212,6 +212,7 @@ local nRecNo2
 local lOkay
 local lStop
 local nOldLMargin := p_setlmargin()
+MsgDisplay(trim(rpt[RPT_HDR1])+trim1b(rpt[RPT_HDR2])+trim1b(rpt[RPT_HDR3]))
 if rpt[RPT_TOCSV]
   if (fd := fcreate(cOutFile)) == -1
     RETURN !SetMsg(cOutFile+MsgDosError(doserror()))
