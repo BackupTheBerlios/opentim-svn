@@ -950,7 +950,7 @@ local cName
 local i
 local nStart := 0
 * local aDir := directory(MskPath() + cRoot + "*" + cExt)
-local aDir := GetDllDir(cRoot + "*" + cExt)
+local aDir := GetDlmDir(cRoot + "*" + cExt)
 default cStart to ""
 cStart := trim(cStart)
 for i := 1 to len(aDir)

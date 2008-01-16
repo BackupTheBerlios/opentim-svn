@@ -236,7 +236,7 @@ RETURN WarnInterBnk() if len(aParam) != 3
 RETURN WarnInterBnk(1) if len(aParam[1]) != 3  // Bank-Id
 RETURN WarnInterBnk(2) if len(aParam[2]) != 12 // Kontonummer
 RETURN WarnInterBnk(3) if len(aParam[3]) != 1 // Sprache
-cFileName := AppPath() + "\EXPORT\" + left(FIN->IdJnl,2)
+cFileName := AppRoot() + "\EXPORT\" + left(FIN->IdJnl,2)
 cFileName += FIN->IdDoc
 RETURN FinOtiCreate(cFilename,aParam[1],aParam[2],aParam[3])
 
@@ -705,9 +705,9 @@ RETURN WarnInterBnk(2) if len(aParam[2]) != 3  // Code banque
 RETURN WarnInterBnk(3) if len(aParam[3]) != 12 // Kontonummer
 RETURN WarnInterBnk(4) if len(aParam[4]) != 1 // Sprache
 cFileName := TmpConvert( ;
-  AppPath() + "\" + trim(IMP->IdJnl) + "*.OTI" ;
+  AppRoot() + "\" + trim(IMP->IdJnl) + "*.OTI" ;
 )
-* cFileName := TmpConvert(AppPath() + "\" + trim(IMP->IdJnl) + "*.OTI")
+* cFileName := TmpConvert(AppRoot() + "\" + trim(IMP->IdJnl) + "*.OTI")
 if (fd := fcreate(cFileName)) == -1
   Warning(cFileName + MsgDosError(ferror()))
   RETURN NIL
@@ -880,7 +880,7 @@ FUNCTION ImpWriteZau(cFilename)
 local cReturn := ""
 local jnl := JnlLocate(IMP->IdJnl)
 * local lOkay := .t.
-default cFilename to AppPath() + "\" + substr(IMP->IdJnl,2,2) + IMP->IdDoc
+default cFilename to AppRoot() + "\" + substr(IMP->IdJnl,2,2) + IMP->IdDoc
 #ifdef DEF_IBAN
   if ImpImlFind("!IsIBAN(IML->Compte1)")
     if fgenerate(cFilename+".OTI", {|fd|ImpOtiWrite(fd,jnl)})
@@ -1203,7 +1203,7 @@ local nCount
 local cReturn := ""
 local jnl := JnlLocate(FIN->IdJnl)
 * local lOkay := .t.
-default cFilename to AppPath() + "\" + substr(FIN->IdJnl,2,2) + FIN->IdDoc
+default cFilename to AppRoot() + "\" + substr(FIN->IdJnl,2,2) + FIN->IdDoc
 default xcFnlCompte to "PAR->Compte1"
 #ifdef DEF_IBAN
   nCount := FinFnlCount(xcFnlCompte,"!IsIBAN("+xcFnlCompte+")")

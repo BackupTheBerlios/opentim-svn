@@ -58,7 +58,7 @@ FUNCTION RunTests() // cOutfile)
 local a
 local nCount := 0
 local nFailures := 0
-local aDir := GetDllDir("*.tst")
+local aDir := GetDlmDir("*.tst")
 local i
 local lOkay := .t.
 * #ifdef DEF_IE10

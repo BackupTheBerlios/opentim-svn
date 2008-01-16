@@ -47,7 +47,7 @@ RETURN .t.
 ** default cPath to DbPath()
 *default lEdit to .t.
 *if cPath == NIL
-*  aDir := GetDllDir(cWildcard)
+*  aDir := GetDlmDir(cWildcard)
 *else
 *  aDir := directory(cPath + "\"  + cWildcard)
 *endif
@@ -154,7 +154,7 @@ endif
 * aDir := directory(cPath + "\"  + cWildcard)
 if cPath == NIL
   bcName :=  {|x|FileFirstLine(x)}
-  aDir := GetDllDir(cWildcard)
+  aDir := GetDlmDir(cWildcard)
 else
   aDir := directory(cPath + "\"  + cWildcard)
   bcName :=  {|x|FileFirstLine(cPath+"\"+x)}

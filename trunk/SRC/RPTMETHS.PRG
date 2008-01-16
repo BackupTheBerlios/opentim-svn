@@ -22,7 +22,7 @@ static fdRpt      := -1
 static scFileName := NIL
 static snStart    := 0
 static scRptArchive := NIL
-static sbLogConsole := {|cMsg| LogMsg(AppPath()+"\CONSOLE.MSG",cMsg)}
+static sbLogConsole := {|cMsg| LogMsg(AppRoot()+"\CONSOLE.MSG",cMsg)}
 
 **
 **

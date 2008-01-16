@@ -147,7 +147,7 @@ static saPreLogin
 static saOnLogin   := { ;
   {|| AppOnLogin() } ;
 }
-static sxcHelpPath  := "AppPath()+'\HELP'"
+static sxcHelpPath  := "AppRoot()+'\HELP'"
 
 #ifdef DEF_VERBOSE
   static slKeepReport          := .t.
@@ -161,6 +161,7 @@ static scExtEditor          := ""
 static snKeepOpenFiles       := 10
 * static snTolerance           := 10
 static scProgramPath
+static scAppRoot
 static scDataRoot
 * static scDlmRoot
 * static scCommonDBFs          := ""
@@ -269,7 +270,11 @@ set softseek off
 #else
   scProgramPath := left(ft_origin(),rat("\",ft_origin())-1)
 #endif
-* scProgramPath := rat("\",ft_origin())
+if upper(right(scProgramPath,4)) == "\BIN"
+  scAppRoot := left(scProgramPath,len(scProgramPath)-4)
+else
+  scAppRoot := scProgramPath
+endif
 * raus am 20070326 : cParams := AppGetPrgPath(cParams)
 scDataRoot := scProgramPath
 * scDlmRoot := scProgramPath+"\DLM"
@@ -428,7 +433,7 @@ saOnLogin   := { ;
 }
 snLenIdLng  := 1
 set(_SET_EPOCH,1920)
-RETURN .f. if ! IniLoad( saIniCmds, AppPath() + fn, .F. )
+RETURN .f. if ! IniLoad( saIniCmds, AppRoot() + fn, .F. )
 RETURN .f. if ! LoadDlm("STD")
 * if ! LoadDlm("STD")
 *   AddDllDir(scProgramPath)
@@ -1002,24 +1007,16 @@ RETURN cParams
 
 #endif DEF_ACT
 
-* FUNCTION CfgScreenBlankDelay ; RETURN snScreenBlankDelay
-* FUNCTION CfgMustLoginAgain   ; RETURN slMustLoginAgain
-* FUNCTION CfgExternEdit       ; RETURN scExtEditor
-
 FUNCTION CfgProgramPath      ; RETURN scProgramPath
 FUNCTION AppPath             ; RETURN scProgramPath
+FUNCTION AppRoot             ; RETURN scAppRoot
 *FUNCTION DlmRoot             ; RETURN scDlmRoot
 FUNCTION DataRoot            ; RETURN scDataRoot
 
 FUNCTION CfgDataBase         ; RETURN scDataBase
-* FUNCTION CfgPublicDBFs       ; RETURN scCommonDBFs
-* FUNCTION CfgBootDisk         ; RETURN scBootDisk
 FUNCTION CfgKeepOpenFiles    ; RETURN snKeepOpenFiles
-* FUNCTION CfgTolerance        ; RETURN snTolerance
-* FUNCTION CfgIgnore           ; RETURN slIgnore
 FUNCTION AppVer              ; RETURN snAppVer
 FUNCTION ProgName             ; RETURN scAppName
-* FUNCTION AppName             ; RETURN scAppName
 FUNCTION AppIsDemo           ; RETURN ! AppIsInstalled() // slDemo
 
 FUNCTION SetKeepReport(lNew)
@@ -1628,7 +1625,7 @@ if (fd := fcreate(scDataRoot + "\DBD.DBC")) == -1
   RETURN .f.
 endif
 for i := 1 to len(a)
-  if file(AppPath()+"\"+a[i][F_NAME]+"\" + scAppName + ".dbi")
+  if file(DataRoot()+"\"+a[i][F_NAME]+"\" + scAppName + ".dbi")
     fwrite(fd,padr(a[i][F_NAME],8)+"|")
     fwrite(fd,padr(a[i][F_NAME],30)+"|")
     fwrite(fd,CR_LF)

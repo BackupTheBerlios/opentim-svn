@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+
+<VatList xmlns="http://www.minfin.fgov.be/VatList"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://minfin.fgov.be/portail1/fr/vatlist/VatList.xsd">
+</VatList>

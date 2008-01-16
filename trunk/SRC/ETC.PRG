@@ -2744,3 +2744,40 @@ for i := 1 to len(aTagged)
   endif
 next i
 RETURN .t.
+
+#ifdef DEF_INDEX
+
+FUNCTION prixind(nPrix1,cPer1,cPer2)
+local nIndex1 := NIL
+local nIndex2 := NIL
+local nPrix2 := nPrix1
+RETURN nPrix2 if is0(nPrix1)
+default cPer2 to PerActive(UserDate())
+// default cPer2 to PerActive(SkipMonth(UserDate(),-1))
+open area oPer()
+  seek cPer1
+  if eof()
+    SetMsg(cPer1 + MsgPerExist())
+  elseif empty(PER->Index)
+    SetMsg(cPer1 + " : pas d'index de base.")
+  else
+    nIndex1 := val(PER->Index)
+    seek cPer2
+    if eof()
+      go bottom
+    endif
+    do while ! bof() .and. PER->Periode >= cPer1
+      if !empty(PER->Index)
+        nIndex2 := val(PER->Index)
+        nPrix2 := nPrix1 * nIndex2 / nIndex1
+        SetMsg("(Prix index‚ en p‚riode "+PER->Periode+")")
+        exit
+      endif
+      skip -1
+    enddo
+  endif
+close area
+RETURN nPrix2
+
+#endif DEF_INDEX
+

@@ -46,7 +46,7 @@ static saDlmRoots
 FUNCTION DlmInit()
 saMemoStack := {}
 saDlmPath := {}
-saDlmRoots := { AppPath()+"\DLM" }
+saDlmRoots := { AppRoot()+"\DLM" }
 RETURN .t.
 
 
@@ -102,7 +102,7 @@ for i := 1 to len(saDlmPath)
 next i
 RETURN NIL // cFilename
 
-FUNCTION GetDllDir(cWildCard)
+FUNCTION GetDlmDir(cWildCard)
 local aDir1 := directory(DbPath() + "\" + cWildCard)
 local aDir2
 local a := {}

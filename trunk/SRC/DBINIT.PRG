@@ -20,7 +20,8 @@ scName1   := cName1
 scName2   := cName2
 scName3   := cName3
 scOptions := cOptions
-scDbPath    := AppPath() + "\" + cPath
+* scDbPath    := AppPath() + "\" + cPath
+scDbPath    := DataRoot() + "\" + cPath
 scIdDos   := cPath
 cName := scDbPath + "\" + ProgName()
 #ifdef __XPP__

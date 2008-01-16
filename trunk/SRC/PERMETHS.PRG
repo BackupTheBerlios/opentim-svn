@@ -146,9 +146,14 @@ RETURN nReturn
 
 FUNCTION JnlNextIdDoc(cSeqType,cIdDoc,cPeriode)
 RETURN NextId(cIdDoc) if cSeqType == SEQTYPE_M
-RETURN NextId(cIdDoc,y2p(year(PerDate1(cPeriode)))) if cSeqType == SEQTYPE_Y
 RETURN NextId(cIdDoc) if cSeqType == SEQTYPE_C
+RETURN NextId(cIdDoc,y2p(year(PerDate1(cPeriode)))) if cSeqType == SEQTYPE_Y
+* also cSeqType ist SEQTYPE_E
+* if left(cIdDoc,LEN_YEAR) == left(cPeriode,LEN_YEAR)
 RETURN NextId(cIdDoc,left(cPeriode,LEN_YEAR))
+* endif
+** Neues Rechnungsjahr beginnen:
+* RETURN NextId(space(len(cIdDoc)),left(cPeriode,LEN_YEAR))
 
 
 **

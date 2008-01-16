@@ -181,6 +181,19 @@ open area oVen()
 close area
 RETURN lOkay
 
+FUNCTION JnlIsActive(cIdJnl,dDate)
+local lOkay := .f.
+local cIdDoc
+local cPeriode := PerActive(dDate)
+local jnl := JnlLocate(cIdJnl)
+RETURN !SetMsg(cIdJnl+MsgJnlExist()) if jnl == NIL
+open area oJnl()
+  seek cIdJnl
+  cIdDoc := JnlNextIdDoc(JNL->SeqType,JNL->IdDoc,cPeriode)
+  lOkay := CheckIdDoc(jnl,cIdDoc,cPeriode)
+close area
+RETURN lOkay
+
 #define NSIM_PAR1 1
 #define NSIM_PAR2 2
 #define NSIM_MONT 3
@@ -580,100 +593,102 @@ open area b, oPar(), oPlz(), oNat(), oPrj()
     if ddRecLock()
       cIdDoc := JnlNextIdDoc(JNL->SeqType,JNL->IdDoc,cPeriode)
       * 20040203 cIdDoc := NextNum(JNL->IdDoc,left(cPeriode,LEN_YEAR))
-      select VEN
-      seek jnl[JNL_IDJNL] + cIdDoc
-      if ! eof()
-        SetMsg(jnl[JNL_IDJNL] + " " + cIdDoc + MsgDocExist())
-      elseif dbAddRec()
-        nRecNo := recno()
-        JNL->IdDoc := cIdDoc
-        VEN->IdJnl   := jnl[JNL_IDJNL]
-        VEN->IdDoc   := cIdDoc
-        VEN->Etat    := DocStatNew()
-        VEN->IdPar   := cIdPar1
-        if cIdPar2 != NIL
-          VEN->IdPar2  := cIdPar2
-        endif
-        VEN->Date    := dDate
-        VEN->Periode := cPeriode
-        VEN->DC      := cDC
-        if empty(PAR->IdDev)
-          VEN->IdDev   := DevDefault(cPeriode)
-        else
-          VEN->IdDev   := PAR->IdDev
-        endif
-        VEN->Cours   := DocDevCours(VEN->IdDev,cPeriode)
-        if cNB1 != NIL
-          VEN->NB1     := cNB1
-        endif
-        #ifdef DEF_TAX
-          VEN->IdReg   := PAR->IdReg
-        #endif
-        VEN->Auteur  := UserId() // "AUTO"
-        #ifdef DEF_HST
-          VEN->Match   := cMatch
-        #endif
-        VEN->Attrib  := jnl[JNL_DOCATTR]
-        VenParValidate(jnl,ifc,.f.,cIdMfc)
-        // 19990226 :
-        // bei EH mssen die VenParValidate-Events auch bei
-        // Automatikfakturierung ausgefhrt werden, wegen der Anzahl
-        // Rechnungskopien. Also hier nicht nur VenMfcValidate(),
-        // sondern VenParValidate()
-        // VenMfcValidate(jnl,ifc,.f.)  raus 19990226
-        // 19990517 :
-        // Aber bei PAC darf die ZahlArt S2, die in VnaAuto() forciert
-        // wird, nicht wieder durch die Zahlart aus PAR->IdMfc
-        // berschrieben werden
-        //
-        // 20000504 :
-        DoEvents(b[AD_ONCREATE],"ParVenAppend.OnCreate")
-        if blOnCreate != NIL
-          eval(blOnCreate)
-        endif
-        // die kamen vorher erst sp„ter
-        if (a := VenVnlInit(jnl)) == NIL
-          SetMsg(MsgIdJnlDoc() + " : " + SetMsg())
-        else
-          lOkay := .t.
-          if ! VenVnlGenerate(aVna,jnl,ifc,VEN->DC)
+      if CheckIdDoc(jnl,cIdDoc,cPeriode)
+        select VEN
+        seek jnl[JNL_IDJNL] + cIdDoc
+        if ! eof()
+          SetMsg(jnl[JNL_IDJNL] + " " + cIdDoc + MsgDocExist())
+        elseif dbAddRec()
+          nRecNo := recno()
+          JNL->IdDoc := cIdDoc
+          VEN->IdJnl   := jnl[JNL_IDJNL]
+          VEN->IdDoc   := cIdDoc
+          VEN->Etat    := DocStatNew()
+          VEN->IdPar   := cIdPar1
+          if cIdPar2 != NIL
+            VEN->IdPar2  := cIdPar2
+          endif
+          VEN->Date    := dDate
+          VEN->Periode := cPeriode
+          VEN->DC      := cDC
+          if empty(PAR->IdDev)
+            VEN->IdDev   := DevDefault(cPeriode)
+          else
+            VEN->IdDev   := PAR->IdDev
+          endif
+          VEN->Cours   := DocDevCours(VEN->IdDev,cPeriode)
+          if cNB1 != NIL
+            VEN->NB1     := cNB1
+          endif
+          #ifdef DEF_TAX
+            VEN->IdReg   := PAR->IdReg
+          #endif
+          VEN->Auteur  := UserId() // "AUTO"
+          #ifdef DEF_HST
+            VEN->Match   := cMatch
+          #endif
+          VEN->Attrib  := jnl[JNL_DOCATTR]
+          VenParValidate(jnl,ifc,.f.,cIdMfc)
+          // 19990226 :
+          // bei EH mssen die VenParValidate-Events auch bei
+          // Automatikfakturierung ausgefhrt werden, wegen der Anzahl
+          // Rechnungskopien. Also hier nicht nur VenMfcValidate(),
+          // sondern VenParValidate()
+          // VenMfcValidate(jnl,ifc,.f.)  raus 19990226
+          // 19990517 :
+          // Aber bei PAC darf die ZahlArt S2, die in VnaAuto() forciert
+          // wird, nicht wieder durch die Zahlart aus PAR->IdMfc
+          // berschrieben werden
+          //
+          // 20000504 :
+          DoEvents(b[AD_ONCREATE],"ParVenAppend.OnCreate")
+          if blOnCreate != NIL
+            eval(blOnCreate)
+          endif
+          // die kamen vorher erst sp„ter
+          if (a := VenVnlInit(jnl)) == NIL
             SetMsg(MsgIdJnlDoc() + " : " + SetMsg())
-            lOkay := .f.
-          elseif ! IFCATTR_U $ ifc[IFC_ATTRIB]
-            if ! VenVnlReset(VNLRESET_PU)
+          else
+            lOkay := .t.
+            if ! VenVnlGenerate(aVna,jnl,ifc,VEN->DC)
               SetMsg(MsgIdJnlDoc() + " : " + SetMsg())
               lOkay := .f.
+            elseif ! IFCATTR_U $ ifc[IFC_ATTRIB]
+              if ! VenVnlReset(VNLRESET_PU)
+                SetMsg(MsgIdJnlDoc() + " : " + SetMsg())
+                lOkay := .f.
+              endif
             endif
-          endif
-          VEN->Etat    := iif(len(aVna)==0,DocStatNew(),DocStatOpen())
-          // ... denn sonst wrde TIM
-          // nochmal die Fakturierungsvorschl„ge anzeigen...
-          if lOkay .and. ! lDlg
-            lOkay := .f.
-            // 20000504
-            // DoEvents(b[AD_ONCREATE],"ParVenAppend.OnCreate")
-            // die werden jetzt weiter oben ausgefhrt, weil bei
-            // EH auch VEN->IdReg aus einem VKA nach VKL und VKR
-            // bernommen werden muss.
-            if VenVnlUpdate(jnl)
-              VEN->Etat := DocStatOpen()
-              if PerSetDirty(jnl,VEN->Periode,VEN->Date,VEN->IdDoc)
-                if VenDoClose(jnl,ifc,.f.)
-                  lOkay := .t.
+            VEN->Etat    := iif(len(aVna)==0,DocStatNew(),DocStatOpen())
+            // ... denn sonst wrde TIM
+            // nochmal die Fakturierungsvorschl„ge anzeigen...
+            if lOkay .and. ! lDlg
+              lOkay := .f.
+              // 20000504
+              // DoEvents(b[AD_ONCREATE],"ParVenAppend.OnCreate")
+              // die werden jetzt weiter oben ausgefhrt, weil bei
+              // EH auch VEN->IdReg aus einem VKA nach VKL und VKR
+              // bernommen werden muss.
+              if VenVnlUpdate(jnl)
+                VEN->Etat := DocStatOpen()
+                if PerSetDirty(jnl,VEN->Periode,VEN->Date,VEN->IdDoc)
+                  if VenDoClose(jnl,ifc,.f.)
+                    lOkay := .t.
+                  endif
                 endif
               endif
             endif
+            VnlRestore(a)
           endif
-          VnlRestore(a)
+          if recno() != nRecNo
+            raise("recno() changed during ParVenAppend().")
+          endif
+          dbcommit()
+          unlock record
         endif
-        if recno() != nRecNo
-          raise("recno() changed during ParVenAppend().")
-        endif
+        select JNL
         dbcommit()
-        unlock record
       endif
-      select JNL
-      dbcommit()
       unlock record
     endif
   close area

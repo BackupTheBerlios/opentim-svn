@@ -136,7 +136,7 @@ if lLog
   )
 endif
 if ! "\" $ scInputFile
-  scInputFile := AppPath() + "\TEMP\" + scInputFile
+  scInputFile := AppRoot() + "\TEMP\" + scInputFile
 endif
 open area ad
   if snSeekOrder != 0
@@ -251,7 +251,7 @@ else
   endif
   if lOkay
     if ! "\" $ scOutputFile
-      scOutputFile := AppPath() + "\TEMP\" + scOutputFile
+      scOutputFile := AppRoot() + "\TEMP\" + scOutputFile
     endif
     if slConfirm .and. fexist(scOutputFile)
       if ! Confirm(scOutputFile + MsgOverwrite())
@@ -407,7 +407,7 @@ local nChoice
 local cTitle
 static a := NIL
 if cFilename == NIL
-  aDir := GetDllDir(cName + "*." + cExt)
+  aDir := GetDlmDir(cName + "*." + cExt)
   ** aDir := directory(DbPath() + "\" + cName + "*." + cExt)
   for i := 1 to len(aDir)
     aDir[i][5] := aDir[i][F_NAME] + ":" + FileFirstLine(aDir[i][F_NAME])

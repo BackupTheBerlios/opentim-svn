@@ -1458,7 +1458,7 @@ RETURN NIL
 
 #ifdef CUST_HSB
 
-** Schauergans
+**
 **
 FUNCTION NewIdTax(cIdCtr,cIdTax)
 if cIdCtr == IDCTR_E
@@ -1527,7 +1527,7 @@ RETURN cIdDoc
 
 #ifdef CUST_BELLE
 
-** Belleflamme
+**
 **
 FUNCTION NewIdTax(cIdCtr,cIdTax)
 if cIdCtr == IDCTR_E
@@ -1585,7 +1585,7 @@ RETURN cIdDoc
 
 #ifdef CUST_REUL
 
-** reul
+**
 **
 FUNCTION NewIdTax(cIdCtr,cIdTax)
 if cIdCtr == IDCTR_E
@@ -1638,7 +1638,7 @@ RETURN "9" + left(cIdDoc,1) + "0" + right(cIdDoc,3)
 
 #ifdef CUST_BOURSIE
 
-** Boursie
+**
 **
 FUNCTION NewIdTax(cIdCtr,cIdTax)
 if cIdCtr == IDCTR_E
@@ -1802,7 +1802,7 @@ RETURN cIdDoc
 
 #ifdef CUST_GARN
 
-** Garnstock
+**
 **
 FUNCTION NewIdTax(cIdCtr,cIdTax)
 if cIdCtr == IDCTR_E
@@ -1853,7 +1853,7 @@ RETURN "9" + left(cIdDoc,1) + "0" + right(cIdDoc,3)
 
 #ifdef CUST_MERVEILLE
 
-** La Merveille
+**
 **
 FUNCTION NewIdTax(cIdCtr,cIdTax)
 if cIdCtr == IDCTR_E
