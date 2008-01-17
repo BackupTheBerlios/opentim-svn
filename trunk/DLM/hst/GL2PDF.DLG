@@ -9,8 +9,11 @@ field name="GL2PDF.path" \
 field name="GL2PDF.Journale" default="X" \
       caption2=" Journale" \
       reader={|g|CbxReader(g)}
-field name="GL2PDF.Salden" default="X" \
-      caption2=" Saldenlisten" \
+field name="GL2PDF.GENHST" default="X" \
+      caption2=" Saldenliste Generalkonten" \
+      reader={|g|CbxReader(g)}
+field name="GL2PDF.PARHST" default="X" \
+      caption2=" Saldenlisten Partnerkonten" \
       reader={|g|CbxReader(g)}
 field name="GL2PDF.Historiken" default="X" \
       caption2=" Historiken" \

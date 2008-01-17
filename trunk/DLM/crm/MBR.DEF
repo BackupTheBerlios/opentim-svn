@@ -1,4 +1,5 @@
 // MBR.DEF
+ddAddIndex("MBR->IdPar+MBR->IdPar2","IdPar+IdPar2")
 ddAddSpecial(\
   {||DlgExec("MBRAPPND")},\
   "Massen~eintragung       [Ctrl-Num+]",\
@@ -12,3 +13,11 @@ ddAddSpecial(\
   {||indexord()<3}\
 )
 ddFldSetValidate("IdPar",{||MbrParValidate()})
+ddAddField("Tel","C",LenTel(),0)
+ddAddField("email","C",250,0)
+ddAddSpecial(\
+  {||ParExist(MBR->IdPar2).and.OpenMail(trim(MBR->email),trim1(PAR->Allo)+trim1(PAR->Vorname)+trim(PAR->Firme))},\
+  "E-~Mail starten         [Alt-M]",\
+  306\
+)
+

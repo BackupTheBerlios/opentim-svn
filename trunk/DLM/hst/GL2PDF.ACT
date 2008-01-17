@@ -5,6 +5,8 @@ SetDevise(DevDefault(MemPer1))
 setvar("GL2PDF.path",trim(getvar("GL2PDF.path")))
 right(getvar("GL2PDF.path"),1)=="\".or.\
   DlgPlus("GL2PDF.path","\"+ntrim(getvar("year"))+"\")
+SetPreview(" ")
+SetAsPdf(.t.)
 SetBatch(.t.)
 // HSTVEN und HSTFIN : Journale
 setvar("b",{||\
@@ -12,7 +14,6 @@ setvar("b",{||\
   setvar("IdJnlVen",JNL->IdJnl),\
   setvar("IdJnlFin",JNL->IdJnl),\
   setvar("subttl","X"),\
-  SetAsPdf(.t.),\
   setvar("PRN2PDF.out",trim(getvar("GL2PDF.path"))+"JNL-"+trim(JNL->IdJnl)+".pdf"),\
   RepPrint("HST"+JNL->Alias,NIL,"foo",\
            CtrTplIni(JNL->IdCtr)," ",.f.)\
@@ -27,7 +28,7 @@ setvar("GenFilter",".t.")
 setvar("IdGen1","")
 setvar("IdGen2","")
 setvar("PRN2PDF.out",trim(getvar("GL2PDF.path"))+"GENHST.pdf")
-empty(getvar("GL2PDF.Salden")).or.\
+empty(getvar("GL2PDF.GENHST")).or.\
   RepPrint("GENHST",NIL,"foo")
 
 // HSTGEN: Historik Generalkonten
@@ -40,7 +41,7 @@ setvar("HSTGEN.SumByJnl"," ")
 empty(getvar("GL2PDF.Historiken")).or.\
   RepPrint("HSTGEN",NIL,"foo")
 
-// PARHST: Saldenliste Partnerkonten
+// PARHST: Saldenlisten Partnerkonten
 setvar("ParFilter",".t.")
 setvar("IdJnl",space(LenIdJnl()))
 setvar("b",{||\
@@ -51,7 +52,7 @@ setvar("b",{||\
   setvar("HstFilter","HST->IdCtr=="+utos(CTR->IdCtr)),\
   setvar("FltText",trim(CTR->Name)),\
   RepPrint("PARHST",NIL,"foo")})
-empty(getvar("GL2PDF.Salden")).or.\
+empty(getvar("GL2PDF.PARHST")).or.\
   DbfScan({oCtr()},1,NIL,NIL,".t.",getvar("b"))
 
 // HSTPAR: Historik Partnerkonten

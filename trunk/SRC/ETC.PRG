@@ -322,15 +322,9 @@ RETURN line
 
 
 FUNCTION MsgFileExist()
-#ifdef LG_GERMAN
-RETURN " : Datei existiert nicht !"
-#endif
-#ifdef LG_FRENCH
-RETURN " : ce fichier n'existe pas !"
-#endif
-#ifdef LG_EN
-RETURN " : no such file !"
-#endif
+RETURN utrp(" : no such file !",;
+            " : Datei existiert nicht !",;
+            " : ce fichier n'existe pas !")
 
 **
 **  AComp( <aArray>, <bComp>, [<nStart>], [<nStop>] ) --> valueElement
@@ -2781,3 +2775,13 @@ RETURN nPrix2
 
 #endif DEF_INDEX
 
+
+FUNCTION setup(lOverwrite)
+local a := GetDlmDir("*.BTP")
+local i
+for i := 1 to len(a)
+  RETURN .f. if ! fparse(a[i][F_NAME],;
+    AppPath()+"\"+strtran(upper(a[i][F_NAME]),".BTP",".BAT"),;
+    "[]",.t.,lOverwrite,NIL,NIL,"TXTWIN")
+next i
+RETURN .t.

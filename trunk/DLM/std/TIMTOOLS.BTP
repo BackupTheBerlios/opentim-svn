@@ -1,0 +1,7 @@
+@echo off
+[etc if file(AppRoot()+"\timtools\prn2pdf.exe")]
+[=AppRoot()]\timtools\%*
+[etc else]
+echo Using Lino from source
+python -c "from lino import runscript" %*
+[etc endif]

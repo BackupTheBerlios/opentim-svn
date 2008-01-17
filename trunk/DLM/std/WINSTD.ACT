@@ -1,0 +1,31 @@
+// called by OnSelect in WINSTD.DRV
+!(SetAsMail().or.SetAsPdf()).or.p_SetCopies(1)
+SetAsMail().or.SetAsPdf().or.SetSpooler('\
+  runbg(AppPath()+"\timtools.bat",\
+    "prnprint"\
+    +iif(empty(p_setport()),""," -p"+p_setport())\
+    +" preview.prn")')
+!SetAsPdf().or.p_SetCopies(1)
+!SetAsPdf().or.FileDelete(trim(getvar("PRN2PDF.out")),.f.,.t.)
+!SetAsPdf().or.SetSpooler('runbg(\
+  AppPath()+"\timtools.bat",\
+  "prn2pdf "+iif(SetBatch().or.SetAsMail(),"-b ","")\
+            +"-o "+trim(getvar("PRN2PDF.out"))\
+    +" preview.prn")')
+RETURN .t. if !SetAsMail().or.empty(getvar("mailto"))
+empty(getvar("mailhost"))\
+  .or.AddSpooler('\
+    FileDelete(".\tmp.eml",.f.,.t.)\
+    .and.fparse(getvar("mailtpl"),".\tmp.eml",NIL,NIL,.t.)\
+    .and.AppShell(\
+      AppPath()+"\timtools sendmail -e cp850 "\
+      +"--host "+trim1(getvar("mailhost")) \
+      +".\tmp.eml "\
+      +iif(SetAsPdf(),trim(getvar("PRN2PDF.out")),"")\
+      )\
+  ')
+!empty(getvar("mailhost"))\
+  .or.AddSpooler(\
+    'OpenMail(getvar("mailto"),NIL,SetDlgTitle(),\
+      getvar("mailbody")+iif(SetAsPdf(),"",crlf()+p_PreBuffer()),\
+      iif(SetAsPdf(),trim(getvar("PRN2PDF.out")),NIL))')

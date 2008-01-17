@@ -87,7 +87,7 @@ column header=utr("VAT","MWS","TVA") width=3 text={||HST->IdTax}
 
   // services sales intracom
   column header="3" width=LenMntF() \
-         when={||GEN->IdClj=="..".and.HST->IdTax$"0  IS IM XM "} \
+         when={||GEN->IdClj=="..".and.HST->IdTax$"0  IS IM XM XS "} \
          value={||HstDcMont("C",SetDevise())} \
          text={|x|ntomf(x)} xsum={|x| ntomf(x) }
   // 3.1. sh. kaupade hendusesisene k„ive

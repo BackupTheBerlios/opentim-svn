@@ -1,0 +1,49 @@
+Integrit„tstest 05.10.07 18:00:03
+GEN : 398 records. 
+Generalkonten : OK
+ART : 29 records. 
+Artikel : OK
+PRJ : 0 records. 
+Projekte : OK
+
+[1] AUF 050001 : AUF 050001 (Dokument nicht registriert)
+[2] AUF 050002 : AUF 050002 (Dokument nicht registriert)
+[3] AUF 050003 : AUF 050003 (Dokument nicht registriert)
+[4] AUF 050004 : AUF 050004 (Dokument nicht registriert)
+[5] AUF 050005 : AUF 050005 (Dokument nicht registriert)
+[6] AUF 050006 : AUF 050006 (Dokument nicht registriert)
+[7] AUF 050007 : AUF 050007 (Dokument nicht registriert)
+[8] AUF 050008 : AUF 050008 (Dokument nicht registriert)
+[9] AUF 050009 : AUF 050009 (Dokument nicht registriert)
+VEN : 37 records. 
+Fakturationsdokumente : 9 warnings
+VNL : 33 records. 
+Fakturationsdokumente Inhalt : OK
+
+[10] BB2 010001 : Beginnsaldo (123.00) widerspricht Historik () !
+[11]              (550100 beginnt in 0108 mit  DEM (Differenz = -123.00)
+[12] BB2 010001 -> 011001 : Sequenzbruch !
+[13] BB3 000001 (Dokument nicht registriert)
+[14] BB3 000002 : Beginnsaldo 35.23 statt 25
+[15] BB3 000002 (Dokument nicht registriert)
+[16] BB3 000003 : Beginnsaldo 194.62 statt 25
+[17] BB3 000003 (Dokument nicht registriert)
+[18] BBL 000002 : Beginnsaldo (-9224) widerspricht Historik () !
+[19]              (550000 beginnt in 0102 mit  BEF (Differenz = 9224)
+[20] BBL 000003 (Dokument nicht registriert)
+[21] BBL 000003 : Beginnsaldo (-476.55) widerspricht Historik (-247.89) !
+[22]              (550000 beginnt in 0108 mit -247.89 EUR (Differenz = 228.66)
+[23] BBL 020001 : Beginnsaldo  statt -477
+[24] BBL 040002 (Dokument nicht registriert)
+[25] BBL 040002 : Beginnsaldo (311.00) widerspricht Historik (63.11) !
+[26]              (550000 beginnt in 0402 mit 63.11 EUR (Differenz = -247.89)
+FIN : 19 records. 
+Finanzdokumente : 17 warnings
+FNL : 71 records. 
+Finanzdokumente Inhalt : OK
+PAR : 48 records. 
+Partnerstammdaten : OK
+HST : 151 records. 
+Historik Buchhaltung : OK
+26 warnings in 9 of 9 tests.
+Done after 1.00 seconds.

@@ -1,0 +1,29 @@
+// OnLogin LoadColor("COLOR4")
+do SetCmdTags("[","]")
+
+// FixY2K .t. : Jahr 2000 als Buchungsperiode "A0" darstellen.
+// FixY2K .f. : Jahr 2000 als Buchungsperiode "00" darstellen.
+// Bei Installationen, die keine Buchungen aus dem vorigen
+// Jahrhundert enthalten, sollte es auf .f. gesetzt sein.
+FixY2K .f.
+
+LoadDlm "SPRL"
+LoadDlm "HST"
+LoadDlm "VEN"
+LoadDlm "FIN"
+LoadDlm "ART"
+LoadDlm "BIL"
+// LoadDlm "MSG"
+LoadDlm "CHRON"
+LoadDlm "TRM"
+LoadDlm "IBAN"
+LoadDlm "TESTS"
+
+#include "NEWETAT.INI"   // DOC->Etat
+#include "NEWIDART.INI"  // ART->IdArt ohne fhrende Nullen
+
+// do SetKeepReport(.t.)
+do SetActiveMenus(.t.)
+
+PerToggle "0100"
+

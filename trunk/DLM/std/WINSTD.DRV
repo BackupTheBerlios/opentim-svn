@@ -25,35 +25,4 @@ Option 8  8LinesPerInch chr(27)+"l8 "
 Option 7  7LinesPerInch chr(27)+"l7 "
 Option 6  6LinesPerInch chr(27)+"l6 "
 
-OnSelect !(SetAsMail().or.SetAsPdf()).or.p_SetCopies(1)
-OnSelect SetAsMail().or.SetAsPdf().or.SetSpooler('\
-  AppShell(AppPath()+"\timtools prnprint"\
-    +iif(empty(p_setport()),""," -p"+p_setport())\
-    +" preview.prn")\
-  ')
-OnSelect !SetAsPdf().or.p_SetCopies(1)
-OnSelect !SetAsPdf().or.FileDelete(trim(getvar("PRN2PDF.out")),.f.,.t.)
-OnSelect !SetAsPdf().or.SetSpooler('AppShell("'\
-    +AppPath()+"\timtools prn2pdf "\
-    +iif(SetBatch().or.SetAsMail(),"-b ","")+"-o "\
-    +trim(getvar("PRN2PDF.out"))\
-    +' preview.prn")')
-OnSelect !SetAsMail().or.empty(getvar("mailhost"))\
-  .or.empty(getvar("mailto"))\
-  .or.AddSpooler('\
-    FileDelete(".\tmp.eml",.f.,.t.)\
-    .and.fparse(getvar("mailtpl"),".\tmp.eml",NIL,NIL,.t.)\
-    .and.AppShell(\
-      AppPath()+"\timtools sendmail -e cp850 "\
-      +"--host "+trim1(getvar("mailhost")) \
-      +".\tmp.eml "\
-      +iif(SetAsPdf(),trim(getvar("PRN2PDF.out")),"")\
-      )\
-  ')
-OnSelect !SetAsMail().or.!empty(getvar("mailhost"))\
-  .or.empty(getvar("mailto"))\
-  .or.AddSpooler(\
-    'OpenMail(getvar("mailto"),NIL,SetDlgTitle(),\
-      getvar("mailbody")+iif(SetAsPdf(),"",crlf()+p_PreBuffer()),\
-      iif(SetAsPdf(),trim(getvar("PRN2PDF.out")),NIL))')
-
+OnSelect ActExec("WINSTD")

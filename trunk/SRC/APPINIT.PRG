@@ -120,7 +120,7 @@ static slDlmRdOnly := .f.
 static scBossTables := ""
 
 // options specified in command line:
-static scExec := NIL // "/exec:" 
+static scExec := NIL // "/exec:"
 static scIdDos := NIL // database name to be used
 static slCheck // /check
 static slRecover // /recover
@@ -380,7 +380,7 @@ endif
 RETURN .f. if ! OpenData(cIdDos) // ,lCheck) // ,lRecover)
 * warning("OpenData() returned .t.")
 if scExec != NIL
-  xparse(scExec)
+  RETURN .f. if ! xparse(scExec)
 endif
 **
 ** LOGIN
@@ -433,7 +433,7 @@ saOnLogin   := { ;
 }
 snLenIdLng  := 1
 set(_SET_EPOCH,1920)
-RETURN .f. if ! IniLoad( saIniCmds, AppRoot() + fn, .F. )
+RETURN .f. if ! IniLoad( saIniCmds, AppPath() + fn, .F. )
 RETURN .f. if ! LoadDlm("STD")
 * if ! LoadDlm("STD")
 *   AddDllDir(scProgramPath)
@@ -606,6 +606,16 @@ RETURN ProgName() + " " + ntrim(AppVer()) + " - " + CopyRight()
 
 
 #ifdef DEF_SHELL
+
+FUNCTION runbg(cProgram,cParams)
+local uRetVal
+RETURN !SetMsg("runbg(): "+cProgram+MsgFileExist()) if ! file(cProgram)
+#ifdef __XPP__
+  uRetVal := RunShell(cParams,cProgram,.f.,.t.)
+  RETURN .t. if uRetVal == 0
+  RETURN !SetMsg("runbg("+cProgram+" "+cParams+") returned "+utos(uRetVal))
+#endif
+RETURN AppShell(cProgram+" "+cParams)
 
 **
 ** AppShell()
@@ -812,7 +822,7 @@ local cPath := AppMrkFile()
 if file(cPath)
   restore from (cPath) addi
 else
-  SetMsg(cPath+MsgFileExist())
+  SendConsole(cPath+MsgFileExist())
 endif
 RETURN .T. if AppIsInstalled()
 if lDlg

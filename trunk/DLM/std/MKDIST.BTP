@@ -1,0 +1,99 @@
+@echo off
+[* --------------------------------------------------------------
+  mkdist.btp : create distribution files from this installation
+  This file is part of the TIM installation routines
+  Copyright(c) 2002-2008 Luc Saffre
+  distributed under the terms of the GNU General Public License
+  -------------------------------------------------------------- *]
+rem **********
+rem *** preparation
+rem **********
+[=left(AppRoot(),2)]
+cd [=AppRoot()]
+rem check for first time run
+rem clean up from previous runs
+rem 20030205 on win95 you cannot test easily if directory exists...
+if exist .\dist\*.* del /q dist\*.*
+if errorlevel 1 goto ende
+rd dist
+if errorlevel 1 goto ende
+md dist
+if errorlevel 1 goto ende
+
+[=left(AppRoot(),2)]
+cd [=AppRoot()]
+if exist dlm\*.* zip -r dist\dlm.zip dlm
+if errorlevel 1 goto err_zip
+if exist localdlm\*.* zip -r dist\localdlm.zip localdlm
+if errorlevel 1 goto err_zip
+if exist readme.txt xcopy readme.txt dist /v
+if errorlevel 1 goto err_copy
+
+[=left(AppPath(),2)]
+cd [=AppPath()]
+zip [=AppRoot()]\dist\bin.zip tim4.exe tim4.ico \
+  choice.com prn2file.com \
+  zip.exe zipsplit.exe setup.bat
+if errorlevel 1 goto err_zip
+if exist unzip.exe xcopy unzip.exe [=AppRoot()]\dist /v
+if errorlevel 1 goto err_copy
+
+
+:restart
+
+if x%1 == x goto ende
+
+[=left(DataRoot(),2)]
+cd [=DataRoot()]
+if not exist %1\tim.dbi goto error1
+zip -r -e [=AppRoot()]\dist\%1 %1 -x *.NTX -x *.OL* -x *.CDX
+if errorlevel 1 goto err_zip
+
+[etc if !empty(getvar("mailhost")).and.!empty(getvar("mailsupport"))]
+call [=AppPath()]\timtools.bat sendmail \
+  --subject="Backup %1" \
+  --from="[=getvar("mailfrom")]" \
+  --to="[=getvar("mailsupport")]" \
+  --host=[=getvar("mailhost")] \
+  [=AppRoot()]\dist\%1.zip
+[etc endif]
+
+shift
+goto restart
+
+:error1
+[=left(AppRoot(),2)]
+cd [=AppRoot()]
+echo [=utr( \
+  "ERROR : %1 : no such database in",\
+  "FEHLER : %1 : Datenbank nicht gefunden in")] [=DataRoot()]
+pause
+shift
+if not x%1 == x goto restart
+goto ende
+
+:err_zip
+[=left(AppRoot(),2)]
+cd [=AppRoot()]
+echo [=utr( \
+  "Error during compression",\
+  "FEHLER : Datei konnte nicht komprimiert werden")]
+pause
+goto ende
+
+:err_copy
+[=left(AppRoot(),2)]
+cd [=AppRoot()]
+echo [=utr( \
+  "Error while copying some files",\
+  "FEHLER : Datei konnte nicht kopiert werden")]
+pause
+goto ende
+
+:syntax
+echo Usage : MKDIST.BAT [[[dbname_1] dbname_2] dbname_n]
+echo 컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�
+echo where dbname_1 through n are database names
+pause
+
+:ende
