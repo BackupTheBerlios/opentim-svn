@@ -862,9 +862,11 @@ case ( key == K_CTRL_HOME ) ; get:exitState := GE_TOP
 *    case (key == K_CTRL_W) ;   get:exitState := GE_WRITE
 #endif
 case (key == K_INS)
+  get:changed := .t.
   get:varPut(BUTTON_ON)
   get:updateBuffer()
 case (key == K_DEL)
+  get:changed := .t.
   get:varPut(BUTTON_OFF)
   get:updateBuffer()
   * Set( _SET_INSERT, !Set(_SET_INSERT) )
@@ -873,6 +875,7 @@ case (key == K_CTRL_Y)     ; get:DelEnd()
 case (key == K_UNDO)       ; get:Undo()
 otherwise
   if key >= 32 .and. key <= 255
+    get:changed := .t.
     if empty( get:buffer )
       get:varPut(BUTTON_ON)
     else

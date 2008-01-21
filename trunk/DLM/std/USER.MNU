@@ -16,7 +16,7 @@ MnuAddItem(utr("Partner ~Lists             ","Partner~listen             ","~Lis
 #if HasDlm("ALA")
 MnuAddItem(    "Partnerliste fÅr ~Wartung  ",{||ParEdit("7",MnuItemName())})
 #endif
-#if file(DbPath()+"\LIC.DBF")
+#if HasDlm("LIC")
 MnuAddItem(    "Li~zenzen                  ",{||DbfEdit({oLic(),oPar(),oPlz()},MnuItemName())})
 MnuAddItem(    "Relea~ses                  ",{||DbfEdit({oRel(),oLic(),oPar(),oPlz()},MnuItemName())})
 #endif

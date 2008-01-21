@@ -11,7 +11,7 @@
 #define DEF_SEEK      // Edition Recherche
 #define DEF_SHELL     // external editor, programmes externes
 
-// #define DEF_BRAND      // Application with copy protection
+#define DEF_BRAND      // Application with copy protection
 #define DEF_LOGIN      // Application with USR.DBF and login system
 
 * #define DEF_WRITE

@@ -2,7 +2,7 @@
 !(SetAsMail().or.SetAsPdf()).or.p_SetCopies(1)
 SetAsMail().or.SetAsPdf().or.SetSpooler('\
   runbg(AppPath()+"\timtools.bat",\
-    "prnprint"\
+    'prnprint --fontName "Lucida Console"'\
     +iif(empty(p_setport()),""," -p"+p_setport())\
     +" preview.prn")')
 !SetAsPdf().or.p_SetCopies(1)

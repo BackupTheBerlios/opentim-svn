@@ -1,0 +1,6 @@
+@echo off
+[=left(AppPath(),2)]
+cd [=AppPath()]
+start tim4.exe %*
+[=left(AppPath(),2)]
+cd [=AppPath()]

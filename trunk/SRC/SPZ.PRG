@@ -1234,7 +1234,6 @@ open area oDlp(),oPar()
 close area
 RETURN n
 
-* FUNCTION DlsMont()
 FUNCTION DlsArtPrix()
 local c
 if ART->IdPga=="T"
