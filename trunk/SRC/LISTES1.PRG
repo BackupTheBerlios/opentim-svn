@@ -2628,6 +2628,7 @@ if cDoFile == BUTTON_ON
 endif
 RETURN lOkay
 
+
 FUNCTION TvaTrim(c)
 local r := strtran(strtran(strtran(c,"."),"-")," ")
 if left(r,2) == "BE".and.len(r) == 12
@@ -2638,6 +2639,89 @@ RETURN r
 FUNCTION TvaBase     ; RETURN snTotBase
 FUNCTION TvaTaxe     ; RETURN snTotTaxe
 FUNCTION TvaParCount ; RETURN snSeq
+
+
+FUNCTION ParTvaScan(cIdCtr,cRegimes)
+local i
+local lOkay := .f.
+local jnl
+local aMvt
+local a
+local nParBase := 0
+local nParTaxe := 0
+local cIdPar := PAR->IdPar
+local cIdDev := DevDefault(MemPer1)
+local cDC := CtrDC(cIdCtr)
+open area oVen(), oPar(), oGen(), oArt()
+  lOkay := .t.
+  ddSetOrder(ORD_VEN_PAR)
+  softseek cIdPar
+  do while lOkay .and. ! eof() .and. LstContinue() .and. VEN->IdPar == cIdPar
+    if VEN->IdReg$cRegimes
+      if ChkPeriode(VEN->Periode) == 0
+        if (jnl := JnlLocate(VEN->IdJnl)) != NIL
+          if jnl[JNL_IDCTR] == cIdCtr
+            if JNLATTR_G $ jnl[JNL_ATTRIB]
+              if (a := VenVnlInit(jnl)) == NIL
+                SetMsg(MsgIdJnlDoc() + " : " + SetMsg())
+                lOkay := .f.
+              else
+                aMvt := {}
+                open area oVnl(VEN->Etat)
+                  softseek VEN->IdJnl + VEN->IdDoc
+                  do while ! eof() ;
+                           .and. FIELD->IdJnl == VEN->IdJnl ;
+                           .and. FIELD->IdDoc == VEN->IdDoc
+                    if ! VnlVarCollect()
+                      SetMsg(MsgIdJnlDoc()+" : " + SetMsg())
+                      lOkay := .f.
+                    endif
+                    VnlMvtCollect(jnl,aMvt)
+                    skip
+                  enddo
+                  #ifdef DEF_VENREMISE
+                    VenMvtRemise(aMvt)
+                  #endif
+                  #ifdef DEF_FRF
+                    if ! VenFrfCollect(jnl,aMvt)
+                      SetMsg(MsgIdJnlDoc()+" : " + SetMsg())
+                      lOkay := .f.
+                    endif
+                  #endif DEF_FRF
+                  VenMvtRound(aMvt,jnl)
+                close area
+                for i := 1 to len(aMvt)
+                  if aMvt[i][MVT_ISBASE]
+                    if VEN->DC == cDC
+                      nParBase += Db2Dev(cIdDev,VEN->Periode,aMvt[i][MVT_MONTDB])
+                    else
+                      nParBase -= Db2Dev(cIdDev,VEN->Periode,aMvt[i][MVT_MONTDB])
+                    endif
+                  else
+                    if VEN->DC == cDC
+                      nParTaxe += Db2Dev(cIdDev,VEN->Periode,aMvt[i][MVT_MONTDB])
+                    else
+                      nParTaxe -= Db2Dev(cIdDev,VEN->Periode,aMvt[i][MVT_MONTDB])
+                    endif
+                  endif
+                next i
+                VnlRestore(a)
+              endif
+            endif
+          endif
+        else
+          SetMsg(MsgIdJnlDoc() + MsgJnlExist())
+          lOkay := .f.
+        endif
+      endif
+    endif
+    skip
+  enddo
+close area
+setvar("MontB",nParBase)
+setvar("MontT",nParTaxe)
+RETURN lOkay
+
 
 #endif DEF_VEN
 

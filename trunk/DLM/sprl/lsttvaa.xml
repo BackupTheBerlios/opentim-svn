@@ -1,6 +1,47 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<VatList xmlns="http://www.minfin.fgov.be/VatList"  
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+xsi:schemaLocation="http://www.minfin.fgov.be/VatList 
+http://www.minfin.fgov.be/VatList/VatList.xsd" 
+RecipientId="VAT-ADMIN"  
+SenderId="[=trim(substr(MemNoTva,4))]"  
+ControlRef="[=trim(substr(MemNoTva,4))]0001"  
+MandataireId="xxxx"  
+SenderDate="[=dtocf(UserDate(),"yyyy-mm-dd")]"  
+VersionTech="1.2"  
+Test="0" >
 
-<VatList xmlns="http://www.minfin.fgov.be/VatList"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xsi:schemaLocation="http://minfin.fgov.be/portail1/fr/vatlist/VatList.xsd">
+<CompanyInfo>
+<VATNum>[=substr(TvaTrim(MemNoTva),4)]</VATNum>
+<Name>[=trim(MemName1)]</Name>
+<Street>[=trim(MemName2)]</Street>
+<CityAndZipCode>[=trim(MemName3)]</CityAndZipCode>
+<Country>BE</Country>
+</CompanyInfo>
+
+<Period>getvar("LSTTVA.Period")</Period>
+
+[=setvar("LSTTVA.TurnOver",0)]
+[=setvar("LSTTVA.Amount",0)]
+
+[etc if .f.]
+<Farmer>1</Farmer>
+[etc endif]
+
+[etc loop clients DbfScan({oPar()},1,NIL,NIL,"ParTvaScan('V','AC').and.MontMin",xlEval)]
+[etc do DlgPlus("LSTTVA.Turnover",getvar("MontB"))]
+[etc do DlgPlus("LSTTVA.Amount",getvar("MontT"))]
+<ClientList SequenceNum="1">
+<CompanyInfo>
+<VATNum>[=substr(PAR->NoTva,4)]</VATNum>
+<Country>[=left(PAR->NoTva,2)]</Country>
+</CompanyInfo>
+<Amount>[=ntrim(getvar("MontT"))]</Amount>
+<TurnOver>[=ntrim(getvar("MontB"))]</TurnOver>
+</ClientList>
+[etc endloop clients]
+
+<TurnOver>[=ntrim(getvar("LSTTVA.TurnOver"))]</TurnOver>
+<Amount>[=ntrim(getvar("LSTTVA.Amount"))]</Amount>
+
 </VatList>

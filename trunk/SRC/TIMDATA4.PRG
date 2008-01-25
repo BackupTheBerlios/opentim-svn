@@ -1007,22 +1007,23 @@ if ! empty(OBJ->IdRub)
 endif
 RETURN ph_refresh()
 
-*FUNCTION DocIdDocF(cIdDtp,cIdDoc)
-*local dtp := DtpLocate(cIdDtp)
-*local cId := ""
-*RETURN cIdDoc if dtp == NIL
-*if dtp[DTP_LENPRE] > 0
-*  cId += left(cIdDoc,dtp[DTP_LENPRE]) + "-"
-*endif
-*cId += substr( ;
-*  cIdDoc, ;
-*  dtp[DTP_LENPRE]+1, ;
-*  LEN_IDDOC-dtp[DTP_LENPRE]-dtp[DTP_LENSUF] ;
-*)
-*if dtp[DTP_LENSUF] > 0
-*  cId += "." + right(cIdDoc,dtp[DTP_LENSUF])
-*endif
-*RETURN cId
+* FUNCTION DocIdDocF(cIdDtp,cIdDoc)
+* local dtp := DtpLocate(cIdDtp)
+* local cId := ""
+* RETURN cIdDoc if dtp == NIL
+* if dtp[DTP_LENPRE] > 0
+*   cId += left(cIdDoc,dtp[DTP_LENPRE]) + "-"
+* endif
+* cId += substr( ;
+*   cIdDoc, ;
+*   dtp[DTP_LENPRE]+1, ;
+*   LEN_IDDOC-dtp[DTP_LENPRE]-dtp[DTP_LENSUF] ;
+* )
+* if dtp[DTP_LENSUF] > 0
+*   cId += "." + right(cIdDoc,dtp[DTP_LENSUF])
+* endif
+* RETURN cId
+
 
 **
 ** AUT - Auteurs
@@ -1036,6 +1037,7 @@ define data b name AUT                                 ;
               create    AutCreate() ;
               predelete    AutPreDelete() ;
               wait      {|w| AutWait(w) }
+
 ddIndex b on  AUT->IdAut                      // AUT_ORD_ID
 ddIndex b on  upper(AUT->Name) format {|x|upper(x)}    // AUT_ORD_NAME
 ddFld IdAut    ,C, LEN_IDAUT,0 when .f.

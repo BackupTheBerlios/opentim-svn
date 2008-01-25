@@ -1158,7 +1158,9 @@ memvar MemPickArtMode
 #define ORD_QUO_PUB 3
 #else
   #xtranslate oPub() => NIL
-  #xtranslate oAut() => NIL
+  #ifndef DEF_BIBLIO
+    #xtranslate oAut() => NIL
+  #endif
   #xtranslate oQuo() => NIL
 #endif DEF_LITERA
 

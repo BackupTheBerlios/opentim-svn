@@ -2931,7 +2931,8 @@ RETURN lOkay
 #define OS_LANG     4
 #define OS_DRV      5
 #define OS_IFSTACK  6
-#define OS_ALEN     6
+#define OS_PRNSTAT  7
+#define OS_ALEN     7
 
 FUNCTION BeginOfStream(cOutFile,lAppend,lOverwrite,cDrvName)
 local cFileName := TmpConvert(cOutFile)
@@ -2981,7 +2982,8 @@ local os := { ;
   sbWriter,;
   scLangue,;
   DrvSave(),;
-  saIfStack ;
+  saIfStack, ;
+  snPrnStatus ;
 } // OS_ALEN
 if cDrvName != NIL
   RETURN .f. if ! DrvLoad(cDrvName)
@@ -3010,6 +3012,7 @@ endif
 sbWriter := os[OS_WRITER]
 scLangue := os[OS_LANG]
 saIfStack := os[OS_IFSTACK]
+snPrnStatus := os[OS_PRNSTAT]
 DrvRestore(os[OS_DRV])
 asize(saOsStack,len(saOsStack)-1)
 RETURN os
