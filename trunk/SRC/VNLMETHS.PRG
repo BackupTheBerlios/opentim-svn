@@ -1807,8 +1807,10 @@ endif
 #ifdef DEF_VNA
   if !empty(VNL->Match)
     seek VNL->Match in VNA
-    if (eof() in VNA) .or. VNA->IdArt != VNL->IdArt // no such vna
-      RETURN !SetMsg(VNL->Match+"/"+VNL->IdArt+" : r‚f‚rence de suite invalide!")
+    if (eof() in VNA) 
+      RETURN !SetMsg(VNL->Match+" : r‚f‚rence de suite invalide!")
+    * elseif VNA->IdArt != VNL->IdArt 
+    *   RETURN !SetMsg(VNL->Match+"/"+VNL->IdArt+" : r‚f‚rence de suite invalide!")
     endif
     if VnaTrnLocate(saJnl) == NIL
       RETURN !SetMsg(VNA->IdJnl+"/"+VNL->IdJnl+" : sans instruction de suite!")

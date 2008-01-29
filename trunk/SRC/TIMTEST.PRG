@@ -4293,7 +4293,9 @@ open area b, oVen(), oPar()
               if VNA->DC != jnl[JNL_DC]
                 nQte *= -1
               endif
-              nQteUs -= nQte
+              if !TRNATTR_P $ trn[TRN_ATTRIB]
+                nQteUs -= nQte
+              endif
             endif
           endif
           skip
