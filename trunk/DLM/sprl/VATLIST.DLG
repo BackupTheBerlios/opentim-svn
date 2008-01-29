@@ -1,0 +1,50 @@
+// Kundenliste MWSt fÅr INTERVAT
+before setvar("year",ntrim(year(UserDate())-1))
+before SetPeriode(getvar("year"))
+before SetDevise(DevDefault(MemPer1))
+before setvar("MontMin",ntom(Dev2Db("EUR",MemPer1,250)))
+before SetTplIni("LISTE")
+// before DlgDefault("IdDev",DevDefault(MemPer2))
+title "Kundenliste INTERVAT"
+field name="year" caption="Jahr " picture="9999" \
+      valid={||\
+      SetPeriode(getvar("year"))\
+      .and.setvar("MontMin",ntom(Dev2Db("EUR",MemPer1,250)))\
+      .and.ph_refresh()\
+    }
+field name="Type" picture="!" \
+      caption="Type: "\
+      default="A" \
+      pick={|x|PickDbcCode("VATLIST.DBC")} \
+      attrib="N"
+field block={||padr(DbcText("VATLIST.DBC",getvar("Type")),25)} \
+      caption=" : " \
+      color="N/W" \
+      when={||.f.}
+field caption="WÑhrung  " \
+      block={|x|SetDevise(x)}\
+      picture="@k@!"\
+      pick={|x|PickDev(x)}\
+      valid={||DevExist(SetDevise())\
+        .and.setvar("MontMin",\
+          ntom(Db2Dev(SetDevise(),MemPer1,val(getvar("MontMin"))))\
+        )\
+      }
+field caption="Mindestbetrag  " \
+      name="MontMin"\
+      picture="@k@!"\
+      pick={|x|PickNum(x)}\
+      postedit={|x|GetMont(x)}
+field caption="Ihre MWSt-Nummer " \
+    picture="@k@!"\
+    postedit={|x|GetNoTva(x,MemPays)}\
+    valid={||ValNoTva(MemNoTva)}\
+    block={|x|if(x==NIL,MemNoTva,MemNoTva:=x)}
+
+after setvar("Filename",\
+  AppRoot()+"\TEMP\"+getvar("Type")+getvar("year")+".XML")
+
+after fparse(\
+  DbcText("VATLIST.DBC",getvar("Type"),4),\
+  getvar("Filename"),"[]",NIL,NIL,NIL,NIL,"XML")
+after OpenUrl(getvar("Filename"))

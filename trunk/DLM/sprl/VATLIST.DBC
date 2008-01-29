@@ -1,0 +1,5 @@
+// used by VATLIST.DLG
+// Type | description | regimes | template
+A|clients assujettis                     |AC|VATLIST.XML
+I|clients intracommunautaires            |I |VATLIST.XML
+S|clients intracommunautaires (services) |S |VATLIST.XML
