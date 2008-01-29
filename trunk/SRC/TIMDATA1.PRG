@@ -1012,7 +1012,7 @@ ddFld Tel     ,C,LenTel(),0 postedit {|x| TelPostEdit(x,PAR->Pays,PAR->CP) }
 ddFld Fax     ,C,LenTel(),0 postedit {|x| TelPostEdit(x,PAR->Pays,PAR->CP) }
 ddFld Compte1 ,C,15,0 postedit {|x| BqePostEdit(x,PAR->Pays) } ;
                       valid BqeValidate(PAR->Compte1)
-ddFld NoTVA   ,C,18,0 picture PIC_ID ;
+ddFld NoTVA   ,C,LEN_NOTVA,0 picture PIC_ID ;
                       postedit {|x| GetNoTva(x,PAR->Pays) } ;
                       valid ValNoTva(PAR->NoTva)
 ddFld Compte3 ,C,25,0

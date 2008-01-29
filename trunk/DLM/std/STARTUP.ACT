@@ -1,4 +1,4 @@
-// STARTUP.ACT called from STD.INI
+// STARTUP.ACT called from rpt_open()
 !file("C:\AUTOEXEC.ACT").or.ActExec("C:\AUTOEXEC")
 DlgDefault("USER",alltrim(upper(\
   iif(empty(getenv("USER")),getenv("USERNAME"),getenv("USER"))\

@@ -996,6 +996,8 @@ MemVersion := AppVer()
 AppSaveMem()
 RETURN .t.
 
+#ifdef UPGR98
+
 #ifdef DEF_GEN
 
 FUNCTION c980728
@@ -1086,6 +1088,8 @@ close area
 RETURN NIL if ! lOkay
 delete file (DbPath()+"\NAT.DBC")
 RETURN NIL
+
+#endif UPGR98
 
 #ifdef DEF_JNL
 

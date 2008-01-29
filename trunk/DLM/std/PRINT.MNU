@@ -11,6 +11,7 @@ MnuAddItem("MWSt.-Erk~l„rung           ",{|| ActExec("DCLTVA") })
 MnuAddItem("Kundenliste ~Intracom      ",{|| DlgExec("LSTTVAI") })
 MnuAddItem("Kundenliste ~MWSt          ",{|| DlgExec("LSTTVAA") })
 MnuAddItem("Kundenliste ~Deutschland   ",{|| DlgExec("LSTTVAD") })
+MnuAddItem("Kundenliste ~XML",{|| DlgExec("VATLIST") })
 #endif
 #if .f.
 MnuAddSep()

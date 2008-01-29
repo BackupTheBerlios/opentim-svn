@@ -135,5 +135,5 @@
 
 #define LG_GERMAN
 #define CUST_MOOR
-#define DEF_FOX
+// #define DEF_FOX
 // #define DEF_DEBUG

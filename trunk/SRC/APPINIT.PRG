@@ -610,6 +610,7 @@ RETURN ProgName() + " " + ntrim(AppVer()) + " - " + CopyRight()
 FUNCTION runbg(cProgram,cParams)
 local uRetVal
 RETURN !SetMsg("runbg(): "+cProgram+MsgFileExist()) if ! file(cProgram)
+default cParams to ""
 #ifdef __XPP__
   uRetVal := RunShell(cParams,cProgram,.f.,.t.)
   RETURN .t. if uRetVal == 0

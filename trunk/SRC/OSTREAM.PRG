@@ -537,15 +537,13 @@ elseif scDoCapture == BUTTON_ON
   set printer to (TmpConvert(scPrnFile))
 else
   scPreviewFile := NIL
-  * #ifdef __XPP__
-    if ! isprinter(scPort)
-      EndOStream()
-      snPrnStatus := PRN_ABORT
-      close window
-      SetMsg(scPort + " : printer port not ready.")
-      RETURN .f.
-    endif
-  * #endif __XPP__
+  if ! isprinter(scPort)
+    EndOStream()
+    snPrnStatus := PRN_ABORT
+    close window
+    SetMsg(scPort + " : printer port not ready.")
+    RETURN .f.
+  endif
   set printer to ( scPort )
 endif
 set printer on
@@ -578,6 +576,7 @@ RETURN .t.
 FUNCTION ClosePrinter(lNoWarn)
 local cMsg
 local cFontName
+local nPrnStatus
 default lNoWarn to .f.
 SetMntFormat(scMntFormat)
 SetSolde(scSetSolde)
@@ -593,16 +592,18 @@ PrnOut( DrvReset() )
 set printer to
 set printer off
 set console on
-close window // this close window is for the OpenWin() in InitPrint() !
+close window // this close window is for the OpenWin() in OpenPrinter() !
 ** [etc exit] wird nach einem vorherigen [etc do fparse()] benutzt,
 ** um einen Druckjob ohne weitere Meldung zu beenden.
 cFontName := FntName()
+nPrnStatus := snPrnStatus // save status at end of stream
 EndOStream()
-if snPrnStatus == PRN_EXIT
-  snPrnStatus := PRN_DONE
-  RETURN NIL
-endif
-if snPrnStatus == PRN_CONTINUE .or. snPrnStatus == PRN_DONE // normal end
+* 20080125 : "etc exit" wird imho nirgendwo benutzt
+* if snPrnStatus == PRN_EXIT
+*   snPrnStatus := PRN_DONE
+*   RETURN NIL
+* endif
+if nPrnStatus == PRN_CONTINUE .or. nPrnStatus == PRN_DONE // normal end
   snPrnStatus := PRN_DONE
   if snCurPage == 0
     RETURN NIL
@@ -617,7 +618,8 @@ if snPrnStatus == PRN_CONTINUE .or. snPrnStatus == PRN_DONE // normal end
     cMsg += ", " + if( scDoCapture == BUTTON_OFF, scPort, scPrnFile )
     SetMsg(cMsg)
   endif
-elseif snPrnStatus == PRN_ABORT
+elseif nPrnStatus == PRN_ABORT
+  snPrnStatus := PRN_ABORT
   if empty(SetMsg())
     SetMsg(MSG_004 + ntrim(snCurPage) + MSG_003)
   else
@@ -625,31 +627,13 @@ elseif snPrnStatus == PRN_ABORT
     RETURN NIL
   endif
 endif
-*if snCurPage == 0
-*  * #ifdef LG_GERMAN
-*  *   Warning("Nichts zu drucken.",NIL,"WRN021")
-*  * #endif
-*  * #ifdef LG_FRENCH
-*  *   Warning("Rien … imprimer.",NIL,"WRN021")
-*  * #endif
-*  * #ifdef LG_EN
-*  *   Warning("Nothing to print.",NIL,"WRN021")
-*  * #endif
-*  * snPrnStatus := PRN_ABORT
-*  snPrnStatus := PRN_DONE
-*  RETURN NIL
-*endif
-* RETURN NIL if scDoPreview == BUTTON_OFF .and. snCopies == NIL // 19980724
 if scDoPreview == BUTTON_ON
-  ShowPreview(cFontName)
-elseif scPreviewFile != NIL // 20000605
-//elseif snCopies != NIL // 19980724
-  PrintPreview()
+  RETURN .f. if ! ShowPreview(cFontName)
 endif
-if snPrnStatus == PRN_DONE
-  DrvOnSuccess()
-  snPrnStatus := PRN_DONE
+if scPreviewFile != NIL
+  RETURN .f. if ! PrintPreview()
 endif
+DrvOnSuccess()
 RETURN NIL
 
 FUNCTION fdostream(fdout,s) // „hnlich wie PrnStream
@@ -764,6 +748,7 @@ local nWidth := 250 // int(FntPitch() * p_LnWidth()) // snApsWidth
 local SCROLL_LINES := maxrow() - 9
 local nMaxLine := mlcount(saPreBuffer[1],nWidth) - SCROLL_LINES
 local i
+local lOkay := .f.
 open window (MSG_PREVIEW + " [" + cFntName + "]") ;
      size maxrow()-4,maxcol()+1 ;
      help PREVIEW
@@ -850,21 +835,16 @@ do while .t.
   elseif nKey == K_F3
     FileEdit(scPreviewFile)
     if lastKey() == K_F10
-      PrintPreview()
+      lOkay := .t.
       exit
     endif
   elseif nKey == K_F10
-    if AppIsInstalled()
-      if PrintPreview()
-        exit
-      endif
-    else
-      WarnDemo()
-    endif
+    lOkay := .t.
+    exit
   endif
 enddo
 close window
-RETURN NIL
+RETURN lOkay
 
 FUNCTION p_PreBuffer()
 local c := ""
@@ -882,6 +862,7 @@ local cMsg
 local e
 local cFile := scPrnFile
 local lBreak := SetBreakTrap()
+local lOkay := .t.
 RETURN .f. if ! eval(sbPrePrint)
 if snCopies == NIL
   snCopies := 1
@@ -897,10 +878,10 @@ endif
 if len(saCmdSpooler) > 0
   do while i <= snCopies
     if DoEvents(saCmdSpooler)
-    * if xparse(xCmdSpooler)
       i += 1
     elseif ! Confirm(SetMsg(),MsgRetry())
       snPrnStatus := PRN_ABORT
+      lOkay := .f.
       i := snCopies + 1
       exit
     endif
@@ -924,6 +905,7 @@ else
         i++
       recover using e
         if ! Confirm(MSG_NOTREADY,MsgRetry())
+          lOkay := .f.
           snPrnStatus := PRN_ABORT
           // c += " -> " + ErrorMessage(e)
           i := snCopies + 1
@@ -932,22 +914,20 @@ else
     enddo
   SetBreakTrap(lBreak)
 endif
-if snPrnStatus == PRN_CONTINUE
-  cMsg := ""
-  if snCopies != 1
-    cMsg += ntrim(snCopies) + " x "
-  endif
-  cMsg += ntrim(len(saPreBuffer)) + MSG_003
-  #ifdef LG_GERMAN
-    cMsg += " wurden gedruckt auf "
-  #else
-    cMsg += " ont ‚t‚ imprim‚es sur "
-  #endif
-  cMsg += DrvName()
-  cMsg += ", " + if( scDoCapture == BUTTON_OFF, scPort, cFile )
-  SetMsg(cMsg)
-  snPrnStatus := PRN_DONE
+RETURN .f. if ! lOkay
+cMsg := ""
+if snCopies != 1
+  cMsg += ntrim(snCopies) + " x "
 endif
+cMsg += ntrim(len(saPreBuffer)) + MSG_003
+#ifdef LG_GERMAN
+  cMsg += " wurden gedruckt auf "
+#else
+  cMsg += " ont ‚t‚ imprim‚es sur "
+#endif
+cMsg += DrvName()
+cMsg += ", " + if( scDoCapture == BUTTON_OFF, scPort, cFile )
+SetMsg(cMsg)
 RETURN .t.
 
 ** Beispiel :
@@ -2322,7 +2302,7 @@ elseif cIdTca == "etc"
       * LogDebug("loop: "+p+" {|xlEval|"+utos(c)+"}")
     endif
     RETURN NIL
-  elseif cIdTcs == "exit"    ; snPrnStatus := PRN_EXIT ; c:= NIL
+  * 20080125 elseif cIdTcs == "exit"    ; snPrnStatus := PRN_EXIT ; c:= NIL
   endif
 elseif cIdTca == "dlg"
   c := DlgValue(cIdTcs)

@@ -697,7 +697,8 @@ local c
 local cTvaPrefix := NatField(cIdNat,"trim(TvaPrefix)")
 local cTvaPict 
 * local nat := NatLocate(cIdNat)
-RETURN cNoTva if empty(cNoTva)
+default cNoTva to ""
+RETURN padr(cNoTva,LEN_NOTVA) if empty(cNoTva)
 if !isdigit(cNoTva)
   cTvaPrefix := left(cNoTva,2)
   cNoTva := substr(cNoTva,3)
@@ -718,8 +719,8 @@ if cTvaPrefix == "BE"
 endif
 cNoTva := cTvaPrefix + cNoTva
 cTvaPict := NatField(cIdNat,"TvaPict")
-RETURN cNoTva if empty(cTvaPict)
-RETURN transform(cNoTva,cTvaPict)
+RETURN padr(cNoTva,LEN_NOTVA) if empty(cTvaPict)
+RETURN padr(transform(cNoTva,cTvaPict),LEN_NOTVA)
 
 **
 ** ValNoTva()

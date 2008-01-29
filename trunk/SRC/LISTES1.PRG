@@ -2641,7 +2641,8 @@ FUNCTION TvaTaxe     ; RETURN snTotTaxe
 FUNCTION TvaParCount ; RETURN snSeq
 
 
-FUNCTION ParTvaScan(cIdCtr,cRegimes)
+// used by VATLIST.XML
+FUNCTION ParVatList(cIdCtr,cRegimes)
 local i
 local lOkay := .f.
 local jnl

@@ -443,7 +443,7 @@ local aSaveRecnos := saRecnos
 local nSaveRecno := snRecno
 saRecnos := aRecnos
 if aRecnos != NIL
-  SetMsg("Displaying "+ntrim(len(aRecnos))+" rows.")
+  * SetMsg("Displaying "+ntrim(len(aRecnos))+" rows.")
   snRecno := min(1,len(aRecnos))
 endif
 * local bSearchFormat := sbSearchFormat
@@ -1430,9 +1430,9 @@ RETURN .f. if IsReadOnly(ad)
 * endif
 RETURN .t. if ad[AD_PREEDIT] == NIL
 RETURN .t. if eval(ad[AD_PREEDIT])
-#ifdef DEF_WRITE
-  RETURN .t. if USRATTR_W $ UsrAttrib()
-#endif
+// #ifdef DEF_WRITE
+RETURN .t. if USRATTR_W $ UsrAttrib()
+// #endif
 RETURN .f.
 
 * FUNCTION ddIsPublic(ad)
@@ -1939,6 +1939,8 @@ ad[AD_UPDATED] := .t.
 if ad[AD_POSTEDIT] == NIL
   snRecStat := RS_VALID
 elseif eval(ad[AD_POSTEDIT])
+  snRecStat := RS_VALID
+elseif USRATTR_W $ UsrAttrib() .and. Confirm(SetMsg(),"Ignore this warning (Y/N) ?")
   snRecStat := RS_VALID
 else
   snRecStat := RS_INVALID

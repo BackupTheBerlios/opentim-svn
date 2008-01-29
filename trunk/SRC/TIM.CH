@@ -1,5 +1,5 @@
 ** Copyright (c) 1992-2001 PAC Systems
-** Copyright (c) 2001-2007 Luc Saffre
+** Copyright (c) 2001-2008 Luc Saffre
 **
 ** This file is part of TIM.
 **
@@ -21,6 +21,7 @@
 **  annulliert werden dÅrfen.
 **
 
+#define LEN_NOTVA   18
 #define LEN_IDTPT    3
 
 #define LEN_IDDOC   6

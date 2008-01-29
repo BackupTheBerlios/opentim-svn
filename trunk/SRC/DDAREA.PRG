@@ -602,12 +602,16 @@ RETURN .t.
 
 
 FUNCTION GetTableDef(cAlias)
-RETURN xparse("o" + cAlias + "()")
-* local i
+* RETURN xparse("o" + cAlias + "()")
+local i
+local aTables := AppDataList()
 * local ad
-* for i := 1 to len(saTables)
-*   RETURN saTables[i] if saTables[i][AD_NAME] == cAlias
-* next i
+for i := 1 to len(aTables)
+  if aTables[i] != NIL .and. aTables[i][AD_NAME] == cAlias
+    RETURN aTables[i]
+  endif
+next i
+RETURN NIL
 * // create new table descriptor:
 * ad := ddDeclare(cAlias)
 * RETURN NIL if ! AddTableDef(ad)

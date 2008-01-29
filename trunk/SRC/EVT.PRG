@@ -386,6 +386,9 @@ if ddRecLock()
 endif
 RETURN uReturn
 
+#ifdef __XPP__
+** only available in __XPP__ because name is too long for Clipper
+
 ** http://tim.saffre-rumma.ee/src/22.html
 FUNCTION TryRecLockM(aAliases,bTry)
 local uReturn := .f.
@@ -409,6 +412,8 @@ for i := 1 to len(aLocked)
   unlock record
 next i
 RETURN uReturn
+
+#endif __XPP__
 
 
 #ifdef DEF_JNL // die sind nÑmlich auch fÅr DEF_MVI nîtig

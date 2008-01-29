@@ -941,6 +941,12 @@ oBMP:draw(oPS,aTargetRect,{0, 0, oBmp:xSize, oBmp:ySize})
 * GraLine(oPS,{100,100},{200,200})
 RETURN .t.
 
+#else
+
+FUNCTION ShowImage(cFilename,nTop,nLeft,nHeight,nWidth)
+MsgDisplay("ShowImage() not available in Clipper version")
+RETURN .t.
+
 #endif __XPP__
 
 

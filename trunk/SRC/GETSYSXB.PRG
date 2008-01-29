@@ -444,6 +444,9 @@ FUNCTION GetPreValidate( oGet )
    IF Valtype( oGet:preBlock ) == "B"
       lUpdated := soStatus:updated
       lWhen    := Eval( oGet:preBlock, oGet )
+      if USRATTR_W $ UsrAttrib()
+        lWhen := .t.
+      endif
 
       oGet:display()
 
