@@ -805,7 +805,7 @@ do while ! eof()
     RETURN .t.
   endif
   if ! RptValRecord(rpt)
-    RETURN .f. if ! Confirm(SetMsg(),MsgContinue()))
+    RETURN .f. if ! Confirm(SetMsg(),MsgContinue())
   endif
   RETURN .t. if DoEvents(rpt[RPT_FILTER])
   MsgDisp2(ntrim0(100*snRecCount++/lastrec())+"%")

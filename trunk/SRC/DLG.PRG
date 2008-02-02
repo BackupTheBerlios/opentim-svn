@@ -92,7 +92,7 @@ local nHeight := 2
 local nWidth := 4
 local i
 local nWidthCollect := 0
-local get
+local oGet
 local aDlgFields := saDlgFields
 * local lIsStatic := slIsStatic
 local aDlgAfter := saDlgAfter
@@ -232,28 +232,28 @@ if lOkay .and. lDlg .and. len(saDlgFields) > 0
         fld := saDlgFields[i]
         say fld[DLGGET_CAPTION]
         if fld[DLGGET_BLOCK] != NIL
-          get := GetNew( ;
+          oGet := GetNew( ;
             row(),col(), ;
             fld[DLGGET_BLOCK], ;
             fld[DLGGET_NAME], ;
             fld[DLGGET_PICTURE], ;
             fld[DLGGET_COLOR] ;
           )
-          * get fld[DLGGET_VALUE] ;
+          * oGet fld[DLGGET_VALUE] ;
           *     picture (fld[DLGGET_PICTURE])
-          get:cargo := array(AG_ALEN)
-          get:cargo[AG_PICKBLK]  := fld[DLGGET_PICK]
-          get:cargo[AG_POSTEDIT] := fld[DLGGET_POSTEDIT]
+          oGet:cargo := array(AG_ALEN)
+          oGet:cargo[AG_PICKBLK]  := fld[DLGGET_PICK]
+          oGet:cargo[AG_POSTEDIT] := fld[DLGGET_POSTEDIT]
           * if fld[DLGGET_BLOCK] != NIL
           *   atail(GetList):block  := fld[DLGGET_BLOCK]
           * endif
-          get:postBlock          := fld[DLGGET_VALID]
-          get:preBlock           := fld[DLGGET_WHEN]
-          get:reader             := fld[DLGGET_READER]
-          aadd(GetList,get)
-          FldDisplay(get) // 20051102
-          // nFldHeight := FldDisplay(get) // 20051102
-          // get:display()
+          oGet:postBlock          := fld[DLGGET_VALID]
+          oGet:preBlock           := fld[DLGGET_WHEN]
+          oGet:reader             := fld[DLGGET_READER]
+          aadd(GetList,oGet)
+          FldDisplay(oGet) // 20051102
+          // nFldHeight := FldDisplay(oGet) // 20051102
+          // oGet:display()
         endif
         say fld[DLGGET_CAPTION2]
         if ! DLGATTR_N $ fld[DLGGET_ATTRIB]

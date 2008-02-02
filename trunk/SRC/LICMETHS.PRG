@@ -467,7 +467,7 @@ if TPLATTR_P $ tpl[TPL_ATTRIB]
   else
       RETURN NIL if ! WrnJnlOpen({||&cJnlTest})
       bTitBlock := {|| ;
-        PrintHeader( tpl[TPL_NAME], PerText( {|| &cJnlTest } ) ) ;
+        PrintHeader( tpl[TPL_NAME], PerText( cblock(cJnlTest) ) ) ;
       }
   endif
   AppSaveMem()
