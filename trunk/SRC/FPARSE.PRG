@@ -21,7 +21,7 @@
 ** derived from TplParse(), 17.06.1998
 **
 #include "LIB.CH"
-#include "ERROR.CH"
+#include "error.ch"
 
 static slBreakTrap := .f.
 static slActive := .t.

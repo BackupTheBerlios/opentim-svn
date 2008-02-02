@@ -24,7 +24,7 @@
 *	Compile:  /m/n/w
 */
 
-#include "ERROR.CH"
+#include "error.ch"
 #include "LIB.CH"
 // put messages to STDERR
 #command ? <list,...>   =>  ?? Chr(13) + Chr(10) ; ?? <list>

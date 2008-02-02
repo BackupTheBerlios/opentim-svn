@@ -18,7 +18,7 @@
 
 
 #include "LIB.CH"
-#include "GETEXIT.CH"
+#include "getexit.ch"
 
 * #define DEF_COMMIT
 

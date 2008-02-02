@@ -17,7 +17,7 @@
 ** along with TIM. If not, see <http://www.gnu.org/licenses/>.
 
 #include "LIB.CH"
-#include "DBSTRUCT.CH"
+#include "dbstruct.ch"
 
 * static saStat := { }  // only used by PushStatus() and PopStatus()
 

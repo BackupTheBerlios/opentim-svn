@@ -1968,7 +1968,7 @@ FUNCTION ft_default()
 RETURN CurDrive()
 
 * FUNCTION SetCollation(n)
-* #include "SET.CH"
+* #include "set.ch"
 * // #include "COLLAT.CH"
 * set(_SET_COLLATION,n)
 * // SET COLLATION to &cCollation

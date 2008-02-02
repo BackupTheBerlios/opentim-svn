@@ -22,8 +22,8 @@
 **             Copyright (c) 1990, 1991 Nantucket Corp.
 **             All rights reserved.
 */
-#include "SET.CH"
-#include "GETEXIT.CH"
+#include "set.ch"
+#include "getexit.ch"
 #include "LIB.CH"
 
 #ifdef LG_FRENCH

@@ -25,7 +25,7 @@
 
 #include "LIB.CH"
 #include "APPEVENT.CH"
-#include "COMMON.CH"
+#include "common.ch"
 
 #pragma Library( "XppUi2.lib" )
 

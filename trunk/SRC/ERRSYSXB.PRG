@@ -17,7 +17,7 @@
 ** along with TIM. If not, see <http://www.gnu.org/licenses/>.
 
 #include "XBP.CH"
-#include "ERROR.CH"
+#include "error.ch"
 #include "TIM.CH"
 
 #define  XPPDEBUG

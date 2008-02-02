@@ -18,7 +18,7 @@
 
 #include "LIB.CH"
 * #include "DIRECTRY.CH"
-#include "DBSTRUCT.CH"
+#include "dbstruct.ch"
 
 ** request eac_allo
 request i_plz
