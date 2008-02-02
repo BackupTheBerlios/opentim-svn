@@ -187,7 +187,7 @@ static sbOnParSatisfy := {||.t.}
   static sbTolerateTax := {||.f.}
 #endif
 #ifdef DEF_VEN
-  static sbcNafAttr := "ID" // NAFATTR_I+NAFATTR_D
+  static sbcNafAttr := {|cIdJnl|"ID"} // NAFATTR_I+NAFATTR_D
   static sbVnlQteBase := {||qton1(FIELD->Qte)}
   static sbQteValidate := {|| StdQteValidate() }
   static snLenLstVen    := 30

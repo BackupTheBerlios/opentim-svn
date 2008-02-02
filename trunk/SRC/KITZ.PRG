@@ -858,7 +858,7 @@ open area oPar()
         endif
         nCount += 1
         if !empty(cIdKrg)
-          cIdKrg := NextNum(cIdKrg)
+          cIdKrg := NextNum(cIdKrg,NIL," ")
         endif
         MsgDisplay(SetMsg())
       endif

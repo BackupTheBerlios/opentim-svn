@@ -87,6 +87,12 @@ RETURN .t.
 FUNCTION NafDelete(naf)
 local lOkay := .f.
 #ifdef DEF_VNA
+if ArtExist(naf[NAF_IDART]).and.!ARTATTR_S $ ART->Attrib
+  if JNLATTR_Q $ JnlAttrib(naf[NAF_IDJNL])
+    RETURN !SetMsg( ;
+      "Suppression manuelle uniquement pour articles sans stock!")
+  endif
+endif    
 RETURN .f. if ! Confirm(;
   "Suppression manuelle de la proposition!",MsgSure())
 open area oVna()
