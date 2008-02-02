@@ -111,7 +111,7 @@ memvar GetList
 #include "MONTANT.CH"
 #include "DDEDIT.CH"
 #include "WINDOWS.CH"
-#include "SETCURS.CH"
+#include "setcurs.ch"
 #include "BOX.CH"
 #include "REPORT.CH"
 #include "FILEIO.CH"
@@ -121,7 +121,7 @@ memvar GetList
 #include "SMENU.CH"
 #include "SAYGET.CH"
 // #include "MUSIC.CH"
-#include "DIRECTRY.CH"
+#include "directry.ch"
 * #include "DBFSIX.CH"
 
 #define K_MOUSE_EVENT   (332)               // numpad 5
