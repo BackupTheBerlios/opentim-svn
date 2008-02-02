@@ -540,7 +540,7 @@ if valtype(b)=="C"; b := cblock(b) ; endif
 // local bValid := xparse("{||"+xlValid+"}")
 for i := 1 to len(sadCurrent[AD_FIELDS])
   if sadCurrent[AD_FIELDS][i][AG_NAME] == cName
-    sadCurrent[AD_FIELDS][i][AG_VALID] := b // wird get:postBlock
+    sadCurrent[AD_FIELDS][i][AG_VALID] := b // wird oGet:postBlock
     RETURN .t.
   endif
 next i
@@ -710,23 +710,23 @@ next i
 RETURN .f.
 
 FUNCTION ag2get(ag,nRow,nCol,cPicture)
-local get
+local oGet
 default cPicture to ag[AG_PICTURE]
-get := GetNew(    ;
+oGet := GetNew(    ;
   nRow, nCol,  ;
   ag[AG_BLOCK],            ;
   ag[AG_NAME], ;
   cPicture ;
 )
-get:postBlock := ag[AG_VALID]
-get:preBlock := ag[AG_WHEN]
+oGet:postBlock := ag[AG_VALID]
+oGet:preBlock := ag[AG_WHEN]
 if ag[AG_TYPE] == GTYPE_MEMO
-  get:reader := {|x| MemoReader(x) }
+  oGet:reader := {|x| MemoReader(x) }
 elseif ag[AG_TYPE] == GTYPE_LOGICAL
-  get:reader := {|x| CbxReader(x) }
+  oGet:reader := {|x| CbxReader(x) }
 endif
-get:cargo := ag
-RETURN get
+oGet:cargo := ag
+RETURN oGet
 
 **
 ** ddAddField()
@@ -1122,11 +1122,11 @@ RETURN "unknown event"+ntrim(n)
 
 #endif __XPP__
 
-FUNCTION GetPaste(get,s)
+FUNCTION GetPaste(oGet,s)
 local i
 RETURN NIL if s == NIL
 for i := 1 to len(s)
-  get:insert(substr(s,i,1))
+  oGet:insert(substr(s,i,1))
 next i
 RETURN NIL
 

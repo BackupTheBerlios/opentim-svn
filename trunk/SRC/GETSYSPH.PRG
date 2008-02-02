@@ -102,7 +102,7 @@ static scLastGet :=  ""
 **
 FUNCTION ReadModal( aList, nStart, aReadKeys, msk )
 local aMskSave := saMsk
-local get
+local oGet
 local savedGetSysVars
 local nSaveCursor := setcursor()
 local nLastPos   // Luc
@@ -154,7 +154,7 @@ ReadProcLine := ProcLine(1)
 ** siehe 20070518, 20070823
 if len(aList) > 1
   for i := 1 to len(aList)
-    * if aList[i]:cargo == NIL ; raise(aList[i]:name+" get:cargo is NIL") ; endif
+    * if aList[i]:cargo == NIL ; raise(aList[i]:name+" oGet:cargo is NIL") ; endif
     if aList[i]:cargo[AG_PICKBLK] != NIL
       if aList[i]:preBlock == NIL .or. eval(aList[i]:preBlock)
         @ aList[i]:row, aList[i]:col - 1 say SetPickIndicator()
@@ -172,19 +172,19 @@ LastPos  := 0
 snCurGetPos := Settle( aList, snCurGetPos )
 setcursor( if(readinsert(), SC_INSERT, SC_NORMAL) )   // (Luc)
 do while snCurGetPos != 0
-   get := aList[snCurGetPos]
-   PostActiveGet( get )
-   uOldValue := get:varGet()
-   if valtype(get:reader) == T_BLOCK
-     eval(get:reader, get)                 // use custom reader block
+   oGet := aList[snCurGetPos]
+   PostActiveGet( oGet )
+   uOldValue := oGet:varGet()
+   if valtype(oGet:reader) == T_BLOCK
+     eval(oGet:reader, oGet)                 // use custom reader block
    else
-     MyGetReader(get)                        // use standard reader
+     MyGetReader(oGet)                        // use standard reader
    endif
-   if get:exitState != GE_WHEN
+   if oGet:exitState != GE_WHEN
      LastPos   := snCurGetPos // 19981029 war vorher eine Zeile h”her
-     snLastExit  := get:exitState
-     if get:cargo[AG_AFTER] != NIL
-       eval(get:cargo[AG_AFTER],uOldValue)
+     snLastExit  := oGet:exitState
+     if oGet:cargo[AG_AFTER] != NIL
+       eval(oGet:cargo[AG_AFTER],uOldValue)
      endif
    endif
    snCurGetPos := Settle( aList, snCurGetPos )
@@ -227,30 +227,30 @@ RETURN nLastPos // = die letzte nicht-null-Position ...!
 **
 **  READER procedure for standard get objects
 **
-PROCEDURE MyGetReader( get )
+PROCEDURE MyGetReader( oGet )
 #ifdef MONKEY
   static snErrCount := 0
 #endif
-if ! GetPreValidate(get)
+if ! GetPreValidate(oGet)
   RETURN    // read it only if the WHEN clause is satisfied
 endif
-if empty(get:picture) .and. get:type != "D"
-  get:picture := "@K"
+if empty(oGet:picture) .and. oGet:type != "D"
+  oGet:picture := "@K"
 endif
-GetSetFocus ( @get )    // activate the GET for reading
-do while get:exitState == GE_NOEXIT
-  if get:typeOut        // check for initial typeout (no editable positions)
-    get:exitState := GE_ENTER
+GetSetFocus ( @oGet )    // activate the GET for reading
+do while oGet:exitState == GE_NOEXIT
+  if oGet:typeOut        // check for initial typeout (no editable positions)
+    oGet:exitState := GE_ENTER
   endif
-  do while ( get:exitState == GE_NOEXIT )
-    GetApplyKey( get, WaitKey() )
-    * 20030211 GetApplyKey( get, RdKey() )
+  do while ( oGet:exitState == GE_NOEXIT )
+    GetApplyKey( oGet, WaitKey() )
+    * 20030211 GetApplyKey( oGet, RdKey() )
   enddo
-  if ! GetPostValidate(get)
-    get:exitState := GE_NOEXIT   // VALID condition not satisfied
+  if ! GetPostValidate(oGet)
+    oGet:exitState := GE_NOEXIT   // VALID condition not satisfied
   endif
 enddo
-get:KillFocus()   // de-activate the GET
+oGet:KillFocus()   // de-activate the GET
 RETURN
 * #endif __XPP__
 
@@ -259,26 +259,26 @@ RETURN
 **  CbxReader()
 **  READER procedure for CHECKBOX get objects
 **
-PROCEDURE CbxReader( get )
+PROCEDURE CbxReader( oGet )
 * local uOldValue
-if ! GetPreValidate(get)
+if ! GetPreValidate(oGet)
   RETURN    // read it only if the WHEN clause is satisfied
 endif
-GetSetFocus ( @get )    // activate the GET for reading
-* uOldValue := get:varget()
-do while get:exitState == GE_NOEXIT
-  if get:typeOut        // check for initial typeout (no editable positions)
-    get:exitState := GE_ENTER
+GetSetFocus ( @oGet )    // activate the GET for reading
+* uOldValue := oGet:varget()
+do while oGet:exitState == GE_NOEXIT
+  if oGet:typeOut        // check for initial typeout (no editable positions)
+    oGet:exitState := GE_ENTER
   endif
-  do while ( get:exitState == GE_NOEXIT )
-    CbxApplyKey( get, WaitKey() )
-    * 20030210 CbxApplyKey( get, RdKey() )
+  do while ( oGet:exitState == GE_NOEXIT )
+    CbxApplyKey( oGet, WaitKey() )
+    * 20030210 CbxApplyKey( oGet, RdKey() )
   enddo
-  if ! GetPostValidate(get)
-    get:exitState := GE_NOEXIT   // VALID condition not satisfied
+  if ! GetPostValidate(oGet)
+    oGet:exitState := GE_NOEXIT   // VALID condition not satisfied
   endif
 enddo
-get:KillFocus()   // de-activate the GET
+oGet:KillFocus()   // de-activate the GET
 RETURN
 
 
@@ -287,23 +287,23 @@ RETURN
 **  READER procedure for multiline get objects
 **  note : the picture of a memo field contains a hand-made picture string
 **  of the form "40x4" (width x height)
-PROCEDURE MemoReader( get )
+PROCEDURE MemoReader( oGet )
 local nWaitKey
 local cColor := setcolor()
-local nWidth  := val(left(get:picture,2))      // MEMO_PICTURE
-local nHeight := val(substr(get:picture,4))    // MEMO_PICTURE
+local nWidth  := val(left(oGet:picture,2))      // MEMO_PICTURE
+local nHeight := val(substr(oGet:picture,4))    // MEMO_PICTURE
 local cSaveScreen := savescreen( ;
-  get:row, ;
-  get:col+nWidth, ;
-  get:row+nHeight, ;
-  get:col+nWidth+1  ;
+  oGet:row, ;
+  oGet:col+nWidth, ;
+  oGet:row+nHeight, ;
+  oGet:col+nWidth+1  ;
 )
-if ! GetPreValidate(get)
+if ! GetPreValidate(oGet)
   RETURN    // read it only if the WHEN clause is satisfied
 endif
 setcolor(CfgWindowColor())
-* GetSetFocus(get)
-scLastGet := get:name
+* GetSetFocus(oGet)
+scLastGet := oGet:name
 ** 19990210 die folgende Schleife ist n”tig, weil wenn man bei HK
 ** durch eine Data-Key hierhin kommt, dann kommt diese nicht in den
 ** keyboard-buffer des TxtEdit() und erschien stattdessen nach
@@ -311,49 +311,49 @@ scLastGet := get:name
 do while (nWaitKey := PopKey()) != 0
   keyboard chr(nWaitKey)
 enddo
-do while get:exitState == GE_NOEXIT
-  * if get:typeOut        // check for initial typeout (no editable positions)
-  *   get:exitState := GE_ENTER
+do while oGet:exitState == GE_NOEXIT
+  * if oGet:typeOut        // check for initial typeout (no editable positions)
+  *   oGet:exitState := GE_ENTER
   * endif
   TxtEdit( ;
-    get:block, ;
-    get:row, ;
-    get:col, ;
-    get:row + nHeight - 1 , ;
-    get:col + nWidth, ;
+    oGet:block, ;
+    oGet:row, ;
+    oGet:col, ;
+    oGet:row + nHeight - 1 , ;
+    oGet:col + nWidth, ;
     .t., ;
     NIL, ;
-    get:cargo[AG_PICKBLK], ;
+    oGet:cargo[AG_PICKBLK], ;
     .t. ;
   )
   if TxtExitState() == TXT_UP
-    get:exitState := GE_UP
+    oGet:exitState := GE_UP
   * elseif TxtExitState() == TXT_DOWN
-  *   get:exitState := GE_DOWN
+  *   oGet:exitState := GE_DOWN
   * elseif lastkey() == K_SH_TAB
-  *   get:exitState := GE_UP
+  *   oGet:exitState := GE_UP
   elseif lastkey() == K_ESC
-    get:exitState := GE_ESCAPE
+    oGet:exitState := GE_ESCAPE
   elseif lastkey() == K_F10
-    get:exitState := GE_WRITE
+    oGet:exitState := GE_WRITE
   else
-    get:exitState := GE_DOWN
+    oGet:exitState := GE_DOWN
   endif
-  * do while ( get:exitState == GE_NOEXIT )
-  *   GetApplyKey( get, RdKey() )
+  * do while ( oGet:exitState == GE_NOEXIT )
+  *   GetApplyKey( oGet, RdKey() )
   * enddo
-  if ! GetPostValidate(get)
-    get:exitState := GE_NOEXIT   // VALID condition not satisfied
+  if ! GetPostValidate(oGet)
+    oGet:exitState := GE_NOEXIT   // VALID condition not satisfied
   endif
 enddo
 restscreen( ;
-  get:row, ;
-  get:col+nWidth, ;
-  get:row+nHeight, ;
-  get:col+nWidth+1, ;
+  oGet:row, ;
+  oGet:col+nWidth, ;
+  oGet:row+nHeight, ;
+  oGet:col+nWidth+1, ;
   cSaveScreen, ;
 )
-* get:KillFocus()   // de-activate the GET
+* oGet:KillFocus()   // de-activate the GET
 setcolor(cColor)
 RETURN
 
@@ -364,78 +364,78 @@ RETURN
 **  ButtonReader ( )
 **  READER function for buttons
 **
-*PROCEDURE ButtonReader( get )
+*PROCEDURE ButtonReader( oGet )
 *local nSaveCursor
 *local key, bKeyBlock
-*if ! GetPreValidate ( get )
+*if ! GetPreValidate ( oGet )
 *  RETURN
 *endif
 *nSaveCursor := setcursor ( SC_NONE )
 *// Set the button flag
 *InButton := TRUE
 *// read the GET if the WHEN condition is satisfied
-*GetSetFocus ( get )
-*do while ( get:exitState == GE_NOEXIT )
+*GetSetFocus ( oGet )
+*do while ( oGet:exitState == GE_NOEXIT )
 *  // check for initial typeout (no editable positions)
-*  if ( get:typeOut )
-*    get:exitState := GE_ENTER
+*  if ( oGet:typeOut )
+*    oGet:exitState := GE_ENTER
 *  endif
-*  do while ( get:exitState == GE_NOEXIT )
+*  do while ( oGet:exitState == GE_NOEXIT )
 *    key := RdKey ()
 *    // check for SET KEY first
 *    if ( (bKeyBlock := SetKey(key)) <> NIL )
-*      GetDoSetKey(bKeyBlock, get)
+*      GetDoSetKey(bKeyBlock, oGet)
 *    else
 *      do case
-*      case ( key == K_UP )     ; get:exitState := GE_UP
-*      case ( key == K_SH_TAB ) ; get:exitState := GE_UP
-*      case ( key == K_DOWN )   ; get:exitState := GE_DOWN
-*      case ( key == K_TAB )    ; get:exitState := GE_DOWN
+*      case ( key == K_UP )     ; oGet:exitState := GE_UP
+*      case ( key == K_SH_TAB ) ; oGet:exitState := GE_UP
+*      case ( key == K_DOWN )   ; oGet:exitState := GE_DOWN
+*      case ( key == K_TAB )    ; oGet:exitState := GE_DOWN
 *      case ( key == K_ENTER ) .or. ( key == K_SPACE )
 *         // disallow action if bad valid
-*         if GetPostValidate(get)
-*           eval ( get:cargo[AG_BUTTON] )
+*         if GetPostValidate(oGet)
+*           eval ( oGet:cargo[AG_BUTTON] )
 *         endif
 *      case ( key == K_ESC )
 *         if ( Set(_SET_ESCAPE) )
-*            get:undo()
-*            get:exitState := GE_ESCAPE
+*            oGet:undo()
+*            oGet:exitState := GE_ESCAPE
 *         end
-*      case ( key == K_CTRL_HOME ) ; get:exitState := GE_TOP
+*      case ( key == K_CTRL_HOME ) ; oGet:exitState := GE_TOP
 *#ifdef CTRL_END_SPECIAL
 *         // both ^W and ^End go to the last GET
-*      case (key == K_CTRL_END) ; get:exitState := GE_BOTTOM
+*      case (key == K_CTRL_END) ; oGet:exitState := GE_BOTTOM
 *#else
 *         // both ^W and ^End terminate the READ (the default)
-*      case (key == K_CTRL_W) ; get:exitState := GE_WRITE
+*      case (key == K_CTRL_W) ; oGet:exitState := GE_WRITE
 *#endif
-*      * case (key == K_UNDO)  ; get:Undo()
-*      * case (key == K_HOME)  ; get:Home()
-*      * case (key == K_END)   ; get:End()
-*      * case (key == K_RIGHT) ; get:Right()
-*      * case (key == K_LEFT)    ; get:Left()
-*      * case (key == K_CTRL_RIGHT) ; get:WordRight()
-*      * case (key == K_CTRL_LEFT) ; get:WordLeft()
-*      * case (key == K_BS) ; get:BackSpace()
-*      * case (key == K_DEL) ; get:Delete()
-*      * case (key == K_CTRL_T) ; get:DelWordRight()
-*      * case (key == K_CTRL_Y) ; get:DelEnd()
-*      * case (key == K_CTRL_BS) ; get:DelWordLeft()
+*      * case (key == K_UNDO)  ; oGet:Undo()
+*      * case (key == K_HOME)  ; oGet:Home()
+*      * case (key == K_END)   ; oGet:End()
+*      * case (key == K_RIGHT) ; oGet:Right()
+*      * case (key == K_LEFT)    ; oGet:Left()
+*      * case (key == K_CTRL_RIGHT) ; oGet:WordRight()
+*      * case (key == K_CTRL_LEFT) ; oGet:WordLeft()
+*      * case (key == K_BS) ; oGet:BackSpace()
+*      * case (key == K_DEL) ; oGet:Delete()
+*      * case (key == K_CTRL_T) ; oGet:DelWordRight()
+*      * case (key == K_CTRL_Y) ; oGet:DelEnd()
+*      * case (key == K_CTRL_BS) ; oGet:DelWordLeft()
 *      otherwise
-*        OtherKey(get,key)
+*        OtherKey(oGet,key)
 *        * if key != K_MOUSE_EVENT .and. key != K_ALT
-*        *   get:exitState := GE_WRITE
+*        *   oGet:exitState := GE_WRITE
 *        * endif
 *      endcase
 *    endif
 *  enddo
 *  // disallow exit if the VALID condition is not satisfied
-*  if ( !GetPostValidate(get) )
-*    get:exitState := GE_NOEXIT
+*  if ( !GetPostValidate(oGet) )
+*    oGet:exitState := GE_NOEXIT
 *  endif
 *enddo
 *// de-activate the GET
-*get:KillFocus()
+*oGet:KillFocus()
 *InButton := FALSE
 *setcursor ( nSaveCursor )
 *RETURN
@@ -445,36 +445,36 @@ RETURN
 **
 ** Apply a single Inkey() keystroke to a (focussed) GET.
 **
-PROCEDURE GetApplyKey(get, key)
+PROCEDURE GetApplyKey(oGet, key)
 local cKey
 local bKeyBlock
 // check for SET KEY first
 if (bKeyBlock := SetKey(key)) <> NIL
-  GetDoSetKey(bKeyBlock, get)
+  GetDoSetKey(bKeyBlock, oGet)
   RETURN                                                   // NOTE
 endif
 do case
-case ( key == K_UP )     ; get:exitState := GE_UP
-case ( key == K_SH_TAB ) ; get:exitState := GE_UP
-case ( key == K_DOWN )   ; get:exitState := GE_DOWN
-case ( key == K_TAB )    ; get:exitState := GE_DOWN
-case ( key == K_CTRL_INS )  ; clipboard(trim(get:buffer))
+case ( key == K_UP )     ; oGet:exitState := GE_UP
+case ( key == K_SH_TAB ) ; oGet:exitState := GE_UP
+case ( key == K_DOWN )   ; oGet:exitState := GE_DOWN
+case ( key == K_TAB )    ; oGet:exitState := GE_DOWN
+case ( key == K_CTRL_INS )  ; clipboard(trim(oGet:buffer))
 case ( key == K_ALT_INS )
-  GetPaste(get,clipboard())
+  GetPaste(oGet,clipboard())
   * GetPasteBuffer()
   * keyboard clipboard()
-  * get:insert(clipboard())
+  * oGet:insert(clipboard())
 case ( key == K_ENTER )
-  get:exitState := GE_ENTER
-case (key == K_F1) ; GetDoPick(get)
+  oGet:exitState := GE_ENTER
+case (key == K_F1) ; GetDoPick(oGet)
 case ( key == K_ESC )
   if set(_SET_ESCAPE)
-    get:undo()
-    get:exitState := GE_ESCAPE
+    oGet:undo()
+    oGet:exitState := GE_ESCAPE
   endif
-case ( key == K_CTRL_HOME ) ; get:exitState := GE_TOP
+case ( key == K_CTRL_HOME ) ; oGet:exitState := GE_TOP
 #ifdef CTRL_END_SPECIAL  // both ^W and ^End go to the last GET
-   case (key == K_CTRL_END) ; get:exitState := GE_BOTTOM
+   case (key == K_CTRL_END) ; oGet:exitState := GE_BOTTOM
 #endif
 case (key == K_INS)
   if readinsert( !readinsert() )
@@ -482,66 +482,66 @@ case (key == K_INS)
   else
     setcursor(SC_INSERT)
   endif
-case (key == K_UNDO)       ; get:Undo()
-case (key == K_HOME)       ; get:Home()
+case (key == K_UNDO)       ; oGet:Undo()
+case (key == K_HOME)       ; oGet:Home()
 #ifdef __XPP__
-  case (key == K_END)        ; get:_end()
+  case (key == K_END)        ; oGet:_end()
 #else
-  case (key == K_END)        ; get:End()
+  case (key == K_END)        ; oGet:End()
 #endif
-case (key == K_RIGHT)      ; get:Right()
-case (key == K_LEFT)       ; get:Left()
-case (key == K_CTRL_RIGHT) ; get:WordRight()
-case (key == K_CTRL_LEFT)  ; get:WordLeft()
-case (key == K_BS)         ; get:BackSpace()
-case (key == K_DEL)        ; get:Delete()
-case (key == K_CTRL_T)     ; get:DelWordRight()
-case (key == K_CTRL_Y)     ; get:DelEnd()
-case (key == K_CTRL_BS)    ; get:DelWordLeft()
+case (key == K_RIGHT)      ; oGet:Right()
+case (key == K_LEFT)       ; oGet:Left()
+case (key == K_CTRL_RIGHT) ; oGet:WordRight()
+case (key == K_CTRL_LEFT)  ; oGet:WordLeft()
+case (key == K_BS)         ; oGet:BackSpace()
+case (key == K_DEL)        ; oGet:Delete()
+case (key == K_CTRL_T)     ; oGet:DelWordRight()
+case (key == K_CTRL_Y)     ; oGet:DelEnd()
+case (key == K_CTRL_BS)    ; oGet:DelWordLeft()
 otherwise
   if key >= 32 .and. key <= 255
     cKey := chr(key)
-    if (get:type == T_NUMERIC .and. (cKey == "." .or. cKey == ","))
-      get:ToDecPos()
+    if (oGet:type == T_NUMERIC .and. (cKey == "." .or. cKey == ","))
+      oGet:ToDecPos()
     else
-      if get:type == T_DATE
-        if empty(get:VarGet())
+      if oGet:type == T_DATE
+        if empty(oGet:VarGet())
           * .and. (empty(ptod(MrkInstall)).or.UserDate()<=ptod(MrkInstall))
-          get:VarPut(UserDate())
-          get:updateBuffer()
+          oGet:VarPut(UserDate())
+          oGet:updateBuffer()
         endif
         if cKey == "+"
-          get:changed := .t.
-          get:VarPut(get:VarGet() + 1)
-          get:updateBuffer()
+          oGet:changed := .t.
+          oGet:VarPut(oGet:VarGet() + 1)
+          oGet:updateBuffer()
           RETURN
         elseif cKey == "-"
-          get:changed := .t.
-          get:VarPut(get:VarGet() - 1)
-          get:updateBuffer()
+          oGet:changed := .t.
+          oGet:VarPut(oGet:VarGet() - 1)
+          oGet:updateBuffer()
           RETURN 
         elseif cKey == " "
-          get:changed := .t.
-          get:VarPut(ctod(""))
-          get:updateBuffer()
+          oGet:changed := .t.
+          oGet:VarPut(ctod(""))
+          oGet:updateBuffer()
           RETURN 
         endif
       endif
       if Set(_SET_INSERT)
-        get:Insert(cKey)
+        oGet:Insert(cKey)
       else
-        get:Overstrike(cKey)
+        oGet:Overstrike(cKey)
       endif
-      if get:typeOut
+      if oGet:typeOut
         if ! Set(_SET_CONFIRM)
-          get:exitState := GE_ENTER
+          oGet:exitState := GE_ENTER
         else
           Alarm()
         endif
       endif
     endif
   else
-    OtherKey(get,key)
+    OtherKey(oGet,key)
   endif
 endcase
 RETURN
@@ -564,78 +564,78 @@ RETURN
 * *endif
 * RETURN NIL
 
-STATIC PROCEDURE OtherKey(get,key)
+STATIC PROCEDURE OtherKey(oGet,key)
 local i
 if key != K_MOUSE_EVENT .and. key != K_ALT
   * for i := 1 to len(saGetList)
   *   if saGetList[i]:cargo[AG_HOTKEY] == key
   *     BouncePos := i
-  *     get:exitState := GE_BOUNCE
+  *     oGet:exitState := GE_BOUNCE
   *     RETURN
   *   endif
   * next i
-  get:exitState := GE_WRITE
+  oGet:exitState := GE_WRITE
 endif
 RETURN
 
 **
 **  CbxApplyKey()
-**  Apply a single Inkey() keystroke to a (focussed) CHECKBOX get.
+**  Apply a single Inkey() keystroke to a (focussed) CHECKBOX oGet.
 **
-PROCEDURE CbxApplyKey(get, key)
+PROCEDURE CbxApplyKey(oGet, key)
 local cKey
 local bKeyBlock
 // check for SET KEY first
 if ( (bKeyBlock := SetKey(key)) <> NIL )
-  GetDoSetKey(bKeyBlock, get)
+  GetDoSetKey(bKeyBlock, oGet)
   RETURN                                                             // NOTE
 endif
 do case
-case ( key == K_UP )     ; get:exitState := GE_UP
-case ( key == K_SH_TAB ) ; get:exitState := GE_UP
-case ( key == K_DOWN )   ; get:exitState := GE_DOWN
-case ( key == K_TAB )    ; get:exitState := GE_DOWN
+case ( key == K_UP )     ; oGet:exitState := GE_UP
+case ( key == K_SH_TAB ) ; oGet:exitState := GE_UP
+case ( key == K_DOWN )   ; oGet:exitState := GE_DOWN
+case ( key == K_TAB )    ; oGet:exitState := GE_DOWN
 #ifdef ENTER_STOPS
-  * case ( key == K_ENTER )  ; get:exitState := GE_WRITE // GE_ENTER
+  * case ( key == K_ENTER )  ; oGet:exitState := GE_WRITE // GE_ENTER
 #else
-  case ( key == K_ENTER )  ; get:exitState := GE_ENTER
+  case ( key == K_ENTER )  ; oGet:exitState := GE_ENTER
 #endif
-case (key == K_F1) ; GetDoPick(get)
+case (key == K_F1) ; GetDoPick(oGet)
 case ( key == K_ESC )
   if set(_SET_ESCAPE)
-    get:undo()
-    get:exitState := GE_ESCAPE
+    oGet:undo()
+    oGet:exitState := GE_ESCAPE
   endif
-* case ( key == K_PGUP )      ; get:exitState := GE_WRITE
-* case ( key == K_PGDN )      ; get:exitState := GE_WRITE
-case ( key == K_CTRL_HOME ) ; get:exitState := GE_TOP
+* case ( key == K_PGUP )      ; oGet:exitState := GE_WRITE
+* case ( key == K_PGDN )      ; oGet:exitState := GE_WRITE
+case ( key == K_CTRL_HOME ) ; oGet:exitState := GE_TOP
 #ifdef CTRL_END_SPECIAL  // both ^W and ^End go to the last GET
-   case (key == K_CTRL_END) ; get:exitState := GE_BOTTOM
+   case (key == K_CTRL_END) ; oGet:exitState := GE_BOTTOM
 * #else                    // both ^W and ^End terminate the READ (the default)
-*    case (key == K_CTRL_W) ;   get:exitState := GE_WRITE
+*    case (key == K_CTRL_W) ;   oGet:exitState := GE_WRITE
 #endif
 case (key == K_INS)
-  get:varPut(BUTTON_ON)
-  get:updateBuffer()
+  oGet:varPut(BUTTON_ON)
+  oGet:updateBuffer()
 case (key == K_DEL)
-  get:varPut(BUTTON_OFF)
-  get:updateBuffer()
+  oGet:varPut(BUTTON_OFF)
+  oGet:updateBuffer()
   * Set( _SET_INSERT, !Set(_SET_INSERT) )
   * ShowScoreboard()
-case (key == K_CTRL_Y)     ; get:DelEnd()
-case (key == K_UNDO)       ; get:Undo()
+case (key == K_CTRL_Y)     ; oGet:DelEnd()
+case (key == K_UNDO)       ; oGet:Undo()
 otherwise
   if key >= 32 .and. key <= 255
-    if empty( get:buffer )
-      get:varPut(BUTTON_ON)
+    if empty( oGet:buffer )
+      oGet:varPut(BUTTON_ON)
     else
-      get:varPut(BUTTON_OFF)
+      oGet:varPut(BUTTON_OFF)
     endif
-    get:updateBuffer()
+    oGet:updateBuffer()
   else
-    OtherKey(get,key)
+    OtherKey(oGet,key)
     * if key != K_MOUSE_EVENT .and. key != K_ALT
-    *   get:exitState := GE_WRITE
+    *   oGet:exitState := GE_WRITE
     * endif
   endif
 endcase
@@ -647,32 +647,32 @@ RETURN
 ** GetPreValidate()
 ** Test entry condition (WHEN clause) for a GET.
 **
-FUNCTION GetPreValidate(get)
+FUNCTION GetPreValidate(oGet)
 local saveUpdated
 local lWhen := .t.
 * RETURN .f. if IsReadOnly()
 * Nein : ph_read() wird ja gar nicht aufgerufen, wenn Daten nicht
 * bearbeitet werden drfen. Aber selbst in einer read-only Datebank
 * k”nnen z.B. Dialogfenster bearbeitet werden. Logisch.
-if get:preBlock != NIL
+if oGet:preBlock != NIL
   saveUpdated := slUpdated
-  lWhen := eval(get:preBlock, get)
+  lWhen := eval(oGet:preBlock, oGet)
   #ifdef DEF_WRITE
     if USRATTR_W $ UsrAttrib()
       lWhen := .t.
     endif
   #endif DEF_WRITE
-  * get:Display()       ausgeklammert weil nicht n”tig bei mir...
+  * oGet:Display()       ausgeklammert weil nicht n”tig bei mir...
   * ShowScoreBoard()
   slUpdated := saveUpdated
 endif
 if slKillRead
   lWhen := .f.
-  get:exitState := GE_ESCAPE           // provokes ReadModal() exit
+  oGet:exitState := GE_ESCAPE           // provokes ReadModal() exit
 elseif ! lWhen
-  get:exitState := GE_WHEN             // indicates failure
+  oGet:exitState := GE_WHEN             // indicates failure
 else
-  get:exitState := GE_NOEXIT           // prepares for editing
+  oGet:exitState := GE_NOEXIT           // prepares for editing
 endif
 RETURN (lWhen)
 #endif __XPP__
@@ -681,43 +681,43 @@ RETURN (lWhen)
 **
 ** GetDoPick()
 **
-STATIC FUNCTION GetDoPick(get)
+STATIC FUNCTION GetDoPick(oGet)
 local uNewVal
-RETURN NIL if get:cargo == NIL
-if get:cargo[AG_PICKBLK] == NIL .and. get:type != T_DATE
+RETURN NIL if oGet:cargo == NIL
+if oGet:cargo[AG_PICKBLK] == NIL .and. oGet:type != T_DATE
   RETURN NIL
 endif
-if get:changed
+if oGet:changed
   #ifdef __XPP__
-    get:_assign()
+    oGet:_assign()
   #else
-    get:Assign()
+    oGet:Assign()
   #endif
   slUpdated := .t.
 endif
 * #ifdef MONKEY
 *   SendKey(K_ENTER)
 * #endif
-if get:type == T_DATE
-  uNewVal := PickDate(get:varGet())
+if oGet:type == T_DATE
+  uNewVal := PickDate(oGet:varGet())
 else
-  uNewVal := eval(get:cargo[AG_PICKBLK],get:buffer,get:row,get:col)
-  * uNewVal := eval(get:cargo[AG_PICKBLK],get:varGet(),get:row,get:col)
+  uNewVal := eval(oGet:cargo[AG_PICKBLK],oGet:buffer,oGet:row,oGet:col)
+  * uNewVal := eval(oGet:cargo[AG_PICKBLK],oGet:varGet(),oGet:row,oGet:col)
 endif
 if uNewVal != NIL
-  get:varPut(uNewVal) // unerkl„rter bug bei PickStreet() nach ParCreate
-  * eval(get:block,uNewVal) // das geht nicht in DlgExec() (via array)
-  get:updateBuffer()
-  get:changed := .t.
+  oGet:varPut(uNewVal) // unerkl„rter bug bei PickStreet() nach ParCreate
+  * eval(oGet:block,uNewVal) // das geht nicht in DlgExec() (via array)
+  oGet:updateBuffer()
+  oGet:changed := .t.
   * if len(saGetList) == 1
-  *   get:exitState := GE_ENTER
+  *   oGet:exitState := GE_ENTER
   * elseif len(saGetList) == 1
   if len(saGetList) == 1 .or. snCurGetPos < len(saGetList)
-    get:exitState := GE_ENTER
-    // 19980701 get:exitState := GE_DOWN
+    oGet:exitState := GE_ENTER
+    // 19980701 oGet:exitState := GE_DOWN
   * else
   *   for i := snCurGetPos to len(saGetList)
-  *     get:exitState := GE_DOWN
+  *     oGet:exitState := GE_DOWN
   *   next i
     nKey := K_ENTER
   endif
@@ -730,9 +730,9 @@ if uNewVal != NIL
   folgenden Felder read-only sind.
   */
   * slUpdated := .t.
-  * get:reset() // Versuchsweise raus. Ntzt nix.
+  * oGet:reset() // Versuchsweise raus. Ntzt nix.
 else
-  get:display() // sonst ist evtl Cursor nicht mehr da.
+  oGet:display() // sonst ist evtl Cursor nicht mehr da.
 endif
 RETURN NIL
 
@@ -744,58 +744,58 @@ RETURN NIL
 **
 ** NOTE: bad dates are rejected in such a way as to preserve edit buffer.
 **
-FUNCTION GetPostValidate(get)
+FUNCTION GetPostValidate(oGet)
 local saveUpdated
 local lValid := .t.
 local i
 local aTrig
-if get:exitState == GE_ESCAPE
+if oGet:exitState == GE_ESCAPE
   RETURN .t.
 endif
-if get:BadDate()
-  get:Home()
+if oGet:BadDate()
+  oGet:Home()
   RETURN .f.
 endif
-if ! get:changed
+if ! oGet:changed
   RETURN .T.
 endif
 //
 // if editing occurred, assign the new value to the variable
 //
-if get:cargo[AG_POSTEDIT] != NIL
-  get:buffer := eval(get:cargo[AG_POSTEDIT],get:buffer)
+if oGet:cargo[AG_POSTEDIT] != NIL
+  oGet:buffer := eval(oGet:cargo[AG_POSTEDIT],oGet:buffer)
 endif
 **
 **
 #ifdef __XPP__
-  get:_assign()
+  oGet:_assign()
 #else
-  get:Assign()
+  oGet:Assign()
 #endif
 slUpdated := .t.
-* if get:type == T_DATE .and. ! empty(get:varGet())
-*   if year(get:varGet()) < set(_SET_EPOCH) // Shift2000()
-*     get:varPut(SkipJahr(get:varGet(),100))
+* if oGet:type == T_DATE .and. ! empty(oGet:varGet())
+*   if year(oGet:varGet()) < set(_SET_EPOCH) // Shift2000()
+*     oGet:varPut(SkipJahr(oGet:varGet(),100))
 *   endif
 * endif
-get:Reset()    // reform edit buffer, set cursor to home position, redisplay
-if get:postBlock <> NIL   // check VALID clause if specified
+oGet:Reset()    // reform edit buffer, set cursor to home position, redisplay
+if oGet:postBlock <> NIL   // check VALID clause if specified
   saveUpdated := slUpdated
-  * setpos( get:row, get:col + len(get:buffer) )   // Summer '87 compatibility
-  lValid := eval(get:postBlock, get)
-  * setpos( get:row, get:col )                     // reset compat. pos
+  * setpos( oGet:row, oGet:col + len(oGet:buffer) )   // Summer '87 compatibility
+  lValid := eval(oGet:postBlock, oGet)
+  * setpos( oGet:row, oGet:col )                     // reset compat. pos
   * ShowScoreBoard()
-  get:updateBuffer()
+  oGet:updateBuffer()
   slUpdated := saveUpdated
   if slKillRead
-    get:exitState := GE_ESCAPE                  // provokes ReadModal() exit
+    oGet:exitState := GE_ESCAPE                  // provokes ReadModal() exit
     lValid := .t.
   endif
 endif
 #ifdef DEF_BRAND
-  if get:Type == T_DATE
+  if oGet:Type == T_DATE
     if ! empty(ptod(MrkInstall))
-      if get:VarGet() > ptod(MrkInstall)
+      if oGet:VarGet() > ptod(MrkInstall)
         SetMsg(MSG001 + dtoc(ptod(MrkInstall)))
         RETURN .F.
       endif
@@ -843,24 +843,24 @@ RETURN .t.
 ** GetDoSetKey()
 ** Process SET KEY during editing.
 **
-PROCEDURE GetDoSetKey(keyBlock, get)
+PROCEDURE GetDoSetKey(keyBlock, oGet)
 local saveUpdated
 // if editing has occurred, assign variable
-if ( get:changed )
+if ( oGet:changed )
   #ifdef __XPP__
-    get:_assign()
+    oGet:_assign()
   #else
-    get:Assign()
+    oGet:Assign()
   #endif
   slUpdated := .t.
 endif
 saveUpdated := slUpdated
 eval(keyBlock, ReadProcName, ReadProcLine, ReadVar())
 * ShowScoreboard()
-get:UpdateBuffer()
+oGet:UpdateBuffer()
 slUpdated := saveUpdated
 if slKillRead
-  get:exitState := GE_ESCAPE              // provokes ReadModal() exit
+  oGet:exitState := GE_ESCAPE              // provokes ReadModal() exit
 endif
 RETURN
 #endif __XPP__
@@ -888,7 +888,7 @@ FUNCTION DoMouse ( )
 LOCAL MouseFld
 LOCAL m_row, m_col, m_but
 //
-// get mouse position
+// oGet mouse position
 mouse_mchk (@m_row, @m_col, @m_but)
 //
 // check for button 1
@@ -924,34 +924,34 @@ RETURN NIL
 
 #ifdef __XPP__
 
-FUNCTION GetSetFocus ( get )
-get:setFocus()
+FUNCTION GetSetFocus ( oGet )
+oGet:setFocus()
 RETURN NIL
 
 #else
 //
-// GetSetFocus ( get )
+// GetSetFocus ( oGet )
 //
 // Simple function which will set the current focus
 // AND cursor position within the field (for better mouse support)
 //
-FUNCTION GetSetFocus ( get )
-get:SetFocus()
+FUNCTION GetSetFocus ( oGet )
+oGet:SetFocus()
 if FldPos != -1
-  if len( transform( get:varGet, get:picture ))  >  FldPos
-    get:pos := FldPos
+  if len( transform( oGet:varGet, oGet:picture ))  >  FldPos
+    oGet:pos := FldPos
     #ifdef DEF_MOUSE
       MOUSE_OFF ( )
     #endif
-    * FldDisplay(get)
-    get:Display()
+    * FldDisplay(oGet)
+    oGet:Display()
     #ifdef DEF_MOUSE
       MOUSE_ON ( )
     #endif
   endif
 endif
 FldPos := -1
-scLastGet := get:name
+scLastGet := oGet:name
 RETURN NIL
 
 #endif
@@ -967,84 +967,84 @@ RETURN scLastGet
 *  YNReader ( )
 *  READER function for buttons
 */
-* PROCEDURE YNReader( get )
+* PROCEDURE YNReader( oGet )
 * local old_cursor := setcursor ( SC_NONE )
 * local key, bKeyBlock
 * // Set the button flag
 * InButton := TRUE
 * // read the GET if the WHEN condition is satisfied
-* if ( GetPreValidate ( get ) )
-*    GetSetFocus ( get )
-*    do while ( get:exitState == GE_NOEXIT )
+* if ( GetPreValidate ( oGet ) )
+*    GetSetFocus ( oGet )
+*    do while ( oGet:exitState == GE_NOEXIT )
 *      // check for initial typeout (no editable positions)
-*      if ( get:typeOut )
-*        get:exitState := GE_ENTER
+*      if ( oGet:typeOut )
+*        oGet:exitState := GE_ENTER
 *      endif
-*      do while ( get:exitState == GE_NOEXIT )
+*      do while ( oGet:exitState == GE_NOEXIT )
 *        key := RdKey ()
 *        // check for SET KEY first
 *        if ( (bKeyBlock := SetKey(key)) <> NIL )
-*          GetDoSetKey(bKeyBlock, get)
+*          GetDoSetKey(bKeyBlock, oGet)
 *        else
 *          do case
-*          case ( key == K_UP )     ; get:exitState := GE_UP
-*          case ( key == K_SH_TAB ) ; get:exitState := GE_UP
-*          case ( key == K_DOWN )   ; get:exitState := GE_DOWN
-*          case ( key == K_TAB )    ; get:exitState := GE_DOWN
-*          case ( key == K_ENTER )  ; get:exitState := GE_WRITE // GE_ENTER
+*          case ( key == K_UP )     ; oGet:exitState := GE_UP
+*          case ( key == K_SH_TAB ) ; oGet:exitState := GE_UP
+*          case ( key == K_DOWN )   ; oGet:exitState := GE_DOWN
+*          case ( key == K_TAB )    ; oGet:exitState := GE_DOWN
+*          case ( key == K_ENTER )  ; oGet:exitState := GE_WRITE // GE_ENTER
 *          case ( key == K_ESC )
 *            if ( Set(_SET_ESCAPE) )
-*              get:undo()
-*              get:exitState := GE_ESCAPE
+*              oGet:undo()
+*              oGet:exitState := GE_ESCAPE
 *            endif
-*          case ( key == K_PGUP )      ; get:exitState := GE_WRITE
-*          case ( key == K_PGDN )      ; get:exitState := GE_WRITE
-*          case ( key == K_CTRL_HOME ) ; get:exitState := GE_TOP
+*          case ( key == K_PGUP )      ; oGet:exitState := GE_WRITE
+*          case ( key == K_PGDN )      ; oGet:exitState := GE_WRITE
+*          case ( key == K_CTRL_HOME ) ; oGet:exitState := GE_TOP
 * #ifdef CTRL_END_SPECIAL
 *             // both ^W and ^End go to the last GET
-*             case (key == K_CTRL_END) ; get:exitState := GE_BOTTOM
+*             case (key == K_CTRL_END) ; oGet:exitState := GE_BOTTOM
 * #else
 *             // both ^W and ^End terminate the READ (the default)
-*             case (key == K_CTRL_W) ; get:exitState := GE_WRITE
+*             case (key == K_CTRL_W) ; oGet:exitState := GE_WRITE
 * #endif
 *          case (key == K_INS)
 *             Set( _SET_INSERT, !Set(_SET_INSERT) )
 *             ShowScoreboard()
-*          case (key == K_UNDO)       ; get:Undo()
-*          case (key == K_HOME)       ; get:Home()
-*          case (key == K_END)        ; get:End()
-*          case (key == K_RIGHT)      ; get:Right()
-*          case (key == K_LEFT)       ; get:Left()
-*          case (key == K_CTRL_RIGHT) ; get:WordRight()
-*          case (key == K_CTRL_LEFT)  ; get:WordLeft()
-*          case (key == K_BS)         ; get:BackSpace()
-*          case (key == K_DEL)        ; get:Delete()
-*          case (key == K_CTRL_T)     ; get:DelWordRight()
-*          case (key == K_CTRL_Y)     ; get:DelEnd()
-*          case (key == K_CTRL_BS)    ; get:DelWordLeft()
+*          case (key == K_UNDO)       ; oGet:Undo()
+*          case (key == K_HOME)       ; oGet:Home()
+*          case (key == K_END)        ; oGet:End()
+*          case (key == K_RIGHT)      ; oGet:Right()
+*          case (key == K_LEFT)       ; oGet:Left()
+*          case (key == K_CTRL_RIGHT) ; oGet:WordRight()
+*          case (key == K_CTRL_LEFT)  ; oGet:WordLeft()
+*          case (key == K_BS)         ; oGet:BackSpace()
+*          case (key == K_DEL)        ; oGet:Delete()
+*          case (key == K_CTRL_T)     ; oGet:DelWordRight()
+*          case (key == K_CTRL_Y)     ; oGet:DelEnd()
+*          case (key == K_CTRL_BS)    ; oGet:DelWordLeft()
 *          case ( key == K_SPACE )
-*            get:varPut ( !get:varGet ( ) )
-*            get:updateBuffer ( )
+*            oGet:varPut ( !oGet:varGet ( ) )
+*            oGet:updateBuffer ( )
 *          case ( key == K_UPPER_Y ) .or. ( key == K_LOWER_Y ) .or. ;
 *               ( key == K_UPPER_T ) .or. ( key == K_LOWER_T ) .or. ;
 *               ( key == K_PLUS ) .or.    ( key == K_EQUAL )
-*             get:varPut ( TRUE )
-*             get:updateBuffer ( )
+*             oGet:varPut ( TRUE )
+*             oGet:updateBuffer ( )
 *          case ( key == K_UPPER_N ) .or. ( key == K_LOWER_N ) .or. ;
 *               ( key == K_UPPER_F ) .or. ( key == K_LOWER_F ) .or. ;
 *               ( key == K_MINUS ) .or.   ( key == K_BAR )
-*             get:varPut ( FALSE )
-*             get:updateBuffer ( )
+*             oGet:varPut ( FALSE )
+*             oGet:updateBuffer ( )
 *          endcase
 *        endif
 *      enddo
 *      // disallow exit if the VALID condition is not satisfied
-*      if ( !GetPostValidate(get) )
-*        get:exitState := GE_NOEXIT
+*      if ( !GetPostValidate(oGet) )
+*        oGet:exitState := GE_NOEXIT
 *      endif
 *    enddo
 *    // de-activate the GET
-*    get:KillFocus()
+*    oGet:KillFocus()
 * endif
 * InButton := FALSE
 * setcursor ( old_cursor )
@@ -1175,9 +1175,9 @@ RETURN nPos
 **  PostActiveGet()
 **  Post active GET for ReadVar(), GetActive().
 **
-static PROCEDURE PostActiveGet(get)
-GetActive( get )
-ReadVar( GetReadVar(get) )
+static PROCEDURE PostActiveGet(oGet)
+GetActive( oGet )
+ReadVar( GetReadVar(oGet) )
 * ShowScoreBoard()
 RETURN
 
@@ -1240,21 +1240,21 @@ RETURN
 *       GetReadVar()
 *       Set READVAR() value from a GET.
 */
-static FUNCTION GetReadVar(get)
-local cName := upper(get:name)
+static FUNCTION GetReadVar(oGet)
+local cName := upper(oGet:name)
 //#ifdef SUBSCRIPT_IN_READVAR
 local i
 /***
 *       The following code includes subscripts in the name returned by
-*       this function, if the get variable is an array element.
+*       this function, if the oGet variable is an array element.
 *
-*       Subscripts are retrieved from the get:subscript instance variable.
+*       Subscripts are retrieved from the oGet:subscript instance variable.
 *
 *       NOTE: incompatible with Summer 87
 */
-if ( get:subscript <> NIL )
-  for i := 1 to len(get:subscript)
-    cName += "[" + ltrim(str(get:subscript[i])) + "]"
+if ( oGet:subscript <> NIL )
+  for i := 1 to len(oGet:subscript)
+    cName += "[" + ltrim(str(oGet:subscript[i])) + "]"
   next
 endif
 //#endif
@@ -1362,13 +1362,13 @@ return
 **
 **       NOTE: unused second param for 5.00 compatibility.
 */
-FUNCTION RangeCheck(get, junk, lo, hi)
+FUNCTION RangeCheck(oGet, junk, lo, hi)
 local cMsg, nRow, nCol
 local xValue
-if ( !get:changed )
+if ( !oGet:changed )
   return (.t.)
 endif
-xValue := get:VarGet()
+xValue := oGet:VarGet()
 if ( xValue >= lo .and. xValue <= hi )
         return (.t.)                                                                    // NOTE
 endif

@@ -799,15 +799,15 @@ FUNCTION AddExpFlds(ad)
   adds all fields of table ad to this filter
 */
 local i
-local get
+local oGet
 local fld
 for i := 1 to len( ad[AD_FIELDS] )
-  get := ad[AD_FIELDS][i]
-  if (! FLDATTR_V $ get[AG_ATTRIB]) .and. (! "H" $ get[AG_ATTRIB])
+  oGet := ad[AD_FIELDS][i]
+  if (! FLDATTR_V $ oGet[AG_ATTRIB]) .and. (! "H" $ oGet[AG_ATTRIB])
     fld := array(FLD_ALEN)
-    fld[FLD_NAME]   := get[AG_NAME]
-    fld[FLD_EXPR]   := "val2csv('"+get[AG_TYPE]+"',";
-                       +ad[AD_NAME]+"->"+get[AG_NAME]+")"
+    fld[FLD_NAME]   := oGet[AG_NAME]
+    fld[FLD_EXPR]   := "val2csv('"+oGet[AG_TYPE]+"',";
+                       +ad[AD_NAME]+"->"+oGet[AG_NAME]+")"
     fld[FLD_TYPE]   := FLDTYPE_UPDATE
     aadd(saFields,fld)
   endif

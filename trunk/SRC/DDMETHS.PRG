@@ -492,15 +492,15 @@ RETURN .T.
 FUNCTION ddStructure( ad, cAttrib )
 local aStruct := { }
 local i
-local get
+local oGet
 for i := 1 to len( ad[AD_FIELDS] )
-  get := ad[AD_FIELDS][i]
-  if (! "V" $ get[AG_ATTRIB]) .and. (! "H" $ get[AG_ATTRIB])
-    if empty(cAttrib) .or. cAttrib $ get[AG_ATTRIB]
-        aadd( aStruct, { get[AG_NAME], ;
-                         type2dbf(get[AG_TYPE]), ;
-                         get[AG_LEN], ;
-                         get[AG_DEC] ;
+  oGet := ad[AD_FIELDS][i]
+  if (! "V" $ oGet[AG_ATTRIB]) .and. (! "H" $ oGet[AG_ATTRIB])
+    if empty(cAttrib) .or. cAttrib $ oGet[AG_ATTRIB]
+        aadd( aStruct, { oGet[AG_NAME], ;
+                         type2dbf(oGet[AG_TYPE]), ;
+                         oGet[AG_LEN], ;
+                         oGet[AG_DEC] ;
                        } ;
             )
     endif
