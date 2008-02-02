@@ -19,7 +19,7 @@
 ** Based on GETSYS.PRG included with Alaska Xbase++ compiler
 
 #include "LIB.CH"
-* #include "INKEY.CH"
+* #include "inkey.ch"
 #include "NATMSG.CH"
 
 #ifdef LG_FRENCH

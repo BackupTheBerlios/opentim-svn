@@ -9,7 +9,7 @@ not used
 *  NOTE: compile with /n/w/a/m
 */
 
-#include "INKEY.CH"
+#include "inkey.ch"
 
 
 /***

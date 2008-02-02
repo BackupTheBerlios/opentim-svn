@@ -87,7 +87,7 @@ memvar GetList
 
 * #include "TODAY.CH"
 #include "APPINIT.CH"
-#include "INKEY.CH"
+#include "inkey.ch"
 #include "TYPES.CH"
 #ifdef __XPP__
   #include "GRA.CH"
