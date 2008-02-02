@@ -16,6 +16,7 @@
 ** along with TIM. If not, see <http://www.gnu.org/licenses/>.
 
 #ifndef __XPP__
+#ifndef HARBOUR
 
   #define DEF_ALT      // ft_alt() benutzen ?
   #define DEF_NANFOR   // sonstige NANFOR-Funktionen benutzen ?
@@ -26,6 +27,7 @@
 
   #define DEF_LFN  // seit 20070307 fÅr alle
 
+#endif HARBOUR
 #endif __XPP__
 
 
