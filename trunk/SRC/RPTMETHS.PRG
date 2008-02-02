@@ -277,6 +277,9 @@ RETURN !SetMsg("cannot chdir() after session start") if fdRpt != -1
   *  curdir(c)
   *endif
 #else
+#ifdef __XHARBOUR__
+  DirChange(c)
+#else
   n := ft_chdir(c)
   RETURN !SetMsg('ChDir("'+c+'") : error '+ntrim(n)) if n != 0
   if substr(c,2,1)==":"
@@ -285,6 +288,7 @@ RETURN !SetMsg("cannot chdir() after session start") if fdRpt != -1
       RETURN !SetMsg("Could not set default drive to "+cDrive+":")
     endif
   endif
+#endif
 #endif
 RETURN .t.
 
