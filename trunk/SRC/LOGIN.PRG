@@ -16,9 +16,9 @@
 ** You should have received a copy of the GNU General Public License
 ** along with TIM. If not, see <http://www.gnu.org/licenses/>.
 
-#include "Lib.ch"
-#include "DefData.ch"
-* #include "directry.ch"
+#include "LIB.CH"
+#include "DEFDATA.CH"
+* #include "DIRECTRY.CH"
 
 *#ifdef __XPP__
 *  #ifdef DEF_ADS

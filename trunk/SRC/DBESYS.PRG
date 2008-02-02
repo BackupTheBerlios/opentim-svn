@@ -24,7 +24,7 @@
 #define MSG_DBE_NOT_LOADED   " database engine not loaded"
 #define MSG_DBE_NOT_CREATED  " database engine could not be created"
 
-#include "tim.ch"
+#include "TIM.CH"
 #include "DMLB.CH"
 #include "DBFDBE.CH"
 #include "FOXDBE.CH"

@@ -16,7 +16,7 @@
 ** You should have received a copy of the GNU General Public License
 ** along with TIM. If not, see <http://www.gnu.org/licenses/>.
 
-#include "Lib.ch"
+#include "LIB.CH"
 
 static scMainMenuColor      := "N/BG,W+/R,W/BG,R/BG"
 static scEditMenuColor      := "N/W,W+/R,N+/W,R/W"

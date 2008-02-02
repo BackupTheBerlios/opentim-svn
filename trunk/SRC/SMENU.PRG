@@ -16,7 +16,7 @@
 ** You should have received a copy of the GNU General Public License
 ** along with TIM. If not, see <http://www.gnu.org/licenses/>.
 
-#include "Lib.ch"
+#include "LIB.CH"
 
 #define MENU_FAIL      0
 #define MENU_DONE      1

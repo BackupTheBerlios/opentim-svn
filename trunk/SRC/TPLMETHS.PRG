@@ -24,8 +24,8 @@
 #define TCS_NAME  2
 #define TCS_ALEN  2
 
-#include "Tim.ch"
-#include "defdata.ch"
+#include "TIM.CH"
+#include "DEFDATA.CH"
 
 **
 ** STATIC_SECTION global static variables

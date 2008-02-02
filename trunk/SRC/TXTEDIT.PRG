@@ -16,8 +16,8 @@
 ** You should have received a copy of the GNU General Public License
 ** along with TIM. If not, see <http://www.gnu.org/licenses/>.
 
-#include "memoedit.ch"
-#include "Lib.ch"
+#include "MEMOEDIT.CH"
+#include "LIB.CH"
 
 #ifdef LG_FRENCH
   #define MSG001 " [Esc] Abandon ³ [F10] Fin & sauvegarde ³ [Alt-F1] Aide"
@@ -279,8 +279,8 @@ local nPos
 * ol_yield()
 #ifdef __XPP__
   // Till Warweg 2007-03-26:
-  #include "xbp.ch"
-  #include "appevent.ch"
+  #include "XBP.CH"
+  #include "APPEVENT.CH"
   // Filter out non-keyboard events in the
   // user function
   IF (nMode==ME_UNKEY.OR.nMode==ME_UNKEYX) .AND. AppType()==APPTYPE_PM

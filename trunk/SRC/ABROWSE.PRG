@@ -18,7 +18,7 @@
 ** You should have received a copy of the GNU General Public License
 ** along with TIM. If not, see <http://www.gnu.org/licenses/>.
 
-#include "Lib.ch"
+#include "LIB.CH"
 
 static snItem  := 1
 static saItems := NIL

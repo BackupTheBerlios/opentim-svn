@@ -16,7 +16,7 @@
 ** You should have received a copy of the GNU General Public License
 ** along with TIM. If not, see <http://www.gnu.org/licenses/>.
 
-#include "Tim.ch"
+#include "TIM.CH"
 
 request ParEdit
 
@@ -28,7 +28,7 @@ request ParEdit
 #endif
 
 #ifdef DEF_GUI
-#include "appevent.ch"
+#include "APPEVENT.CH"
 #endif DEF_GUI
 
 #ifdef DEF_VAR

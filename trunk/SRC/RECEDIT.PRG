@@ -17,7 +17,7 @@
 ** along with TIM. If not, see <http://www.gnu.org/licenses/>.
 
 
-#include "Lib.ch"
+#include "LIB.CH"
 
 static saRecStack := {}
 

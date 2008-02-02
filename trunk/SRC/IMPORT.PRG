@@ -16,9 +16,9 @@
 ** You should have received a copy of the GNU General Public License
 ** along with TIM. If not, see <http://www.gnu.org/licenses/>.
 
-#include "Lib.ch"
-* #include "directry.ch"
-#include "dbstruct.ch"
+#include "LIB.CH"
+* #include "DIRECTRY.CH"
+#include "DBSTRUCT.CH"
 
 ** request eac_allo
 request i_plz

@@ -16,7 +16,7 @@
 ** You should have received a copy of the GNU General Public License
 ** along with TIM. If not, see <http://www.gnu.org/licenses/>.
 
-#include "Lib.ch"
+#include "LIB.CH"
 
 * FUNCTION nText(nZahl,langue, lFull,nMaxDecPos)
 FUNCTION nText(cZahl,langue, lFull)

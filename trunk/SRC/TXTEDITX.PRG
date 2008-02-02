@@ -17,7 +17,7 @@
 
 #ifdef __XPP__
 
-#include "Appevent.ch"
+#include "APPEVENT.CH"
 
 **
 ** TxtEdit()

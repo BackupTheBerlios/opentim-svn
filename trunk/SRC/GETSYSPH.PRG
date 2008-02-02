@@ -22,9 +22,9 @@
 **             Copyright (c) 1990, 1991 Nantucket Corp.
 **             All rights reserved.
 */
-#include "Set.ch"
-#include "Getexit.ch"
-#include "Lib.ch"
+#include "SET.CH"
+#include "GETEXIT.CH"
+#include "LIB.CH"
 
 #ifdef LG_FRENCH
   #define MSG001 "Votre code d'installation est limit‚ jusqu'au "

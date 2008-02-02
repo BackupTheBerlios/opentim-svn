@@ -18,8 +18,8 @@
 
 ** Description .... : Tilgungsplan
 
-#include "Tim.ch"
-#include "DefData.ch"
+#include "TIM.CH"
+#include "DEFDATA.CH"
 
 #ifdef DEF_TIL
 

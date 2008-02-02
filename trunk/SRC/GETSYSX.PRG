@@ -18,7 +18,7 @@
 
 ** Based on GETSYSX.PRG included with Alaska Xbase++ compiler
 
-#include "appevent.ch"
+#include "APPEVENT.CH"
 
 #define _FORCE_KILL_GET                // Active Get will always be exited
                                        // by a mouse click ->

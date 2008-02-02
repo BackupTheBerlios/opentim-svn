@@ -17,11 +17,11 @@
 ** along with TIM. If not, see <http://www.gnu.org/licenses/>.
 
 
-#include "tim.ch"
-* #include "Lib.ch"
+#include "TIM.CH"
+* #include "LIB.CH"
 
 #ifdef DEF_LFN
-#include "lfnlib.ch"
+#include "LFNLIB.CH"
 #endif DEF_LFN
 
 static scDelim
@@ -601,11 +601,11 @@ RETURN "(c) 1993-2001 PAC Systems, (c) 2001-2008 Rumma & Ko"
 
 
 ** #ifdef DEF_FFCOPYRIGHT
-** #include "paceff.rig"
+** #include "PACEFF.RIG"
 ** #else
-** #include "pac.rig"
+** #include "PAC.RIG"
 ** #endif
-*#include "rumma.rig"
+*#include "RUMMA.RIG"
 *
 *FUNCTION CopyRight()
 *local c := ""

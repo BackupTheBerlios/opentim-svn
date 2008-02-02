@@ -16,11 +16,11 @@
 ** You should have received a copy of the GNU General Public License
 ** along with TIM. If not, see <http://www.gnu.org/licenses/>.
 
-#include "lib.ch"
+#include "LIB.CH"
 
-#include "defdata.ch"
+#include "DEFDATA.CH"
 #ifdef DEF_CLIP53
-  #include "llibg.ch"
+  #include "LLIBG.CH"
 #endif
 
 #ifndef __XPP__
@@ -1968,8 +1968,8 @@ FUNCTION ft_default()
 RETURN CurDrive()
 
 * FUNCTION SetCollation(n)
-* #include "set.ch"
-* // #include "collat.ch"
+* #include "SET.CH"
+* // #include "COLLAT.CH"
 * set(_SET_COLLATION,n)
 * // SET COLLATION to &cCollation
 * RETURN .t.

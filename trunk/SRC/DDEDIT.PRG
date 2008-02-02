@@ -17,8 +17,8 @@
 ** along with TIM. If not, see <http://www.gnu.org/licenses/>.
 
 
-#include "Lib.ch"
-#include "Getexit.ch"
+#include "LIB.CH"
+#include "GETEXIT.CH"
 
 * #define DEF_COMMIT
 

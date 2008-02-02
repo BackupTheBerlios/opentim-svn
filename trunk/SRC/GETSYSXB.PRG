@@ -18,9 +18,9 @@
 
 ** Based on GETSYS.PRG included with Alaska Xbase++ compiler
 
-#include "lib.ch"
-* #include "inkey.ch"
-#include "natmsg.ch"
+#include "LIB.CH"
+* #include "INKEY.CH"
+#include "NATMSG.CH"
 
 #ifdef LG_FRENCH
   #define MSG001 "Votre code d'installation est limit‚ jusqu'au "

@@ -17,7 +17,7 @@
 ** along with TIM. If not, see <http://www.gnu.org/licenses/>.
 
 
-#include "lib.ch"
+#include "LIB.CH"
 
 #ifdef DEF_REPORT
 

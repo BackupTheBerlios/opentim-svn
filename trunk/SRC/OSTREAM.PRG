@@ -41,7 +41,7 @@ static sbInputFilter := {|x|x}
 #define MAX_MEMOLEN 64000
 
 
-#include "Lib.ch"
+#include "LIB.CH"
 
 #ifdef DEF_PRINT
 

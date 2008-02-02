@@ -30,7 +30,7 @@ RETURN upper(c)
 
 #else
 
-#include "tim.ch"
+#include "TIM.CH"
 
 FUNCTION eupper(c,nLenRoot)
 local nLen := len(c)

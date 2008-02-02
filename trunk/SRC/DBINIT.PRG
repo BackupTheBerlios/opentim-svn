@@ -4,7 +4,7 @@
 ** Description .... : Database Initialization
 ** Copyright ...... : Luc Saffre, P.A.C. Systems, Eupen, Belgium
 **
-#include "Lib.ch"
+#include "LIB.CH"
 
 
 static scName1 := ""

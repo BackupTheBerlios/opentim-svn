@@ -19,9 +19,9 @@
 ** Note: this is a modified version of Alaska's APPSYS.PRG
 ** (Copyright Alaska Software, (c) 1997-2006. All rights reserved.)
 
-#include "lib.ch"
-#include "xbp.ch"
-#include "rsc.ch"
+#include "LIB.CH"
+#include "XBP.CH"
+#include "RSC.CH"
 
 * #define DEF_ROWS       43
 * #define DEF_COLS       100

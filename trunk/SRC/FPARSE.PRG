@@ -20,8 +20,8 @@
 ** fparse.exe, a successor for btp2bat.exe
 ** derived from TplParse(), 17.06.1998
 **
-#include "lib.ch"
-#include "Error.ch"
+#include "LIB.CH"
+#include "ERROR.CH"
 
 static slBreakTrap := .f.
 static slActive := .t.

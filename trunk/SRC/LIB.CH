@@ -81,48 +81,48 @@
 memvar nKey
 memvar GetList
 
-#include "precust.ch"
-#include "cust.ch"
-#include "postcust.ch"
+#include "PRECUST.CH"
+#include "CUST.CH"
+#include "POSTCUST.CH"
 
-* #include "today.ch"
-#include "appinit.ch"
-#include "Inkey.ch"
-#include "types.ch"
+* #include "TODAY.CH"
+#include "APPINIT.CH"
+#include "INKEY.CH"
+#include "TYPES.CH"
 #ifdef __XPP__
-  #include "gra.ch"
-  #include "os.ch"
+  #include "GRA.CH"
+  #include "OS.CH"
 #endif __XPP__
 
 #ifdef DEF_CLIP53
-  #include "lsget.ch"
+  #include "LSGET.CH"
 #else
   *#ifdef __XPP__
-  *  #include "getsysxb.ch"
+  *  #include "GETSYSXB.CH"
   *#else
-  *  #include "getsysph.ch"
+  *  #include "GETSYSPH.CH"
   *#endif
-  #include "getsysph.ch"
-  #include "ddGet.ch"
-  #include "Inkey2.ch"
+  #include "GETSYSPH.CH"
+  #include "DDGET.CH"
+  #include "INKEY2.CH"
 #endif
-#include "data.ch"
-#include "views.ch"
-#include "montant.ch"
-#include "ddEdit.ch"
-#include "Windows.ch"
-#include "setcurs.ch"
-#include "Box.ch"
-#include "Report.ch"
-#include "FileIO.ch"
-#include "printer.ch"
-#include "abrowse.ch"
-#include "login.ch"
-#include "smenu.ch"
-#include "sayget.ch"
-// #include "music.ch"
-#include "directry.ch"
-* #include "dbfsix.ch"
+#include "DATA.CH"
+#include "VIEWS.CH"
+#include "MONTANT.CH"
+#include "DDEDIT.CH"
+#include "WINDOWS.CH"
+#include "SETCURS.CH"
+#include "BOX.CH"
+#include "REPORT.CH"
+#include "FILEIO.CH"
+#include "PRINTER.CH"
+#include "ABROWSE.CH"
+#include "LOGIN.CH"
+#include "SMENU.CH"
+#include "SAYGET.CH"
+// #include "MUSIC.CH"
+#include "DIRECTRY.CH"
+* #include "DBFSIX.CH"
 
 #define K_MOUSE_EVENT   (332)               // numpad 5
 
@@ -258,5 +258,5 @@ if (<lIf>) ; RETURN (<uReturn>) ; endif
 #define DEF_DBF
 
 #ifdef DEF_GUI
-#include "Xbp.ch"
+#include "XBP.CH"
 #endif DEF_GUI

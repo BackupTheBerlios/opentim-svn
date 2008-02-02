@@ -16,9 +16,9 @@
 ** You should have received a copy of the GNU General Public License
 ** along with TIM. If not, see <http://www.gnu.org/licenses/>.
 
-#include "Xbp.ch"
-#include "Error.ch"
-#include "tim.ch"
+#include "XBP.CH"
+#include "ERROR.CH"
+#include "TIM.CH"
 
 #define  XPPDEBUG
 // #define NEWLINE ";"

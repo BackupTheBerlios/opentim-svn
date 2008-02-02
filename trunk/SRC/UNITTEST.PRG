@@ -15,7 +15,7 @@
 ** You should have received a copy of the GNU General Public License
 ** along with TIM. If not, see <http://www.gnu.org/licenses/>.
 
-#include "lib.ch"
+#include "LIB.CH"
 
 #ifdef DEF_UNITTEST
 

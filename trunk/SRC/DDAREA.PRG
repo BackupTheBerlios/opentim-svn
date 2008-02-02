@@ -42,7 +42,7 @@
 REQUEST header
 REQUEST recsize
 
-#include "Lib.ch"
+#include "LIB.CH"
 
 **
 ** "table status descriptor array" returned by ddOpen() :

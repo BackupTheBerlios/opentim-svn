@@ -16,7 +16,7 @@
 ** You should have received a copy of the GNU General Public License
 ** along with TIM. If not, see <http://www.gnu.org/licenses/>.
 
-#include "Lib.ch"
+#include "LIB.CH"
 
 #ifdef LG_FRENCH
   #define MSG001 "Tapez O pour interrompre le travail en cours"
@@ -210,7 +210,7 @@ RETURN NIL
 
 
 #ifdef __XPP__
-#include "Appevent.ch"
+#include "APPEVENT.CH"
 FUNCTION ft_alt()
 RETURN AppKeyState(xbeK_ALT) == APPKEY_DOWN
 
@@ -878,7 +878,7 @@ RETURN
 
 #ifdef __XPP__
 
-#include "Xbp.ch"
+#include "XBP.CH"
 
 ** get/set the Windows clipboard
 ** if x is NIL, return the current clipboard content

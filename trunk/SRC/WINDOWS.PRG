@@ -16,8 +16,8 @@
 ** You should have received a copy of the GNU General Public License
 ** along with TIM. If not, see <http://www.gnu.org/licenses/>.
 
-#include "memoedit.ch"
-#include "Lib.ch"
+#include "MEMOEDIT.CH"
+#include "LIB.CH"
 
 * #define LUC_RPTLOG   // causes each window to be logged in report session
 * #define LUC_SHADOW

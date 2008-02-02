@@ -17,7 +17,7 @@
 ** along with TIM. If not, see <http://www.gnu.org/licenses/>.
 
 
-#include "Tim.ch"
+#include "TIM.CH"
 
 **
 ** STATIC_SECTION global static variables

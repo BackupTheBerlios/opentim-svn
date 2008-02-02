@@ -32,7 +32,7 @@
 
 
 
-#include "lib.ch"
+#include "LIB.CH"
 
 #ifdef DEF_TRIG
 

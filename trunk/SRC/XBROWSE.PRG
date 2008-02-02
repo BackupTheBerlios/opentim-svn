@@ -23,9 +23,9 @@
 // Table columns are created within a FOR..NEXT loop. 
 // The browser is displayed in the event loop.
 
-#include "lib.ch"
-#include "Appevent.ch"
-#include "Common.ch"
+#include "LIB.CH"
+#include "APPEVENT.CH"
+#include "COMMON.CH"
 
 #pragma Library( "XppUi2.lib" )
 

@@ -17,8 +17,8 @@
 
 ** created 2004-02-05
 
-#include "lib.ch"
-#include "dbstruct.ch"
+#include "LIB.CH"
+#include "DBSTRUCT.CH"
 
 #ifdef DEF_SQLEXPORT
 static saSqlConvert := {}

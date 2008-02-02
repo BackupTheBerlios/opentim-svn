@@ -50,8 +50,8 @@
 
 * #define DEF_IMPTIM205
 
-#include "Lib.ch"
-#include "Objects.ch"
+#include "LIB.CH"
+#include "OBJECTS.CH"
 
 ** Diese DEF_s sind noch nicht fertig integriert. Stets gesetzt lassen !
 #define DEF_MASQUES

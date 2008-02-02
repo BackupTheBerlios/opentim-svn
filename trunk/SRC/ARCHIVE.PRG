@@ -15,7 +15,7 @@
 **
 ** You should have received a copy of the GNU General Public License
 ** along with TIM. If not, see <http://www.gnu.org/licenses/>.
-#include "tim.ch"
+#include "TIM.CH"
 
 static snCurArchive
 static saArchives
