@@ -264,11 +264,15 @@ set softseek off
   set key K_ALT_F1 to CallHelp
 #endif
 * set key K_ALT_F3 to BiosInfo()
+#ifdef __XHARBOUR__
+  scProgramPath := left(ExeFile(),rat("\",ExeFile())-1)
+#else
 #ifdef __XPP__
   scProgramPath := left(AppName(.t.),rat("\",AppName(.t.))-1)
   * ? scProgramPath
 #else
   scProgramPath := left(ft_origin(),rat("\",ft_origin())-1)
+#endif
 #endif
 if upper(right(scProgramPath,4)) == "\BIN"
   scAppRoot := left(scProgramPath,len(scProgramPath)-4)
@@ -1956,10 +1960,20 @@ raise("You pressed Alt-F1")
 return
 
 FUNCTION AppDate
+#ifdef __XHARBOUR__
+  RETURN FileDate(ExeName())
+#endif
 #ifdef __XPP__
   RETURN FileDate(AppName(.t.)) // scProgramPath+"\tim4.exe")
 #else
   RETURN FileDate(ft_origin())
+#endif
+
+#ifdef __XHARBOUR__
+
+FUNCTION ft_default()
+RETURN CurDrive()
+
 #endif
 
 #ifdef __XPP__
