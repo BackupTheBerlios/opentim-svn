@@ -265,7 +265,7 @@ set softseek off
 #endif
 * set key K_ALT_F3 to BiosInfo()
 #ifdef __XHARBOUR__
-  scProgramPath := left(ExeFile(),rat("\",ExeFile())-1)
+  scProgramPath := left(ExeName(),rat("\",ExeName())-1)
 #else
 #ifdef __XPP__
   scProgramPath := left(AppName(.t.),rat("\",AppName(.t.))-1)
@@ -1962,11 +1962,12 @@ return
 FUNCTION AppDate
 #ifdef __XHARBOUR__
   RETURN FileDate(ExeName())
-#endif
+#else
 #ifdef __XPP__
   RETURN FileDate(AppName(.t.)) // scProgramPath+"\tim4.exe")
 #else
   RETURN FileDate(ft_origin())
+#endif
 #endif
 
 #ifdef __XHARBOUR__

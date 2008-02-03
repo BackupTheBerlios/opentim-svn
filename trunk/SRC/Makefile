@@ -1,0 +1,144 @@
+HB=harbour
+HBCC=cl
+CFLAGS=
+CPPFLAGS=
+SDKROOT=C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2
+MSVCROOT=C:\Program Files\Microsoft Visual Studio 8\VC
+XHBROOT=s:\xharbour
+HBFLAGS=/m /n0 /i$(XHBROOT)\include
+INCLUDE=$(SDKROOT)\Include;$(SDKROOT)\Include\crt;$(XHBROOT)\include
+LIB = $(SDKROOT)\Lib;$(MSVCROOT)\lib;$(XHBROOT)\lib
+C_USR=-TP
+HB_ARCHITECTURE=w32
+HB_COMPILER=msvc
+HB_GT_LIB=gtwin
+#HB_MT=MT multi-threaded ?
+HB_MT=
+HB_FIRST_LIBS=
+HB_LIBLIST=$(HB_FIRST_LIBS) common.lib dllmain.lib debug.lib vm$(HB_MT).lib rtl$(HB_MT).lib pcrepos.lib $(_HB_GT_LIB).lib lang.lib rdd$(HB_MT).lib macro$(HB_MT).lib pp$(HB_MT).lib dbffpt$(HB_MT).lib dbfntx$(HB_MT).lib dbfcdx$(HB_MT).lib hsx$(HB_MT).lib hbsix$(HB_MT).lib ct$(HB_MT).lib tip$(HB_MT).lib $(ADS_LIBS) $(HB_USER_LIBS) $(HB_ALGLIB)
+
+export LIB
+
+
+OBJ =TIM.obj
+OBJ+=ADL.obj
+OBJ+=ALS.obj
+OBJ+=ADMIN.obj
+OBJ+=ARCHIVE.obj
+OBJ+=CODA.obj
+OBJ+=CREATE.obj
+OBJ+=DCL.obj
+OBJ+=DELETE.obj
+OBJ+=EDIT.obj
+OBJ+=EVT.obj
+OBJ+=FNLMETHS.obj
+OBJ+=HAUSHALT.obj
+OBJ+=IMLMETHS.obj
+OBJ+=IMAGES.obj
+OBJ+=IMP.obj
+OBJ+=INT.obj
+OBJ+=INTERBNK.obj
+OBJ+=KVK.obj
+OBJ+=LICMETHS.obj
+OBJ+=LISTES1.obj
+OBJ+=LISTES2.obj
+OBJ+=LITERA.obj
+OBJ+=LNK.obj
+OBJ+=METHODS.obj
+OBJ+=METHODS2.obj
+OBJ+=MSG.obj
+OBJ+=MVIMETHS.obj
+OBJ+=OBJECTS.obj
+OBJ+=PERMETHS.obj
+OBJ+=PICK.obj
+OBJ+=PLS.obj
+OBJ+=PLI.obj
+OBJ+=PRJ.obj
+OBJ+=PSEUDO.obj
+OBJ+=R.obj
+OBJ+=RAPMETHS.obj
+OBJ+=SQL.obj
+OBJ+=TLG.obj
+OBJ+=TIMDATA1.obj
+OBJ+=TIMDATA2.obj
+OBJ+=TIMDATA3.obj
+OBJ+=TIMDATA4.obj
+OBJ+=TIMFAC.obj
+OBJ+=TIMGET.obj
+OBJ+=TIMTEST.obj
+OBJ+=TIMPRINT.obj
+OBJ+=TPLMETHS.obj
+OBJ+=TRAMETHS.obj
+OBJ+=UNITTEST.obj
+OBJ+=UPGRADE.obj
+OBJ+=VENMETHS.obj
+OBJ+=VNAMETHS.obj
+OBJ+=VNLMETHS.obj
+OBJ+=WWW.obj
+OBJ+=POINTAGE.obj
+OBJ+=TIL.obj
+OBJ+=NAF.obj
+OBJ+=KITZ.obj
+OBJ+=SPZ.obj
+OBJ+=RFX.obj
+OBJ+=NTEXT.obj
+OBJ+=RECEDIT.obj
+OBJ+=TIME.obj
+OBJ+=MONTANT.obj
+OBJ+=TRIG.obj
+OBJ+=TASKS.obj
+OBJ+=RPTMETHS.obj
+OBJ+=ETC.obj
+OBJ+=LOGIN.obj
+OBJ+=DDLAYOUT.obj
+OBJ+=REPORT.obj
+OBJ+=DDSEEK.obj
+OBJ+=FILTER.obj
+OBJ+=IMPORT.obj
+OBJ+=ABROWSE.obj
+OBJ+=A2BROWSE.obj
+OBJ+=PROTECT.obj
+OBJ+=CALEND.obj
+OBJ+=WOY.obj
+OBJ+=APPINIT.obj
+OBJ+=DDMETHS.obj
+OBJ+=TXTEDIT.obj
+OBJ+=STDIO.obj
+OBJ+=WINDOWS.obj
+OBJ+=GETSYSPH.obj
+OBJ+=DDGET.obj
+OBJ+=DDAREA.obj
+OBJ+=DDEDIT.obj
+OBJ+=DLG.obj
+OBJ+=SMENU.obj
+OBJ+=VIEWS.obj
+OBJ+=COLORS.obj
+OBJ+=OSTREAM.obj
+OBJ+=TAB.obj
+OBJ+=DRV.obj
+OBJ+=MFILEIO.obj
+OBJ+=DBCEDIT.obj
+OBJ+=DATANORM.obj
+OBJ+=BYT2HEX.obj
+OBJ+=BYT2BIT.obj
+OBJ+=NOOCCUR.obj
+OBJ+=ISBIT.obj
+OBJ+=DBESYS.obj
+OBJ+=EUPPER.obj
+OBJ+=ERRSYSLS.obj
+
+all: tim.exe
+
+tim.exe : $(OBJ)
+	link.exe $^ /NODEFAULTLIB:libcmt.lib /out:$@ /subsystem:CONSOLE /FORCE:MULTIPLE $(LDFLAGS) $(HB_LIBLIST) shell32.lib user32.lib winspool.lib ole32.lib oleaut32.lib ws2_32.lib kernel32.lib gdi32.lib comctl32.lib comdlg32.lib 
+#	cl $^ -o $@
+
+clean :
+	rm -f *.c *.obj
+
+%.obj : %.c
+	cl /W3 /c /I"$(INCLUDE)" $< 
+#	$(HBCC) -c $(CFLAGS) $(CPPFLAGS) $< -o $@
+
+%.c : %.PRG
+	$(HB) $(HBFLAGS) $<
