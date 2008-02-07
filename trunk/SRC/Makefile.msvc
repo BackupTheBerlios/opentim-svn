@@ -130,7 +130,7 @@ OBJ+=ERRSYSLS.obj
 all: tim.exe
 
 tim.exe : $(OBJ)
-	link.exe $^ /NODEFAULTLIB:libcmt.lib /out:$@ /subsystem:CONSOLE /FORCE:MULTIPLE $(LDFLAGS) $(HB_LIBLIST) shell32.lib user32.lib winspool.lib ole32.lib oleaut32.lib ws2_32.lib kernel32.lib gdi32.lib comctl32.lib comdlg32.lib 
+	link.exe $^ /NODEFAULTLIB:libcmt.lib /out:$@ /subsystem:WINDOWS /FORCE:MULTIPLE $(LDFLAGS) $(HB_LIBLIST) shell32.lib user32.lib winspool.lib ole32.lib oleaut32.lib ws2_32.lib kernel32.lib gdi32.lib comctl32.lib comdlg32.lib 
 #	cl $^ -o $@
 
 clean :
