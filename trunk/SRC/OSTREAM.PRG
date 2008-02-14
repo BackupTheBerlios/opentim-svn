@@ -3204,8 +3204,18 @@ if cIdLng == MemLang2
 endif
 RETURN xparse(x+"1")
 
-FUNCTION fprint(cFilename,cCmdTags,nWidth,bPageHeader)
-RETURN .f. if ! OpenPrinter(SetTplIni(),SetPreview(),nWidth,bPageHeader)
+FUNCTION fprint(cFilename,cCmdTags,nWidth,bPageHeader,;
+  cRange, ;
+  bPrePrint, ;
+  cIdDlg, ;
+  lDlg, ;
+  lAsPdf, lAsMail )
+RETURN .f. if ! OpenPrinter(SetTplIni(),SetPreview(),nWidth,bPageHeader,;
+  cRange, ;
+  bPrePrint, ;
+  cIdDlg, ;
+  lDlg, ;
+  lAsPdf, lAsMail )
 p_MsgDisplay(SetDlgTitle())
 if ! fparse(cFilename,NIL,cCmdTags)
   Warning(SetMsg())

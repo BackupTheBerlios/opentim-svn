@@ -1,10 +1,23 @@
 // VerwaltermenÅ
 MnuAddTitle(utr("~Configuration","~Konfigurierung","~Configuration"))
-
-MnuAddItem("~Journale                  ",{||WinEdit(oJnl(),"Journale")})
-MnuAddItem("~Benutzerliste                 ",{||UsrEdit()})
-MnuAddItem("Buchungs~perioden              ",{||WinEdit(oPer(),MnuItemName())})
+MnuAddItem("~Journale",{||WinEdit(oJnl(),"Journale")})
 MnuAddItem("Druckmasken und ~Textblocks",{||TplConfig()})
+MnuAddItem("~Benutzerliste",{||UsrEdit()})
+MnuAddItem("Buchungs~perioden",{||WinEdit(oPer(),MnuItemName())})
+MnuAddItem(utr("~Currencies","~WÑhrungen","~Devises"),{||WinEdit(oDev(),MnuItemName())})
+MnuAddItem(\
+  utr("~Nations (Countries)",\
+      "~Nationen (LÑnder)",\
+      "~Nations (pays)"),\
+      {||DbfEdit({oNat()},MnuItemName())})
+#if oBic()!=NIL
+MnuAddItem("~Bank Identifier Codes     ",{||DbfEdit({oBic()}, MnuItemName())})
+#endif
+MnuAddSep()
+MnuAddItem(utr("Database ~parameters       ","Datenbank~parameter        ","~Paramätres du dossier     "),{||ParaGen()})
+MnuAddItem(utr("Printer ~settings          ","~Standarddrucker           ","Imprimante ~standard       "),{||DlgExec("PARAM")})
+
+MnuAddTitle(utr("~Invoicing","~Fakturation","~Facturation"))
 #if oReg()!=NIL
 MnuAddItem("~MWSt-Codes                ",{||TaxEdit(MnuItemName())})
 MnuAddItem("MWSt-~Regimes              ",{||WinEdit(oReg(), MnuItemName())})
@@ -27,21 +40,9 @@ MnuAddItem("Befriedi~gungstabelle      ",{||WinEdit(oTrn(), MnuItemName())})
 MnuAddItem("~Zentralisierungsarten     ",{||WinEdit(oCtr(), MnuItemName())})
 MnuAddItem("Zahlungs~differenzen       ",{||WinEdit(oDif(), MnuItemName())})
 MnuAddSep()
-MnuAddItem(utr("Database ~parameters       ","Datenbank~parameter        ","~Paramätres du dossier     "),{||ParaGen()})
-MnuAddItem(utr("Printer ~settings          ","~Standarddrucker           ","Imprimante ~standard       "),{||DlgExec("PARAM")})
 #if TptLocate("TXT")!=NIL
 MnuAddItem("~Info-Texte                ",{||TplEdit(TptLocate("TXT"),"Info-Texte")})
 #endif
-MnuAddItem(utr("~Currencies                ","~WÑhrungen                 ","~Devises                   "),{||WinEdit(oDev(),MnuItemName())})
-MnuAddItem(\
-  utr("~Nations (Countries)",\
-      "~Nationen (LÑnder)",\
-      "~Nations (pays)"),\
-      {||DbfEdit({oNat()},MnuItemName())})
-#if oBic()!=NIL
-MnuAddItem("~Bank Identifier Codes     ",{||DbfEdit({oBic()}, MnuItemName())})
-#endif
-
 
 MnuAddTitle("~Editor")
 MnuAddItem("~dbc-Dateien               ",{||DbcEdit("*.dbc",,MnuItemName())})

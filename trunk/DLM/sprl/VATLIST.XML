@@ -4,17 +4,51 @@
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
 xsi:schemaLocation="http://www.minfin.fgov.be/VatList http://www.minfin.fgov.be/VatList/VatList.xsd"
 RecipientId="VAT-ADMIN"  
-SenderId="[=trim(substr(tvatrim(MemNoTva),4))]"
-ControlRef="[=trim(substr(tvatrim(MemNoTva),4))]0001"
+SenderId="[=trim(substr(tvatrim(MemNoTva),3))]"
+ControlRef="[=trim(substr(tvatrim(MemNoTva),3))]0001"
 MandataireId="xxxx"  
 SenderDate="[=dtocf(UserDate(),"yyyy-mm-dd")]"  
-[etc if .t.]
+[etc if .f.]
 Test="1"
 [etc endif]
 VersionTech="1.2">
 
+[=setvar("LSTTVA.TurnOver",0)]
+[=setvar("LSTTVA.Amount",0)]
+[=setvar("LSTTVA.ClientNbr",0)]
+[=setvar("b",{||\
+  DlgPlus("LSTTVA.TurnOver",getvar("MontB")),\
+  DlgPlus("LSTTVA.Amount",getvar("MontT")),\
+  DlgPlus("LSTTVA.ClientNbr",1),\
+  (!empty(PAR->NoTva).and.ValNoTva(PAR->NoTva))\
+    .or.Confirm(PAR->IdPar+" "+trim(ParName())+": nø TVA invalide",\
+    MsgContinue())\
+})]
+[=DbfScan({oPar()},1,NIL,NIL,\
+  "ParVatList('V','"\
+    +DbcText("VATLIST.DBC",getvar("Type"),3)\
+    +"').and.getvar('MontB')>="+ltrim(getvar('MontMin')),\
+  getvar("b")\
+)]
+
+<AgentRepr DecNumber="1">
 <CompanyInfo>
-<VATNum>[=substr(TvaTrim(MemNoTva),4)]</VATNum>
+<VATNum>[=substr(TvaTrim(MemNoTva),3)]</VATNum>
+<Name>[=trim(MemName1)]</Name>
+<Street>[=trim(MemName2)]</Street>
+<CityAndZipCode>[=trim(MemName3)]</CityAndZipCode>
+<Country>[=left(MemNoTva,2)]</Country>
+</CompanyInfo>
+</AgentRepr>
+
+<DeclarantList
+  SequenceNum="1"
+  DeclarantNum="[=trim(substr(tvatrim(MemNoTva),3))]000100001"
+  ClientNbr="[=ntrim0(getvar("LSTTVA.ClientNbr"))]"
+  TurnOverSum="[=ntrim0(getvar("LSTTVA.TurnOver")*100)]" \
+  TaxSum="[=ntrim0(getvar("LSTTVA.Amount")*100)]">
+<CompanyInfo>
+<VATNum>[=substr(TvaTrim(MemNoTva),3)]</VATNum>
 <Name>[=trim(MemName1)]</Name>
 <Street>[=trim(MemName2)]</Street>
 <CityAndZipCode>[=trim(MemName3)]</CityAndZipCode>
@@ -22,33 +56,35 @@ VersionTech="1.2">
 </CompanyInfo>
 
 <Period>[=getvar("year")]</Period>
-
-[=setvar("LSTTVA.TurnOver",0)]
-[=setvar("LSTTVA.Amount",0)]
-
+[etc if .f.]
+<TurnOver>[=ntrim0(getvar("LSTTVA.TurnOver")*100)]</TurnOver>
+<Amount>[=ntrim0(getvar("LSTTVA.Amount")*100)]</Amount>
+[etc endif]
 [etc if .f.]
 <Farmer>1</Farmer>
 [etc endif]
 
+[=setvar("i",0)]
 [etc loop clients DbfScan({oPar()},1,NIL,NIL,\
   "ParVatList('V','"\
     +DbcText("VATLIST.DBC",getvar("Type"),3)\
     +"').and.getvar('MontB')>="\
     +ltrim(getvar('MontMin')\
   ),xlEval)]
-[etc do DlgPlus("LSTTVA.Turnover",getvar("MontB"))]
-[etc do DlgPlus("LSTTVA.Amount",getvar("MontT"))]
-<ClientList SequenceNum="1">
+[=DlgPlus("i",1)]
+<ClientList SequenceNum="[=ntrim0(getvar("i"))]">
 <CompanyInfo>
-<VATNum>[=substr(tvatrim(PAR->NoTva),4)]</VATNum>
+<VATNum>[=substr(tvatrim(PAR->NoTva),3)]</VATNum>
+<Name>[=trim(ParName())]</Name>
+<Street>[=trim(ParStreet())]</Street>
+<CityAndZipCode>[=trim(ParCity())]</CityAndZipCode>
 <Country>[=left(PAR->NoTva,2)]</Country>
 </CompanyInfo>
-<Amount>[=ntrim(getvar("MontT")*100)]</Amount>
-<TurnOver>[=ntrim(getvar("MontB")*100)]</TurnOver>
+<Amount>[=ntrim0(getvar("MontT")*100)]</Amount>
+<TurnOver>[=ntrim0(getvar("MontB")*100)]</TurnOver>
 </ClientList>
 [etc endloop clients]
 
-<TurnOver>[=ntrim(getvar("LSTTVA.TurnOver")*100)]</TurnOver>
-<Amount>[=ntrim(getvar("LSTTVA.Amount")*100)]</Amount>
+</DeclarantList>
 
 </VatList>

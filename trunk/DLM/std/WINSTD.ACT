@@ -2,14 +2,15 @@
 !(SetAsMail().or.SetAsPdf()).or.p_SetCopies(1)
 SetAsMail().or.SetAsPdf().or.SetSpooler('\
   runbg(AppPath()+"\timtools.bat",\
-    "prnprint --fontName "+chr(34)+"Courier New"+chr(34)\
-    +iif(empty(p_setport()),""," -p"+p_setport())\
+    "prnprint --fontName "+chr(34)+getvar("fontName")+chr(34)\
+    +iif(empty(p_setport()),""," -p "+p_setport())\
     +" preview.prn")')
 !SetAsPdf().or.p_SetCopies(1)
 !SetAsPdf().or.FileDelete(trim(getvar("PRN2PDF.out")),.f.,.t.)
 !SetAsPdf().or.SetSpooler('runbg(\
   AppPath()+"\timtools.bat",\
   "prn2pdf "+iif(SetBatch().or.SetAsMail(),"-b ","")\
+            +"--fontName "+chr(34)+getvar("fontName")+chr(34)+" "\
             +"-o "+trim(getvar("PRN2PDF.out"))\
     +" preview.prn")')
 RETURN .t. if !SetAsMail().or.empty(getvar("mailto"))
