@@ -2631,9 +2631,11 @@ RETURN lOkay
 
 FUNCTION TvaTrim(c)
 local r := strtran(strtran(strtran(c,"."),"-")," ")
+/** raus am 20080215
 if left(r,2) == "BE".and.len(r) == 12
   r:= "BE" + substr(r,4)
 endif
+**/
 RETURN r
 
 FUNCTION TvaBase     ; RETURN snTotBase

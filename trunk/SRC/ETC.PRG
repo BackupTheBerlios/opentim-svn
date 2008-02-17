@@ -2275,7 +2275,6 @@ c := strtran(c,"ø" , "°")
 c := strtran(c,"«" , chr(189)) // "½"
 c := strtran(c,"¬" , chr(188)) // "¼")
 
-
 RETURN c
 
 FUNCTION latin2dos(c)

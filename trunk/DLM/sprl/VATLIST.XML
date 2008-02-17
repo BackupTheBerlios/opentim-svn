@@ -1,18 +1,4 @@
-[=MsgDisplay("Generating "+trim(getvar("Filename"))+" ...")]
-<?xml version="1.0" encoding="UTF-8" ?>
-<VatList xmlns="http://www.minfin.fgov.be/VatList"  
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
-xsi:schemaLocation="http://www.minfin.fgov.be/VatList http://www.minfin.fgov.be/VatList/VatList.xsd"
-RecipientId="VAT-ADMIN"  
-SenderId="[=trim(substr(tvatrim(MemNoTva),3))]"
-ControlRef="[=trim(substr(tvatrim(MemNoTva),3))]0001"
-MandataireId="xxxx"  
-SenderDate="[=dtocf(UserDate(),"yyyy-mm-dd")]"  
-[etc if .f.]
-Test="1"
-[etc endif]
-VersionTech="1.2">
-
+[=MsgDisplay("Calcul pr‚liminaire ...")]
 [=setvar("LSTTVA.TurnOver",0)]
 [=setvar("LSTTVA.Amount",0)]
 [=setvar("LSTTVA.ClientNbr",0)]
@@ -30,6 +16,20 @@ VersionTech="1.2">
     +"').and.getvar('MontB')>="+ltrim(getvar('MontMin')),\
   getvar("b")\
 )]
+[=MsgDisplay("Generating "+trim(getvar("Filename"))+" ...")]
+<?xml version="1.0" encoding="UTF-8" ?>
+<VatList xmlns="http://www.minfin.fgov.be/VatList"  
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+xsi:schemaLocation="http://www.minfin.fgov.be/VatList http://www.minfin.fgov.be/VatList/VatList.xsd"
+RecipientId="VAT-ADMIN"  
+SenderId="[=trim(substr(tvatrim(MemNoTva),3))]"
+ControlRef="[=trim(substr(tvatrim(MemNoTva),3))]0001"
+MandataireId="xxxx"  
+SenderDate="[=dtocf(UserDate(),"yyyy-mm-dd")]"  
+[etc if .f.]
+Test="1"
+[etc endif]
+VersionTech="1.2">
 
 <AgentRepr DecNumber="1">
 <CompanyInfo>
@@ -75,9 +75,6 @@ VersionTech="1.2">
 <ClientList SequenceNum="[=ntrim0(getvar("i"))]">
 <CompanyInfo>
 <VATNum>[=substr(tvatrim(PAR->NoTva),3)]</VATNum>
-<Name>[=trim(ParName())]</Name>
-<Street>[=trim(ParStreet())]</Street>
-<CityAndZipCode>[=trim(ParCity())]</CityAndZipCode>
 <Country>[=left(PAR->NoTva,2)]</Country>
 </CompanyInfo>
 <Amount>[=ntrim0(getvar("MontT")*100)]</Amount>

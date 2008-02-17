@@ -541,18 +541,8 @@ open area oPar(), oArt()
           else
             nNew += n
           endif
-          // if n is 0, loop stops without error
-          * if n == 0 .and. Confirm(utrp( ;
-          *   "Continue with invoicing?",;
-          *   "Automatikfakturierung fortsetzen?",;
-          *   "Continuer avec la facturation automatique ?"))
-          *   n := 1
-          * endif
         endif
       enddo
-      * #ifdef DEF_TSK
-      *   ParTskRun(PAR->IdPar,lDlg)
-      * #endif DEF_TSK
     endif
     if ! lOkay
       nErr += 1
