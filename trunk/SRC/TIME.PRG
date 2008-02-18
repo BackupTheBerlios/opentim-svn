@@ -345,25 +345,43 @@ local nLen
 local nHours
 local nMinutes
 local lMinus := .f.
+local a
 RETURN x if empty(x)
 nLen := len(x)
 x := alltrim(x)
-x := strtran(x,":")
-x := strtran(x,".")
-x := strtran(x,",")
 if left(x,1)=="-"
   x := substr(x,2)
   lMinus := .t.
 endif
-if len(x) <= 2
-  nHours := val(x)
-  nMinutes := 0
-elseif len(x) == 3
-  nHours := val(left(x,1))
-  nMinutes := val(right(x,2))
-else
-  nHours := val(left(x,len(x)-2))
-  nMinutes := val(right(x,2))
+// x := strtran(x,":")
+// x := strtran(x,".")
+// x := strtran(x,",")
+x := strtran(x,":",",")
+x := strtran(x,".",",")
+if "," $ x
+  a := split(x,",")
+  if len(a) == 2
+    nHours := val(a[1])
+    nMinutes := val(a[2])
+    if nMinutes < 6 .and. len(a[2]) == 1
+      nMinutes := nMinutes * 10
+    endif
+    x := NIL
+  else
+    x := strtran(x,",")
+  endif
+endif
+if x != NIL
+  if len(x) <= 2
+    nHours := val(x)
+    nMinutes := 0
+  elseif len(x) == 3
+    nHours := val(left(x,1))
+    nMinutes := val(right(x,2))
+  else
+    nHours := val(left(x,len(x)-2))
+    nMinutes := val(right(x,2))
+  endif
 endif
 if lMinus
   RETURN padl("-"+ntrim(nHours),nLen-3) + ":" + strtran(str(nMinutes,2)," ","0")

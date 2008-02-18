@@ -200,7 +200,12 @@ open area oJnl()
 close area
 RETURN lOkay
 
-
+FUNCTION FilteredSkip(xlFilter)
+do while !eof()
+  skip
+  RETURN .t. if &xlFilter
+enddo
+RETURN .f.
 
 #define PNF_TAGGED  1
 #define PNF_IDPAR   2
@@ -265,77 +270,62 @@ open area oVna(), oPar(), oArt(), oVen()
         exit
       endif
     endif
-    if &xlVnaFilter 
+    if &xlVnaFilter
       seek VNA->IdPar in PAR
       // MsgDisplay(trim(ParName()) + "...")
       if &(xlParFilter)
-        cIdPar := PAR->IdPar
-        aVna := {}
-        cVnaMatch := NIL
-        nMont := 0
-        do while lOkay .and. !eof() .and. VNA->IdPar == cIdPar
-          cVenMatch := VNA->IdJnl + VNA->IdDoc
-          seek VNA->IdJnl + VNA->IdDoc in VEN
-          if ! VENATTR_A $ VEN->Attrib
-            do while lOkay .and. ! eof() ;
-                .and. VNA->IdPar == cIdPar ;
-                .and. VNA->IdJnl + VNA->IdDoc == cVenMatch
-              if (trn := VnaTrnLocate(jnl)) != NIL
-                if ! TRNATTR_M $ trn[TRN_ATTRIB]
-                  if VEN->DatEch <= dDate .or. TRNATTR_D $ trn[TRN_ATTRIB]
-                    c := &xcVnaMatch
-                    if cVnaMatch != c
-                      if len(aVna) > 0 .and. ! is0(nMont)
-                        aadd(aPnf,{.t.,VNA->IdPar,cVnaMatch,aVna,nMont,VEN->IdDev}) // PNF_ALEN
-                      endif
-                      aVna := {}
-                      nMont:=0
-                      cVnaMatch := c
-                    endif
-                    if VNA->DC == jnl[JNL_DC]
-                      nMont += (qton1(VNA->QteUs)*val(VNA->PrixU))
-                    else
-                      nMont -= (qton1(VNA->QteUs)*val(VNA->PrixU))
-                    endif
-                    lOkay := NafCollect(aVna,;
-                      VNA->IdJnl,;
-                      VNA->IdDoc,;
-                      VNA->Line,; // VNA->Match,;
-                      VNA->Date,;
-                      VNA->IdArt,;
-                      VNA->Code,;
-                      VNA->QteUs,;
-                      VNA->NB1,;
-                      VNA->Memo,;
-                      VNA->PrixU,;
-                      (TRNATTR_X $ trn[TRN_ATTRIB]),;
-                      VNA->QteForm,;
-                      if(HasInt(),VNA->QteStat,NIL),;
-                      if(HasInt(),VNA->IdInt,NIL),;
-                      if(HasProvi(),VNA->PrixL,NIL),;
-                      if(HasVnlAttr(),VNA->Attrib,NIL),;
-                      if(TRNATTR_I $ trn[TRN_ATTRIB],DcInvert(VNA->DC),VNA->DC),;
-                      TRNATTR_U $ trn[TRN_ATTRIB],;
-                      NIL,NIL,NIL,NIL,;
-                      VnaMustEdit();
-                    )
+        seek VNA->IdJnl + VNA->IdDoc in VEN
+        if ! VENATTR_A $ VEN->Attrib
+          if (trn := VnaTrnLocate(jnl)) != NIL
+            if ! TRNATTR_M $ trn[TRN_ATTRIB]
+              if VEN->DatEch <= dDate .or. TRNATTR_D $ trn[TRN_ATTRIB]
+                c := &xcVnaMatch
+                if VNA->IdPar != cIdPar .or. cVnaMatch != c
+                  if !empty(cIdPar) .and. len(aVna) > 0 .and. ! is0(nMont)
+                    aadd(aPnf,{.t.,cIdPar,cVnaMatch,aVna,nMont,VEN->IdDev}) // PNF_ALEN
+                    MsgDisplay(ntrim(len(aPnf)) + " " + trim(ParName()) + "...")
                   endif
+                  aVna := {}
+                  nMont := 0
+                  cVnaMatch := c
+                  cIdPar := VNA->IdPar
                 endif
+                if VNA->DC == jnl[JNL_DC]
+                  nMont += (qton1(VNA->QteUs)*val(VNA->PrixU))
+                else
+                  nMont -= (qton1(VNA->QteUs)*val(VNA->PrixU))
+                endif
+                lOkay := NafCollect(aVna,;
+                  VNA->IdJnl,;
+                  VNA->IdDoc,;
+                  VNA->Line,; // VNA->Match,;
+                  VNA->Date,;
+                  VNA->IdArt,;
+                  VNA->Code,;
+                  VNA->QteUs,;
+                  VNA->NB1,;
+                  VNA->Memo,;
+                  VNA->PrixU,;
+                  (TRNATTR_X $ trn[TRN_ATTRIB]),;
+                  VNA->QteForm,;
+                  if(HasInt(),VNA->QteStat,NIL),;
+                  if(HasInt(),VNA->IdInt,NIL),;
+                  if(HasProvi(),VNA->PrixL,NIL),;
+                  if(HasVnlAttr(),VNA->Attrib,NIL),;
+                  if(TRNATTR_I $ trn[TRN_ATTRIB],DcInvert(VNA->DC),VNA->DC),;
+                  TRNATTR_U $ trn[TRN_ATTRIB],;
+                  NIL,NIL,NIL,NIL,;
+                  VnaMustEdit();
+                )
               endif
-              skip
-            enddo
-          else
-            skip
+            endif
           endif
-        enddo
-      else
-        skip
+        endif
       endif
-    else
-      skip
     endif
+    skip          
   enddo
-  if len(aVna)>0 .and. ! is0(nMont)
+  if !empty(cIdPar) .and. len(aVna) > 0 .and. ! is0(nMont)
     aadd(aPnf,{.t.,cIdPar,cVnaMatch,aVna,nMont,VEN->IdDev}) // PNF_ALEN
   endif
 close area
@@ -372,22 +362,30 @@ open area oPar(), oVen()
   for i := 1 to len(aPnf)
     if aPnf[i][PNF_TAGGED]
       seek aPnf[i][PNF_IDPAR]
-      n := ParVenAppend( ;
-        aPnf[i][PNF_AVNA],&xcZahler,jnl,ifc,dDate,cPeriode,&xcNB1,;
-        lEdit, ;
-        lVnaTag, ;
-        SetPreview(), ;
-        PAR->IdMfc, ;
-        &xcAkte, cMontMin, lSimulate, aNafSim ;
-      )
-      if n < 0
-        nErr += 1
-        if ! Confirm(SetMsg(),MsgContinue())
-          lOkay := .f.
-          exit
-        endif
+      if (ifc := IfcLocate(jnl[JNL_IDCTR],jnl[JNL_IDJNL],PAR->IdMfc)) == NIL
+        SetMsg( ;
+          PAR->IdPar + " : " + ;
+          jnl[JNL_IDJNL] + " & " + PAR->IdMfc + MsgIfcFail(), ;
+        )
+        lOkay := .f.
       else
-        nNew += n
+        n := ParVenAppend( ;
+          aPnf[i][PNF_AVNA],&xcZahler,jnl,ifc,dDate,cPeriode,&xcNB1,;
+          lEdit, ;
+          lVnaTag, ;
+          SetPreview(), ;
+          PAR->IdMfc, ;
+          &xcAkte, cMontMin, lSimulate, aNafSim ;
+        )
+        if n < 0
+          nErr += 1
+          if ! Confirm(SetMsg(),MsgContinue())
+            lOkay := .f.
+            exit
+          endif
+        else
+          nNew += n
+        endif
       endif
     endif
   next i
