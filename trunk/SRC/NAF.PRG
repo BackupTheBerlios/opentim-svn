@@ -207,6 +207,8 @@ do while !eof()
 enddo
 RETURN .f.
 
+#ifdef DEF_VNA
+
 #define PNF_TAGGED  1
 #define PNF_IDPAR   2
 #define PNF_MATCH   3
@@ -224,6 +226,7 @@ FUNCTION VnaAuto2( cTitle,;
   cMontMin,;
   lEdit,lVnaTag,;
   xcNB1,xcZahler,xcAkte,;
+  cIdJnlI,;
   lSimulate,cTitle1,cTitle2,cTitle3)
 local cPeriode
 local aVna
@@ -235,6 +238,7 @@ local nCount := 0
 local cIdPar
 local nMont
 local jnl := JnlLocate(cIdJnl)
+local jnlt, jnli
 local ifc, trn
 local n,c,i
 local nErr := 0
@@ -255,6 +259,13 @@ default xcVnaMatch to "NIL"
 if jnl == NIL
   SetMsg(cIdJnl + MsgJnlExist())
   RETURN .f.
+endif
+if cIdJnlI != NIL
+  jnli := JnlLocate(cIdJnlI)
+  if jnli == NIL
+    SetMsg(cIdJnlI + MsgJnlExist())
+    RETURN .f.
+  endif
 endif
 cPeriode := PerActive(dDate)
 RETURN .f. if ! PreVenAuto(cIdJnl)
@@ -282,8 +293,10 @@ open area oVna(), oPar(), oArt(), oVen()
                 c := &xcVnaMatch
                 if VNA->IdPar != cIdPar .or. cVnaMatch != c
                   if !empty(cIdPar) .and. len(aVna) > 0 .and. ! is0(nMont)
-                    aadd(aPnf,{.t.,cIdPar,cVnaMatch,aVna,nMont,VEN->IdDev}) // PNF_ALEN
-                    MsgDisplay(ntrim(len(aPnf)) + " " + trim(ParName()) + "...")
+                    aadd(aPnf,{ ;
+                        empty(cMontMin).or.abs(nMont)>val(cMontMin),;
+                        cIdPar,cVnaMatch,aVna,nMont,VEN->IdDev}) // PNF_ALEN
+                    MsgDisplay("("+ntrim(len(aPnf)) + ") " + trim(ParName()) + "...")
                   endif
                   aVna := {}
                   nMont := 0
@@ -326,7 +339,9 @@ open area oVna(), oPar(), oArt(), oVen()
     skip          
   enddo
   if !empty(cIdPar) .and. len(aVna) > 0 .and. ! is0(nMont)
-    aadd(aPnf,{.t.,cIdPar,cVnaMatch,aVna,nMont,VEN->IdDev}) // PNF_ALEN
+    aadd(aPnf,{ ;
+        empty(cMontMin).or.abs(nMont)>val(cMontMin),;
+        cIdPar,cVnaMatch,aVna,nMont,VEN->IdDev}) // PNF_ALEN
   endif
 close area
 RETURN .f. if ! lOkay
@@ -361,16 +376,21 @@ RETURN .f. if ! lOkay
 open area oPar(), oVen()
   for i := 1 to len(aPnf)
     if aPnf[i][PNF_TAGGED]
+      if aPnf[i][PNF_MONT] < 0 .and. jnli != NIL
+        jnlt:= jnli
+      else
+        jnlt := jnl
+      endif
       seek aPnf[i][PNF_IDPAR]
-      if (ifc := IfcLocate(jnl[JNL_IDCTR],jnl[JNL_IDJNL],PAR->IdMfc)) == NIL
+      if (ifc := IfcLocate(jnlt[JNL_IDCTR],jnlt[JNL_IDJNL],PAR->IdMfc)) == NIL
         SetMsg( ;
           PAR->IdPar + " : " + ;
-          jnl[JNL_IDJNL] + " & " + PAR->IdMfc + MsgIfcFail(), ;
+          jnlt[JNL_IDJNL] + " & " + PAR->IdMfc + MsgIfcFail(), ;
         )
         lOkay := .f.
       else
         n := ParVenAppend( ;
-          aPnf[i][PNF_AVNA],&xcZahler,jnl,ifc,dDate,cPeriode,&xcNB1,;
+          aPnf[i][PNF_AVNA],&xcZahler,jnlt,ifc,dDate,cPeriode,&xcNB1,;
           lEdit, ;
           lVnaTag, ;
           SetPreview(), ;
@@ -409,6 +429,7 @@ next i
 RETURN K_ALT_F5
 
 
+#endif DEF_VNA
 
 
 
@@ -702,7 +723,6 @@ if len(aVna) == 0
 endif
 * 20070507 RETURN 0 if ! PreVenAuto(jnl[JNL_IDJNL])
 RETURN -1 if ! PreVenAuto(jnl[JNL_IDJNL])
-// todo 20080215 : hier ein loop durch aVna, der die naf[NAF_TAGGED] setzt
 default lVnaTag to ! IFCATTR_X $ ifc[IFC_ATTRIB]
 if lVnaTag .and. ! lSimulate
   RETURN 0 if ! VnaTag( ;
@@ -750,8 +770,7 @@ else
   nSum := - nSum
 endif
 RETURN -1 if ! VenMake(cIdPar1,cIdPar2,jnl[JNL_IDJNL],lDlg,;
-                       dDate,cNB1,cIdMfc,jnl,ifc,aVna,cDC,cPeriode,cMatch)
-// todo 20080215 : hier ein loop durch aVna, der alle Elemente mit naf[NAF_TAGGED] löscht
+                       dDate,cNB1,cIdMfc,jnl,ifc,aVna,cDC,cPeriode,cMatch,NIL,cPreview)
 RETURN 1
 
 
@@ -772,7 +791,7 @@ RETURN 1
 FUNCTION VenMake(cIdPar1,cIdPar2,cIdJnl,;
                  lDlg,dDate,cNB1,;
                  cIdMfc,jnl,ifc,aVna,cDC,cPeriode,cMatch,;
-                 blOnCreate)
+                 blOnCreate,cPreview)
 local lOkay := .f.
 local a
 local b := oVen()
@@ -892,7 +911,7 @@ open area b, oPar(), oPlz(), oNat(), oPrj()
               if VenVnlUpdate(jnl)
                 VEN->Etat := DocStatOpen()
                 if PerSetDirty(jnl,VEN->Periode,VEN->Date,VEN->IdDoc)
-                  if VenDoClose(jnl,ifc,.f.)
+                  if VenDoClose(jnl,ifc,.f.,cPreview)
                     lOkay := .t.
                   endif
                 endif

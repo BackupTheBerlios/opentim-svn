@@ -911,10 +911,11 @@ local aAttrib := {}
     aadd(aAttrib, { JNLATTR_G, padr("Gesperrt fÅr manuelle Erfassung",50) , 1 } )
     aadd(aAttrib, { JNLATTR_I, padr(MSG042,50) , 1 } )
     aadd(aAttrib, { JNLATTR_K, padr("im Kassenjournal anfÅhren",50) , 1 } )
-    aadd(aAttrib, { JNLATTR_M, padr("Backmatch erforderlich",50) , 1 } )
     aadd(aAttrib, { JNLATTR_L, padr("Schlu·licht-Jnl (immer befriedigt)",50) , 1 } )
+    aadd(aAttrib, { JNLATTR_M, padr("Backmatch erforderlich",50) , 1 } )
     aadd(aAttrib, { JNLATTR_N, padr("Negativ (umgekehrte Buchungsrichtung)",50) , 1 } )
     aadd(aAttrib, { JNLATTR_P, padr(MSG048,50) , 1 } )
+    aadd(aAttrib, { JNLATTR_R, padr("Buchung im Monat nach Buchungsperiode",50) , 1 } )
     aadd(aAttrib, { JNLATTR_S, padr(MSG056,50) , 1 } )
     aadd(aAttrib, { JNLATTR_T, padr("KreditÅberschreitungen tolerieren",50) , 1 } )
     aadd(aAttrib, { JNLATTR_U, padr("öberbefriedigung bei öbernahme verweigern",50) , 1 } )
@@ -922,7 +923,7 @@ local aAttrib := {}
     aadd(aAttrib, { JNLATTR_X, padr("Stornierungs-Journal (spez. Zentral.)",50) , 1 } )
     aadd(aAttrib, { JNLATTR_Y, padr("Analytisch verteilen",50) , 1 } )
     aadd(aAttrib, { JNLATTR_Z, padr("Folgedokumente zusammenlegen",50) , 1 } )
-    aadd(aAttrib, { JNLATTR_R, padr("Buchung im Monat nach Buchungsperiode",50) , 1 } )
+    aadd(aAttrib, { JNLATTR_1, padr("Artikel auswÑhlen via TRT statt direkt",50) , 1 } )
   endif
 #endif DEF_IMP
 #ifdef DEF_TRA

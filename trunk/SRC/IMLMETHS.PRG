@@ -266,9 +266,7 @@ FUNCTION ImpCreate(jnl, cIdDoc) // cIdJnl)
 local cPeriode 
 local cIdPar := ""
 local cIdBud := ""
-* local cMont2
-* local nMont2Db
-* local cIdDev
+local cIdTrt
 local aSolde
 local nOrder := indexord()
 RETURN DDCREATE_FAIL if jnl == NIL
@@ -282,7 +280,13 @@ if JNLATTR_P $ jnl[JNL_ATTRIB]
   RETURN DDCREATE_FAIL if (cIdPar := PickPar(NIL)) == NIL
 endif
 if JNLATTR_B $ jnl[JNL_ATTRIB]
-  RETURN DDCREATE_FAIL if (cIdBud := PickBud(jnl[JNL_DC])) == NIL
+  if JNLATTR_1 $ jnl[JNL_ATTRIB]
+    RETURN DDCREATE_FAIL if (cIdTrt := PickTrt("",jnl[JNL_DC])) == NIL
+    cIdBud := TrtIdBud(cIdTrt)
+    RETURN DDCREATE_FAIL if empty(cIdBud)
+  else
+    RETURN DDCREATE_FAIL if (cIdBud := PickBud(jnl[JNL_DC])) == NIL
+  endif
   RETURN DDCREATE_FAIL if ! ValIdBud(jnl[JNL_DC],cIdBud)
 endif
 ddSetOrder(1)

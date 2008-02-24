@@ -666,6 +666,7 @@ memvar MemPickArtMode
 #define JNLATTR_X "X"  //   Stornierungsjournal
 #define JNLATTR_Y "Y"  // Analytisch verteilen
 #define JNLATTR_Z "Z"  // Folgedokumente zusammenlegen
+#define JNLATTR_1 "1"  // 
 
 #define VENATTR_C "C"  // p.u. tvac
 #define VENATTR_P "P"  // has been printed

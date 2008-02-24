@@ -236,6 +236,9 @@ endif
 #endif DEF_ODS
 #ifdef DEF_IMP
   if JNL->Alias == "IMP"
+    if JNLATTR_1 $ JNL->Attrib .and. ! JNLATTR_B $ JNL->Attrib
+      RETURN !SetMsg("Attribut '1' ist sinnlos ohne Attribut 'B'!")
+    endif
     if ! empty(JNL->IdDev)
       RETURN .f. if ! DevExist(JNL->IdDev)
     endif

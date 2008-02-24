@@ -88,7 +88,7 @@ RETURN FileDelete(getWwwPath()+xt_ofile(),.t.,.t.)
 
 
 
-FUNCTION dlref(cFilename)
+FUNCTION dlref(cFilename,cTitle)
 local fname := GetWwwPath() + "\dl\" + strtran(cFilename,"/","\")
 #ifdef DEF_LFN
 local a := lf_getfinfo(fname)
@@ -101,9 +101,10 @@ if empty(a)
   *RETURN !SetMsg(fname+MsgFileExist()) if empty(a)
 endif
 #endif DEF_LFN
+default cTitle to substr(cFilename,rat("/",cFilename)+1)
 RETURN .f. if ! toStream('<a href="')
 RETURN .f. if ! toStream(GetBasePath()+'/dl/'+cFilename+'">')
-RETURN .f. if ! toStream(substr(cFilename,rat("/",cFilename)+1))
+RETURN .f. if ! toTxtStream(cTitle)
 RETURN .f. if ! toStream("</a>")
 #ifdef DEF_LFN
   RETURN .f. if ! toStream(" (")
