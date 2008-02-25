@@ -291,7 +291,7 @@ open area oVna(), oPar(), oArt(), oVen()
             if ! TRNATTR_M $ trn[TRN_ATTRIB]
               if VEN->DatEch <= dDate .or. TRNATTR_D $ trn[TRN_ATTRIB]
                 c := &xcVnaMatch
-                if VNA->IdPar != cIdPar .or. cVnaMatch != c
+                if VNA->IdPar != cIdPar .or. (cVnaMatch != c .and. !empty(c))
                   if !empty(cIdPar) .and. len(aVna) > 0 .and. ! is0(nMont)
                     aadd(aPnf,{ ;
                         empty(cMontMin).or.abs(nMont)>val(cMontMin),;
@@ -358,7 +358,7 @@ open area oPar(), oVen()
       iif(m[PNF_TAGGED],"X"," ");
       +" "+m[PNF_IDPAR];
       +" "+padr(ParName(m[PNF_IDPAR]),30);
-      +" "+padr(m[PNF_MATCH],9);
+      +" "+padr(iif(m[PNF_MATCH]==NIL,"",m[PNF_MATCH]),9);
       +" "+ntom(m[PNF_MONT]);
       +" "+m[PNF_IDDEV];
       +" "+str(len(m[PNF_AVNA]),4,0);
