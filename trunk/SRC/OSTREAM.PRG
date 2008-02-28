@@ -3272,5 +3272,12 @@ cExpr := strtran(cExpr,"&apos;","'")
 RETURN cExpr
 
 
-
+FUNCTION memoToStream(cMemo,cLinePrefix,nWidth)
+local i
+default cLinePrefix to ""
+default nWidth to p_cpl() - len(cLinePrefix)
+for i := 1 to mlcount(cMemo, nWidth)
+  writeln(cLinePrefix+memoline(cMemo, nWidth, i ))
+next i
+RETURN .t.
 

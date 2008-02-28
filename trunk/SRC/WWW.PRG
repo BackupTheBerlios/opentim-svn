@@ -3012,6 +3012,8 @@ FUNCTION url2text(cURL)
 local n
 if left(cURL,7)=="http://"
   cUrl := substr(cUrl,8)
+elseif left(cURL,7)=="mailto:"
+  cUrl := substr(cUrl,8)
 endif
 * if (n := at("/",cUrl)) > 0
 *   cUrl := left(cUrl,n-1)

@@ -972,6 +972,7 @@ local naf
 local cIdJnl := VEN->IdJnl
 local cIdDoc := VEN->IdDoc
 local b := oVnl(VEN->Etat)
+local aMemos := {}
 open area b, oArt(), oGen(), oSpc(), oVen(), oVna(), oDls()
   lOkay := .t.
   KeyGoBottom(cIdJnl + cIdDoc, "FIELD->IdJnl+FIELD->IdDoc" )
@@ -1013,6 +1014,9 @@ open area b, oArt(), oGen(), oSpc(), oVen(), oVna(), oDls()
                   doc, naf[NAF_IDJNL],naf[NAF_IDDOC], ;
                   PAR->Langue ;
                 )
+                if !empty(doc[DOC_MEMO])
+                  aadd(aMemos,trimcr(doc[DOC_MEMO]))
+                endif
                 cLine := NextNum(FIELD->Line)
                 * dbcommit()
                 unlock record
@@ -1061,6 +1065,9 @@ open area b, oArt(), oGen(), oSpc(), oVen(), oVna(), oDls()
                 lOkay := .f.
                 exit
               endif
+            endif
+            if !empty(VEN->Memo)
+              aadd(aMemos,trimcr(VEN->Memo))
             endif
           endif
           if cIdDev1 == NIL
@@ -1201,6 +1208,9 @@ open area b, oArt(), oGen(), oSpc(), oVen(), oVna(), oDls()
   dbcommit()
 close area
 * goto nRecNo
+if empty(VEN->Memo) .and. len(aMemos) > 0
+  VEN->Memo := join(aMemos,CR_LF+"---"+CR_LF)
+endif
 RETURN lOkay
 
 

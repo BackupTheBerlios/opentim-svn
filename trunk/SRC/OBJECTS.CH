@@ -286,7 +286,8 @@
 #define DOC_MATCH   9
 #define DOC_NB     10
 #define DOC_IDANA  11
-#define DOC_ALEN   11
+#define DOC_MEMO   12
+#define DOC_ALEN   12
 
 #define ESC_IDESC   1
 #define ESC_LIBELL1 2

@@ -1746,6 +1746,7 @@ local doc := NIL // array(DOC_ALEN)
         #endif DEF_HST
         doc[DOC_NB]      := ""
         doc[DOC_IDANA]   := ""
+        doc[DOC_MEMO]    := VEN->Memo
         if cLine != NIL
           open area oVnl(VEN->Etat)
             seek cIdJnl + cIdDoc + cLine
