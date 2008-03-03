@@ -408,12 +408,12 @@ local cIdDoc := VEN->IdDoc
 local b := oVnl(VEN->Etat)
 local a := VnlSave()
 * local xlVnaFilter := ".t."
-#ifdef DEF_VNA
-  local xlVnaFilter := VnaCopyFilter()
-  * local lVnaSuggest := .t.
-#else
-  local xlVnaFilter := ".t."
-#endif DEF_VNA
+* #ifdef DEF_VNA
+*   local xlVnaFilter := VnaCopyFilter()
+*   * local lVnaSuggest := .t.
+* #else
+*   local xlVnaFilter := ".t."
+* #endif DEF_VNA
 open area b, oArt(), oGen(), oSpc(), oVen(), oGra(), oNew(), oVna(), oDls()
   softseek cIdJnl + cIdDoc
   do while ! eof() .and. FIELD->IdJnl == cIdJnl ;
@@ -428,7 +428,7 @@ open area b, oArt(), oGen(), oSpc(), oVen(), oGra(), oNew(), oVna(), oDls()
     skip
   enddo
   if VEN->Etat == DocStatNew() .and. ! lHasRecords
-    VnlFill(jnl,ifc,xlVnaFilter)
+    VnlFill(jnl,ifc) // ,xlVnaFilter)
   endif
   edit data b       ;
             key    FIELD->IdJnl + FIELD->IdDoc ;
@@ -445,33 +445,57 @@ VnlRestore(a)
 RETURN .t. if ddLastKey() == K_F10
 RETURN .f.
 
-* VenVnlFiller iif(VEN->IdJnl$"ABE,ABS",{|jnl,ifc|UsrDlsCollect}
+#ifdef DEF_VNA
 
+STATIC FUNCTION has_selected(a)
+local i
+for i := 1 to len(a)
+  RETURN .t. if a[i][VNA_TAGGED]
+next i
+RETURN .f.
 
-STATIC FUNCTION VnlFill(jnl,ifc,xlVnaFilter)
+#endif DEF_VNA
+
+STATIC FUNCTION VnlFill(jnl,ifc,xlVnaCopyFilter)
+local aPnf := {}
 local aVna
-* local b := VenVnlFiller()
-* if b != NIL
-*   RETURN .t. if eval(b,jnl,ifc)
-* endif
+local pnf := NIL
+local cNB1 := ""
 #ifdef DEF_VNA
   if JNLATTR_A $ jnl[JNL_ATTRIB]
-    if VnlVnaCopy(jnl,ifc,xlVnaFilter)
-      if ! IFCATTR_U $ ifc[IFC_ATTRIB]
-        if ! VenVnlReset(VNLRESET_PU)
-          Warning(SetMsg())
+    RETURN .f. if ! PnfCollect(aPnf,jnl,VEN->IdPar,VEN->IdPar,VEN->Date) // ,xlVnaFilter)
+    RETURN .f. if len(aPnf) == 0
+    if len(aPnf) == 1 .or. IFCATTR_X $ ifc[IFC_ATTRIB] // no dialog
+      pnf := aPnf[1]
+    else
+      do while .t.
+        pnf := ParPnfPick(aPnf,pnf,"R‚f‚rences externes "+trim(ParName()))
+        RETURN .f. if pnf == NIL
+        if VnaTag( ;
+          pnf[PNF_AVNA],;
+          pnf[PNF_IDPAR],;
+          trims(pnf[PNF_MATCH]," (",")") + " : " + MsgVnaTag(), ;
+          jnl[JNL_IDJNL];
+        )
+          if has_selected(pnf[PNF_AVNA])
+            cNB1 := pnf[PNF_MATCH]
+            exit
+          else
+            SetMsg("You must select at least one detail line...")
+          endif
         endif
-      endif
-      RETURN .t.
+      enddo
     endif
+    if !empty(cNB1)
+      VEN->NB1 := cNB1
+    endif
+    RETURN .f. if ! VenVnlGenerate(pnf[PNF_AVNA],jnl,ifc,VEN->DC)
+    if ! IFCATTR_U $ ifc[IFC_ATTRIB]
+      RETURN .f. if ! VenVnlReset(VNLRESET_PU)
+    endif
+    RETURN .t.
   endif
 #endif DEF_VNA
-* #ifdef DEF_DLS
-*   if JNLATTR_A $ jnl[JNL_ATTRIB]
-*     RETURN .t. if VenDlsFill(jnl,ifc)
-*   endif
-* #endif DEF_VNA
-* RETURN .t. if VenMdiFill(jnl,ifc)
 if JNLATTR_T $ jnl[JNL_ATTRIB].and.!empty(VEN->Mont)
   if !empty(PAR->IdGen)
     aVna := {}
@@ -2469,18 +2493,18 @@ RETURN lOkay
 
 **
 **
-STATIC FUNCTION VnlVnaCopy(jnl,ifc,xlVnaFilter)
-local aVna := VnaSuggest(VEN->IdPar,jnl,VEN->Date,xlVnaFilter)
-RETURN .f. if len(aVna) == 0
-if ! IFCATTR_X $ ifc[IFC_ATTRIB]
-  RETURN .f. if ! VnaTag( ;
-    aVna,;
-    VEN->IdPar,;
-    VEN->IdJnl + " " + VEN->IdDoc + " : Fakturierungsvorschl„ge", ;
-    VEN->IdJnl;
-  )
-endif
-RETURN VenVnlGenerate(aVna,jnl,ifc,VEN->DC)
+*STATIC FUNCTION VnlVnaCopy(jnl,ifc,xlVnaFilter)
+*local aVna := VnaSuggest(VEN->IdPar,jnl,VEN->Date,xlVnaFilter)
+*RETURN .f. if len(aVna) == 0
+*if ! IFCATTR_X $ ifc[IFC_ATTRIB]
+*  RETURN .f. if ! VnaTag( ;
+*    aVna,;
+*    VEN->IdPar,;
+*    VEN->IdJnl + " " + VEN->IdDoc + " : Fakturierungsvorschl„ge", ;
+*    VEN->IdJnl;
+*  )
+*endif
+*RETURN VenVnlGenerate(aVna,jnl,ifc,VEN->DC)
 
 **
 ** VnlVnaCollect()

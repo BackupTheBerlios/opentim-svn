@@ -45,7 +45,7 @@
 * #define DEF_STK
 * #define DEF_MOD
 * #define DEF_SPC
-* #define DEF_CTS       // Sammelhistorik Artikel
+#define DEF_CTS       // Sammelhistorik Artikel
 
 
 

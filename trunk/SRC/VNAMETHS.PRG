@@ -88,10 +88,7 @@ RETURN .t.
 *RETURN lFound
 
 **
-** ParVnaEdit() -
 **
-** Parameter bis zum 19980630 :
-** cIdPar,xlVnaFilter,cNB1,dDate,cDlg,cPreview,cIdMfc,xuReturn ;
 FUNCTION ParVnaEdit( ;
   cIdPar,cTitle,xlFilter,xuReturn ;
 )
@@ -99,7 +96,7 @@ local b := oVna()
 local uReturn := .t.
 open area b, oPar(), oArt(), oVen()
   default xlFilter to "empty(VNA->Satis)"
-  default cTitle to "Fakturierungsvorschl„ge " + trim(ParName(cIdPar))
+  default cTitle to MsgVnaTag() + " " + trim(ParName(cIdPar))
   ddSetOrder(ORD_VNA_PARDATE)
   edit data b key VNA->IdPar ;
     value    cIdPar          ;
@@ -722,7 +719,7 @@ RETURN NIL if empty(VNL->Match)
 RETURN DbfPeek(oVnl(),VNL->Match,{||VnlParent(cIdJnl)},NIL)
 
 **
-** VnaSuggest() - Vorschlagsliste von offenen VNA pro Partner und Jnl
+** Vorschlagsliste von offenen VNA pro Partner und Jnl
 ** cIdPar : der Partner, fr den vorgeschlagen werden soll
 ** jnl    : das Journal, fr das vorgeschlagen werden soll
 **

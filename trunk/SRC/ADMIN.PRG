@@ -268,10 +268,10 @@ static sbOnParSatisfy := {||.t.}
 #endif DEF_MULT
   static saTimTestAllow := {}
 #ifdef DEF_VNA
-  static sbVnaMatch := {||NIL}
+  static sbVnaMatch := {||""}
   static sbParVnaStop := {|jnl|PARATTR_S $ PAR->Attrib.and.JnlDoHst(jnl)}
   * static sblPreVnaSuggest := {|dDate|.t.}
-  static sxVnaCopyFilter := "'.t.'"
+  * static sxVnaCopyFilter := "'.t.'"
   static saOnVnaGenerate := NIL
   static xlVnaMustEdit := {||.f.}
   static xlPreVnaUndo := ;
@@ -393,9 +393,9 @@ static saOnParSelect := {}
 
 #ifdef DEF_VEN
 #ifdef LG_GERMAN
-  static sbMsgVnaTag := {|cIdJnl| trim(ParName()) + " : Fakturierungsvorschl„ge" }
+  static sbMsgVnaTag := {|cIdJnl| "Fakturierungsvorschl„ge" }
 #else
-  static sbMsgVnaTag := {|cIdJnl| trim(ParName()) + " : propositions de facturation" }
+  static sbMsgVnaTag := {|cIdJnl| "propositions de facturation" }
 #endif
 #endif DEF_VEN
 
@@ -3812,7 +3812,7 @@ RETURN .f.
   * FUNCTION VnaPreEdit        ; RETURN eval(sbVnaPreEdit)
   FUNCTION PreVnaUndo ; RETURN xparse(xlPreVnaUndo)
   * FUNCTION VnlVnaMatch         ; RETURN eval(sbVnlVnaMatch)
-  FUNCTION VnaCopyFilter       ; RETURN &(sxVnaCopyFilter)
+  * FUNCTION VnaCopyFilter       ; RETURN &(sxVnaCopyFilter)
   * FUNCTION PreVnaSuggest(dDate)  ; RETURN xeval(sblPreVnaSuggest,dDate)
 #endif DEF_VNA
 #ifdef DEF_ODS
@@ -5601,7 +5601,7 @@ AddIniCmd( { "TimTestAllow" , {|x| AddIfNotNil(saTimTestAllow,xparse(x)) } } )
   * AddIniCmd( { "VnlVnaMatch" , {|x| ;
   *   (sbVnlVnaMatch := cblock(x)) != NIL ;
   * } } )
-  AddIniCmd( { "VnaCopyFilter" , {|x| (sxVnaCopyFilter := x) != NIL } } )
+  * AddIniCmd( { "VnaCopyFilter" , {|x| (sxVnaCopyFilter := x) != NIL } } )
   * AddIniCmd( { "PreVnaSuggest" , {|x| (sblPreVnaSuggest := x) != NIL } } )
 #endif DEF_VNA
 #ifdef DEF_MULT
@@ -5622,6 +5622,7 @@ AddIniCmd( { "TimTestAllow" , {|x| AddIfNotNil(saTimTestAllow,xparse(x)) } } )
   AddIniCmd( { "OnOdlPreClose" , {|x| AddIfNotNil(saOnOdlPreClose,cblock(x)) } } )
 #endif DEF_ODS
 #ifdef DEF_VEN
+  VenIniConfig()
   * AddIniCmd( { "DoParMfcDefault", ;
   *   {|x| (sbDoParMfcDefault:=cblock(x))!=NIL } } )
   AddIniCmd( { "VenMfcDefault", {|x| (sbVenMfcDefault:=cblock(x))!=NIL }})

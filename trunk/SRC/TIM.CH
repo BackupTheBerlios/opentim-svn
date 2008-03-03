@@ -1182,3 +1182,13 @@ memvar MemPickArtMode
 #define KTG_DG "*"
 #endif DEF_KITZ
 
+#define PNF_TAGGED  1
+#define PNF_IDPAR   2
+#define PNF_MATCH   3
+#define PNF_AVNA    4
+#define PNF_MONT    5
+#define PNF_IDDEV   6
+#define PNF_IDJNL   7 // of first document
+#define PNF_IDDOC   8 // of first document
+#define PNF_DATE    9 // of first document
+#define PNF_ALEN    9

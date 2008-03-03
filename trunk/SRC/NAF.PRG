@@ -20,14 +20,22 @@
 #include "TIM.CH"
 
 
-
 #ifdef DEF_VEN
+
+static sbVnaVenMemo := {|aMemos|join(aMemos,CR_LF+"---"+CR_LF)}
 
 #ifdef LG_FRENCH
   static LEG_VNATAG := "[Leertaste] Ausw„hlen [*] Umkehren [Escape] Abbrechen [Enter] Weiter"
 #else
   static LEG_VNATAG := "[Leertaste] Ausw„hlen [*] Umkehren [Escape] Abbrechen [Enter] Weiter"
 #endif
+
+
+FUNCTION VenIniConfig()
+AddIniCmd( { "VnaVenMemo"  , {|x| (sbVnaVenMemo := xparse(x)) != NIL } } )
+RETURN .t.
+
+STATIC FUNCTION VnaVenMemo(aMemos) ; RETURN eval(sbVnaVenMemo,aMemos)
 
 FUNCTION MsgVnaAuto
 #ifdef LG_GERMAN
@@ -71,7 +79,7 @@ local bcUsing := {|x| NafLine(x,cIdPar,nWidth,cTagAttrib) }
 aadd(aTagActions, { K_SPACE, {|tag| TagToggle(tag) } } )
 aadd(aTagActions, { asc("*"), {|| TagInvert(aNaf) } } )
 aadd(aTagActions, { K_CTRL_RET, {|x| ArtPage(x[NAF_IDART]), K_ALT_F5 } } )
-SetMsg(ntrim(len(aNaf)) + " Fakturierungsvorschl„ge.")
+SetMsg(ntrim(len(aNaf)) + " " + MsgVnaTag(cIdJnl))
 open area oArt()
   browse array aNaf using (bcUsing) ;
                     actions aTagActions ;
@@ -209,53 +217,35 @@ RETURN .f.
 
 #ifdef DEF_VNA
 
-#define PNF_TAGGED  1
-#define PNF_IDPAR   2
-#define PNF_MATCH   3
-#define PNF_AVNA    4
-#define PNF_MONT    5
-#define PNF_IDDEV   6
-#define PNF_ALEN    6
-
-#define LEG_PNFBROWSE "[Leertaste] ausw„hlen [*] Ausw.umkehren [F10] Weiter [Escape] Abbrechen"
+#define LEG_PNFBROWSE "[Leertaste] ausw„hlen [*] Ausw.umkehren [F6] Detail [Enter] Weiter [Escape] Abbrechen"
 
 FUNCTION VnaAuto2( cTitle,;
   cIdJnl,dDate,;
   cIdPar1,cIdPar2,;
-  xlVnaFilter,xlParFilter,xcVnaMatch,;
+  xlVnaFilter,xlParFilter,;
   cMontMin,;
   lEdit,lVnaTag,;
   xcNB1,xcZahler,xcAkte,;
   cIdJnlI,;
   lSimulate,cTitle1,cTitle2,cTitle3)
 local cPeriode
-local aVna
 local aPnf := {}
-local aActions := {}
 local lOkay := .t.
 local aNafSim := {}
-local nCount := 0
-local cIdPar
-local nMont
 local jnl := JnlLocate(cIdJnl)
 local jnlt, jnli
-local ifc, trn
-local n,c,i
+local ifc
+local n,i
 local nErr := 0
 local nNew := 0
-local cVenMatch
-local cVnaMatch
 default xcZahler to "PAR->IdPar"
 default xcAkte to "PAR->IdPar"
 default dDate to UserDate()
-default xlParFilter to "!'" + PARATTR_A +"'$PAR->Attrib"
 default cIdPar1 to space(LenIdPar())
 default cIdPar2 to space(LenIdPar())
 default xcNB1 to "''"
 default lEdit to .f.
 default lSimulate to .f.
-default xlVnaFilter to "empty(VNA->Satis)"
-default xcVnaMatch to "NIL"
 if jnl == NIL
   SetMsg(cIdJnl + MsgJnlExist())
   RETURN .f.
@@ -269,110 +259,9 @@ if cIdJnlI != NIL
 endif
 cPeriode := PerActive(dDate)
 RETURN .f. if ! PreVenAuto(cIdJnl)
-open area oVna(), oPar(), oArt(), oVen()
-  ddSetOrder(ORD_VNA_PARDATE)
-  softseek trim(cIdPar1)
-  do while lOkay .and. ! eof()
-    MsgDisp2(ntrim0(++nCount * 100 / lastrec()) + "%" )
-    // MsgDisplay(ntrim(recno()))
-    if TaskInter() ; exit ; endif
-    if ! empty(cIdPar2)
-      if left(VNA->IdPar,len(trim(cIdPar2))) > trim(cIdPar2)
-        exit
-      endif
-    endif
-    if &xlVnaFilter
-      seek VNA->IdPar in PAR
-      // MsgDisplay(trim(ParName()) + "...")
-      if &(xlParFilter)
-        seek VNA->IdJnl + VNA->IdDoc in VEN
-        if ! VENATTR_A $ VEN->Attrib
-          if (trn := VnaTrnLocate(jnl)) != NIL
-            if ! TRNATTR_M $ trn[TRN_ATTRIB]
-              if VEN->DatEch <= dDate .or. TRNATTR_D $ trn[TRN_ATTRIB]
-                c := &xcVnaMatch
-                if VNA->IdPar != cIdPar .or. (cVnaMatch != c .and. !empty(c))
-                  if !empty(cIdPar) .and. len(aVna) > 0 .and. ! is0(nMont)
-                    aadd(aPnf,{ ;
-                        empty(cMontMin).or.abs(nMont)>val(cMontMin),;
-                        cIdPar,cVnaMatch,aVna,nMont,VEN->IdDev}) // PNF_ALEN
-                    MsgDisplay("("+ntrim(len(aPnf)) + ") " + trim(ParName()) + "...")
-                  endif
-                  aVna := {}
-                  nMont := 0
-                  cVnaMatch := c
-                  cIdPar := VNA->IdPar
-                endif
-                if VNA->DC == jnl[JNL_DC]
-                  nMont += (qton1(VNA->QteUs)*val(VNA->PrixU))
-                else
-                  nMont -= (qton1(VNA->QteUs)*val(VNA->PrixU))
-                endif
-                lOkay := NafCollect(aVna,;
-                  VNA->IdJnl,;
-                  VNA->IdDoc,;
-                  VNA->Line,; // VNA->Match,;
-                  VNA->Date,;
-                  VNA->IdArt,;
-                  VNA->Code,;
-                  VNA->QteUs,;
-                  VNA->NB1,;
-                  VNA->Memo,;
-                  VNA->PrixU,;
-                  (TRNATTR_X $ trn[TRN_ATTRIB]),;
-                  VNA->QteForm,;
-                  if(HasInt(),VNA->QteStat,NIL),;
-                  if(HasInt(),VNA->IdInt,NIL),;
-                  if(HasProvi(),VNA->PrixL,NIL),;
-                  if(HasVnlAttr(),VNA->Attrib,NIL),;
-                  if(TRNATTR_I $ trn[TRN_ATTRIB],DcInvert(VNA->DC),VNA->DC),;
-                  TRNATTR_U $ trn[TRN_ATTRIB],;
-                  NIL,NIL,NIL,NIL,;
-                  VnaMustEdit();
-                )
-              endif
-            endif
-          endif
-        endif
-      endif
-    endif
-    skip          
-  enddo
-  if !empty(cIdPar) .and. len(aVna) > 0 .and. ! is0(nMont)
-    aadd(aPnf,{ ;
-        empty(cMontMin).or.abs(nMont)>val(cMontMin),;
-        cIdPar,cVnaMatch,aVna,nMont,VEN->IdDev}) // PNF_ALEN
-  endif
-close area
-RETURN .f. if ! lOkay
-
-aadd(aActions, { asc("*"), {|| ;
-  PnfInvert(aPnf) ;
-} } )
-aadd(aActions, { K_SPACE , {|m| ;
-  m[PNF_TAGGED] := !m[PNF_TAGGED], ;
-  K_DOWN ;
-} } )
-open area oPar(), oVen()
-  browse array aPnf using {|m| ;
-      iif(m[PNF_TAGGED],"X"," ");
-      +" "+m[PNF_IDPAR];
-      +" "+padr(ParName(m[PNF_IDPAR]),30);
-      +" "+padr(iif(m[PNF_MATCH]==NIL,"",m[PNF_MATCH]),9);
-      +" "+ntom(m[PNF_MONT]);
-      +" "+m[PNF_IDDEV];
-      +" "+str(len(m[PNF_AVNA]),4,0);
-    } ;
-    title (cTitle) ;
-    legend (LEG_PNFBROWSE) ;
-    actions (aActions) ;
-    delete {||.f.}
-  if lastchoice() == 0
-    lOkay := .f.
-  endif
-close area
-RETURN .f. if ! lOkay
-
+RETURN .f. if ! PnfCollect(aPnf,jnl,cIdPar1,cIdPar2,dDate,xlVnaFilter,xlParFilter,cMontMin)
+// RETURN .f. if ! confirm(utos(aPnf))
+RETURN .f. if ! PnfSelect(aPnf,cTitle,jnl)
 open area oPar(), oVen()
   for i := 1 to len(aPnf)
     if aPnf[i][PNF_TAGGED]
@@ -390,7 +279,7 @@ open area oPar(), oVen()
         lOkay := .f.
       else
         n := ParVenAppend( ;
-          aPnf[i][PNF_AVNA],&xcZahler,jnlt,ifc,dDate,cPeriode,&xcNB1,;
+          aPnf[i][PNF_AVNA],&xcZahler,jnlt,ifc,dDate,cPeriode,aPnf[i][PNF_MATCH],;
           lEdit, ;
           lVnaTag, ;
           SetPreview(), ;
@@ -427,6 +316,175 @@ for i := 1 to len(aTag)
   aTag[i][PNF_TAGGED] := ! aTag[i][PNF_TAGGED]
 next i
 RETURN K_ALT_F5
+
+FUNCTION PnfCollect(aPnf,jnl,cIdPar1,cIdPar2,dDate,xlVnaFilter,xlParFilter,cMontMin)
+local nCount := 0
+local cIdPar
+local nMont
+local pnf
+local lOkay := .f.
+local trn
+local i
+local cVnaMatch := ""
+// local xcVnaMatch := "trim(VEN->NB1)"
+default xlParFilter to "!'" + PARATTR_A +"'$PAR->Attrib"
+default xlVnaFilter to "empty(VNA->Satis)"
+// default xcVnaMatch to "NIL"
+open area oVna(), oPar(), oArt(), oVen()
+  ddSetOrder(ORD_VNA_PARDATE)
+  softseek trim(cIdPar1)
+  lOkay := .t.
+  do while lOkay .and. ! eof()
+    MsgDisp2(ntrim0(++nCount * 100 / lastrec()) + "%" )
+    // MsgDisplay(ntrim(recno()))
+    if TaskInter() ; exit ; endif
+    if ! empty(cIdPar2)
+      if left(VNA->IdPar,len(trim(cIdPar2))) > trim(cIdPar2)
+        exit
+      endif
+    endif
+    if &xlVnaFilter
+      seek VNA->IdPar in PAR
+      // MsgDisplay(trim(ParName()) + "...")
+      if &(xlParFilter)
+        seek VNA->IdJnl + VNA->IdDoc in VEN
+        if ! VENATTR_A $ VEN->Attrib
+          if (trn := VnaTrnLocate(jnl)) != NIL
+            if ! TRNATTR_M $ trn[TRN_ATTRIB]
+              if VEN->DatEch <= dDate .or. TRNATTR_D $ trn[TRN_ATTRIB]
+                pnf := VnaPnfColl(aPnf,VnaMatch())
+                nMont := qton1(VNA->QteUs)*val(VNA->PrixU)
+                if TRNATTR_I $ trn[TRN_ATTRIB]
+                  nMont := -nMont
+                endif
+                if VNA->DC == jnl[JNL_DC]
+                  pnf[PNF_MONT] += nMont
+                else
+                  pnf[PNF_MONT] -= nMont
+                endif
+                lOkay := NafCollect(pnf[PNF_AVNA],;
+                  VNA->IdJnl,;
+                  VNA->IdDoc,;
+                  VNA->Line,; // VNA->Match,;
+                  VNA->Date,;
+                  VNA->IdArt,;
+                  VNA->Code,;
+                  VNA->QteUs,;
+                  VNA->NB1,;
+                  VNA->Memo,;
+                  VNA->PrixU,;
+                  (TRNATTR_X $ trn[TRN_ATTRIB]),;
+                  VNA->QteForm,;
+                  if(HasInt(),VNA->QteStat,NIL),;
+                  if(HasInt(),VNA->IdInt,NIL),;
+                  if(HasProvi(),VNA->PrixL,NIL),;
+                  if(HasVnlAttr(),VNA->Attrib,NIL),;
+                  if(TRNATTR_I $ trn[TRN_ATTRIB],DcInvert(VNA->DC),VNA->DC),;
+                  TRNATTR_U $ trn[TRN_ATTRIB],;
+                  NIL,NIL,NIL,NIL,;
+                  VnaMustEdit();
+                )
+              endif
+            endif
+          endif
+        endif
+      endif
+    endif
+    skip          
+  enddo
+close area
+for i := 1 to len(aPnf)
+  if !empty(cMontMin) .and. abs(aPnf[i][PNF_MONT]) < val(cMontMin)
+    aPnf[i][PNF_TAGGED] := .f.
+  endif
+next i
+RETURN lOkay
+
+STATIC FUNCTION VnaPnfColl(aPnf,cVnaMatch)
+local i
+local pnf
+for i := 1 to len(aPnf)
+  if aPnf[i][PNF_MATCH] == cVnaMatch
+    if aPnf[i][PNF_IDPAR] == VNA->IdPar
+      pnf = aPnf[i]
+      exit
+    endif
+  endif
+next i
+if pnf == NIL
+  pnf := { .t., VNA->IdPar, cVnaMatch, {}, 0, VEN->IdDev, ;
+    VNA->IdJnl, VNA->IdDoc, VEN->Date } // PNF_ALEN
+  aadd(aPnf,pnf)
+  MsgDisplay("("+ntrim(len(aPnf)) + ") " + trim(ParName()) + "...")
+endif
+RETURN pnf
+
+
+
+
+FUNCTION PnfSelect(aPnf,cTitle,jnl)
+local lOkay := .t.
+local aActions := {}
+aadd(aActions, { asc("*"), {|| ;
+  PnfInvert(aPnf) ;
+} } )
+aadd(aActions, { K_SPACE , {|m| ;
+  m[PNF_TAGGED] := !m[PNF_TAGGED], ;
+  K_DOWN ;
+} } )
+aadd(aActions, { K_F6 , {|m| ;
+  VnaTag(m[PNF_AVNA],m[PNF_IDPAR],m[PNF_MATCH]+": "+MsgVnaTag(),jnl[JNL_IDJNL]), ;
+  NIL ;
+} } )
+open area oPar(), oVen(), oArt()
+  browse array aPnf using {|m| ;
+      iif(m[PNF_TAGGED],"X"," ");
+      +" "+m[PNF_IDPAR];
+      +" "+padr(ParName(m[PNF_IDPAR]),30);
+      +" "+padr(m[PNF_MATCH],25);
+      +" "+m[PNF_IDJNL];
+      +" "+m[PNF_IDDOC];
+      +" "+dtoc(m[PNF_DATE]);
+      +" "+ntom(m[PNF_MONT]);
+      +" "+m[PNF_IDDEV];
+    } ;
+    title (cTitle) ;
+    legend (LEG_PNFBROWSE) ;
+    actions (aActions) ;
+    delete {||.f.}
+  if lastchoice() == 0
+    lOkay := .f.
+  endif
+close area
+RETURN lOkay
+
+FUNCTION ParPnfPick(aPnf,oStart,cTitle)
+local nStart := 0
+local i
+if oStart != NIL
+  for i := 1 to len(aPnf)
+    if aPnf[i][PNF_MATCH] == oStart[PNF_MATCH]
+      nStart := i
+      exit
+    endif
+  next i
+endif
+open area oPar(), oVen(), oArt()
+  browse array aPnf using {|m| ;
+      padr(m[PNF_MATCH],25);
+      +" "+m[PNF_IDJNL];
+      +" "+m[PNF_IDDOC];
+      +" "+dtoc(m[PNF_DATE]);
+      +" "+ntom(m[PNF_MONT]);
+      +" "+m[PNF_IDDEV];
+    } ;
+    title (cTitle) ;
+    start (nStart) ;
+    delete {||.f.}
+close area
+RETURN NIL if lastchoice() == 0
+RETURN aPnf[lastchoice()]
+
 
 
 #endif DEF_VNA
@@ -726,7 +784,7 @@ RETURN -1 if ! PreVenAuto(jnl[JNL_IDJNL])
 default lVnaTag to ! IFCATTR_X $ ifc[IFC_ATTRIB]
 if lVnaTag .and. ! lSimulate
   RETURN 0 if ! VnaTag( ;
-    aVna, cIdPar1, MsgVnaTag(jnl[JNL_IDJNL]),jnl[JNL_IDJNL] ;
+    aVna, cIdPar1, trim(ParName())+" : "+MsgVnaTag(jnl[JNL_IDJNL]),jnl[JNL_IDJNL] ;
   )
 endif
 ** Jetzt gucken wir uns zuerst mal die Fakturierungsvorschl„ge an.
@@ -1207,12 +1265,12 @@ open area b, oArt(), oGen(), oSpc(), oVen(), oVna(), oDls()
   next i
   dbcommit()
 close area
-* goto nRecNo
 if empty(VEN->Memo) .and. len(aMemos) > 0
-  VEN->Memo := join(aMemos,CR_LF+"---"+CR_LF)
+  if !empty(cText := VnaVenMemo(aMemos))
+    VEN->Memo := cText
+  endif
 endif
 RETURN lOkay
-
 
 FUNCTION NafCollect(aVna,;
   NA_IDJNL,;

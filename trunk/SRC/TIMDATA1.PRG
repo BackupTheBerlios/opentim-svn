@@ -619,6 +619,10 @@ ddEndDef()
 * #endif DEF_ACT
 RETURN b
 
+#else
+
+FUNCTION oGra ; RETURN NIL
+
 #endif DEF_GRA
 
 #ifdef DEF_VAR
