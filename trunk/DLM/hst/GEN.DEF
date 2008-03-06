@@ -1,7 +1,7 @@
 // gen.def
 ddAddField("Libell4","C",LenGenName(),0,NIL,if(Has4Lang(),NIL,"H"))
 ddAddField("PrixU","C",LenMont(),0,"",if(HasDlm("GENPRIX"),NIL,"H"),NIL,NIL,NIL,{|x|PickNum(x)},{||.t.},{|x|GetMont(x)})
-ddAddField("Match","C",20,0)
+ddAddField("Match","C",20,0,"","H")
 ddAddField("DclSel","C",4,0,NIL,if(HasDlm("DCL"),NIL,"H"),NIL,NIL,\
   {||empty(DclSel).or.len(trim(GEN->IdGen))==LenIdGen()\
      .or.!SetMsg("DclSel only for leaf accounts")},\
@@ -16,7 +16,7 @@ ddAddField("IdAna","C",LenIdAna(),0,"@k@!",\
   if(HasDlm("ANA"),NIL,"H"),NIL,NIL,{||.t.},\
   {|x|PickAna(x)},NIL,{|x|GetIdAna(x)}\
 )
-ddAddIndex("upper(GEN->Match)","Matchcode",NIL,{|x|upper(x)})
+// ddAddIndex("upper(GEN->Match)","Matchcode",NIL,{|x|upper(x)})
 !HasDlm("DCL").or.ddAddIndex("GEN->DclSel+GEN->IdGen","DclSel","!empty(GEN->DclSel)")
 ddAddSpecial({||GenRename()}, MsgMnuRename(), -31 )
 ddPrintRecord({||ActExec("GENPRINT")})

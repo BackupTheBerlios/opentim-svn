@@ -1,17 +1,28 @@
-// Kundenliste MWSt fÅr INTERVAT
-before setvar("year",ntrim(year(UserDate())-1))
-before SetPeriode(getvar("year"))
+// Kundenliste Intracom fÅr INTERVAT
+before setvar("year",year(UserDate())-1)
+before setvar("quarter",pnQuarter(PerActive(UserDate()-90)))
+before SetQuarter(getvar("year"),getvar("quarter"))
 before SetDevise(DevDefault(MemPer1))
 before setvar("MontMin",ntom(Dev2Db("EUR",MemPer1,250)))
 before SetTplIni("LISTE")
 // before DlgDefault("IdDev",DevDefault(MemPer2))
 title MnuItemName()
 field name="year" caption="Jahr " picture="9999" \
+      attrib="N" \
       valid={||\
-      SetPeriode(getvar("year"))\
+      SetQuarter(getvar("year"),getvar("quarter"))\
       .and.setvar("MontMin",ntom(Dev2Db("EUR",MemPer1,250)))\
       .and.ph_refresh()\
     }
+field name="quarter" caption=" Quartal " picture="9" \
+      attrib="N" \
+      valid={||\
+      SetQuarter(getvar("year"),getvar("quarter"))\
+      .and.setvar("MontMin",ntom(Dev2Db("EUR",MemPer1,250)))\
+      .and.ph_refresh()\
+    }
+field block={||"  ("+MemPer1+"-"+MemPer2+")"} \
+      color="N/W" when={||.f.}
 field caption="WÑhrung  " \
       block={|x|SetDevise(x)}\
       picture="@k@!"\
@@ -32,7 +43,8 @@ field caption="Ihre MWSt-Nummer " \
     valid={||ValNoTva(MemNoTva)}\
     block={|x|if(x==NIL,MemNoTva,MemNoTva:=x)}
 
-after setvar("Filename",AppRoot()+"\TEMP\A"+getvar("year")+".XML")
+after setvar("Filename",\
+  AppRoot()+"\TEMP\I"+ntrim(getvar("quarter"))+ntrim(getvar("year"))+".XML")
 
-after fparse("VATLIST.XML",getvar("Filename"),"[]",NIL,NIL,NIL,NIL,"XML")
+after fparse("VATINTRA.XML",getvar("Filename"),"[]",NIL,NIL,NIL,NIL,"XML")
 after OpenUrl(getvar("Filename"))

@@ -206,6 +206,26 @@ GsbPeriode(cPerRange)
 #endif
 RETURN .t.
 
+FUNCTION SetQuarter(nYear,nQuarter)
+if nQuarter == 0 ; RETURN SetPeriode(ntrim(nYear)) ; endif
+if nQuarter == 1 
+  MemPer1 := m2p(nYear,1)
+  MemPer2 := m2p(nYear,3)
+elseif nQuarter == 2 
+  MemPer1 := m2p(nYear,4)
+  MemPer2 := m2p(nYear,6)
+elseif nQuarter == 3 
+  MemPer1 := m2p(nYear,7)
+  MemPer2 := m2p(nYear,9)
+elseif nQuarter == 4 
+  MemPer1 := m2p(nYear,10)
+  MemPer2 := m2p(nYear,12)
+else
+  RETURN ! SetMsg(ntrim(nQuarter)+" : invalid quarter!")
+endif
+RETURN .t.
+
+
 
 
 #ifdef DEF_JNL

@@ -11,14 +11,14 @@
     MsgContinue())\
 })]
 [=DbfScan({oPar()},1,NIL,NIL,\
-  "ParVatList('V','AC').and.getvar('MontB')>="+ltrim(getvar('MontMin')),\
+  "ParVatList('V','I').and.getvar('MontB')>="+ltrim(getvar('MontMin')),\
   getvar("b")\
 )]
 [=MsgDisplay("Generating "+trim(getvar("Filename"))+" ...")]
 <?xml version="1.0" encoding="UTF-8" ?>
 <VatList xmlns="http://www.minfin.fgov.be/VatList"  
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
-xsi:schemaLocation="http://www.minfin.fgov.be/VatList http://www.minfin.fgov.be/VatList/VatList.xsd"
+xsi:schemaLocation="http://minfin.fgov.be/portail1/fr/vatintra/VatIntra.xsd"
 RecipientId="VAT-ADMIN"  
 SenderId="[=trim(substr(tvatrim(MemNoTva),3))]"
 ControlRef="[=trim(substr(tvatrim(MemNoTva),3))]0001"
@@ -53,7 +53,7 @@ VersionTech="1.2">
 <Country>[=left(MemNoTva,2)]</Country>
 </CompanyInfo>
 
-<Period>[=getvar("year")]</Period>
+<Period>[=ntrim(getvar("quarter"))+ntrim(getvar("year"))]</Period>
 [etc if .f.]
 <TurnOver>[=ntrim0(getvar("LSTTVA.TurnOver")*100)]</TurnOver>
 <Amount>[=ntrim0(getvar("LSTTVA.Amount")*100)]</Amount>
@@ -64,7 +64,7 @@ VersionTech="1.2">
 
 [=setvar("i",0)]
 [etc loop clients DbfScan({oPar()},1,NIL,NIL,\
-  "ParVatList('V','AC').and.getvar('MontB')>="\
+  "ParVatList('V','I').and.getvar('MontB')>="\
     +ltrim(getvar('MontMin')\
   ),xlEval)]
 [=DlgPlus("i",1)]
