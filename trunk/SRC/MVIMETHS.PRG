@@ -406,16 +406,16 @@ Warning(MsgIdJnlDoc() + " : falscher Partner")
 RETURN .f.
 
 
-FUNCTION TagToggle(tag)
-tag[2] := ! tag[2]
+STATIC FUNCTION TagToggle(tag)
+tag[1] := ! tag[1]
 RETURN K_DOWN
 * SendKey(K_DOWN)
 * RETURN NIL
 
-FUNCTION TagInvert(aTag)
+STATIC FUNCTION TagInvert(aTag)
 local i
 for i := 1 to len(aTag)
-  aTag[i][2] := ! aTag[i][2]
+  aTag[i][1] := ! aTag[i][1]
 next i
 RETURN K_ALT_F5
 * SendKey(K_ALT_F5)
@@ -423,11 +423,11 @@ RETURN K_ALT_F5
 
 
 FUNCTION MviText(tag)
-local cLine := if(tag[2],"û"," ")
-goto tag[1]
+local cLine := if(tag[1],"û"," ")
+goto tag[2]
 cLine += " " + MVI->IdJnl
 cLine += " " + MVI->IdDoc
-cLine += " " + dtoc(MVI->Date)
+cLine += " " + dtoc(MVI->Date2)
 cLine += " " + left(MVI->NB1,29)
 cLine += " " + MVI->MontUs
 cLine += " " + padl("(" + ltrim(MVI->Mont) + ")",12)
@@ -577,15 +577,16 @@ local aTag
 local aLn := {}
 local cFltText := ""
 local aTagActions := {}
+aadd(aTagActions, { K_SPACE, {|tag| TagToggle(tag) } } )
+aadd(aTagActions, { asc("*"), {|| TagInvert(aTag) } } )
 do while ! AppTerminate()
   aTag := {}
   RETURN NIL if ! MviGetFilter("Buchungen bernehmen",cFltText,lIdPar)
-  if MviScan({|| xaadd(aTag, { recno(), .f. } ) })
+  if MviScan({|| xaadd(aTag, { .f., recno(), MVI->Date2 } ) })
     if len(aTag) > 0
+      asort(aTag,,,{|a,b|a[3] <= b[3]})
       do while len(aLn) == 0 .and. ! AppTerminate()
         open area oMvi()
-          aadd(aTagActions, { K_SPACE, {|tag| TagToggle(tag) } } )
-          aadd(aTagActions, { asc("*"), {|| TagInvert(aTag) } } )
           SetMsg(ntrim(len(aTag)) + " Buchungen gefunden.")
           browse array aTag using {|tag| MviText(tag) } ;
                             actions aTagActions ;
@@ -598,8 +599,8 @@ do while ! AppTerminate()
         endif
         open area oMvi(), oIml()
           for i := 1 to len(aTag)
-            if aTag[i][2]
-              goto aTag[i][1]
+            if aTag[i][1]
+              goto aTag[i][2]
               if eval(bPreCollect)
                 MviImlCollect(aLn,.t.)
               endif
