@@ -16,8 +16,8 @@ PreLogin !IndExist("DBCHECK").or.ActExec("DBCHECK").or.Confirm(\
 )
 
 // OnLogin setvar("asMail"," ")
-OnLogin setvar("mailhost","")
-OnLogin setvar("mailfrom","")
-OnLogin setvar("mailto","luc.saffre@gmx.net")
-OnLogin setvar("mailtpl","MAIL.EML")
+do setvar("mailhost","")
+do setvar("mailfrom","")
+do setvar("mailto","luc.saffre@gmx.net")
+do setvar("mailtpl","MAIL.EML")
 do setvar("fontName","Courier")

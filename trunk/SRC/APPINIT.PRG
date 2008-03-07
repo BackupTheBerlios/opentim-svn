@@ -1970,6 +1970,18 @@ FUNCTION AppDate
 #endif
 #endif
 
+FUNCTION AppCompiler
+#ifdef __XHARBOUR__
+  RETURN "xharbour"
+#else
+#ifdef __XPP__
+  RETURN "xbase"
+#else
+  RETURN "clipper"
+#endif
+#endif
+
+
 #ifdef __XHARBOUR__
 
 FUNCTION ft_default()

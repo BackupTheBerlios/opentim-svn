@@ -1,2 +1,4 @@
 rem @echo off
-zip -r c:\temp\dlm.zip DLM -x "*/.svn/*"
+set TARGET=u:\htdocs\timwebs\tim\dl\dist\dlm.zip
+if exist %TARGET% del %TARGET%
+zip -r %TARGET% DLM -x "*/.svn/*"

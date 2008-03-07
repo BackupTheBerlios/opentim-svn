@@ -1,3 +1,5 @@
+vpath %.PRG t:\svnwork\tim\trunk\SRC
+
 HB=harbour
 HBCC=cl
 CFLAGS=
@@ -138,7 +140,12 @@ clean :
 
 %.obj : %.c
 	cl /W3 /c /I"$(INCLUDE)" $< 
-#	$(HBCC) -c $(CFLAGS) $(CPPFLAGS) $< -o $@
+	$(HBCC) -c $(CFLAGS) $(CPPFLAGS) $< -o $@
 
 %.c : %.PRG
 	$(HB) $(HBFLAGS) $<
+
+# geht auch nicht:
+#%.obj : %.PRG
+#	$(HB) $(HBFLAGS) $<
+#	cl /W3 /c /I"$(INCLUDE)" $< 

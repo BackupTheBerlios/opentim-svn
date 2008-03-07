@@ -1,6 +1,10 @@
 @echo off
 [=left(AppPath(),2)]
 cd [=AppPath()]
+[etc if AppCompiler()=="clipper"]
+tim4.exe %*
+[etc else]
 start tim4.exe %*
+[etc endif]
 [=left(AppPath(),2)]
 cd [=AppPath()]
