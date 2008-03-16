@@ -34,7 +34,7 @@ field name="subttl" \
     reader={|g|CbxReader(g)}
 #include "PREVIEW.DLG"
 
-before setvar("PRN2PDF.out",padr(AppPath()+"\pdf\hstfin.pdf",200))
+before setvar("PRN2PDF.out",padr(AppRoot()+"\pdf\hstfin.pdf",200))
 #include "ASPDF.DLG"
 
 //  field name="date1" \

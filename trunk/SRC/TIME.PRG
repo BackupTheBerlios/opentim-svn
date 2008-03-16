@@ -456,9 +456,12 @@ endif
 RETURN nAge
 
 
+#ifndef __XHARBOUR__
 
 FUNCTION stod(cDate)
 local nYear := val(left(cDate,4))
 local nMonth := val(substr(cDate,5,2))
 local nDay := val(right(cDate,2))
 RETURN ntod(nYear,nMonth,nDay)
+
+#endif

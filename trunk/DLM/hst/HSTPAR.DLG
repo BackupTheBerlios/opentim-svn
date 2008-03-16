@@ -53,7 +53,7 @@ field name="Satis" \
     reader={|g|CbxReader(g)}
 
 #include "PREVIEW.DLG"
-before setvar("PRN2PDF.out",padr(AppPath()+"\pdf\hstpar.pdf",200))
+before setvar("PRN2PDF.out",padr(AppRoot()+"\pdf\hstpar.pdf",200))
 #include "ASPDF.DLG"
 // field block={|x|SetPreview(x)} \
     caption2=" Seitenvorschau " \

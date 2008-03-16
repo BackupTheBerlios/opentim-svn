@@ -2,13 +2,6 @@ header1 MnuItemName()
 header2 "P‚riode du "+dtoc(getvar("Date1"))+"-"+dtoc(getvar("Date2"))
 forloop {getvar("Date1"),getvar("Date2"),1}
 oneach {||ActExec("DLSPRJ1")}
-// oneach {||setvar("MC_P",SrvQte("SRV","MC",ForValue(),"trim(VEN->IdMfc)=='P'"))}
-// oneach {||setvar("MC_F",SrvQte("SRV","MC",ForValue(),"trim(VEN->IdMfc)=='F'"))}
-// oneach {||setvar("CN_P",SrvQte("SRV","CN",ForValue(),"trim(VEN->IdMfc)=='P'"))}
-// oneach {||setvar("CN_F",SrvQte("SRV","CN",ForValue(),"trim(VEN->IdMfc)=='F'"))}
-// oneach {||setvar("PA_P",SrvQte("SRV","PA",ForValue(),"trim(VEN->IdMfc)=='P'"))}
-// oneach {||setvar("PA_F",SrvQte("SRV","PA",ForValue(),"trim(VEN->IdMfc)=='F'"))}
-// filter {||getvar("MC_P")!=0.or.getvar("PA")!=0.or.getvar("CN")!=0}
 group key={||ls_woy(ForValue())} \
       after={||RptTit3().and.PrintTotal(1,1).and.PrintLine()} \
       text={|nCount|"Semaine "+ls_woy(ForValue())+ " :"} align="R"
@@ -25,9 +18,9 @@ column header="Date" \
     {left(PRJ->Name1,8)},8,NIL,\
     cblock("getvar('"+alltrim(PRJ->IdPrj)+"')"),\
     getvar("bText"),NIL,"Q")})
+#exec RptAddColumn(\
+    {"Total"},8,NIL,\
+    cblock("getvar('Total')"),\
+    getvar("bText"),NIL,"Q")
 
-// column header="MC_P" width=6 value={||getvar("MC_P")} \
-       text={|x|ntoq1(x,":")}
-// column header="MC_F" width=6 value={||getvar("MC_F")} \
-       text={|x|ntoq1(x,":")}
 total text={||""}

@@ -1,24 +1,43 @@
-vpath %.PRG t:\svnwork\tim\trunk\SRC
+vpath %.PRG ..\..\SRC
+#vpath %.PRG t:\svnwork\tim\trunk\SRC
+#vpath %.PRG t:\\svnwork\\tim\\trunk\\SRC
+#vpath %.PRG "t:\svnwork\tim\trunk\SRC"
+#vpath %.PRG t:/svnwork/tim/trunk/SRC
+#vpath %.PRG /svnwork/tim/trunk/SRC
+# make: *** No rule to make target `TIM.obj', needed by `tim.exe'.  Stop.
 
-HB=harbour
+#vpath %.PRG /cygdrive/t/svnwork/tim/trunk/SRC
+# harbour /m /n0 /is:\xharbour\include /cygdrive/t/svnwork/tim/trunk/SRC/TIM.PRG
+# Error F0034  Bad command line option: 'CYGDRIVE'
+# make: *** [TIM.c] Error 1
+
+
+XHBROOT=s:\xharbour
+SDKROOT=C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2
+MSVCROOT=C:\Program Files\Microsoft Visual Studio 8\VC
+
+HB=$(XHBROOT)\bin\harbour
 HBCC=cl
 CFLAGS=
 CPPFLAGS=
-SDKROOT=C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2
-MSVCROOT=C:\Program Files\Microsoft Visual Studio 8\VC
-XHBROOT=s:\xharbour
-HBFLAGS=/m /n0 /i$(XHBROOT)\include
+HBFLAGS=/m /n0 /i'.;$(XHBROOT)\include'
+# /dCUST=$(CUST)
 INCLUDE=$(SDKROOT)\Include;$(SDKROOT)\Include\crt;$(XHBROOT)\include
 LIB = $(SDKROOT)\Lib;$(MSVCROOT)\lib;$(XHBROOT)\lib
 C_USR=-TP
 HB_ARCHITECTURE=w32
 HB_COMPILER=msvc
 HB_GT_LIB=gtwin
-#HB_MT=MT multi-threaded ?
+#HB_MT=MT # MT if multi-threaded, otherwise empty
 HB_MT=
 HB_FIRST_LIBS=
-HB_LIBLIST=$(HB_FIRST_LIBS) common.lib dllmain.lib debug.lib vm$(HB_MT).lib rtl$(HB_MT).lib pcrepos.lib $(_HB_GT_LIB).lib lang.lib rdd$(HB_MT).lib macro$(HB_MT).lib pp$(HB_MT).lib dbffpt$(HB_MT).lib dbfntx$(HB_MT).lib dbfcdx$(HB_MT).lib hsx$(HB_MT).lib hbsix$(HB_MT).lib ct$(HB_MT).lib tip$(HB_MT).lib $(ADS_LIBS) $(HB_USER_LIBS) $(HB_ALGLIB)
-
+HB_LIBLIST=$(HB_FIRST_LIBS) common.lib dllmain.lib debug.lib vm$(HB_MT).lib
+HB_LIBLIST+=rtl$(HB_MT).lib pcrepos.lib $(HB_GT_LIB).lib lang.lib
+HB_LIBLIST+=rdd$(HB_MT).lib macro$(HB_MT).lib pp$(HB_MT).lib dbffpt$(HB_MT).lib
+HB_LIBLIST+=dbfntx$(HB_MT).lib dbfcdx$(HB_MT).lib hsx$(HB_MT).lib hbsix$(HB_MT).lib 
+HB_LIBLIST+=ct$(HB_MT).lib tip$(HB_MT).lib $(ADS_LIBS) $(HB_USER_LIBS) $(HB_ALGLIB)
+HB_LIBLIST+=shell32.lib user32.lib winspool.lib ole32.lib oleaut32.lib ws2_32.lib 
+HB_LIBLIST+=kernel32.lib gdi32.lib comctl32.lib comdlg32.lib 
 export LIB
 
 
@@ -132,20 +151,16 @@ OBJ+=ERRSYSLS.obj
 all: tim.exe
 
 tim.exe : $(OBJ)
-	link.exe $^ /NODEFAULTLIB:libcmt.lib /out:$@ /subsystem:WINDOWS /FORCE:MULTIPLE $(LDFLAGS) $(HB_LIBLIST) shell32.lib user32.lib winspool.lib ole32.lib oleaut32.lib ws2_32.lib kernel32.lib gdi32.lib comctl32.lib comdlg32.lib 
+	link.exe $^ /NODEFAULTLIB:libcmt.lib /out:$@ /subsystem:WINDOWS /FORCE:MULTIPLE $(LDFLAGS) $(HB_LIBLIST) 
 #	cl $^ -o $@
 
-clean :
+clean:
 	rm -f *.c *.obj
 
-%.obj : %.c
+%.obj: %.c
 	cl /W3 /c /I"$(INCLUDE)" $< 
 	$(HBCC) -c $(CFLAGS) $(CPPFLAGS) $< -o $@
 
-%.c : %.PRG
+%.c: %.PRG
 	$(HB) $(HBFLAGS) $<
 
-# geht auch nicht:
-#%.obj : %.PRG
-#	$(HB) $(HBFLAGS) $<
-#	cl /W3 /c /I"$(INCLUDE)" $< 

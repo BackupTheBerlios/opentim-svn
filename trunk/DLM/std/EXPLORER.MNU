@@ -40,9 +40,17 @@ MnuAddItem("~KWI.DBF : Keyword instances ",{||DbfEdit({oKwi(),oArt(),oMsx(),oNew
 #endif
 
 MnuAddTitle("~Other")
+#if oDls()!=NIL
+MnuAddItem("~DLS : Dienstleistungen",{||DbfEdit({oDls(),oPar(),oDla()})})
+#endif
+#if oDlp()!=NIL
+MnuAddItem("DL~P : Anwesenheiten",{||DbfEdit({oDlp(),oDls(),oPar(),oDla()})})
+#endif
+
 MnuAddItem("~MSG.DBF Correspondence      ",{||DbfEdit({oMsg(),oPar()})})
 #if oPrj() != NIL
 MnuAddItem("~PRJ.DBF Projects            ",{||DbfEdit({oPrj(),oPar()})})
+#endif
 #if oMbr() != NIL
 MnuAddItem("~MBR.DBF Memberships",         {||DbfEdit({oMbr(),oPar(),oPls()})})
 #endif

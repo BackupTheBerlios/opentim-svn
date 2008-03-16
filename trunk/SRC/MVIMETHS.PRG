@@ -576,20 +576,22 @@ local i
 local aTag
 local aLn := {}
 local cFltText := ""
+local cTitle := "Buchungen bernehmen"
 local aTagActions := {}
 aadd(aTagActions, { K_SPACE, {|tag| TagToggle(tag) } } )
 aadd(aTagActions, { asc("*"), {|| TagInvert(aTag) } } )
 do while ! AppTerminate()
   aTag := {}
-  RETURN NIL if ! MviGetFilter("Buchungen bernehmen",cFltText,lIdPar)
+  RETURN NIL if ! MviGetFilter(cTitle,cFltText,lIdPar)
   if MviScan({|| xaadd(aTag, { .f., recno(), MVI->Date2 } ) })
     if len(aTag) > 0
-      asort(aTag,,,{|a,b|a[3] <= b[3]})
+      // asort(aTag,,,{|a,b|a[3] <= b[3]})
       do while len(aLn) == 0 .and. ! AppTerminate()
         open area oMvi()
           SetMsg(ntrim(len(aTag)) + " Buchungen gefunden.")
           browse array aTag using {|tag| MviText(tag) } ;
                             actions aTagActions ;
+                            title (cTitle) ;
                             delete {||.f. } ;
                             help "IMLTAG" ;
                             legend (LEG_IMLTAG)

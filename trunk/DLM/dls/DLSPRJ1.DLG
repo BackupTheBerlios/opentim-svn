@@ -3,7 +3,7 @@ field name="Date1" \
     default=FirstOfMonth(UserDate()) \
     attrib="N"
 field name="Date2" \
-    caption="Etat au " \
+    caption=" au " \
     value=UserDate()
 
 // field name="IdCtr" \
@@ -19,3 +19,4 @@ field name="Date2" \
 
 #include "PREVIEW.DLG"
 #include "TOCSV.DLG"
+#include "ASPDF.DLG"

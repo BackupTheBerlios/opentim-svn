@@ -325,7 +325,7 @@ total for={||!VenIsNC()} \
       text={||utr("INVOICES","RECHNUNGEN","FACTURES")}
 total for={||VenIsNC()} \
       text={||utr("CREDIT NOTES","GUTSCHRIFTEN","NOTES DE CREDIT")}
-#if getvar("OnlyD")==" "
+#if !empty(getvar("OnlyD"))
 total for={||!VenIsNC().and.VEN->IdReg=="D"} \
       when={|n|n>0} \
       text={||"Rechnungen Deutschland"}

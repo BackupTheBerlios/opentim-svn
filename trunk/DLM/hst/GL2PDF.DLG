@@ -3,7 +3,7 @@ field name="year" default=year(userdate())-1 \
       caption="Jahr " \
       picture="9999"
 field name="GL2PDF.path" \
-      value=padr(AppPath()+"\pdf",200) \
+      value=padr(AppRoot()+"\pdf",200) \
       picture="@k@s30" \
       caption="Path "
 field name="GL2PDF.Journale" default="X" \
