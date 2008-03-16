@@ -141,6 +141,8 @@ default cTplIni to "LISTE"
 if cTplIni != NIL
   SetTplIni(cTplIni)
 endif
+SetAsMail(.f.)
+SetAsPdf(.f.)
 if cIdDlg != NIL
   RETURN .f. if ! DlgExec(cIdDlg)
 endif
