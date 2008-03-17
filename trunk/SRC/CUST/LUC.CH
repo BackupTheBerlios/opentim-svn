@@ -173,3 +173,4 @@
 #define DEF_INDEX
 
 
+#define DEF_LOC

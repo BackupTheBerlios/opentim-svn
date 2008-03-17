@@ -63,6 +63,10 @@ MnuAddItem(   "Wortschatz /~Fran‡ais      ",{||DbfEdit({oVoc(),oArt()},"Wortscha
 MnuAddItem(   "Wortschatz /E~nglish       ",{||DbfEdit(\
   {oVoc(),oArt()},MnuItemName(),"VOCEN")})
 #endif
+#if GetTableDef("LOC")!=NIL
+MnuAddSep()
+MnuAddItem( "~Locations",{||DbfEdit({oLoc(),oPar()},MnuItemName(),"LOC")})
+#endif
 
 #if HasDlm("DLS")
 

@@ -1319,6 +1319,44 @@ action b key K_ENTER prompt "~Partner     [Enter]" block PlzGetPar()
 ddEndDef()
 RETURN b
 
+#ifdef DEF_LOC
+
+FUNCTION oLoc() // Geographical Locations 
+static b := NIL
+if b != NIL ; RETURN b ; endif
+define data b name LOC
+ddIndex b on LOC->IdLoc
+ddIndex b on eupper(LOC->Name) format {|x|eupper(x)}
+ddFld IdLoc   ,C, 6,0 // postedit {|x|GetNum(x)} attrib P
+ddFld Name    ,C,40,0
+ddFld Lati    ,Q,10,0 GET_DECPOS(6)
+ddFld Long    ,Q,10,0 GET_DECPOS(6)
+ddFld x       ,Q,10,0 
+ddFld y       ,Q,10,0 
+action b key K_ALT_W prompt "~Google maps     [Alt-W]" ;
+  block OpenUrl("http://maps.google.com/maps?ll=";
+    +alltrim(LOC->Lati)+","+alltrim(LOC->Long)+"&spn="+LocSpn())
+// http://mapki.com/wiki/Google_Map_Parameters
+// http://maps.google.com/maps?f=q&hl=de&geocode=&q=estland&ie=UTF8&
+// http://maps.google.com/maps?ll=58.765574,24.265527&spn=0.003288,0.011759&t=h&z=17
+// http://maps.google.com/maps?ll=58.765574,24.265527&spn=0.001644,0.005879&z=18
+// http://maps.google.com/maps?f=q&hl=de&geocode=&q=tallinn&ie=UTF8&ll=59.438879,24.754429&spn=0.051584,0.188141&t=h&z=13&iwloc=addr
+// http://maps.google.com/maps?ll=59.438879,24.754429&spn=0.051584,0.188141
+ddEndDef()
+RETURN b
+
+FUNCTION LocSpn
+/*
+Erdumfang ist ca. 40075 Km.
+40000 Km -> 360 Grad
+1 Meter -> 360 / 40.000.000 Grad
+*/
+local x:=iif(empty(LOC->x),1,val(LOC->x))
+local y:=iif(empty(LOC->y),1,val(LOC->y))
+RETURN alltrim(str(x*360/40000000,20,6))+","+alltrim(str(y*360/40000000,20,6))
+
+#endif DEF_LOC
+
 #ifdef DEF_JNL
 
 FUNCTION DocName(cIdJnl,cIdDoc,cLine)

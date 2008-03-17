@@ -1677,6 +1677,9 @@ aadd( a, oNat() )
 #ifdef DEF_IBAN
   aadd( a, oBic() )
 #endif DEF_IBAN
+#ifdef DEF_LOC
+  aadd( a, oLoc() )
+#endif DEF_LOC
 #ifdef DEF_AMK
   aadd( a, oAmk() )
 #endif DEF_AMK
