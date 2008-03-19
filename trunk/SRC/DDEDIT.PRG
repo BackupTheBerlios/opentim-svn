@@ -66,6 +66,7 @@ static snSkipOffset := 0
 static snCellHeight := 0
 * static sbSearchFormat := NIL
 static scIdFlt := ""
+static scCsvSep := ","
 
 **
 **
@@ -3457,7 +3458,8 @@ enddo
 if cToCSV == BUTTON_ON
   fclose(fd)
   // AppShell("excel.bat TMP.CSV")
-  AppShell("excel.bat " + cOutFile)
+  // AppShell("excel.bat " + cOutFile)
+  OpenCsv(cOutFile)
 else
   if LstContinue()
     goto (lastrec() + 1)
@@ -3489,17 +3491,17 @@ if cType == GTYPE_MEMO
   * RETURN '"'+dos2latin1(strtran(strtran(v,CR_LF,chr(10)),'"','""'))+'"'
   RETURN '"'+dos2latin1(strtran(strtran(v,chr(141)," "),'"','""'))+'"'
 elseif cType == GTYPE_CHAR
-  RETURN '"'+iif(slExcelUser,"","'")+strtran(dos2latin1(alltrim(v)),'"','""')+'"'
+  RETURN '"'+iif(slExcelUser,"","'")+strtran(dos2latin1(v),'"','""')+'"'
 elseif cType == GTYPE_DATE
-  if slExcelUser
-    RETURN dtocf(v,"yyyy-mm-dd")
-  endif
+  * if slExcelUser
+  *   RETURN dtocf(v,"yyyy-mm-dd")
+  * endif
   RETURN dtocf(v,'"yyyy-mm-dd"')
   * RETURN dtocf(v,"dd/mm/yyyy")
 elseif cType == GTYPE_NUMERIC
   default nDecPos to SetDecPos()
   * RETURN ltrim(ntom(v,nDecPos,20)) if slExcelUser
-  RETURN '"'+komma(ltrim(ntom(v,nDecPos,20)))+'"'
+  RETURN mont2csv(ntom(v,nDecPos,20)) // '"'+komma(ltrim(ntom(v,nDecPos,20)))+'"'
 elseif cType == GTYPE_AMOUNT
   if "," $ v
     raise("invalid amount "+utos(v)+cSrc)
@@ -3507,7 +3509,7 @@ elseif cType == GTYPE_AMOUNT
   * if slExcelUser
   *   RETURN alltrim(v)
   * endif
-  RETURN '"'+komma(alltrim(v))+'"'
+  RETURN mont2csv(v) // '"'+komma(alltrim(v))+'"'
 elseif cType == GTYPE_QTY
   if "," $ v
     raise("invalid quantity "+utos(v)+cSrc)
@@ -3517,16 +3519,20 @@ elseif cType == GTYPE_QTY
   *   RETURN alltrim(v)
   * endif
   * RETURN komma(alltrim(v))
-  RETURN '"'+komma(alltrim(v))+'"'
+  RETURN mont2csv(v) // '"'+komma(alltrim(v))+'"'
 else
   raise("Invalid type "+utos(cType))
 endif
 RETURN utos(v)
 
-FUNCTION csvsep
-* RETURN ","
-RETURN iif(slExcelUser,";",",")
+FUNCTION mont2csv(cMont)
+RETURN '"'+komma(alltrim(cMont))+'"'
 
+FUNCTION csvsep(x)
+RETURN scCsvSep if x == NIL
+scCsvSep := x
+RETURN .t.
+* RETURN iif(slExcelUser,";",",")
 
 #endif DEF_PRINT
 
@@ -3996,6 +4002,7 @@ RETURN saData[AD_AINDEX][1][AI_EXPR]
 FUNCTION SetExcelUser(x)
 if x == NIL ; RETURN slExcelUser ; endif
 slExcelUser := x
+scCsvSep := iif(slExcelUser,";",",")
 RETURN .t.
 
 

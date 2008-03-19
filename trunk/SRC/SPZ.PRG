@@ -375,8 +375,8 @@ ddIndex b on  DLS->IdUsr+dtos(DLS->Date)+DLS->Von+DLS->Bis // ORD_DLS_USRDATE
 ddIndex b on  DLS->IdPar+dtos(DLS->Date)+DLS->Von+DLS->Bis // ORD_DLS_PARDATE
 ddFld IdDls    ,C,  LenIdDls(),0 when .f.
 ddFld Date     ,D,  8,0 when DlsCanEdit()
-ddFld Von      ,C,  5,0 postedit {|x|GetTime(x)} when DlsCanEdit()
-ddFld Bis      ,C,  5,0 postedit {|x|GetTime(x)} when DlsCanEdit()
+ddFld Von      ,Q,  5,0 postedit {|x|GetTime(x)} when DlsCanEdit()
+ddFld Bis      ,Q,  5,0 postedit {|x|GetTime(x)} when DlsCanEdit()
 // IdPar : T : Therapeut
 ddFld IdUsr    ,C, LenIdUsr(),0  picture PIC_ID ;
       when USRATTR_S $ UsrAttrib().and.DlsCanEdit() ;

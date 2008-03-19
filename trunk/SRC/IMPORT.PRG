@@ -470,7 +470,7 @@ snSeekOrder := 0
 scUserLevel := ""
 saCvtList := {}
 * if IniLoad(a,dbPath()+"\"+cFilename,.t.)
-if IniLoad(a,cFilename,.t.)
+if IniLoad(a,cFilename,.f.)
   if USRATTR_E $ UsrAttrib() .or. UsrLevel() <= scUserLevel
     RETURN cTitle
   else

@@ -91,6 +91,7 @@ static sbRsiRsvColumn := {||NIL}
 static sbOpenMail := {|cToAddr,cToName,cSubject,cBody,cAttach| ;
   mailto(cToAddr,cToName,cSubject,cBody,cAttach)}
 static scWebBrowser := NIL
+static scOpenCsv := NIL
 
 static slFixY2K := .t.
 static sbParName := {|| trim1(PAR->Allo) + trim(PAR->Firme) }
@@ -5576,7 +5577,9 @@ AddIniCmd( { "LenGraName" , {|x| snLenGraName := val(x),.t. } } )
 AddIniCmd( { "QteEmpty"   , {|x| (slQteEmpty := xparse(x)) != NIL } } )
 AddIniCmd( { "VnlAnzahl"  , {|x| (sbVnlAnzahl := xparse(x)) != NIL } } )
 AddIniCmd( { "OpenMail"  , {|x| (sbOpenMail := xparse(x)) != NIL } } )
-AddIniCmd( { "WebBrowser"  , {|x| (scWebBrowser := xparse(x)) != NIL } } )
+// AddIniCmd( { "WebBrowser"  , {|x| (scWebBrowser := xparse(x)) != NIL } } )
+AddIniCmd( { "OpenUrl"  , {|x| (scWebBrowser := xparse(x)) != NIL } } )
+AddIniCmd( { "OpenCsv"  , {|x| (scOpenCsv := xparse(x)) != NIL } } )
 #ifdef DEF_SER
   AddIniCmd( { "IdSerDefault" , {|x| scIdSerDefault := x,.t. } } )
   AddIniCmd( { "LenIdSer" , {|x| snLenIdSer := val(x),.t. } } )
@@ -5846,7 +5849,7 @@ saTimTestAllow := {}
   saOnOdlPreClose := {}
 #endif DEF_ODS
 itinit()
-RETURN IniLoad( AppIniCmds(), DbPath() + "\TIM.DBI")
+RETURN IniLoad( AppIniCmds(), DbPath() + "\TIM.DBI", .t.)
 
 FUNCTION OpenMail(cToAddr,cToName,cSubject,cBody,cAttach)
 RETURN eval(sbOpenMail,cToAddr,cToName,cSubject,cBody,cAttach)
@@ -5863,6 +5866,15 @@ endif
   endif
 #endif __XPP__
 RETURN AppShell("start "+cURL)
+
+FUNCTION OpenCsv(cFilename)
+#ifdef __XPP__
+  if scOpenCsv != NIL
+    RunShell(cFilename,scOpenCsv,.t.)
+    RETURN .t.
+  endif
+#endif __XPP__
+RETURN AppShell("start "+cFilename)
 
 #ifdef DEF_FOX
 

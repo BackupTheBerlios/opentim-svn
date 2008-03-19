@@ -134,8 +134,8 @@ PROCEDURE AppSys()
 
   SetDialog(.f.)
   if ! AppInit("TIM", 4.0)
-    rpt_write("AppInit() failed:")
-    rpt_write(SetMsg())
+    MsgBox(SetMsg(),"Error during AppInit():")
+    quit // 20080318
   endif
   SetDialog(.t.)
 

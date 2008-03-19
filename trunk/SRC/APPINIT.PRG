@@ -437,7 +437,7 @@ saOnLogin   := { ;
 }
 snLenIdLng  := 1
 set(_SET_EPOCH,1920)
-RETURN .f. if ! IniLoad( saIniCmds, AppPath() + fn, .F. )
+RETURN .f. if ! IniLoad( saIniCmds, AppPath() + fn, .t. )
 RETURN .f. if ! LoadDlm("STD")
 * if ! LoadDlm("STD")
 *   AddDllDir(scProgramPath)
@@ -505,25 +505,6 @@ RETURN
 
 
 **
-** AppAbort()
-**
-*FUNCTION AppAbort(cMsg)
-*close data
-*#ifdef DEF_LOGFILE
-*  LogClose()
-*#endif
-*if cMsg != NIL
-*  rpt_write(cMsg)
-*endif
-*set color to
-*scroll()
-*rpt_close()
-*errorlevel(1)
-*quit
-*RETURN NIL // never reached
-
-
-**
 ** AppNormEnd()
 **
 FUNCTION AppNormEnd(cCommand,cMsg)
@@ -572,27 +553,28 @@ local i
 //
 // display message and traceback
 // 20030213 rpt_write( cMessage, RPT_URGENT )
-SendConsole( cMessage )
-rpt_write(MnuJobName())
+if !empty(cMessage)
+  SendConsole( cMessage )
+  rpt_write(MnuJobName())
+endif
 #ifndef __XPP__
-i := 2
-while ( !empty(ProcName(i)) )
-  rpt_write( "Called from " + trim(ProcName(i)) + "(" + ntrim(procline(i)) + ")" , RPT_URGENT)
-  i++
-enddo
+  i := 2
+  while ( !empty(ProcName(i)) )
+    rpt_write( "Called from " + trim(ProcName(i)) + "(" + ntrim(procline(i)) + ")" , RPT_URGENT)
+    i++
+  enddo
 #endif __XPP__
 ddReport()
 #ifdef DEF_LOGIN
   Logout()
 #endif
-RETURN AppClose()
-
-FUNCTION AppClose()
+* RETURN AppClose()
+* FUNCTION AppClose()
 LogClose()
 rpt_close(APPEXIT_RTE) // close & create a .ERR copy of .RPT file ... !
 errorlevel(APPEXIT_RTE)
 quit
-RETURN NIL // never reached
+RETURN FOO->Bar // never reached
 
 
 

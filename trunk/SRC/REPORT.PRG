@@ -1187,7 +1187,7 @@ FUNCTION RptTotal() ; RETURN snTtlCurrent
 **
 **  IniLoad()
 **
-FUNCTION IniLoad(aItems, cFileName, lMsg )
+FUNCTION IniLoad(aItems, cFileName, lSevere )
 local lFound
 local fd, i
 local cMsg
@@ -1198,13 +1198,8 @@ local lOkay := .t.
 * if ! "\" $ cFileName
 *   cFileName := dbPath() + "\" + cFileName
 * endif
-* default lMsg to .t.
-* #ifdef DEF_VERBOSE
-  * if lMsg
-    MsgVerbose(MsgLoading(cFileName) )
-  * endif
-  * rpt_write(MsgLoading(cFileName))
-* #endif
+default lSevere to .f.
+MsgVerbose(MsgLoading(cFileName) )
 RETURN .f. if (fd := mopen(cFileName)) == NIL
 // wenn DLM\STD\STD.INI nicht existiert, dann soll keine Warnung kommen
 do while lOkay .and. (cLine := mreadline(fd)) != NIL
@@ -1216,7 +1211,7 @@ do while lOkay .and. (cLine := mreadline(fd)) != NIL
   endif
   if ! empty(cLine)
     if left(cLine,9)=="#include "
-      if ! IniLoad(aItems,xparse(substr(cLine,10)),lMsg)
+      if ! IniLoad(aItems,xparse(substr(cLine,10)),lSevere)
         lOkay := .f.
       endif
     else
@@ -1250,7 +1245,12 @@ do while lOkay .and. (cLine := mreadline(fd)) != NIL
         if len(cMsg) > 74
           cMsg := trim(left(cMsg,70)) +'..."'
         endif
-        lOkay := Confirm(cMsg, MsgContinue())
+        if lSevere
+          SetMsg(cMsg)
+          lOkay:=.f.
+        else
+          lOkay := Confirm(cMsg, MsgContinue(),MSG_NO)
+        endif
       elseif ! lOkay // neu 20070302
         cMsg := cFileName + "(" + ntrim(mline(fd))
         cMsg += + ') : invalid value ' + substr(cLine,len(cKeyWord))

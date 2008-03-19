@@ -61,7 +61,7 @@ for i := 1 to len(saDlmRoots)
     if (nPos := rat("\",cDlmName)) != 0
       cDlmName := substr(cDlmName,nPos+1)
     endif
-    RETURN IniLoad(AppIniCmds(), c + "\" + cDlmName + ".DLM", .F. )
+    RETURN IniLoad(AppIniCmds(), c + "\" + cDlmName + ".DLM", .t. )
   endif
 next i
 RETURN !SetMsg(cDlmName+" : no such DLM directory")

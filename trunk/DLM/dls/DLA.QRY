@@ -1,10 +1,11 @@
 //
-// DLA.QRY - generated 15.05.06
-// for DLA.DBF
+// DLA.QRY - generated 18.03.08
+// for DLA.FOX
 //
 column 2 Ref
 column 4 Bezeichnung DE pict @K@S40
 column 1 Nr pict @K@!
 column 3 Attrib pict @K@!
 column 7 Zahlart pict @K@!
+column 0 t block t skip .t.
 order 2

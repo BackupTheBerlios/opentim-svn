@@ -23,6 +23,9 @@ static scFileName := NIL
 static snStart    := 0
 static scRptArchive := NIL
 static sbLogConsole := {|cMsg| LogMsg(AppRoot()+"\CONSOLE.MSG",cMsg)}
+static sbOnRTE := {|cFilename| OnRteDefault(cFilename) }
+
+
 
 **
 **
@@ -126,24 +129,26 @@ if lForce.or.SetKeepReport()
     RETURN !SetMsg("Cannot move " + cOldFilename ;
       + " to " + cNewFilename+ MsgDosError(ferror()))
   endif
-  fdBat := fcreate( "rpt.bat" )
-  if fdBat != -1
-    fwrite( fdBat, "@echo off" + CR_LF )
-    fwrite( fdBat, "REM ******** Generated " + dtoc(date()) + " at " + time() + CR_LF )
-    fwrite( fdBat, "if '%1' == '' goto usage" + CR_LF )
-    fwrite( fdBat, "%1 " + cNewFileName + CR_LF )
-    fwrite( fdBat, "goto end" + CR_LF )
-    fwrite( fdBat, ":usage" + CR_LF )
-    fwrite( fdBat, "echo Syntax : RPT command" + CR_LF )
-    fwrite( fdBat, ":end" + CR_LF )
-    fclose(fdBat)
-  endif
   SendConsole("keep report : " + cNewFileName)
-  RETURN .t.
+  RETURN eval(sbOnRTE,cNewFileName)
 endif
 if ferase(cOldFilename) == -1
   RETURN !SetMsg(MsgFerase(cOldFilename) + MsgDosError(ferror()))
 endif
+RETURN .t.
+
+STATIC FUNCTION OnRteDefault(cFilename)
+local fdBat := fcreate( "rpt.bat" )
+RETURN .f. if fdBat == -1
+fwrite( fdBat, "@echo off" + CR_LF )
+fwrite( fdBat, "REM ******** Generated " + dtoc(date()) + " at " + time() + CR_LF )
+fwrite( fdBat, "if '%1' == '' goto usage" + CR_LF )
+fwrite( fdBat, "%1 " + cFileName + CR_LF )
+fwrite( fdBat, "goto end" + CR_LF )
+fwrite( fdBat, ":usage" + CR_LF )
+fwrite( fdBat, "echo Syntax : RPT command" + CR_LF )
+fwrite( fdBat, ":end" + CR_LF )
+fclose(fdBat)
 RETURN .t.
 
 
@@ -186,6 +191,11 @@ FUNCTION MsgLookRpt
 FUNCTION SetConsole(b)
 RETURN sbLogConsole if b == NIL
 sbLogConsole := b
+RETURN .t.
+
+FUNCTION SetRteHandler(b)
+RETURN sbOnRTE if b == NIL
+sbOnRte := b
 RETURN .t.
 
 FUNCTION SendHotLine(cMsg)

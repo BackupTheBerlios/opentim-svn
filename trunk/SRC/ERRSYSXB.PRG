@@ -371,8 +371,8 @@ STATIC PROCEDURE ErrorLog( oError, nStackStart )
               MsgBox( EHS_LOG_OPEN_FAILED )
            ENDIF
            ErrorLevel(1)
-           AppClose()
-           * QUIT
+           AppAbort()
+           // QUIT
         ENDIF
         LOOP
       END SEQUENCE

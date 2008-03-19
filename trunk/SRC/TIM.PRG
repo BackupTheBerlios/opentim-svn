@@ -133,6 +133,7 @@ if cParam3 != NIL ; cParams += cParam3 ; endif
 #ifndef __XPP__
   if ! AppInit("TIM", 4.0)
     ? SetMsg()
+    quit // seit 20080318
   endif
 #endif __XPP__
 if ! AppMain( cParams, "TIM", 4.0)

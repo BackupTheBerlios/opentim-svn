@@ -1,7 +1,8 @@
-// Partner nach Excel exportieren
-
-OutputFile    "PAR.TXT"
-Delimiter     chr(9)
+// Partner nach CSV exportieren
+OutputFile    "PAR.CSV"
+// Delimiter     chr(9)
+Delimiter     csvsep()
 #include "PARCOLS.EXP"
 #include "DOS2WIN.CVT"
-OnSuccess AppShell("excel.bat "+i_OutputFile(),NIL,.f.)
+// OnSuccess AppShell("excel.bat "+i_OutputFile(),NIL,.f.)
+OnSuccess OpenCsv(i_OutputFile())

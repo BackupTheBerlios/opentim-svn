@@ -2,7 +2,7 @@
     DEBUG         = no
     VERSION       = 2.0
     GUI           = yes
-    INCLUDE       = T:\DATA\LUC\PRG\TIM4
+    // INCLUDE       = T:\DATA\LUC\PRG\TIM4
     INCLUDE       = C:\ALASKA\XPPW32\INCLUDE
     OBJ_DIR       = S:\OBJ\$CUST
     LIB           = C:\ALASKA\XPPW32\LIB
