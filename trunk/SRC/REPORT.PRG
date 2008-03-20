@@ -141,9 +141,9 @@ default cTplIni to "LISTE"
 if cTplIni != NIL
   SetTplIni(cTplIni)
 endif
-SetAsMail(.f.)
-SetAsPdf(.f.)
 if cIdDlg != NIL
+  SetAsMail(.f.)
+  SetAsPdf(.f.)
   RETURN .f. if ! DlgExec(cIdDlg)
 endif
 if (rpt := RptLoad(cIdRep,lToCsv)) == NIL
@@ -326,7 +326,8 @@ if rpt[RPT_FORLOOP] == NIL
       ** Beispiel : Haushaltsplan BRF
       for i := len(rpt[RPT_GROUPS]) to 1 step -1
         if rpt[RPT_GROUPS][i][GRP_COUNT] == 0
-          rpt[RPT_GROUPS][i][GRP_KEYVALUE] := xeval(rpt[RPT_GROUPS][i][GRP_KEY])
+          rpt[RPT_GROUPS][i][GRP_KEYVALUE] := ;
+            xeval(rpt[RPT_GROUPS][i][GRP_KEY])
           if ! xeval(rpt[RPT_GROUPS][i][GRP_HEADER])
             lOkay := Confirm(SetMsg(),MsgContinue())
             exit
@@ -504,6 +505,7 @@ local i,j
 local grp
 RETURN .f. if ! xeval(rpt[RPT_PRETTL])
 for i := 1 to len(rpt[RPT_GROUPS])
+  snGrpCurrent := i
   grp := rpt[RPT_GROUPS][i]
   if lFinal .or. grp[GRP_STOP]
     * 20030221
@@ -511,7 +513,7 @@ for i := 1 to len(rpt[RPT_GROUPS])
               grp[GRP_COUNT],;
               grp[GRP_DTLCOUNT])
       // GRP_BEFORE is also called if there were no detail records
-      // (if DtlCount > 0, then it has been already called in RecReport())
+      // (if GRP_DTLCOUNT > 0, then it has been already called in RecReport())
       if grp[GRP_DTLCOUNT] > 0 .or. xeval( ;
         grp[GRP_BEFORE], ;
         grp[GRP_COUNT], ;
@@ -1023,9 +1025,10 @@ local cText
 RETURN .f. if ! xeval(rpt[RPT_ONEACH])
 RETURN .t. if len(rpt[RPT_COLUMNS]) == 0
 if lDetail
-  ** GRP_BEFORE wird erst vor dem Verarbeiten
+  ** GRP_BEFORE wird vor dem Verarbeiten
   ** des ersten Records ausgefÅhrt, der effektiv ausgedruckt wird.
   for k := 1 to len(rpt[RPT_GROUPS])
+    snGrpCurrent := k
     grp := rpt[RPT_GROUPS][k]
     grp[GRP_DTLCOUNT] += 1
     if grp[GRP_DTLCOUNT] == 1
@@ -1230,9 +1233,13 @@ do while lOkay .and. (cLine := mreadline(fd)) != NIL
             alltrim(substr(cLine,len(cKeyWord))) ;
           )
           if valtype(lOkay) != "L"
-            lOkay := Confirm( ;
-              cLine + " : return value must be LOGICAL!",;
-              MsgContinue())
+            cMsg := cLine + " : return value must be LOGICAL!"
+            if lSevere
+              SetMsg(cMsg)
+              lOkay:=.f.
+            else
+              lOkay := Confirm(cMsg,MsgContinue())
+            endif
           endif
           exit
         endif
@@ -1249,7 +1256,7 @@ do while lOkay .and. (cLine := mreadline(fd)) != NIL
           SetMsg(cMsg)
           lOkay:=.f.
         else
-          lOkay := Confirm(cMsg, MsgContinue(),MSG_NO)
+          lOkay := Confirm(cMsg, MsgContinue())
         endif
       elseif ! lOkay // neu 20070302
         cMsg := cFileName + "(" + ntrim(mline(fd))
@@ -1265,9 +1272,7 @@ do while lOkay .and. (cLine := mreadline(fd)) != NIL
 enddo
 mclose(fd)
 #ifdef DEF_VERBOSE
-  * if lMsg
-    MsgVerbose("")
-  * endif
+  MsgVerbose("")
 #endif
 RETURN lOkay
 

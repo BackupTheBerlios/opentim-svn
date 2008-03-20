@@ -130,6 +130,7 @@ if lForce.or.SetKeepReport()
       + " to " + cNewFilename+ MsgDosError(ferror()))
   endif
   SendConsole("keep report : " + cNewFileName)
+  RETURN .t. if errorlevel() == 0 
   RETURN eval(sbOnRTE,cNewFileName)
 endif
 if ferase(cOldFilename) == -1

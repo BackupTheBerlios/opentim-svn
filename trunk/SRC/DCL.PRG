@@ -220,7 +220,7 @@ FUNCTION DcfValExpr()
 RETURN "if(HST->DC=='"+DCF->DC;
   +"',val(HST->Mont),if(DCF->Type=='MX',0,-val(HST->Mont)))"
 
-FUNCTION DcfValues(r1,r2,r3)
+FUNCTION DcfValues(r1,r2,r3,nDecPos)
 local xlGenFilter := DcfGenFilter()
 local xlHstFilter := DclJnlFilter()+".and."+DcfHstFilter()
 local cStop
@@ -303,39 +303,44 @@ open area oGen()
     skip
   enddo
 close area
-if left(DCF->Type,1) == "I"
-  if DCF->Type == "I+"  // initial Saldo if > 0
-    for i := 1 to len(aSaldo1)
-      if aSaldo1[i] < 0
-        aSaldo1[i] := 0
-      endif
-    next i
-  endif
-  RETURN aSaldo1
+if nDecPos != NIL
+  ascan(aSaldo1,{|x|x:=round(x,nDecPos)},NIL,NIL,.t.)
+  ascan(aDebit,{|x|x:=round(x,nDecPos)},NIL,NIL,.t.)
+  ascan(aCredit,{|x|x:=round(x,nDecPos)},NIL,NIL,.t.)
 endif
 RETURN aDebit if DCF->Type == "MD"
 RETURN aCredit if DCF->Type == "MC"
+if left(DCF->Type,1) == "I"
+  if right(DCF->Type,1) == "+"  // only if > 0
+    ascan(aSaldo1,{|x|x:=iif(x<0,0,x)},NIL,NIL,.t.)
+    * for i := 1 to len(aSaldo1)
+    *   if aSaldo1[i] < 0
+    *     aSaldo1[i] := 0
+    *   endif
+    * next i
+  endif
+  RETURN aSaldo1
+endif
 a := {}
-if DCF->Type == "M "
+if left(DCF->Type,1) == "M"
   for i := 1 to len(aPer1)
     aadd(a, aDebit[i]+aCredit[i])
   next i
+  if right(DCF->Type,1) == "+"  // only if > 0
+    ascan(a,{|x|x:=iif(x<0,0,x)},NIL,NIL,.t.)
+  endif
   RETURN a
 elseif left(DCF->Type,1) == "F"
   for i := 1 to len(aPer1)
     aadd(a, aSaldo1[i]+aDebit[i]+aCredit[i])
-    * if DCF->DC==DC_DEBIT
-    *   aadd(a, aSaldo1[i]+aDebit[i]-aCredit[i])
-    * else
-    *   aadd(a, aSaldo1[i]+aCredit[i]-aDebit[i])
-    * endif
   next i
-  if DCF->Type == "F+"  // final Saldo if > 0
-    for i := 1 to len(a)
-      if a[i] < 0
-        a[i] := 0
-      endif
-    next i
+  if right(DCF->Type,1) == "+"  // final Saldo if > 0
+    ascan(a,{|x|x:=iif(x<0,0,x)},NIL,NIL,.t.)
+    * for i := 1 to len(a)
+    *   if a[i] < 0
+    *     a[i] := 0
+    *   endif
+    * next i
   endif
   RETURN a
 endif

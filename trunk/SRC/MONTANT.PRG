@@ -98,9 +98,6 @@ RETURN padl(cStr,nWidth)
 FUNCTION SetDecPos(nNew)
 if nNew != NIL
   snDec := nNew
-  * if ! confirm("SetDecPos("+ntrim(nNew)+")")
-  *   raise("uff")
-  * endif
   RETURN .t.
 endif
 RETURN snDec

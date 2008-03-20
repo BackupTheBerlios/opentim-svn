@@ -165,7 +165,7 @@ cDriver := trim(cDriver)
 RETURN .t. if scLastRead == cDriver
 if a == NIL
   a := {}  // INI_ALEN
-  aadd(a, { "Name"         , {|x| scDrvName      := x         , .t. } })
+  aadd(a, { "Name"         , {|x| scDrvName      := x, .t. } })
   aadd(a, { "Initialize"   , {|x| scDrvInit      := x, .t. } })
   aadd(a, { "Reset"        , {|x| scDrvReset     := x, .t. } })
   aadd(a, { "FormFeed"     , {|x| scDrvFormFeed  := x, .t. } })
