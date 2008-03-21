@@ -131,6 +131,9 @@ STATIC FUNCTION StandardEH( oError )
       cMessage += EHS_OS_ERROR + LTrim(Str(oError:osCode)) +;
                   NEWLINE + DosErrorMessage(oError:osCode)
    ENDIF
+   if oError:args != NIL
+     cMessage += NEWLINE + "Arguments : " + utos(oError:args)
+   endif
 
    if slBreakTrap
       // 20070511 das folgende Warning habe ich rausgeholt, weil es zu
@@ -191,7 +194,7 @@ STATIC FUNCTION StandardEH( oError )
 
       ErrorLevel(1)
       * QUIT
-      AppAbort(cMessage)
+      AppAbort(cMessage,oError)
    ENDIF
 
    IF oError:canDefault .AND. oError:canRetry
@@ -261,7 +264,7 @@ STATIC FUNCTION StandardEH( oError )
    /* Set error level and terminate program ! */
    ErrorLevel(1)
    * QUIT
-   AppAbort(cMessage)
+   AppAbort(cMessage,oError)
 
 RETURN .F. /* The compiler expects a return value */
 
@@ -371,7 +374,7 @@ STATIC PROCEDURE ErrorLog( oError, nStackStart )
               MsgBox( EHS_LOG_OPEN_FAILED )
            ENDIF
            ErrorLevel(1)
-           AppAbort()
+           AppAbort(EHS_LOG_OPEN_FAILED,oError)
            // QUIT
         ENDIF
         LOOP

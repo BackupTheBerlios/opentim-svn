@@ -217,7 +217,7 @@ if ( !Empty(nChoice) )          // do as instructed
     return (.f.)
   endif
 endif
-AppAbort(cMessage)
+AppAbort(cMessage,e)
 RETURN NIL // never reached
 
 

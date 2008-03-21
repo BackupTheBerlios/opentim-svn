@@ -1,4 +1,4 @@
-Integrit„tstest 05.10.07 18:00:03
+Integrit„tstest 21.03.08 10:58:52
 GEN : 398 records. 
 Generalkonten : OK
 ART : 29 records. 
@@ -46,4 +46,4 @@ Partnerstammdaten : OK
 HST : 151 records. 
 Historik Buchhaltung : OK
 26 warnings in 9 of 9 tests.
-Done after 1.00 seconds.
+Done after 1.20 seconds.

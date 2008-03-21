@@ -59,11 +59,6 @@
 
 #define DEF_MSG
 
-
-* #define DEF_IMPTIM205
-* #define CUST_TRANSEX
-* #define DEF_210
-
 #define DEF_CTS       // Sammelhistorik Artikel
 
 #define DEF_ACT
@@ -123,7 +118,8 @@
 * #define DEF_QTESUB
 
 #define DEF_EAN
-#define DEF_BIL
+// #define DEF_BIL
+#define DEF_DCL
 
 #define DEF_PRJ
 

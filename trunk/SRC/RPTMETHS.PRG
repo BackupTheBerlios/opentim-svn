@@ -111,8 +111,16 @@ if empty(scRptArchive)
 else
   cRptArchive := scRptArchive
 endif
+if !PathExist(cRptArchive)
+  if ! CreateDir(cRptArchive)
+    RETURN !Warning(utrp(;
+      "Could not create directory for session reports!",;
+      "Kann Archivordner fÅr Sitzungsberichte nicht erstellen!",;
+      "CrÇation du rÇpertoire d'archivage des rapports de session!"),;
+    cRptArchive+MsgDosError())
+  endif
+endif
 if lForce.or.SetKeepReport()
-  // cNewFileName := "\"+curdir()+"\RPT\" + right(dtos(date()),6)
   cNewFileName := cRptArchive + "\" + right(dtos(date()),6)
   do while( file(cNewFileName+cSuffix+".RPT"))
     if cSuffix == "ZZ"
@@ -126,8 +134,11 @@ if lForce.or.SetKeepReport()
   enddo
   cNewFileName += cSuffix + ".RPT"
   if frename(cOldFilename,cNewFilename) == -1
-    RETURN !SetMsg("Cannot move " + cOldFilename ;
-      + " to " + cNewFilename+ MsgDosError(ferror()))
+    /* rename may fail on DOS and windows if source and target drive are different. So we try also a copy followed by delete. */
+    RETURN .f. if ! CopyFile(cOldFilename,cNewFilename)
+    RETURN FileDelete(cOldFileName,.f.)
+    // RETURN !SetMsg("Cannot move " + cOldFilename ;
+    //  + " to " + cNewFilename+ MsgDosError(ferror()))
   endif
   SendConsole("keep report : " + cNewFileName)
   RETURN .t. if errorlevel() == 0 

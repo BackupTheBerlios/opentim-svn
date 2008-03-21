@@ -548,8 +548,9 @@ endif
 quit
 RETURN NIL // never reached
 
-FUNCTION AppAbort(cMessage)
+FUNCTION AppAbort(cMessage,oError)
 local i
+// local cLine
 //
 // display message and traceback
 // 20030213 rpt_write( cMessage, RPT_URGENT )

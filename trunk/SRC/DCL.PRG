@@ -98,7 +98,7 @@ define data b    ;
   wait {|x| DcfWait(x)}
 ddIndex b on DCF->IdDcl+DCF->IdDcf
 ddIndex b on DCF->IdGen+DCF->IdDcl+DCF->IdDcf
-ddIndex b on DCF->IdBil+DCF->IdDcl+DCF->IdDcf
+// ddIndex b on DCF->IdBil+DCF->IdDcl+DCF->IdDcf
 ddFld IdDcf   ,C, LEN_IDDCF,0 picture PIC_ID
 ddFld DC      ,C, 1,0  picture PIC_ID ;
                        valid empty(DCF->DC).or.DcValidate(DCF->DC)
@@ -123,7 +123,7 @@ ddFld IdGen   ,C, LenIdGen(),0 picture PIC_ID ;
 ddFld IdDcl   ,C, 3,0 picture PIC_ID
 ddFld CljList ,C,20,0 picture "@k@!@s5" ;
                       pick PickClj(space(LenIdCtr()),DCF->CljList)
-ddFld IdBil   ,C, LenIdBil(),0 picture PIC_ID ;
+/* ddFld IdBil   ,C, LenIdBil(),0 picture PIC_ID ;
                   pick DbfPick( ;
                     {oBil()},;
                     DCF->IdDcf + " : Bilanzposten", ;
@@ -131,14 +131,15 @@ ddFld IdBil   ,C, LenIdBil(),0 picture PIC_ID ;
                     DCF->IdBil,;
                     NIL,NIL,NIL, ;
                     "BIL->IdBil",;
-                  )
+                  ) 
+                  */
 action b key K_ENTER   prompt "General accounts [Enter]" ;
          block DcfGenEdit()
 ddEndDef()
 RETURN b
 
 FUNCTION DcfGenEdit()
-RETURN BilGenEdit(DCF->IdBil) if empty(DCF->IdGen)
+// RETURN BilGenEdit(DCF->IdBil) if empty(DCF->IdGen)
 RETURN DbfEdit( ;
   {oGen()},trim(DcfName()),"GENDCF",;
   NIL,NIL,;

@@ -282,3 +282,8 @@
 - Einige fundamentale Žnderungen im Reportgenerator. Buggefahr.
 - DLM\DCL\DCLDCF.REP weiter optimiert
 - DcfValues() weiter optimiert. Neue M”glichkeit "M-" (oder "I-" oder "F-") zeigt die Zahl nur an, wenn sie negativ ist.
+
+20080321
+- cust\stdd.ch : nicht mehr DEF_BIL, sondern DEF_DCL. DEF_BIL erkl„re ich jetzt als obsolete. Das Feld DCF->IdBil verschwindet ebenfalls.
+- Wenn TIM eine unterbrochene Sitzung feststellt, dann verschiebt er die benutzerlose SESSION.RPT ja ins RtpArchive (normalerweise .\RPT). Das RptArchive musste bisher auf dem gleichen Laufwerk liegen. Jetzt darf es auf einem anderen Laufwerk liegen. Und wenn das Verzeichnis nicht existiert, dann legt TIM es selber stillschweigend an (und nur falls das auch noch fehlschl„gt, meldet er die neue Warnung "Could not create directory for session reports!"). rpt_clean()
+- oError:args jetzt auch im TIM-Sitzungsbericht. Diese Info stand bisher immer nur in der xpperror.log

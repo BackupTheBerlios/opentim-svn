@@ -1,1 +1,1 @@
-@tim4.exe /exec:setup(.t.).and.AppNormEnd()
+@TIM4.EXE /exec:setup(.t.).and.AppNormEnd()

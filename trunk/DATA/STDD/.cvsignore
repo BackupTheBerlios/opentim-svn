@@ -1,0 +1,10 @@
+*.obj 
+*.OBJ 
+*.exe 
+*.EXE 
+*.dll 
+*.DLL 
+*.NTX
+*.CDX
+*.OLD
+*.OLT
