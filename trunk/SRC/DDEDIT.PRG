@@ -28,6 +28,7 @@
 ** STATIC_SECTION global static variables
 **
 static slExcelUser := .t.
+static sbMont2CSV := {|cMont|'"'+komma(alltrim(cMont))+'"'}
 static soBrowse := NIL  // current browse object !!!!!!
 static saData := NIL  // AD array (previously soBrowse:cargo)
 // static b := NIL         // current browse object !!!!!!
@@ -3526,7 +3527,12 @@ endif
 RETURN utos(v)
 
 FUNCTION mont2csv(cMont)
-RETURN '"'+komma(alltrim(cMont))+'"'
+RETURN eval(sbMont2CSV,cMont) // '"'+komma(alltrim(cMont))+'"'
+
+FUNCTION SetMont2CSV(b)
+RETURN sbMont2CSV if b == NIL
+sbMont2CSV := b
+RETURN .t.
 
 FUNCTION csvsep(x)
 RETURN scCsvSep if x == NIL

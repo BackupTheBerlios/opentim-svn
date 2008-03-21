@@ -287,4 +287,5 @@
 - cust\stdd.ch : nicht mehr DEF_BIL, sondern DEF_DCL. DEF_BIL erkl„re ich jetzt als obsolete. Das Feld DCF->IdBil verschwindet ebenfalls.
 - Wenn TIM eine unterbrochene Sitzung feststellt, dann verschiebt er die benutzerlose SESSION.RPT ja ins RtpArchive (normalerweise .\RPT). Das RptArchive musste bisher auf dem gleichen Laufwerk liegen. Jetzt darf es auf einem anderen Laufwerk liegen. Und wenn das Verzeichnis nicht existiert, dann legt TIM es selber stillschweigend an (und nur falls das auch noch fehlschl„gt, meldet er die neue Warnung "Could not create directory for session reports!"). rpt_clean()
 - oError:args wird jetzt auch in den TIM-Sitzungsbericht geschrieben. Diese Info stand bisher immer nur in der xpperror.log
-- Kann sein, dass man jetzt den Standard-TIM auf der Standarddatenbank von einem runtergeladenen SVN-Baum aus benutzen kann.
+- Man kann jetzt (theoretisch) TIM auf der Standarddatenbank von einem runtergeladenen SVN-Baum aus benutzen.
+- Neue Funktion SetMont2CSV(), mit der man konfigurieren kann, wie Zahlen in eine CSV-Datei geschrieben werden. Excel 2000 will Punkte als Dezimaltrenner haben, alle anderen Excel-Versionen und OpenOffice wollen Kommas haben.
