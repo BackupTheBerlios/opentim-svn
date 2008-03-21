@@ -1,5 +1,5 @@
 //
-// GEN.QRY - generated 31/12/02
+// GEN.QRY - generated 21.03.08
 // for GEN.DBF
 //
 column 5 =utr("Accnt","Konto","Compte")
@@ -11,7 +11,7 @@ column 9 Z pict @K@!
 column 2 MWSt pict @K@!
 column 11 Ko pict @K@!
 column 4 Attr pict @K@!
-column 12 Bil. pict @K@!
+column 12 W„ pict @K@!
 column 13 W„ pict @K@!
 column 10 =utr("Description","Bezeichnung","Description")+" "+MemLang3 pict @K@S20
 column 14 =utr("Description","Bezeichnung","Description")+" "+MemLang4 pict @K@S25

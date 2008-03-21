@@ -573,17 +573,19 @@ RETURN .f. if ! xeval(rpt[RPT_PRETTL])
 for i := len(rpt[RPT_GROUPS]) to 1 step -1
   snGrpCurrent := i
   grp := rpt[RPT_GROUPS][i]
-  cText := xeval(grp[GRP_TEXT],grp[GRP_COUNT])
-  if cText != NIL .and. ! grp[GRP_STARTED] .and. grp[GRP_COUNT] > 0
-    if ! xeval(rpt[RPT_GROUPS][i][GRP_HEADER],cText)
-      lOkay := Confirm(SetMsg(),MsgContinue())
-      exit
+  if grp[GRP_TEXT] != NIL
+    cText := xeval(grp[GRP_TEXT],grp[GRP_COUNT])
+    if cText != NIL .and. ! grp[GRP_STARTED] .and. grp[GRP_COUNT] > 0
+      if ! xeval(rpt[RPT_GROUPS][i][GRP_HEADER],cText)
+        lOkay := Confirm(SetMsg(),MsgContinue())
+        exit
+      endif
+      if ! xeval(grp[GRP_BEFORE],grp[GRP_COUNT],grp[GRP_DTLCOUNT]) 
+        lOkay := Confirm(SetMsg(),MsgContinue())
+        exit
+      endif
+      grp[GRP_STARTED] := .t.
     endif
-    if ! xeval(grp[GRP_BEFORE],grp[GRP_COUNT],grp[GRP_DTLCOUNT]) 
-      lOkay := Confirm(SetMsg(),MsgContinue())
-      exit
-    endif
-    grp[GRP_STARTED] := .t.
   endif
 next i
 for j := 1 to len(rpt[RPT_LINES])

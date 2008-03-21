@@ -5,6 +5,9 @@ SetDevise(DevDefault(MemPer1))
 setvar("GL2PDF.path",trim(getvar("GL2PDF.path")))
 right(getvar("GL2PDF.path"),1)=="\".or.\
   DlgPlus("GL2PDF.path","\"+ntrim(getvar("year"))+"\")
+PathExist(getvar("GL2PDF.path"))\
+  .or.CreateDir(getvar("GL2PDF.path"))\
+  .or.!SetMsg("mkdir "+getvar("GL2PDF.path")+MsgDosError())
 SetPreview(" ")
 SetAsPdf(.t.)
 SetBatch(.t.)

@@ -25,5 +25,18 @@ LoadDlm "TESTS"
 // do SetKeepReport(.t.)
 do SetActiveMenus(.t.)
 
-PerToggle "0100"
+// Grundw„hrung 1 und 2 
+DevDefault { "BEF" , "EUR" }
+
+// DevToggle bestimmt, ab wann von GW1 nach GW2 umgeschaltet wird
+PerToggle if(FixY2K(),"A200","0200")
+
+// PerDevFixed bestimmt, ob der Wechselkurs fest ist, oder (wenn nicht)
+// im Dokument gespeichert wird. Bei festem Wechselkurs wird immer per
+// Dreiecksrechnung ber EUR konvertiert.
+// PerDevFixed {|cPeriode,cIdDev|cIdDev$"BEF,LUF,DEM,NLG,FRF,ITL,DKK"}
+PerDevFixed {|cPeriode,cIdDev|cPeriode>="0000".and.!cIdDev$"USD"}
+
+
+
 
