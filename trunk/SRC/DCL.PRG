@@ -303,48 +303,35 @@ open area oGen()
     skip
   enddo
 close area
-if nDecPos != NIL
-  ascan(aSaldo1,{|x|x:=round(x,nDecPos)},NIL,NIL,.t.)
-  ascan(aDebit,{|x|x:=round(x,nDecPos)},NIL,NIL,.t.)
-  ascan(aCredit,{|x|x:=round(x,nDecPos)},NIL,NIL,.t.)
-endif
-RETURN aDebit if DCF->Type == "MD"
-RETURN aCredit if DCF->Type == "MC"
-if left(DCF->Type,1) == "I"
-  if right(DCF->Type,1) == "+"  // only if > 0
-    ascan(aSaldo1,{|x|x:=iif(x<0,0,x)},NIL,NIL,.t.)
-    * for i := 1 to len(aSaldo1)
-    *   if aSaldo1[i] < 0
-    *     aSaldo1[i] := 0
-    *   endif
-    * next i
-  endif
-  RETURN aSaldo1
-endif
-a := {}
-if left(DCF->Type,1) == "M"
+if DCF->Type == "MD"
+  a := aDebit
+elseif DCF->Type == "MC"
+  a := aCredit 
+elseif left(DCF->Type,1) == "I"
+  a := aSaldo1
+elseif left(DCF->Type,1) == "M"
+  a := {}
   for i := 1 to len(aPer1)
     aadd(a, aDebit[i]+aCredit[i])
   next i
-  if right(DCF->Type,1) == "+"  // only if > 0
-    ascan(a,{|x|x:=iif(x<0,0,x)},NIL,NIL,.t.)
-  endif
-  RETURN a
 elseif left(DCF->Type,1) == "F"
+  a := {}
   for i := 1 to len(aPer1)
     aadd(a, aSaldo1[i]+aDebit[i]+aCredit[i])
   next i
-  if right(DCF->Type,1) == "+"  // final Saldo if > 0
-    ascan(a,{|x|x:=iif(x<0,0,x)},NIL,NIL,.t.)
-    * for i := 1 to len(a)
-    *   if a[i] < 0
-    *     a[i] := 0
-    *   endif
-    * next i
-  endif
-  RETURN a
+else
+  raise("Invalid DCF->Type "+utos(DCF->Type))
 endif
-RETURN NIL
+if nDecPos != NIL
+  aeval(a,{|x|x:=round(x,nDecPos)},NIL,NIL,.t.)
+endif
+if right(DCF->Type,1) == "+"
+  aeval(a,{|x|x:=iif(x<0,0,x)},NIL,NIL,.t.)
+endif
+if right(DCF->Type,1) == "-"
+  aeval(a,{|x|x:=iif(x>0,0,x)},NIL,NIL,.t.)
+endif
+RETURN a
 
 
 **

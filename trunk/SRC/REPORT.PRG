@@ -50,7 +50,8 @@
 #define RPT_TOCSV       27
 #define RPT_RECNOS      28
 #define RPT_FORLOOP     29
-#define RPT_ALEN        29
+#define RPT_LINES       30
+#define RPT_ALEN        30
 
 
 #define GRP_KEY        1
@@ -95,7 +96,9 @@
 // 20050621 mit afterTotals {||PrintLine()} kann man angeben, dass nach
 // den Totals der Gruppe eine Leerzeile kommt.
 
-#define GRP_ALEN      16
+#define GRP_STARTED     17
+
+#define GRP_ALEN      17
 
 #define CLN_HEADER 1
 #define CLN_WIDTH  2
@@ -214,7 +217,9 @@ local nRecNo2
 local lOkay
 local lStop
 local nOldLMargin := p_setlmargin()
-MsgDisplay(trim1(rpt[RPT_HDR1])+trim1(rpt[RPT_HDR2])+trim1(rpt[RPT_HDR3]))
+MsgDisplay(trim1(rpt[RPT_HDR1]);
+    +trim1(rpt[RPT_HDR2]);
+    +trim1(rpt[RPT_HDR3]))
 if rpt[RPT_TOCSV]
   if (fd := fcreate(cOutFile)) == -1
     RETURN !SetMsg(cOutFile+MsgDosError(doserror()))
@@ -289,14 +294,11 @@ else
 endif
 if rpt[RPT_FORLOOP] == NIL
   BEGIN SEQUENCE
-    * 20030127
-    * if ! AreaOpen(rpt[RPT_AREA],.f.,NIL,.t.) ; BREAK ; endif
     if ! AreaOpen(rpt[RPT_AREA],.f.) ; BREAK ; endif
     if rpt[RPT_RECNOS] == NIL
       if rpt[RPT_INDEX] == NIL
         ddSetOrder(rpt[RPT_ORDER])
       else
-        * MsgDisplay("")
         if rpt[RPT_INDEX][NDX_FOR] == NIL
           index on &(rpt[RPT_INDEX][NDX_ON]) ;
                 to (rpt[RPT_INDEX][NDX_NAME]) ;
@@ -315,30 +317,19 @@ if rpt[RPT_FORLOOP] == NIL
     if (lOkay := RptSkip(rpt))
       nRecNo := recno()
       for i := 1 to len(rpt[RPT_GROUPS])
-        if ! GrpReset(rpt,i)
-          lOkay := Confirm(SetMsg(),MsgContinue())
-        endif
+        GrpReset(rpt,rpt[RPT_GROUPS][i])
       next i
     endif
     do while lOkay .and. ! eof() .and. xeval(rpt[RPT_WHILE])
       if TaskInter() ; lOkay := .f. ; exit ; endif
-      ** 19990628 : headers werden in umgekehrter Reihenfolge ausgefhrt.
-      ** Beispiel : Haushaltsplan BRF
-      for i := len(rpt[RPT_GROUPS]) to 1 step -1
+      for i := 1 to len(rpt[RPT_GROUPS]) 
         if rpt[RPT_GROUPS][i][GRP_COUNT] == 0
           rpt[RPT_GROUPS][i][GRP_KEYVALUE] := ;
-            xeval(rpt[RPT_GROUPS][i][GRP_KEY])
-          if ! xeval(rpt[RPT_GROUPS][i][GRP_HEADER])
-            lOkay := Confirm(SetMsg(),MsgContinue())
-            exit
-          endif
+              xeval(rpt[RPT_GROUPS][i][GRP_KEY])
         endif
         rpt[RPT_GROUPS][i][GRP_COUNT] ++
       next i
-      if ! lOkay
-        exit
-      endif
-      if ! RecReport(rpt) .and. ! Confirm(MsgContinue())
+      if ! _oneach(rpt) .and. ! Confirm(MsgContinue())
         lOkay := .f.
         exit
       endif
@@ -349,53 +340,47 @@ if rpt[RPT_FORLOOP] == NIL
         rptgoto(rpt[RPT_RECNOS],snRow+1)
       endif
       lOkay := RptSkip(rpt)
-      ** So. Jetzt sind wir auf dem n„chsten Record.
-      ** Mal sehen, was das an Gruppen-Unterbrechungen hervorruft...
-      lStop := .f. // (Vielleicht passiert ja auch gar nichts)
+      // So. Jetzt sind wir auf dem n„chsten Record.
+      // Mal sehen, was das an Gruppen-Unterbrechungen hervorruft...
+      lStop := .f. // Vielleicht passiert ja auch gar nichts
       for i := 1 to len(rpt[RPT_GROUPS])
-        if xeval(rpt[RPT_GROUPS][i][GRP_KEY]) != rpt[RPT_GROUPS][i][GRP_KEYVALUE]
+        if xeval(rpt[RPT_GROUPS][i][GRP_KEY]) != ;
+               rpt[RPT_GROUPS][i][GRP_KEYVALUE]
           rpt[RPT_GROUPS][i][GRP_STOP] := .t.
           lStop := .t.
         endif
       next i
       if lStop
-        ** Mindestens eine Gruppe wurde unterbrochen.
+        // Mindestens eine Gruppe wurde unterbrochen. 
+        // Wir springen auf den letzten Record der vorigen Gruppe
+        // zurck, Weil jetzt evtl. Titel und sonstige Bedingungen
+        // evaluiert werden, 
         nRecNo2 := recno()
         goto (nRecNo)
-        if RptValRecord(rpt)
-          GrpStop(.f.)
-        else
-          lOkay := Confirm(SetMsg(),MsgContinue())
+        if ! RptValRecord(rpt) .and. !Confirm(SetMsg(),MsgContinue())
+          lOkay := .f.
           exit
         endif
+        _rupture(.f.)
         goto (nRecNo2)
         if ! eof() .and. ! RptValRecord(rpt)
           lOkay := Confirm(SetMsg(),MsgContinue())
           exit
         endif
+        // restart groups that have stopped:
+        *for i := 1 to len(rpt[RPT_GROUPS])
+        *  snGrpCurrent := i
+        *  grp := rpt[RPT_GROUPS][i]
+        *  if grp[GRP_STOP]
+        *    GrpReset(rpt,grp)
+        *  endif
+        *next i
       endif
     enddo
     if lOkay
       goto (nRecNo)
       RptValRecord(rpt)
-      GrpStop(.t.)
-      * for i := 1 to len(rpt[RPT_GROUPS])
-      *   if rpt[RPT_GROUPS][i][GRP_DTLCOUNT] > 0 .or. xeval( ;
-      *     rpt[RPT_GROUPS][i][GRP_BEFORE], ;
-      *     rpt[RPT_GROUPS][i][GRP_COUNT], ;
-      *   )
-      *     if xeval( ;
-      *       rpt[RPT_GROUPS][i][GRP_AFTER], ;
-      *       rpt[RPT_GROUPS][i][GRP_COUNT], ;
-      *       rpt[RPT_GROUPS][i][GRP_DTLCOUNT] ;
-      *     )
-      *       for j := 1 to len(rpt[RPT_TOTALS])
-      *         PrintTotal(j,i)
-      *       next j
-      *       // TtlPrintAll(i) // sub-totals for group i
-      *     endif
-      *   endif
-      * next i
+      _rupture(.t.)
     endif
     AreaClose()
     if rpt[RPT_INDEX] != NIL
@@ -409,28 +394,23 @@ else
   lOkay := .t.
   suForValue := rpt[RPT_FORLOOP][1]
   for i := 1 to len(rpt[RPT_GROUPS])
-    if ! GrpReset(rpt,i)
-      lOkay := Confirm(SetMsg(),MsgContinue())
-    endif
+    GrpReset(rpt,rpt[RPT_GROUPS][i])
   next i
   do while lOkay .and. suForValue <= rpt[RPT_FORLOOP][2]
     if TaskInter() ; lOkay := .f. ; exit ; endif
     ** 19990628 : headers werden in umgekehrter Reihenfolge ausgefhrt.
     ** Beispiel : Haushaltsplan BRF
-    for i := len(rpt[RPT_GROUPS]) to 1 step -1
+    for i := 1 to len(rpt[RPT_GROUPS]) 
       if rpt[RPT_GROUPS][i][GRP_COUNT] == 0
-        rpt[RPT_GROUPS][i][GRP_KEYVALUE] := xeval(rpt[RPT_GROUPS][i][GRP_KEY])
-        if ! xeval(rpt[RPT_GROUPS][i][GRP_HEADER])
-          lOkay := Confirm(SetMsg(),MsgContinue())
-          exit
-        endif
+        rpt[RPT_GROUPS][i][GRP_KEYVALUE] := ;
+            xeval(rpt[RPT_GROUPS][i][GRP_KEY])
       endif
       rpt[RPT_GROUPS][i][GRP_COUNT] ++
     next i
     if ! lOkay
       exit
     endif
-    if ! RecReport(rpt) .and. ! Confirm(MsgContinue())
+    if ! _oneach(rpt) .and. ! Confirm(MsgContinue())
       lOkay := .f.
       exit
     endif
@@ -440,7 +420,8 @@ else
     ** Mal sehen, was das an Gruppen-Unterbrechungen hervorruft...
     lStop := .f. // (Vielleicht passiert ja auch gar nichts)
     for i := 1 to len(rpt[RPT_GROUPS])
-      if xeval(rpt[RPT_GROUPS][i][GRP_KEY]) != rpt[RPT_GROUPS][i][GRP_KEYVALUE]
+      if xeval(rpt[RPT_GROUPS][i][GRP_KEY]) != ;
+          rpt[RPT_GROUPS][i][GRP_KEYVALUE]
         rpt[RPT_GROUPS][i][GRP_STOP] := .t.
         lStop := .t.
       endif
@@ -449,7 +430,7 @@ else
       ** Mindestens eine Gruppe wurde unterbrochen.
       suForValue -= rpt[RPT_FORLOOP][3]
       if RptValRecord(rpt)
-        GrpStop(.f.)
+        _rupture(.f.)
       else
         lOkay := Confirm(SetMsg(),MsgContinue())
         exit
@@ -459,12 +440,20 @@ else
         lOkay := Confirm(SetMsg(),MsgContinue())
         exit
       endif
+      // restart groups that have stopped:
+      *for i := 1 to len(rpt[RPT_GROUPS])
+      *  snGrpCurrent := i
+      *  grp := rpt[RPT_GROUPS][i]
+      *  if grp[GRP_STOP]
+      *      GrpReset(rpt,grp)
+      *  endif
+      *next i
     endif
   enddo
   if lOkay
     suForValue -= rpt[RPT_FORLOOP][3]
     RptValRecord(rpt)
-    GrpStop(.t.)
+    _rupture(.t.)
   endif
   if lOkay
     lOkay := DoEvents(rpt[RPT_AFTER])
@@ -498,50 +487,146 @@ FUNCTION ForValue
 RETURN suForValue
 
 
+// executed on each row to collect values & print detail
+STATIC FUNCTION _oneach(rpt)
+local i,j,k
+local nValue
+local lFound := .f.
+local cLine := ""
+local lDetail := xeval(rpt[RPT_DETAIL])
+local cln, grp
+local cText
+RETURN .f. if ! xeval(rpt[RPT_ONEACH])
+RETURN .t. if len(rpt[RPT_COLUMNS]) == 0
+if lDetail
+  for k := 1 to len(rpt[RPT_GROUPS])
+    rpt[RPT_GROUPS][k][GRP_DTLCOUNT] += 1
+  next k
+endif
+for i := 1 to len(rpt[RPT_COLUMNS])
+  cln := rpt[RPT_COLUMNS][i]
+  if lDetail .and. i > 1
+    cLine += rpt[RPT_COLSEP]
+  endif
+  if xeval(cln[CLN_WHEN],0)
+    if cln[CLN_VALUE] == NIL
+      nValue := NIL
+    else
+      nValue := xeval(cln[CLN_VALUE])
+      default nValue to 0 // 20070516
+      for j := 1 to len(rpt[RPT_TOTALS])
+        if xeval(rpt[RPT_TOTALS][j][TTL_FOR])
+          for k := 1 to len(rpt[RPT_GROUPS])
+            rpt[RPT_GROUPS][k][GRP_VALUES][j][i] += nValue
+            // rpt[RPT_GROUPS][k][GRP_TTLCOUNT][j] ++
+          next k
+        endif
+      next j
+      lFound := .t.
+    endif
+    if lDetail
+      cText := xeval(cln[CLN_TEXT],nValue)
+    endif
+  * elseif rpt[RPT_TOCSV]
+  *   cText := ""
+  else
+    cText := space(&(cln[CLN_WIDTH]))
+  endif
+  if lDetail
+    if rpt[RPT_TOCSV]
+      cText := val2csv(cln[CLN_TYPE],cText," in column "+ntrim(i))
+    elseif cln[CLN_WIDTH] != NIL
+      if cln[CLN_VALUE] == NIL
+        // class Text
+        cText := padl(cText,&(cln[CLN_WIDTH]))
+      else
+        // class Number
+        cText := padr(cText,&(cln[CLN_WIDTH]))
+      endif
+    endif
+    cLine += cText
+  endif
+next i
+if ! lFound
+  RETURN .f. if ! xeval(rpt[RPT_NOVALUE])
+endif
+for j := 1 to len(rpt[RPT_TOTALS])
+  if xeval(rpt[RPT_TOTALS][j][TTL_FOR]) // 20020620b
+    for k := 1 to len(rpt[RPT_GROUPS])
+      rpt[RPT_GROUPS][k][GRP_TTLCOUNT][j] ++
+    next k
+  endif
+next j
+RETURN .t. if ! lDetail
+aadd(rpt[RPT_LINES],cLine)
+// cLine += rpt[RPT_ROWSEP]
+// RETURN .f. if ! xeval(rpt[RPT_PRINTLINE],cLine)
+RETURN .t.
 
-FUNCTION GrpStop(lFinal)
+
+STATIC FUNCTION _rupture(lFinal)
 local lOkay := .t.
 local i,j
 local grp
+local cText
 RETURN .f. if ! xeval(rpt[RPT_PRETTL])
+for i := len(rpt[RPT_GROUPS]) to 1 step -1
+  snGrpCurrent := i
+  grp := rpt[RPT_GROUPS][i]
+  cText := xeval(grp[GRP_TEXT],grp[GRP_COUNT])
+  if cText != NIL .and. ! grp[GRP_STARTED] .and. grp[GRP_COUNT] > 0
+    if ! xeval(rpt[RPT_GROUPS][i][GRP_HEADER],cText)
+      lOkay := Confirm(SetMsg(),MsgContinue())
+      exit
+    endif
+    if ! xeval(grp[GRP_BEFORE],grp[GRP_COUNT],grp[GRP_DTLCOUNT]) 
+      lOkay := Confirm(SetMsg(),MsgContinue())
+      exit
+    endif
+    grp[GRP_STARTED] := .t.
+  endif
+next i
+for j := 1 to len(rpt[RPT_LINES])
+  RETURN .f. if ! xeval(rpt[RPT_PRINTLINE],;
+    rpt[RPT_LINES][j] + rpt[RPT_ROWSEP])
+next j
+rpt[RPT_LINES] := {}
+*  for i := 1 to len(rpt[RPT_GROUPS]) 
+*    snGrpCurrent := i
+*    grp := rpt[RPT_GROUPS][i]
+*    if lFinal .or. grp[GRP_STOP]
+*      if xeval(grp[GRP_WHEN], grp[GRP_COUNT],grp[GRP_DTLCOUNT] )
+*        for j := 1 to len(grp[GRP_LINES])
+*          RETURN .f. if ! xeval(rpt[RPT_PRINTLINE],;
+*            grp[GRP_LINES][j] + rpt[RPT_ROWSEP])
+*        next j
+*      endif
+*    endif
+*  next i
 for i := 1 to len(rpt[RPT_GROUPS])
   snGrpCurrent := i
   grp := rpt[RPT_GROUPS][i]
   if lFinal .or. grp[GRP_STOP]
-    * 20030221
-    if xeval( grp[GRP_WHEN], ;
-              grp[GRP_COUNT],;
-              grp[GRP_DTLCOUNT])
-      // GRP_BEFORE is also called if there were no detail records
-      // (if GRP_DTLCOUNT > 0, then it has been already called in RecReport())
-      if grp[GRP_DTLCOUNT] > 0 .or. xeval( ;
-        grp[GRP_BEFORE], ;
+    if xeval(grp[GRP_WHEN],grp[GRP_COUNT],grp[GRP_DTLCOUNT])
+      if xeval( ;
+        grp[GRP_AFTER], ;
         grp[GRP_COUNT], ;
-        grp[GRP_DTLCOUNT]  ;
+        grp[GRP_DTLCOUNT] ;
       )
-        if xeval( ;
-          grp[GRP_AFTER], ;
+        for j := 1 to len(rpt[RPT_TOTALS])
+          PrintTotal(j,i)
+        next j
+        if ! xeval( ;
+          grp[GRP_AFTERTTL], ;
           grp[GRP_COUNT], ;
           grp[GRP_DTLCOUNT] ;
         )
-          for j := 1 to len(rpt[RPT_TOTALS])
-            PrintTotal(j,i)
-          next j
-          if ! xeval( ;
-            grp[GRP_AFTERTTL], ;
-            grp[GRP_COUNT], ;
-            grp[GRP_DTLCOUNT] ;
-          )
-            lOkay := .f.
-          endif
+          lOkay := .f.
         endif
       endif
     endif
     if ! lFinal
-      if ! GrpReset(rpt,i)
-        lOkay := Confirm(SetMsg(),MsgContinue())
-        exit
-      endif
+      GrpReset(rpt,grp)
     endif
   endif
 next i
@@ -558,6 +643,7 @@ rpt := array(RPT_ALEN)
 rpt[RPT_ORDER]   := 1
 rpt[RPT_TOTALS]  := {}
 rpt[RPT_COLUMNS] := {}
+rpt[RPT_LINES] := {}
 rpt[RPT_GROUPS]  := {}
 rpt[RPT_VALRECORD]  := {}
 rpt[RPT_ONEACH]  := {||.t.}
@@ -581,7 +667,7 @@ rpt[RPT_ROWSEP]  := ""
 rpt[RPT_PRETTL]  := {||.t.}
 rpt[RPT_POSTTTL]  := {||.t.}
 rpt[RPT_NOVALUE] := {|| Confirm( ;
-  "RecReport() : no column to print record !", ;
+  "_oneach() : no column to print record !", ;
   MsgContinue() ;
 ) }
 aadd(a, { "initialize" ,{|x| xparse(x) } } )
@@ -635,6 +721,7 @@ grp[GRP_ALIGN]  := ALIGN_LEFT
 grp[GRP_FORMAT] := ""
 grp[GRP_HEADER] := {||.t.}
 grp[GRP_DTLCOUNT]  := 0
+grp[GRP_STARTED]  := .f.
 grp[GRP_BEFORE] := {||.t.}
 grp[GRP_AFTERTTL] := {||.t.}
 aadd(a, { "key",     {|x| (grp[GRP_KEY]    := xparse(x)) != NIL } })
@@ -817,8 +904,6 @@ do while ! eof()
 enddo
 RETURN .t.
 
-FUNCTION RepRecCount()
-RETURN snRecCount
 
 * STATIC FUNCTION TtlPrintAll(nGroup)
 * local i
@@ -849,7 +934,9 @@ RETURN .t. if ! xeval( ;
   grp[GRP_TTLCOUNT][nTotal], ;
   grp[GRP_DTLCOUNT] ;
 )
-cLine := trim1(xeval(grp[GRP_TEXT],grp[GRP_COUNT]))
+cText := xeval(grp[GRP_TEXT],grp[GRP_COUNT])
+RETURN .t. if cText == NIL
+cLine := trim1(cText)
 cLine += xeval( ;
   rpt[RPT_TOTALS][nTotal][TTL_TEXT],;
   grp[GRP_TTLCOUNT][nTotal];
@@ -913,21 +1000,27 @@ RETURN rpt[RPT_GROUPS][snGrpCurrent][GRP_VALUES] ;
        [snTtlCurrent][snClnCurrent+nOffset]
 
 
-static FUNCTION GrpReset(rpt,nGroup)
+static FUNCTION GrpReset(rpt,grp)
 local i
 local j
-rpt[RPT_GROUPS][nGroup][GRP_STOP] := .f.
-rpt[RPT_GROUPS][nGroup][GRP_COUNT] := 0
-rpt[RPT_GROUPS][nGroup][GRP_DTLCOUNT] := 0
-rpt[RPT_GROUPS][nGroup][GRP_VALUES] := {}
-rpt[RPT_GROUPS][nGroup][GRP_DONE] := {}
-rpt[RPT_GROUPS][nGroup][GRP_TTLCOUNT] := {}
+grp[GRP_STOP] := .f.
+grp[GRP_COUNT] := 0
+grp[GRP_DTLCOUNT] := 0
+grp[GRP_STARTED] := .f.
+grp[GRP_VALUES] := {}
+grp[GRP_DONE] := {}
+grp[GRP_TTLCOUNT] := {}
+*if grp[GRP_TEXT] == NIL
+*  grp[GRP_TEXTVALUE] := NIL
+*else
+*  grp[GRP_TEXTVALUE] := eval(grp[GRP_TEXT])
+*endif
 for i := 1 to len(rpt[RPT_TOTALS])
-  aadd(rpt[RPT_GROUPS][nGroup][GRP_TTLCOUNT], 0)
-  aadd(rpt[RPT_GROUPS][nGroup][GRP_DONE], .f.)
-  aadd(rpt[RPT_GROUPS][nGroup][GRP_VALUES], {})
+  aadd(grp[GRP_TTLCOUNT], 0)
+  aadd(grp[GRP_DONE], .f.)
+  aadd(grp[GRP_VALUES], {})
   for j := 1 to len(rpt[RPT_COLUMNS])
-    aadd(rpt[RPT_GROUPS][nGroup][GRP_VALUES][i], 0)
+    aadd(grp[GRP_VALUES][i], 0)
   next j
 next i
 RETURN .t.
@@ -1011,99 +1104,6 @@ RETURN .f. if ! eval(rpt[RPT_PRINTLINE],c)
 * PrintLine(c)
 RETURN .t.
 
-**
-** RecReport() - executed on each line to collect values & print detail
-**
-STATIC FUNCTION RecReport(rpt)
-local i,j,k
-local nValue
-local lFound := .f.
-local cLine := ""
-local lDetail := xeval(rpt[RPT_DETAIL])
-local cln, grp
-local cText
-RETURN .f. if ! xeval(rpt[RPT_ONEACH])
-RETURN .t. if len(rpt[RPT_COLUMNS]) == 0
-if lDetail
-  ** GRP_BEFORE wird vor dem Verarbeiten
-  ** des ersten Records ausgefhrt, der effektiv ausgedruckt wird.
-  for k := 1 to len(rpt[RPT_GROUPS])
-    snGrpCurrent := k
-    grp := rpt[RPT_GROUPS][k]
-    grp[GRP_DTLCOUNT] += 1
-    if grp[GRP_DTLCOUNT] == 1
-      if xeval( grp[GRP_WHEN], ;
-                grp[GRP_COUNT],;
-                grp[GRP_DTLCOUNT])
-        RETURN .f. if ! xeval( ;
-          grp[GRP_BEFORE], ;
-          grp[GRP_COUNT], ;
-          grp[GRP_DTLCOUNT] ;
-        )
-      endif
-    endif
-  next k
-endif
-for i := 1 to len(rpt[RPT_COLUMNS])
-  if lDetail .and. i > 1
-    cLine += rpt[RPT_COLSEP]
-  endif
-  cln := rpt[RPT_COLUMNS][i]
-  if xeval(cln[CLN_WHEN],0)
-    if cln[CLN_VALUE] == NIL
-      nValue := NIL
-    else
-      nValue := xeval(cln[CLN_VALUE])
-      default nValue to 0 // 20070516
-      for j := 1 to len(rpt[RPT_TOTALS])
-        if xeval(rpt[RPT_TOTALS][j][TTL_FOR])
-          for k := 1 to len(rpt[RPT_GROUPS])
-            rpt[RPT_GROUPS][k][GRP_VALUES][j][i] += nValue
-            // rpt[RPT_GROUPS][k][GRP_TTLCOUNT][j] ++
-          next k
-        endif
-      next j
-      lFound := .t.
-    endif
-    if lDetail
-      cText := xeval(cln[CLN_TEXT],nValue)
-    endif
-  * elseif rpt[RPT_TOCSV]
-  *   cText := ""
-  else
-    cText := space(&(cln[CLN_WIDTH]))
-  endif
-  if lDetail
-    if rpt[RPT_TOCSV]
-      cText := val2csv(cln[CLN_TYPE],cText," in column "+ntrim(i))
-    elseif cln[CLN_WIDTH] != NIL
-      if cln[CLN_VALUE] == NIL
-        // class Text
-        cText := padl(cText,&(cln[CLN_WIDTH]))
-      else
-        // class Number
-        cText := padr(cText,&(cln[CLN_WIDTH]))
-      endif
-    endif
-    cLine += cText
-  endif
-next i
-if ! lFound
-  RETURN .f. if ! xeval(rpt[RPT_NOVALUE])
-endif
-for j := 1 to len(rpt[RPT_TOTALS])
-  if xeval(rpt[RPT_TOTALS][j][TTL_FOR]) // 20020620b
-    for k := 1 to len(rpt[RPT_GROUPS])
-      rpt[RPT_GROUPS][k][GRP_TTLCOUNT][j] ++
-    next k
-  endif
-next j
-RETURN .t. if ! lDetail
-cLine += rpt[RPT_ROWSEP]
-// PrintLine(cLine)
-RETURN .f. if ! xeval(rpt[RPT_PRINTLINE],cLine)
-RETURN .t.
-
 * FUNCTION RptGrpCount(nGroup) ; RETURN RptCount(nGroup)
 
 FUNCTION RptCount(nGroup)
@@ -1119,6 +1119,24 @@ RETURN (rpt[RPT_GROUPS][nGroup][GRP_COUNT] == 1)
 
 FUNCTION RptValue(nGroup,nTotal,nColumn)
 RETURN rpt[RPT_GROUPS][nGroup][GRP_VALUES][nTotal][nColumn]
+
+FUNCTION RepRecCount() ; RETURN snRecCount
+
+/*
+  19990820. In der Intrastat-Erkl„rung wird ohne detail gearbeitet, d.h.
+  die scheinbaren Detail-Zeilen sind in Wirklichkeit schon
+  Zwischensummen. Diese Zwischensummen sollen da sein, aber die
+  Gesamtsumme soll in manchen Kolonnen nicht stehen. Dort wird dann im
+  xsum=... auf RptTotal() getestet...
+*/
+FUNCTION RptGroup() ; RETURN snGrpCurrent
+
+FUNCTION RptTotal() ; RETURN snTtlCurrent
+
+FUNCTION RptGrpKey()
+RETURN rpt[RPT_GROUPS][snGrpCurrent][GRP_KEYVALUE]
+
+#endif DEF_REPORT
 
 **
 ** DbfDelete()
@@ -1174,18 +1192,6 @@ endif
 SetMnuDone()
 RETURN lOkay
 
-/*
-  19990820. In der Intrastat-Erkl„rung wird ohne detail gearbeitet, d.h.
-  die scheinbaren Detail-Zeilen sind in Wirklichkeit schon
-  Zwischensummen. Diese Zwischensummen sollen da sein, aber die
-  Gesamtsumme soll in manchen Kolonnen nicht stehen. Dort wird dann im
-  xsum=... auf RptTotal() getestet...
-*/
-FUNCTION RptGroup() ; RETURN snGrpCurrent
-FUNCTION RptTotal() ; RETURN snTtlCurrent
-
-
-#endif DEF_REPORT
 
 **
 **  IniLoad()

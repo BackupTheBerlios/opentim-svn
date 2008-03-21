@@ -1310,7 +1310,7 @@ Die folgenden Anweisungen sind alle optional :
 
 
 20060810
-- Buggefahr in StkReset(). Also bei Himaco, Calu, etc. testen!
+- Buggefahr in StkReset(). 
 
 20060824
 - PreVnaUndo muss jetzt selber SetMsg() aufrufen, falls er nicht
@@ -1318,7 +1318,7 @@ Die folgenden Anweisungen sind alle optional :
 
 
 20060825
-- DEF_VNA. (Himaco!)
+- DEF_VNA.
   Zun„chst in VNA.DEF ein manuelles Feld "Match" definieren, damit die
   Angaben nicht verloren gehen.
   Konvertierungsroutine fr VNL->Match schreiben. VNL->Match enth„lt
@@ -1369,7 +1369,7 @@ Bei Umstieg Clipper/Xbase:
 20071003-20071231
 - Irgendwann in dieser Periode habe ich eine Änderung gemacht, 
   durch die nach dem Upgrade Rundungsdifferenzen beim 
-  Integritätstest kommen:
+  Integrit„tstest kommen:
   VKP A62250 : Total du document (60.60) en désaccord avec contenu (60.58)
   
 
@@ -1396,3 +1396,5 @@ Bei Umstieg Clipper/Xbase:
   ersetzt werden durch:
     OnSuccess OpenCsv(i_OutputFile())    
   Dann ist die excel.bat nicht mehr n”tig.
+20080320
+- Einige fundamentale Žnderungen im Reportgenerator. Buggefahr.

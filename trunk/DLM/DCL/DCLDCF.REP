@@ -11,10 +11,13 @@ area { oDcf() }
 order 1
 start DCL->IdDcl
 while {||DCF->IdDcl==DCL->IdDcl}
+#exec setvar("decpos",0)
 
+// ValidateRecord {||setvar("values",\
+  DcfValues(getvar("range1"),getvar("range2"),getvar("range3"),\
+  getvar("decpos")))}
 ValidateRecord {||setvar("values",\
-  DcfValues(getvar("range1"),getvar("range2"),getvar("range3"),0))}
-// ValidateRecord {||SetDecPos(0)}
+  DcfValues(getvar("range1"),getvar("range2"),getvar("range3")))}
 
 // filter {|| !"H"$DCF->Attrib }
 // filter {|| empty(DCF->Type).or."A"$DCF->Attrib
@@ -24,71 +27,43 @@ filter {|| "A"$DCF->Attrib\
            .or.!is0(getvara("values",3,0))\
        }
 
+//  before={||PrintLine(trim(eval(getvar("bcDcfHeader"),0))+":")} \
+
+
 #exec setvar("bcDcfHeader",{|| \
-    +padr(left(DCF->IdDcf,5-RptGroup()),LenIdDcf()+1)\
-    +DbfPeek(oDcf(),\
-      DCF->IdDcl+padr(left(DCF->IdDcf,5-RptGroup()),LenIdDcf()),\
-      "trim(LngExpr('DCF->Name'))",\
-      "") \
-  })
-
-// text={|| \
-    +padr(left(DCF->IdDcf,4),LenIdDcf()+1)\
-    +DbfPeek(oDcf(),\
-      DCF->IdDcl+padr(left(DCF->IdDcf,4),LenIdDcf()),\
-      "trim(LngExpr('DCF->Name'))",\
-      "") \
-  } \
-  text={|| \
-    +padr(left(DCF->IdDcf,3),LenIdDcf()+1)\
-    +DbfPeek(oDcf(),\
-      DCF->IdDcl+padr(left(DCF->IdDcf,3),LenIdDcf()),\
-      "trim(LngExpr('DCF->Name'))",\
-      "") \
-  } \
-  text={|| \
-    +padr(left(DCF->IdDcf,2),LenIdDcf()+1)\
-    +DbfPeek(oDcf(),\
-      DCF->IdDcl+padr(left(DCF->IdDcf,2),LenIdDcf()),\
-      "trim(LngExpr('DCF->Name'))",\
-      "") \
-  } \
-  text={|| \
-    padr(left(DCF->IdDcf,1),LenIdDcf()+1)\
-    +DbfPeek(oDcf(),\
-      DCF->IdDcl+padr(left(DCF->IdDcf,1),LenIdDcf()),\
-      "trim(LngExpr('DCF->Name',TplLang()))",\
-      "") \
-  } \
-
-// before wird nicht ausgefhrt, weil when dann immer .f. zurckgibt
-// (weil nDtlCount dann noch 1 ist)
+  iif(\
+    len(trim(DCF->IdDcf)) <= len(RptGrpKey()),\
+    NIL,\
+    DbfPeek(oDcf(),\
+      DCF->IdDcl+padr(RptGrpKey(),LenIdDcf()),\
+      "padr(RptGrpKey(),LenIdDcf()+1)+space(len(trim(DCF->IdDcf))-1)+trim(LngExpr('DCF->Name'))",\
+      NIL))})
 
 group key={||left(DCF->IdDcf,4) } \
   text=getvar("bcDcfHeader") \
   when={|nCount,nDtlCount|nDtlCount>1} \
-  before={||PrintLine(eval(getvar("bcDcfHeader"),0))} \
+  header={|cText|PrintLine(trim(cText)+":")} \
   afterTotals={||PrintLine()}\
   format="B"
 
 group key={||left(DCF->IdDcf,3) } \
   text=getvar("bcDcfHeader") \
   when={|nCount,nDtlCount|nDtlCount>1} \
+  header={|cText|PrintLine(trim(cText)+":")} \
   afterTotals={||PrintLine()}\
-  before={||PrintLine(eval(getvar("bcDcfHeader"),0))} \
   format="B"
 
 group key={||left(DCF->IdDcf,2) } \
   text=getvar("bcDcfHeader") \
   when={|nCount,nDtlCount|nDtlCount>1} \
-  before={||PrintLine(eval(getvar("bcDcfHeader"),0))} \
+  header={|cText|PrintLine(trim(cText)+":")} \
   afterTotals={||PrintLine()}\
   format="B"
 
 group key={||left(DCF->IdDcf,1) } \
   text=getvar("bcDcfHeader") \
-  when={|nCount,nDtlCount|nDtlCount>1} \
-  before={||PrintLine(eval(getvar("bcDcfHeader"),0))} \
+  when={|nCount,nDtlCount|nDtlCount>0} \
+  header={|cText|PrintLine(trim(cText)+":")} \
   after={||RptTit2()}\
   afterTotals={||PrintLine()}\
   format="B"
@@ -97,24 +72,25 @@ group key={||left(DCF->IdDcf,1) } \
 
 column header=tr("Item","Art.","Code") width=LenIdDcf() \
        text={||DCF->IdDcf}
-column header="Sel" width=LenIdBil() text={||DCF->IdBil}
 column header=tr("Description","Bezeichnung",\
        "Description","Omschrijving") width=43 \
-       text={||padr(DcfName(NIL,TplLang()),43)}
+       text={||padr(space(len(trim(DCF->IdDcf))-1)+DcfName(NIL,TplLang()),43)}
+// column header="Sel" width=LenIdBil() text={||DCF->IdBil}
+column header="Gen" width=LenIdGen() text={||DCF->IdGen}
 column header=padl(trim(DlgValue("range1")),LenMntF()) \
        width=LenMntF() \
        value={||getvara("values",1,0)} \
-       type="T" decpos=0
+       type="T" decpos=getvar("decpos")
 column header=padl(trim(DlgValue("range2")),LenMntF()) \
        width=LenMntF() \
        value={||getvara("values",2,0)} \
-       type="T" decpos=0
+       type="T" decpos=getvar("decpos")
 
 #if !empty(getvar("range3"))
 column header=padl(trim(DlgValue("range3")),LenMntF()) \
        width=LenMntF() \
        value={||getvara("values",3,0)} \
-       type="T" decpos=0
+       type="T" decpos=getvar("decpos")
 #endif
 
 
@@ -122,4 +98,5 @@ column header=padl(trim(DlgValue("range3")),LenMntF()) \
 // column header="Type" width=4 text={||DCF->Type+"  "}
 // column header="D/C" width=3 text={||" "+DCF->DC+" "}
 
-total text={||tr("Total","Summe","Total","Total","kokku")+" "} when={||.t.}
+total text={||tr("Total","Summe","Total","Total","kokku")+" "} \
+      when={||.t.}

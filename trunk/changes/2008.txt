@@ -269,9 +269,16 @@
 - Nachtrag 20080316 RepPrint() : SetAsPdf(.f.) und SetAsMail(.f.) werden jetzt nur gemacht, wenn cIdDlg nicht NIL ist. Denn z.B. DLM\DCL\DCLPRINT.ACT ruft zuerst DlgExec() und dann je nach Auswahl verschiedene RepPrint() ohne weiteren Dialog.
 
 - DLM\DCL\DCLDCF.REP 
-
   a) druckt alle Zahlen jetzt ohne Nachkommastellen. In Estland wird die Buchhaltung zwar auf den Cent genau gefhrt (DevDecPos("EEK") ist 2), aber in der Bilanz muss man die Betr„ge runden.
   
   b) Ich definiere jetzt eine bcDcfText, die ich als GRP_TEXT fr alle Gruppen benutze. Der Codeblock in dieser Variablen bentuzt RptGroup() um den Level rauszufinden.
   
   c) Neue M”glichkeit M+ fr DCF->Type. In DcfValues() habe ich ein paar eher „sthetische nderungen gemacht.
+  
+20080320
+- Das GRP_WHEN bekam als nCount und nDtlCount meistens 1 statt des tats„chlichen Wertes. Dadurch konnte effektiv kein Gruppentitel definiert werden, der nur erscheint, wenn mehr als 1 Record in der Gruppe vorkommen. Jetzt geht das.
+- Wenn GRP_BEFORE .f. zurck gibt, dann galt das bisher als Filter (gewisse Totals wurden dann nicht gedruckt). Jetzt gilt es als Fehler und TIM fragt dann MsgContinue().
+- GRP_TEXT kann jetzt NIL zurck geben, und das bedeutet, dass fr diese Instanz der Gruppe weder Titel noch Summen gedruckt werden sollen.
+- Einige fundamentale nderungen im Reportgenerator. Buggefahr.
+- DLM\DCL\DCLDCF.REP weiter optimiert
+- DcfValues() weiter optimiert. Neue M”glichkeit "M-" (oder "I-" oder "F-") zeigt die Zahl nur an, wenn sie negativ ist.
