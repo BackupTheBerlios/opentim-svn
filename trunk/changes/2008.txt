@@ -289,3 +289,6 @@
 - oError:args wird jetzt auch in den TIM-Sitzungsbericht geschrieben. Diese Info stand bisher immer nur in der xpperror.log
 - Man kann jetzt (theoretisch) TIM auf der Standarddatenbank von einem runtergeladenen SVN-Baum aus benutzen.
 - Neue Funktion SetMont2CSV(), mit der man konfigurieren kann, wie Zahlen in eine CSV-Datei geschrieben werden. Excel 2000 will Punkte als Dezimaltrenner haben, alle anderen Excel-Versionen und OpenOffice wollen Kommas haben.
+
+20080322
+- DcfGenFilter() schaute auch ohne DEF_BIL noch auf DCF->IdBil.

@@ -204,10 +204,15 @@ RETURN ".t."
 * RETURN .t.
 
 FUNCTION DcfGenFilter()
-if empty(DCF->IdBil)
-  RETURN "left(GEN->IdGen,"+ntrim(len(trim(DCF->IdGen)))+")=='"+trim(DCF->IdGen)+"'"
-endif
-RETURN "left(GEN->IdBil,"+ntrim(len(trim(DCF->IdBil)))+")=='"+trim(DCF->IdBil)+"'"
+#ifdef DEF_BIL
+  RETURN "left(GEN->IdBil," ;
+    + ntrim(len(trim(DCF->IdBil))) ;
+    + ")=='" + trim(DCF->IdBil) + "'" if !empty(DCF->IdBil)
+#endif DEF_BIL  
+RETURN "left(GEN->IdGen," ;
+  + ntrim(len(trim(DCF->IdGen))) ;
+  + ")=='" + trim(DCF->IdGen) + "'"
+
 * if !empty(DCF->DclSel)
 *   RETURN "GEN->DclSel$'"+trim(DCF->DclSel)+"'"
 * endif
@@ -217,9 +222,9 @@ RETURN "left(GEN->IdBil,"+ntrim(len(trim(DCF->IdBil)))+")=='"+trim(DCF->IdBil)+"
 * endif
 * RETURN ".f."
 
-FUNCTION DcfValExpr()
-RETURN "if(HST->DC=='"+DCF->DC;
-  +"',val(HST->Mont),if(DCF->Type=='MX',0,-val(HST->Mont)))"
+* FUNCTION DcfValExpr()
+* RETURN "if(HST->DC=='"+DCF->DC;
+*   +"',val(HST->Mont),if(DCF->Type=='MX',0,-val(HST->Mont)))"
 
 FUNCTION DcfValues(r1,r2,r3,nDecPos)
 local xlGenFilter := DcfGenFilter()

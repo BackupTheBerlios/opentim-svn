@@ -68,7 +68,7 @@
 
 #define DEF_ACT
 
-#define DEF_BIL
+// #define DEF_BIL
 
 * #define DEF_KVK
 
