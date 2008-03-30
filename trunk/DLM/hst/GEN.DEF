@@ -22,11 +22,11 @@ ddAddSpecial({||GenRename()}, MsgMnuRename(), -31 )
 ddPrintRecord({||ActExec("GENPRINT")})
 !HasDcl().or.ddAddSpecial(\
   {||DbfEdit(\
-    {oDcf(),oDcl(),oBil()},\
-    "Bilanzposten pro Bilanzkonto : " + FIELD->IdBil ,\
-    "DCFBIL",NIL,\
+    {oDcf(),oDcl(),oGen()},\
+    "Bilanzposten pro Generalkonto : " + FIELD->IdGen ,\
+    "DCFGEN",NIL,\
     ".t.",\
-    FIELD->IdBil\
+    FIELD->IdGen\
   )}, \
   "~Bilanzposten/Konto       [F8]",\
   -7\

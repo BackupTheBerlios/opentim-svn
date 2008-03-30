@@ -835,7 +835,8 @@ define data b                 ;
 ddIndex b on GEN->IdGen                   // ORD_GEN_IDGEN
 ddIndex b on GEN->IdCtr + GEN->IdGen      // ORD_GEN_IDCTR
 #ifdef DEF_BIL
-ddIndex b on GEN->IdBil + GEN->IdGen  for !empty(GEN->IdBil) // ORD_GEN_BIL
+ddIndex b on GEN->IdBil + GEN->IdGen for !empty(GEN->IdBil) 
+  // ORD_GEN_BIL
 #endif DEF_BIL
 ddFld IdGen   ,C, LenIdGen(),0  when .f. picture PIC_ID
 #ifdef DEF_TAX
