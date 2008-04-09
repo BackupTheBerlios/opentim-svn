@@ -414,7 +414,7 @@ local a := VnlSave()
 * #else
 *   local xlVnaFilter := ".t."
 * #endif DEF_VNA
-open area b, oArt(), oGen(), oSpc(), oVen(), oGra(), oNew(), oVna(), oDls()
+open area b, oArt(), oGen(), oSpc(), oVen(), oGra(), oNew(), oVna(), oDls(), oAna()
   softseek cIdJnl + cIdDoc
   do while ! eof() .and. FIELD->IdJnl == cIdJnl ;
                    .and. FIELD->IdDoc == cIdDoc

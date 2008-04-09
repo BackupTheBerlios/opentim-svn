@@ -1,11 +1,11 @@
 //
-// MBRPAR2.QRY - generated 07/02/06
-// for MBR.DBF
+// MBRPAR2.QRY - generated 08.04.08
+// for MBR.FOX
 //
 window 12 76 10 0 
 column 1 Liste pict @K@!
 column 2 Firme block padr(ParName(MBR->IdPar),60) pict @k@s25
-column 7 Bemerkung pict @k@s20
+column 7 Bemerkung pict @k@s30
 column 5 Bezeichnung pict @k@s15 skip .t.
 column 6 Attrib pict @K@! skip .t.
 column 11 Date skip .t. say ""
