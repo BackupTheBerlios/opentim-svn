@@ -272,13 +272,18 @@ if !empty(r3)
 endif
 cStart := PerStart(cStart)
 open area oGen()
-  if empty(DCF->IdGen)
-    ddSetOrder(ORD_GEN_BIL)
-    softseek trim(DCF->IdBil)
-  else
+  #ifdef DEF_BIL
+    if empty(DCF->IdGen)
+      ddSetOrder(ORD_GEN_BIL)
+      softseek trim(DCF->IdBil)
+    else
+      ddSetOrder(1)
+      softseek trim(DCF->IdGen)
+    endif
+  #else
     ddSetOrder(1)
     softseek trim(DCF->IdGen)
-  endif
+  #endif DEF_BIL  
   do while lOkay .and. !eof().and.&xlGenFilter
     open area oHst(),oGen(),oPar(),oVen(),oFin()
       ddSetOrder(3)

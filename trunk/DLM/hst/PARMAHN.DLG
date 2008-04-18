@@ -35,6 +35,8 @@ field name="IstLetzte" \
       pick={|x|PickDbcAttr("HSTVEN.DBC",x)}
 
 #include "PREVIEW.DLG"
+#include "ASPDF.DLG"
 
-after fprint("PARMAHN.TPL","[]")
+after fprint("PARMAHN.TPL","[]",\
+  NIL,NIL,NIL,NIL,NIL,NIL,SetAsPdf(),SetAsMail())
 after .f.

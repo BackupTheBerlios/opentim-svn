@@ -1,0 +1,10 @@
+before SetTplIni("MAHN")
+before empty(PAR->IdDev).or.SetDevise(PAR->IdDev)
+field caption="W„hrung  " \
+      block={|x|SetDevise(x)}\
+      picture="@k@!"\
+      pick={|x|PickDev(x)}\
+      valid={||DevExist(SetDevise())}
+
+#include "PREVIEW.DLG"
+#include "ASPDF.DLG"

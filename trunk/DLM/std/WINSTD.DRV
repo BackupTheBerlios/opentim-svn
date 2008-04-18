@@ -1,17 +1,24 @@
 // Windows-Standarddrucker oder PDF-Datei
-// (c) 2002-2007 Luc Saffre
+// (c) 2002-2008 Luc Saffre
+// TIM driver for lino.textprinter
+// vertical font sizes were determined using:
+// lino prn2pdf -s 12 docs\examples\textprinter\7.prn
 Name           Windows or PDF
 Reset      ""
 FormFeed       chr(12)
 
 Font  5cpi  5 28/72 chr(27)+"c5 "
-Font 10cpi 10 11.69/63 chr(27)+"c10 "
-Font 12cpi 12 11.69/74 chr(27)+"c12 "
-Font 13cpi 13 11.69/81 chr(27)+"c13 "
-Font 14cpi 14 11.69/87 chr(27)+"c15 "
-Font 15cpi 15 11.69/93 chr(27)+"c15 "
-Font 17cpi 17 11.69/105 chr(27)+"c17 "
-Font 20cpi 20 11.69/124 chr(27)+"c20 "
+Font 10cpi 10 11.69/64 chr(27)+"c10 "
+Font 11cpi 11 11.69/69 chr(27)+"c11 "
+Font 12cpi 12 11.69/76 chr(27)+"c12 "
+Font 13cpi 13 11.69/82 chr(27)+"c13 "
+Font 14cpi 14 11.69/88 chr(27)+"c14 "
+Font 15cpi 15 11.69/94 chr(27)+"c15 "
+Font 16cpi 16 11.69/101 chr(27)+"c16 "
+Font 17cpi 17 11.69/107 chr(27)+"c17 "
+Font 18cpi 18 11.69/113 chr(27)+"c18 "
+Font 19cpi 18 11.69/120 chr(27)+"c19 "
+Font 20cpi 20 11.69/125 chr(27)+"c20 "
 
 BoldOn   chr(27)+"b1"
 BoldOff  chr(27)+"b0"
@@ -20,7 +27,7 @@ ItalOff  chr(27)+"i0"
 UnderOn  chr(27)+"u1"
 UnderOff chr(27)+"u0"
 
-Option L  Landscape     chr(27)+"L" // prn2pdf-specific ctrl sequence
+Option L  Landscape     chr(27)+"L"
 Option 8  8LinesPerInch chr(27)+"l8 "
 Option 7  7LinesPerInch chr(27)+"l7 "
 Option 6  6LinesPerInch chr(27)+"l6 "

@@ -292,3 +292,12 @@
 
 20080322
 - DcfGenFilter() schaute auch ohne DEF_BIL noch auf DCF->IdBil.
+
+20080414
+- DLM\STD\WINSTD.DRV : Zeilenhîhen leicht verÑndert (entsprechend der neuen Resultate mit docs\examples\textprinter\7.prn), neue Schriftgrî·en 11, 18 und 19, ein Bug bei 14 cpi.
+
+- DLM\HST: 
+  - Neue Datei MAHN.DLG, die momentan lediglich PREVIEW.DLG und
+    ASPDF.DLG included. FÅr BM.
+  - Die Standardmahnung PARMAHN.DLG (die momentan noch keiner benutzt)
+    hat jetzt auch ASPDF.DLG

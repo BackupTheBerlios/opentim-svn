@@ -46,7 +46,7 @@ while cblock("left(HST->IdGen,"\
       when={||"D"$GEN->Attrib}
 
 group key={|| HST->IdGen } \
-      text={|| NIL} \
+      text={|| ""} \
       when={||.t.} \
       after={|nCount,nDetail|nDetail>0.or."D"$GEN->Attrib} \
       align="R" \

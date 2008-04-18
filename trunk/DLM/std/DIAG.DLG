@@ -1,4 +1,4 @@
-before SetTplIni("PDF")
+before SetTplIni("LISTE")
 title MnuItemName()
 field name="diag.Path" \
       caption2=" Path" \
