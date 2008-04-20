@@ -8,7 +8,7 @@ header3 ""
   filter cblock("'"+DlgValue("ParAttr")+"'$PAR->Attrib")
 #endif
 
-area { oPar(), oPlz() }
+area { oPar(), oPlz(), oArt() }
 index for="ParCtpSum(PAR->IdPar,'val(Umsatz)','"+DlgValue("IdCtr")+"')!=0" on="-ParCtpSum(PAR->IdPar,'val(Umsatz)','"+DlgValue("IdCtr")+"')"
 group text={|x|"alle"} align="L"
 column header="Nr." width=LenIdPar() text={||PAR->IdPar}

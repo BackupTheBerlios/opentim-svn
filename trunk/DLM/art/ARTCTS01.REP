@@ -4,7 +4,7 @@ header1 utr("Best/Worst Sellers","Renner/Penner-Liste",\
  "Chiffre d'affaires par article")
 header2 PerText()
 header3 "Journal " + DlgValue("IdJnl")
-area { oArt(), oCts(), oGra() }
+area { oArt(), oCts(), oGra(), oPar() }
 // #exec setvar("ByGroup",.t.)
 
 #if getvar("ByGroup")=="X"
