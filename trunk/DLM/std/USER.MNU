@@ -47,6 +47,9 @@ MnuAddItem(utr("~Balance entries           ","~Bilanzposten              ","Comp
 MnuAddItem(\
   utr("D~eclarations"),\
   {||DbfEdit({oDcl()},MnuItemName())})
+MnuAddItem(\
+  utr("A~nnual report","Jahresbericht","Rapport annuel"),\
+  {||DlgExec("AA")})
 // MnuAddItem(\
   utr("Cash Flo~w Statement entries"),\
   {||DbfEdit({oDcf()},MnuItemName())})

@@ -3526,6 +3526,30 @@ else
 endif
 RETURN utos(v)
 
+
+FUNCTION val2html(cType,v,cSrc,nDecPos)
+default cSrc to ""
+default nDecPos to SetDecPos()
+if cType == GTYPE_MEMO
+  RETURN strtran(strtran(v,chr(141)," "),'"','""')
+elseif cType == GTYPE_CHAR
+  RETURN v
+elseif cType == GTYPE_DATE
+  RETURN dtocf(v)
+elseif cType == GTYPE_NUMERIC
+  RETURN ltrim(komma(ntom(v,nDecPos,20)))
+elseif cType == GTYPE_AMOUNT
+  RETURN ltrim(v)
+elseif cType == GTYPE_QTY
+  RETURN ltrim(komma(v))
+else
+  raise("Invalid type "+utos(cType))
+endif
+RETURN utos(v)
+
+
+
+
 FUNCTION mont2csv(cMont)
 RETURN eval(sbMont2CSV,cMont) // '"'+komma(alltrim(cMont))+'"'
 

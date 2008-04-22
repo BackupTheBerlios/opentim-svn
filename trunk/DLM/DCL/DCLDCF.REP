@@ -27,7 +27,7 @@ filter {|| "A"$DCF->Attrib\
            .or.!is0(getvara("values",3,0))\
        }
 
-//  before={||PrintLine(trim(eval(getvar("bcDcfHeader"),0))+":")} \
+//  before={||rwriteln(trim(eval(getvar("bcDcfHeader"),0))+":")} \
 
 
 #exec setvar("bcDcfHeader",{|| \
@@ -42,30 +42,30 @@ filter {|| "A"$DCF->Attrib\
 group key={||left(DCF->IdDcf,4) } \
   text=getvar("bcDcfHeader") \
   when={|nCount,nDtlCount|nDtlCount>1} \
-  header={|cText|PrintLine(trim(cText)+":")} \
-  afterTotals={||PrintLine()}\
+  header={|cText|rwriteln(trim(cText)+":")} \
+  afterTotals={||rwriteln()}\
   format="B"
 
 group key={||left(DCF->IdDcf,3) } \
   text=getvar("bcDcfHeader") \
   when={|nCount,nDtlCount|nDtlCount>1} \
-  header={|cText|PrintLine(trim(cText)+":")} \
-  afterTotals={||PrintLine()}\
+  header={|cText|rwriteln(trim(cText)+":")} \
+  afterTotals={||rwriteln()}\
   format="B"
 
 group key={||left(DCF->IdDcf,2) } \
   text=getvar("bcDcfHeader") \
   when={|nCount,nDtlCount|nDtlCount>1} \
-  header={|cText|PrintLine(trim(cText)+":")} \
-  afterTotals={||PrintLine()}\
+  header={|cText|rwriteln(trim(cText)+":")} \
+  afterTotals={||rwriteln()}\
   format="B"
 
 group key={||left(DCF->IdDcf,1) } \
   text=getvar("bcDcfHeader") \
   when={|nCount,nDtlCount|nDtlCount>0} \
-  header={|cText|PrintLine(trim(cText)+":")} \
+  header={|cText|rwriteln(trim(cText)+":")} \
   after={||RptTit2()}\
-  afterTotals={||PrintLine()}\
+  afterTotals={||rwriteln()}\
   format="B"
 
 // group text={|x|"Gesamt"} when={||.t.}

@@ -1,4 +1,5 @@
 // FIN.DEF
+ddAddField("Memo","M",10,0)
 ddAddSpecial(\
   {||DlgExec("JNLIDDOC")}, \
   "~Letzte Dokumentnummer setzen  ",\

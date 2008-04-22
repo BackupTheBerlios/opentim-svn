@@ -51,7 +51,8 @@
 #define RPT_RECNOS      28
 #define RPT_FORLOOP     29
 #define RPT_LINES       30
-#define RPT_ALEN        30
+#define RPT_TOHTML      31
+#define RPT_ALEN        31
 
 
 #define GRP_KEY        1
@@ -173,7 +174,7 @@ endif
 rpt := rptSave
 RETURN lOkay
 
-FUNCTION RepExec(cIdRep,cIdDlg,cTitle,lToCSV)
+FUNCTION RepExec(cIdRep,cIdDlg,cTitle,lToCSV,lToHtml)
 local rptSave := rpt
 local lOkay
 if cIdDlg != NIL
@@ -182,7 +183,7 @@ if cIdDlg != NIL
   endif
   RETURN .f. if ! DlgExec(cIdDlg)
 endif
-if (rpt := RptLoad(cIdRep,lToCSV)) == NIL
+if (rpt := RptLoad(cIdRep,lToCSV,lToHtml)) == NIL
   rpt := rptSave
   RETURN .f.
 endif
@@ -202,7 +203,8 @@ else
 endif
 RETURN .t.
 
-
+FUNCTION Rep2Html(cIdRep,cIdDlg,cTitle)
+RETURN RepExec(cIdRep,cIdDlg,cTitle,.f.,.t.)
 
 **
 **
@@ -225,6 +227,8 @@ if rpt[RPT_TOCSV]
     RETURN !SetMsg(cOutFile+MsgDosError(doserror()))
   endif
   rpt[RPT_PRINTLINE] := {|cLine|fwrite(fd,dos2latin1(cLine)+CR_LF),.t.}
+elseif rpt[RPT_TOHTML]
+  rpt[RPT_PRINTLINE] := {|cLine| toStream(cLine+CR_LF)}
 endif
 if ! DoEvents(rpt[RPT_BEFORE])
   if fd != -1
@@ -237,6 +241,9 @@ rpt[RPT_TEXTWIDTH] := 0
 rpt[RPT_TEXTCOLUMNS] := 1
 if rpt[RPT_TOCSV]
   default rpt[RPT_COLSEP] to csvsep()
+elseif rpt[RPT_TOHTML]
+  default rpt[RPT_COLSEP] to ""
+  RETURN .f. if ! eval(rpt[RPT_PRINTLINE],"<TABLE>")
 else
   default rpt[RPT_COLSEP] to " "
 endif
@@ -267,6 +274,8 @@ if rpt[RPT_TOCSV]
   RptTit2()
   RptTit1()
   RptTit2()
+elseif rpt[RPT_TOHTML]
+  // pass
 elseif lEmbedded
   if nLIndent != NIL
     p_setlmargin(nOldLMargin+nLIndent)
@@ -292,6 +301,17 @@ else
   endif
   // MsgDisplay(cTitle + "...")
 endif
+
+if rpt[RPT_TOHTML]
+  RETURN .f. if ! eval(rpt[RPT_PRINTLINE],"<thead>")
+  for j := 1 to len(rpt[RPT_COLUMNS])
+    RETURN .f. if ! eval(rpt[RPT_PRINTLINE],;
+      "<th>"+join(rpt[RPT_COLUMNS][j][CLN_HEADER],"<br>")+"</th>")
+  next j
+  RETURN .f. if ! eval(rpt[RPT_PRINTLINE],"</thead>")
+  RETURN .f. if ! eval(rpt[RPT_PRINTLINE],"<tbody>")
+endif
+
 if rpt[RPT_FORLOOP] == NIL
   BEGIN SEQUENCE
     if ! AreaOpen(rpt[RPT_AREA],.f.) ; BREAK ; endif
@@ -502,6 +522,9 @@ if lDetail
   for k := 1 to len(rpt[RPT_GROUPS])
     rpt[RPT_GROUPS][k][GRP_DTLCOUNT] += 1
   next k
+  if rpt[RPT_TOHTML]
+    RETURN .f. if ! eval(rpt[RPT_PRINTLINE],"<tr>")
+  endif
 endif
 for i := 1 to len(rpt[RPT_COLUMNS])
   cln := rpt[RPT_COLUMNS][i]
@@ -535,6 +558,14 @@ for i := 1 to len(rpt[RPT_COLUMNS])
   if lDetail
     if rpt[RPT_TOCSV]
       cText := val2csv(cln[CLN_TYPE],cText," in column "+ntrim(i))
+    elseif rpt[RPT_TOHTML]
+      cText := val2html(cln[CLN_TYPE],cText," in column "+ntrim(i))
+      if cln[CLN_VALUE] == NIL
+        cText := "<td>" + cText
+      else
+        cText := '<td align="right">' + cText
+      endif
+      cText += "</td>"
     elseif cln[CLN_WIDTH] != NIL
       if cln[CLN_VALUE] == NIL
         // class Text
@@ -562,6 +593,14 @@ aadd(rpt[RPT_LINES],cLine)
 // cLine += rpt[RPT_ROWSEP]
 // RETURN .f. if ! xeval(rpt[RPT_PRINTLINE],cLine)
 RETURN .t.
+
+FUNCTION rwriteln(cLine)
+default cLine to ""
+if rpt[RPT_TOHTML]
+  cLine := "<tr><td colspan="+ntrim(len(rpt[RPT_COLUMNS]))+">" ;
+    + cLine + "</td></tr>"
+endif
+RETURN xeval(rpt[RPT_PRINTLINE],cLine)
 
 
 STATIC FUNCTION _rupture(lFinal)
@@ -637,7 +676,7 @@ RETURN xeval(rpt[RPT_POSTTTL])
 
 
 
-STATIC FUNCTION RptLoad(cIdRpt,lToCSV) // cFileName)
+STATIC FUNCTION RptLoad(cIdRpt,lToCSV,lToHtml) 
 local a := {}
 local j
 * local ttl
@@ -661,6 +700,8 @@ else
   DlgDefault("ToCSV",BUTTON_OFF)
   rpt[RPT_TOCSV]   := getvar("ToCSV") == BUTTON_ON
 endif
+default lToHtml to .f.
+rpt[RPT_TOHTML] := lToHtml
 rpt[RPT_WHILE]   := {||.t.}
 rpt[RPT_DETAIL]  := {||.t.}
 rpt[RPT_START]   := ""
@@ -948,6 +989,9 @@ if rpt[RPT_TOCSV]
   for j := 2 to rpt[RPT_TEXTCOLUMNS]
     cLine += rpt[RPT_COLSEP]
   next j
+elseif rpt[RPT_TOHTML]
+  cLine := "<tr><td colspan="+ntrim(rpt[RPT_TEXTCOLUMNS]-1)+">" ;
+    + cLine + "</td>"
 else
   if ALIGN_LEFT $ grp[GRP_ALIGN]
     cLine := padr(cLine,rpt[RPT_TEXTWIDTH])
@@ -957,7 +1001,11 @@ else
   cLine += rpt[RPT_COLSEP]
 endif
 for j := rpt[RPT_TEXTCOLUMNS] to len(rpt[RPT_COLUMNS])
-  if rpt[RPT_COLUMNS][j][CLN_VALUE] == NIL .and. rpt[RPT_COLUMNS][j][CLN_WIDTH] != NIL
+  if rpt[RPT_TOHTML]
+    cLine += '<td align="right">'
+  endif
+  if rpt[RPT_COLUMNS][j][CLN_VALUE] == NIL ;
+      .and. rpt[RPT_COLUMNS][j][CLN_WIDTH] != NIL
     cLine += space(&(rpt[RPT_COLUMNS][j][CLN_WIDTH]))
     * 20070414 cLine += space(rpt[RPT_COLUMNS][j][CLN_WIDTH])
   else
@@ -977,12 +1025,17 @@ for j := rpt[RPT_TEXTCOLUMNS] to len(rpt[RPT_COLUMNS])
   if j < len(rpt[RPT_COLUMNS])
     cLine += rpt[RPT_COLSEP]
   endif
+  if rpt[RPT_TOHTML]
+    cLine += "</td>"
+  endif
 next j
 snClnCurrent := 0
 if ! rpt[RPT_TOCSV]
   if FORMAT_BOLD $ grp[GRP_FORMAT]
     cLine := Tagged("B") + cLine + Tagged("b")
   endif
+elseif rpt[RPT_TOHTML]  
+  cLine += "<tr>"
 endif
 RETURN .f. if ! eval(rpt[RPT_PRINTLINE],cLine)
 * PrintLine(cLine)
@@ -1037,7 +1090,13 @@ for j := 1 to len(rpt[RPT_COLUMNS])
 next j
 for i := 1 to nTitHeight
   c := ""
+  if rpt[RPT_TOHTML] 
+    c += "<tr>"
+  endif
   for j := 1 to len(rpt[RPT_COLUMNS])
+    if rpt[RPT_TOHTML] 
+      c += "<th>"
+    endif
     if i <= len(rpt[RPT_COLUMNS][j][CLN_HEADER])
       * if rpt[RPT_COLUMNS][j][CLN_WIDTH] == 0
       if rpt[RPT_TOCSV] .or. rpt[RPT_COLUMNS][j][CLN_WIDTH] == NIL
@@ -1057,7 +1116,13 @@ for i := 1 to nTitHeight
        c += space(&(rpt[RPT_COLUMNS][j][CLN_WIDTH]))
     endif
     if j < len(rpt[RPT_COLUMNS]) ; c += rpt[RPT_COLSEP] ; endif
+    if rpt[RPT_TOHTML] 
+      c += "</th>"
+    endif
   next j
+  if rpt[RPT_TOHTML] 
+    c += "<tr>"
+  endif
   RETURN .f. if ! eval(rpt[RPT_PRINTLINE],c)
   * PrintLine(c)
 next i
@@ -1067,6 +1132,7 @@ RETURN .t.
 FUNCTION RptTit2()
 local c := ""
 local i
+RETURN .t. if rpt[RPT_TOHTML]
 for i := 1 to len(rpt[RPT_COLUMNS])
   if rpt[RPT_COLUMNS][i][CLN_WIDTH] != NIL
     c += repl("Ä",&(rpt[RPT_COLUMNS][i][CLN_WIDTH]))

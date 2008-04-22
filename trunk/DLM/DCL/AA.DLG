@@ -1,0 +1,7 @@
+// title "Aastaaruanne"
+
+#include "RANGES.DLG"
+
+after fparse("AA.HTM","TMP.HST","[]",.t.,.t.,NIL,NIL,"HTM")\
+  .and.OpenUrl("file:TMP.HST")
+
