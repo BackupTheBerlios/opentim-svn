@@ -77,7 +77,7 @@ column header="Bemerkung" width=40 \
 //        Confirm("when "+trim1(ParName())+ntrim(nDtlCount)).and.
 //        Confirm("before "+ParName()).and.
 group key={|| HST->IdPar } \
-      text={|| NIL} \
+      text={|| ""} \
       when={|nCount,nDtlCount|\
         nDtlCount>0.or.abs(RptValue(1,1,6)-RptValue(1,1,7))>DevTolerance(SetDevise())\
       } \

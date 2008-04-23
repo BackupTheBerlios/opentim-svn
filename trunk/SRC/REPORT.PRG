@@ -229,6 +229,9 @@ if rpt[RPT_TOCSV]
   rpt[RPT_PRINTLINE] := {|cLine|fwrite(fd,dos2latin1(cLine)+CR_LF),.t.}
 elseif rpt[RPT_TOHTML]
   rpt[RPT_PRINTLINE] := {|cLine| toStream(cLine+CR_LF)}
+  // n.b: if RPT_TOHTML, then there are also direct calls to toStream()
+  // and toTxtStream() because i don't think that RPT_PRINTLINE for
+  // html reports could change...
 endif
 if ! DoEvents(rpt[RPT_BEFORE])
   if fd != -1
@@ -243,7 +246,7 @@ if rpt[RPT_TOCSV]
   default rpt[RPT_COLSEP] to csvsep()
 elseif rpt[RPT_TOHTML]
   default rpt[RPT_COLSEP] to ""
-  RETURN .f. if ! eval(rpt[RPT_PRINTLINE],"<TABLE>")
+  RETURN .f. if ! toStream("<TABLE>")
 else
   default rpt[RPT_COLSEP] to " "
 endif
@@ -303,13 +306,17 @@ else
 endif
 
 if rpt[RPT_TOHTML]
-  RETURN .f. if ! eval(rpt[RPT_PRINTLINE],"<thead>")
+  toStream("<thead>")
   for j := 1 to len(rpt[RPT_COLUMNS])
-    RETURN .f. if ! eval(rpt[RPT_PRINTLINE],;
-      "<th>"+join(rpt[RPT_COLUMNS][j][CLN_HEADER],"<br>")+"</th>")
+    toStream("<th>")
+    for i := 1 to len(rpt[RPT_COLUMNS][j][CLN_HEADER])
+      if i > 1 ; toStream("<br>") ; endif
+      toTxtStream((rpt[RPT_COLUMNS][j][CLN_HEADER][i]))
+    next i
+    toStream("</th>")
   next j
-  RETURN .f. if ! eval(rpt[RPT_PRINTLINE],"</thead>")
-  RETURN .f. if ! eval(rpt[RPT_PRINTLINE],"<tbody>")
+  toStream("</thead>")
+  toStream("<tbody>")
 endif
 
 if rpt[RPT_FORLOOP] == NIL
@@ -523,7 +530,7 @@ if lDetail
     rpt[RPT_GROUPS][k][GRP_DTLCOUNT] += 1
   next k
   if rpt[RPT_TOHTML]
-    RETURN .f. if ! eval(rpt[RPT_PRINTLINE],"<tr>")
+    toStream("<tr>")
   endif
 endif
 for i := 1 to len(rpt[RPT_COLUMNS])
@@ -559,12 +566,13 @@ for i := 1 to len(rpt[RPT_COLUMNS])
     if rpt[RPT_TOCSV]
       cText := val2csv(cln[CLN_TYPE],cText," in column "+ntrim(i))
     elseif rpt[RPT_TOHTML]
-      cText := val2html(cln[CLN_TYPE],cText," in column "+ntrim(i))
       if cln[CLN_VALUE] == NIL
-        cText := "<td>" + cText
+        cText := "<td>"
       else
-        cText := '<td align="right">' + cText
+        cText := '<td align="right">'
       endif
+      cText += DrvCvtString(val2str(cln[CLN_TYPE],cText,;
+        " in column "+ntrim(i)))
       cText += "</td>"
     elseif cln[CLN_WIDTH] != NIL
       if cln[CLN_VALUE] == NIL
@@ -597,8 +605,10 @@ RETURN .t.
 FUNCTION rwriteln(cLine)
 default cLine to ""
 if rpt[RPT_TOHTML]
-  cLine := "<tr><td colspan="+ntrim(len(rpt[RPT_COLUMNS]))+">" ;
-    + cLine + "</td></tr>"
+  toStream("<tr><td colspan="+ntrim(len(rpt[RPT_COLUMNS]))+">")
+  toTxtStream(cLine)
+  toStream("</td></tr>")
+  RETURN .t.
 endif
 RETURN xeval(rpt[RPT_PRINTLINE],cLine)
 
@@ -991,7 +1001,7 @@ if rpt[RPT_TOCSV]
   next j
 elseif rpt[RPT_TOHTML]
   cLine := "<tr><td colspan="+ntrim(rpt[RPT_TEXTCOLUMNS]-1)+">" ;
-    + cLine + "</td>"
+    + DrvCvtString(cLine) + "</td>"
 else
   if ALIGN_LEFT $ grp[GRP_ALIGN]
     cLine := padr(cLine,rpt[RPT_TEXTWIDTH])
@@ -1094,31 +1104,40 @@ for i := 1 to nTitHeight
     c += "<tr>"
   endif
   for j := 1 to len(rpt[RPT_COLUMNS])
-    if rpt[RPT_TOHTML] 
-      c += "<th>"
-    endif
     if i <= len(rpt[RPT_COLUMNS][j][CLN_HEADER])
-      * if rpt[RPT_COLUMNS][j][CLN_WIDTH] == 0
       if rpt[RPT_TOCSV] .or. rpt[RPT_COLUMNS][j][CLN_WIDTH] == NIL
         c += rpt[RPT_COLUMNS][j][CLN_HEADER][i]
       elseif rpt[RPT_COLUMNS][j][CLN_VALUE] == NIL
-        c += padr( ;
-          rpt[RPT_COLUMNS][j][CLN_HEADER][i], ;
-          &(rpt[RPT_COLUMNS][j][CLN_WIDTH]) ;
-        )
+        if rpt[RPT_TOHTML]
+          c += '<th align="left">'
+          c += DrvCvtString(rpt[RPT_COLUMNS][j][CLN_HEADER][i])
+          c += "</th>"
+        else
+          c += padr( ;
+            rpt[RPT_COLUMNS][j][CLN_HEADER][i], ;
+            &(rpt[RPT_COLUMNS][j][CLN_WIDTH]) ;
+          )
+        endif
       else
-        c += padl( ;
-          rpt[RPT_COLUMNS][j][CLN_HEADER][i], ;
-          &(rpt[RPT_COLUMNS][j][CLN_WIDTH]) ;
-        )
+        if rpt[RPT_TOHTML]
+          c += '<th align="right">'
+          c += DrvCvtString(rpt[RPT_COLUMNS][j][CLN_HEADER][i])
+          c += "</th>"
+        else
+          c += padl( ;
+            rpt[RPT_COLUMNS][j][CLN_HEADER][i], ;
+            &(rpt[RPT_COLUMNS][j][CLN_WIDTH]) ;
+          )
+        endif
       endif
     else
-       c += space(&(rpt[RPT_COLUMNS][j][CLN_WIDTH]))
+      if rpt[RPT_TOHTML] 
+         c += "<th></th>"
+      else
+         c += space(&(rpt[RPT_COLUMNS][j][CLN_WIDTH]))
+      endif
     endif
     if j < len(rpt[RPT_COLUMNS]) ; c += rpt[RPT_COLSEP] ; endif
-    if rpt[RPT_TOHTML] 
-      c += "</th>"
-    endif
   next j
   if rpt[RPT_TOHTML] 
     c += "<tr>"

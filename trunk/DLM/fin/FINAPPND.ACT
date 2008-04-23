@@ -1,0 +1,15 @@
+// setvar("IdJnl",FIN->IdJnl)
+// FIN->IdJnl!="VKA".or.setvar("IdJnl","VKR")
+DlgExec("FINAPPND")
+// setvar("IdJnl", DbfPick(\
+  {oJnl()},\
+  utr("Create document...","Was fÅr ein Dokument erstellen?",\
+    "CrÇer document en recopiant..."),\
+  "JNLPICK",\
+  getvar("IdJnl"),\
+  "Alias=='FIN'"\
+))
+// !empty(getvar("IdJnl"))
+FinAppend(\
+  getvar("IdJnl"),NIL,\
+  getvar("Date"),getvar("NB"))

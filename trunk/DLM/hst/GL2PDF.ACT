@@ -1,6 +1,7 @@
 // General Ledger to PDF
 DlgExec("GL2PDF")
 SetPeriode(ntrim(getvar("year")))
+SetUserDate(ntod(getvar("year"),12,31))
 SetDevise(DevDefault(MemPer1))
 setvar("GL2PDF.path",trim(getvar("GL2PDF.path")))
 right(getvar("GL2PDF.path"),1)=="\".or.\
@@ -11,6 +12,7 @@ PathExist(getvar("GL2PDF.path"))\
 SetPreview(" ")
 SetAsPdf(.t.)
 SetBatch(.t.)
+
 // HSTVEN und HSTFIN : Journale
 setvar("b",{||\
   setvar("HstVenCols",CtrHstCols(JNL->IdCtr)),\
@@ -72,4 +74,17 @@ setvar("b",{||\
   RepPrint("HSTPAR",NIL,"foo")})
 empty(getvar("GL2PDF.Historiken")).or.\
   DbfScan({oCtr()},1,NIL,NIL,".t.",getvar("b"))
+
+// DCLPRINT
+setvar("range1",GetPeriode(ntrim(getvar("year"))))
+setvar("range2",GetPeriode(ntrim(getvar("year")-1)))
+setvar("range3","")
+setvar("b",{||\
+  setvar("PRN2PDF.out",trim(getvar("GL2PDF.path"))+"DCL"+DCL->IdDcl+".pdf"),\
+  RepPrint("DCLDCF",NIL,"foo")\
+  })
+empty(getvar("GL2PDF.Deklarationen")).or.\
+  DbfScan({oDcl()},1,NIL,NIL,".t.",getvar("b"))
+
+SetUserDate(NIL)
 

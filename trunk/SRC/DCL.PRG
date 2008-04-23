@@ -226,7 +226,7 @@ RETURN "left(GEN->IdGen," ;
 * RETURN "if(HST->DC=='"+DCF->DC;
 *   +"',val(HST->Mont),if(DCF->Type=='MX',0,-val(HST->Mont)))"
 
-FUNCTION DcfValues(r1,r2,r3,nDecPos)
+FUNCTION DcfValues(r1,r2,r3) // ,nDecPos)
 local xlGenFilter := DcfGenFilter()
 local xlHstFilter := DclJnlFilter()+".and."+DcfHstFilter()
 local cStop
@@ -333,9 +333,9 @@ elseif left(DCF->Type,1) == "F"
 else
   raise("Invalid DCF->Type "+utos(DCF->Type))
 endif
-if nDecPos != NIL
-  aeval(a,{|x|x:=round(x,nDecPos)},NIL,NIL,.t.)
-endif
+* if nDecPos != NIL
+*   aeval(a,{|x|x:=round(x,nDecPos)},NIL,NIL,.t.)
+* endif
 if right(DCF->Type,1) == "+"
   aeval(a,{|x|x:=iif(x<0,0,x)},NIL,NIL,.t.)
 endif

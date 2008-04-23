@@ -111,15 +111,17 @@ if empty(scRptArchive)
 else
   cRptArchive := scRptArchive
 endif
-if !PathExist(cRptArchive)
-  if ! CreateDir(cRptArchive)
-    RETURN !Warning(utrp(;
-      "Could not create directory for session reports!",;
-      "Kann Archivordner fÅr Sitzungsberichte nicht erstellen!",;
-      "CrÇation du rÇpertoire d'archivage des rapports de session!"),;
-    cRptArchive+MsgDosError())
+#ifdef __XPP__
+  if !PathExist(cRptArchive)
+    if ! CreateDir(cRptArchive)
+      RETURN !Warning(utrp(;
+        "Could not create directory for session reports!",;
+        "Kann Archivordner fÅr Sitzungsberichte nicht erstellen!",;
+        "CrÇation du rÇpertoire d'archivage des rapports de session!"),;
+      cRptArchive+MsgDosError())
+    endif
   endif
-endif
+#endif
 if lForce.or.SetKeepReport()
   cNewFileName := cRptArchive + "\" + right(dtos(date()),6)
   do while( file(cNewFileName+cSuffix+".RPT"))

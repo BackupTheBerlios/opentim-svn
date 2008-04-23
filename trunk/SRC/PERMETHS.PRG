@@ -1229,7 +1229,8 @@ open area oCtg(), oGen()
   softseek trim(cIdGen1)
   do while ! eof() .and. (empty(cIdGen2) .or. CTG->IdGen <= cIdGen2)
     if len(trim(CTG->IdGen)) == LenIdGen()
-      if right(CTG->Periode,1) != CHR_255
+      if CTG->Periode != PerYear(CTG->Periode)
+      * if right(CTG->Periode,1) != CHR_255
         if ! GenCtrExist(CTG->IdGen)
           if CTG->Periode >= PerStart(MemPer1)
             if ChkPeriode(CTG->Periode) == 0
@@ -1323,7 +1324,7 @@ endif
     default cNB to "Report " + PerText()
   endif
 #endif
-RETURN FinAppend(jnl,dDate,cPeriode,aFnl,cNB,DevDefault(cPeriode))
+RETURN FinGenerate(jnl,dDate,cPeriode,aFnl,cNB,DevDefault(cPeriode))
 
 /********** in Entwicklung
 
@@ -1437,7 +1438,7 @@ RETURN FinAppend(jnl,dDate,cPeriode,aFnl,cNB,DevDefault(cPeriode))
 *  fnl[FNL_DC]   := DcInvert(fnl[FNL_DC])
 *endif
 *aadd(aFnl, fnl)
-*RETURN FinAppend(jnl,dDate,cPeriode,aFnl)
+*RETURN FinGenerate(jnl,dDate,cPeriode,aFnl)
 **
 *STATIC FUNCTION FnlParCollect(cIdCtr,aFnl,lDcInvert,lNoDetail)
 *local nDevDecPos := DevDecPos(PAR->IdDev)
@@ -1497,9 +1498,8 @@ RETURN FinAppend(jnl,dDate,cPeriode,aFnl,cNB,DevDefault(cPeriode))
 ************/
 
 **
-** FinAppend()
 **
-FUNCTION FinAppend(jnl,dDate,cPeriode,aFnl,cNB,cIdDev)
+STATIC FUNCTION FinGenerate(jnl,dDate,cPeriode,aFnl,cNB,cIdDev)
 local cLine := NextNum(space(LEN_POS))
 local lOkay := .f.
 local a

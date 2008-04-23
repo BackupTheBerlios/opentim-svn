@@ -3527,7 +3527,7 @@ endif
 RETURN utos(v)
 
 
-FUNCTION val2html(cType,v,cSrc,nDecPos)
+FUNCTION val2str(cType,v,cSrc,nDecPos)
 default cSrc to ""
 default nDecPos to SetDecPos()
 if cType == GTYPE_MEMO

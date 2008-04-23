@@ -1,0 +1,17 @@
+title "Create a copy of "+MsgIdJnlDoc()
+field name="IdJnl" \
+  value=FIN->IdJnl \
+  caption="Journal " \
+  picture="@k@!"\
+  pick={|x| DbfPick(\
+    {oJnl()},\
+    utr("Create document...","Was fr ein Dokument erstellen?",\
+      "Cr‚er document en recopiant..."),\
+    "JNLPICK",\
+    x,\
+    "Alias=='FIN'"\
+  )} \
+  valid={||JnlExist(getvar("IdJnl"))}
+
+field name="Date" value=FIN->Date caption="Date   "
+field name="NB" value=FIN->Remarq caption="Remark "

@@ -1112,8 +1112,6 @@ FUNCTION PickVna ; RETURN NIL
 #ifdef DEF_VEN
 
 **
-** VenAppend()
-** wird benutzt im TIM fr AMG
 **
 FUNCTION VenAppend( ;
   cIdJnl,cTitle,dDate, ;
@@ -1129,9 +1127,6 @@ local cDC1 := VEN->DC
 * local aVnaMatch := {}
 local lOkay := .f.
 local b := oVen()
-local aCtp := {}
-local aCtg := {}
-local aHsi := {}
 local i
 local aVenBuf
 local aVnlBuf := {}
@@ -1320,6 +1315,135 @@ RETURN lOkay
 
 
 #endif DEF_VEN
+
+#ifdef DEF_FIN
+
+**
+**
+FUNCTION FinAppend( ;
+  cIdJnl,cTitle,dDate,cNB1, ;
+  xlFnlFilter, ;
+  lInvert, lCopy, xlOkay ;
+)
+local cIdDoc
+local cIdDoc1 := FIN->IdDoc
+local cIdJnl1 := FIN->IdJnl
+local lOkay := .f.
+local b := oFin()
+local i
+local aFinBuf
+local aFnlBuf := {}
+local jnl := JnlLocate(cIdJnl)
+default lCopy to .t.
+default lInvert to .f.
+default xlOkay to ".t."
+default xlFnlFilter to ".t."
+if cTitle != NIL
+  RETURN .f. if ! Confirm( ;
+    cTitle, ;
+    MsgSure() ;
+  )
+endif
+RETURN .f. if jnl == NIL
+if lCopy
+  aFinBuf := CopyRec("FIN")
+endif
+default dDate to UserDate()
+if lCopy
+  open area oFnl(), oPar(), oGen()
+    softseek FIN->IdJnl+FIN->IdDoc
+    do while ! eof() .and. FIELD->IdDoc == FIN->IdDoc ;
+                     .and. FIELD->IdJnl == FIN->IdJnl
+      if &xlFnlFilter
+        aadd(aFnlBuf,CopyRec())
+      endif
+      skip
+    enddo
+  close area
+endif
+open area b
+  KeyGoBottom( cIdJnl, "FIN->IdJnl")
+  if eof() .or. FIN->Etat == DocStatClosed()
+    lOkay := .t.
+  else
+    lOkay := Confirm( ;
+      MsgPrevDoc() + MsgNotClosed(), ;
+      MsgContinue(), MSG_NO, "WRN007" ;
+    )
+  endif
+  if lOkay
+    lOkay := .f.
+    open area oJnl()
+      seek cIdJnl
+      if ddRecLock()
+        cIdDoc := NextNum(JNL->IdDoc,left(PerActive(),LEN_YEAR))
+        select FIN
+        seek cIdJnl + cIdDoc
+        if ! eof()
+          Warning( ;
+            jnl[JNL_IDJNL] + " " + cIdDoc + MsgDocExist(), ;
+            NIL, "WRN014" ;
+          )
+        elseif dbAddRec()
+          JNL->IdDoc := cIdDoc
+          if lCopy
+            PasteRec(aFinBuf)
+          endif
+          FIN->IdJnl   := cIdJnl
+          FIN->IdDoc   := cIdDoc
+          FIN->Etat    := DocStatNew()
+          FIN->Date    := dDate
+          FIN->Periode := PerActive(dDate)
+          if cNB1 != NIL
+            FIN->Remarq := cNB1
+          endif
+          DoEvents(b[AD_ONCREATE],"VenAppend")
+          if lCopy
+            open area oFnl(),oPar(),oGen()
+              lOkay := .t.
+              for i := 1 to len(aFnlBuf)
+                if dbAddRec()
+                  PasteRec(aFnlBuf[i])
+                  FIELD->IdJnl := cIdJnl
+                  FIELD->IdDoc := cIdDoc
+                  unlock record
+                else
+                  lOkay := .f.
+                  exit
+                endif
+              next i
+            close area
+          else
+            lOkay := .t.
+          endif
+          if lOkay
+            default cTitle to jnl[JNL_IDJNL] +  " " + cIdDoc
+            SendKey(K_ENTER)
+            SendKey(K_ENTER)
+            edit data b ;
+              key FIN->IdJnl + FIN->IdDoc ;
+              value jnl[JNL_IDJNL] + cIdDoc ;
+              create   {||DDCREATE_FAIL} ;
+              query ("FIN"+jnl[JNL_IDDBV]) ;
+              mode edit  ;
+              full noskip ;
+              title (cTitle)
+            dbcommit()
+            lOkay := xparse(xlOkay)
+          endif
+          unlock record
+        endif
+        select JNL
+        dbcommit()
+        unlock record
+      endif
+    close area
+  endif
+close area
+RETURN lOkay
+
+
+#endif DEF_FIN
 
 
 
