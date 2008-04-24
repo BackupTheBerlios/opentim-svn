@@ -286,6 +286,7 @@
 20080321
 - cust\stdd.ch : nicht mehr DEF_BIL, sondern DEF_DCL. DEF_BIL erkl„re ich jetzt als obsolete. Das Feld DCF->IdBil verschwindet ebenfalls.
 - Wenn TIM eine unterbrochene Sitzung feststellt, dann verschiebt er die benutzerlose SESSION.RPT ja ins RtpArchive (normalerweise .\RPT). Das RptArchive musste bisher auf dem gleichen Laufwerk liegen. Jetzt darf es auf einem anderen Laufwerk liegen. Und wenn das Verzeichnis nicht existiert, dann legt TIM es selber stillschweigend an (und nur falls das auch noch fehlschl„gt, meldet er die neue Warnung "Could not create directory for session reports!"). rpt_clean()
+  Das Ganze funktioniert wohl nur mit der xbase-Version, nicht mit der Clipper-Version.
 - oError:args wird jetzt auch in den TIM-Sitzungsbericht geschrieben. Diese Info stand bisher immer nur in der xpperror.log
 - Man kann jetzt (theoretisch) TIM auf der Standarddatenbank von einem runtergeladenen SVN-Baum aus benutzen.
 - Neue Funktion SetMont2CSV(), mit der man konfigurieren kann, wie Zahlen in eine CSV-Datei geschrieben werden. Excel 2000 will Punkte als Dezimaltrenner haben, alle anderen Excel-Versionen und OpenOffice wollen Kommas haben.
@@ -301,3 +302,10 @@
     ASPDF.DLG included. Fr BM.
   - Die Standardmahnung PARMAHN.DLG (die momentan noch keiner benutzt)
     hat jetzt auch ASPDF.DLG
+    
+20080423
+- 
+- FinAuto() hatte einen Bug, so dass die šbertragsbuchung falsche Zahlen enthielt wenn sich der Periodenbereich ber mehrere Jahre erstreckte. Behoben.
+
+20080424
+- DEF_DCL : Die Entscheidung, ob alle Journale oder nur die Kassen- und Bankjournale bercksichtigt werden, findet jetzt nicht mehr fr die ganze Deklaration auf einmal statt, sondern pro Deklarationsfeld. Also DCL->JnlType wird DCF->JnlType. Denn die beiden letzten Zeilen im Cash Flow Statement, die mit den Bankkontost„nden, die mssen alle Journale bercksichtigen. Die anderen Felder dagegen, die mit dem eigentlich Cash Flow, die drfen nur in die Kassen- und Bankjournale bercksichtigen.

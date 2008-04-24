@@ -26,7 +26,7 @@
 #ifdef DEF_DCL
 
 #define JNLTYPE_C "C"
-#define JNLTYPE_A "A"
+#define JNLTYPE_A " "
 
 #define LEN_IDDCF 6
 
@@ -63,8 +63,8 @@ ddFld Name2   ,C,70,0 picture "@K@S40"
 ddFld Name3   ,C,70,0 picture "@K@S40"
 ddFld Attrib  ,C, 4,0  picture PIC_ID ;
                        pick PickDbcAttr("DCLATTR.DBC",DCF->Attrib)
-ddFld JnlType ,C, 1,0 picture "@k@!" ;
-                      pick PickJnlType(DCL->JnlType)
+// ddFld JnlType ,C, 1,0 picture "@k@!" ;
+//                       pick PickJnlType(DCL->JnlType)
 action b key K_ENTER   prompt NIL block DclDcfEdit(DCL->IdDcl)
 ddEndDef()
 RETURN b
@@ -121,8 +121,10 @@ ddFld IdGen   ,C, LenIdGen(),0 picture PIC_ID ;
                     "GEN->IdGen",;
                   )
 ddFld IdDcl   ,C, 3,0 picture PIC_ID
-ddFld CljList ,C,20,0 picture "@k@!@s5" ;
-                      pick PickClj(space(LenIdCtr()),DCF->CljList)
+ddFld JnlType ,C, 1,0 picture "@k@!" ;
+                      pick PickJnlType(DCF->JnlType)
+// ddFld CljList ,C,20,0 picture "@k@!@s5" ;
+//                      pick PickClj(space(LenIdCtr()),DCF->CljList)
 /* ddFld IdBil   ,C, LenIdBil(),0 picture PIC_ID ;
                   pick DbfPick( ;
                     {oBil()},;
@@ -167,11 +169,11 @@ RETURN .t. if !empty(DCF->Type)
 RETURN .f.
 
 
-FUNCTION DclJnlFilter()
+STATIC FUNCTION DcfJnlFilter()
 local aJnl
 local i
 local c := ""
-if DCL->JnlType == JNLTYPE_C
+if DCF->JnlType == JNLTYPE_C
   aJnl := JnlList(;
     {|jnl|jnl[JNL_ALIAS]==JNLALIAS_FIN.and.!empty(jnl[JNL_IDGEN])})
   for i := 1 to len(aJnl)
@@ -179,15 +181,10 @@ if DCL->JnlType == JNLTYPE_C
   next i
   RETURN 'HST->IdJnl$"'+c+'"'
   * RETURN 'HST->IdJnl$"'+c+',REP"'
-elseif DCL->JnlType == JNLTYPE_A
+elseif DCF->JnlType == JNLTYPE_A
   RETURN ".t."
-  * aJnl := JnlList({|jnl|JNLATTR_G $ jnl[JNL_ATTRIB]})
-  * for i := 1 to len(aJnl)
-  *   c+=aJnl[i][JNL_IDJNL]+","
-  * next i
-  * RETURN 'HST->IdJnl$"'+c+'"'
 endif
-RETURN raise("Bad DCL->JnlType")
+RETURN raise("Bad DCF->JnlType")
 
 FUNCTION DcfHstFilter()
 RETURN "HST->DC=='D'" if DCF->Type == "MD"
@@ -227,8 +224,8 @@ RETURN "left(GEN->IdGen," ;
 *   +"',val(HST->Mont),if(DCF->Type=='MX',0,-val(HST->Mont)))"
 
 FUNCTION DcfValues(r1,r2,r3) // ,nDecPos)
-local xlGenFilter := DcfGenFilter()
-local xlHstFilter := DclJnlFilter()+".and."+DcfHstFilter()
+local xlGenFilter
+local xlHstFilter 
 local cStop
 local cStart
 local a
@@ -241,6 +238,8 @@ local aDebit := {}
 local aCredit := {}
 local nMont
 RETURN {0,0,0} if empty(DCF->Type)
+xlGenFilter := DcfGenFilter()
+xlHstFilter := DcfJnlFilter()+".and."+DcfHstFilter()
 SetPeriode(r1)
 aadd(aPer1,MemPer1)
 aadd(aPer2,MemPer2)
