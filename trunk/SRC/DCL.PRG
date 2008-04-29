@@ -343,6 +343,12 @@ if right(DCF->Type,1) == "-"
 endif
 RETURN a
 
+FUNCTION DcfPeek(cIdDcl,cIdDcf,cRange)
+local a 
+a := DbfPeek(oDcf(),cIdDcl+cIdDcf,{||DcfValues(cRange)},NIL)
+RETURN !SetMsg(cIdDcl+cIdDcf+" : no such DCF") if a == NIL
+RETURN a[1]
+
 
 **
 ** DcfExist()

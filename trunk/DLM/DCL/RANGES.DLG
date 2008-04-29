@@ -1,14 +1,30 @@
 field name="range1" \
+    caption="Aktivit„tsjahr 1 " \
+    default=padr(ntrim(year(UserDate())-1),9) \
+    picture="@k@!"
+
+field name="range2" \
+    caption="               2 " \
+    default=padr(ntrim(year(UserDate())-2),9) \
+    picture="@k@!"
+
+field name="range3" \
+    caption="              (3 " \
+    caption2=")" \
+    default=space(9) \
+    picture="@k@!"
+
+// field name="range1" \
     caption="Periodenbereich 1 " \
     picture="@k@!" \
     default=GetPeriode(str(year(UserDate())-1,4)) \
     postedit={|x|GetPeriode(x)}
-field name="range2" \
+// field name="range2" \
     caption="                2 " \
     picture="@k@!" \
     default=GetPeriode(str(year(UserDate())-2,4)) \
     postedit={|x|GetPeriode(x)}
-field name="range3" \
+// field name="range3" \
     caption="               (3 " \
     caption2=")" \
     picture="@k@!" \

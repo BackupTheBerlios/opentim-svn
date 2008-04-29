@@ -77,17 +77,17 @@ column header=tr("Description","Bezeichnung",\
        text={||padr(space(len(trim(DCF->IdDcf))-1)+DcfName(NIL,TplLang()),43)}
 // column header="Sel" width=LenIdBil() text={||DCF->IdBil}
 column header="Gen" width=LenIdGen() text={||DCF->IdGen}
-column header=padl(trim(DlgValue("range1")),LenMntF()) \
+column header=padl(trim(getvar("range1")),LenMntF()) \
        width=LenMntF() \
        value={||getvara("values",1,0)} \
        type="T" decpos=getvar("decpos")
-column header=padl(trim(DlgValue("range2")),LenMntF()) \
+column header=padl(trim(getvar("range2")),LenMntF()) \
        width=LenMntF() \
        value={||getvara("values",2,0)} \
        type="T" decpos=getvar("decpos")
 
 #if !empty(getvar("range3"))
-column header=padl(trim(DlgValue("range3")),LenMntF()) \
+column header=padl(trim(getvar("range3")),LenMntF()) \
        width=LenMntF() \
        value={||getvara("values",3,0)} \
        type="T" decpos=getvar("decpos")

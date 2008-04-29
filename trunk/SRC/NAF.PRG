@@ -1194,7 +1194,8 @@ open area b, oArt(), oGen(), oSpc(), oVen(), oVna(), oDls()
             if VnlFirstCheck(jnl[JNL_IDCTR])
               VnlSetIdTax()
             else
-              raise("VnlFirstCheck() failed")
+              lOkay := .f.
+              // raise("VnlFirstCheck() failed")
             endif
           #endif DEF_TAX
           FIELD->PrixU := naf[NAF_PRIXU]

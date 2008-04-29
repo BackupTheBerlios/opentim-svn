@@ -4797,6 +4797,9 @@ lOkay := sparse(DrvCvtString(hardcr(cMemo)),cSource,.f.)
 * scRefMode := cSaveRefMode
 RETURN lOkay
 
+* FUNCTION memo2html(cFilename)
+* RETURN toHtmStream(memoread(GetDlmPath(cFilename)),cFilename)
+
 
 * #endif DEF_LFN
 

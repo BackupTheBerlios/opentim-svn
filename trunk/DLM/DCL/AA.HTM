@@ -1,12 +1,46 @@
 <html>
+<head>
+<title>[="Aastaaruanne"]</title>
+<style type="text/css">
+<!--
+thead th { font-weight:bold; border-bottom: 1px solid black;}
+tr.total td { font-weight:bold; border-top: 1px solid black;}
+tr.detail {}
+
+th.textHeader { text-align:left; font-weight:bold; }
+th.numberHeader { font-weight:bold; }
+
+td.textCell { text-align:left; }
+td.numberCell { text-align:right; }
+-->
+</style>
+</head>
 <body>
+[=setvar("brutoPalk",-DcfPeek("004","1221  ",getvar("range1")))]
+[etc do SetDecPos(0)]
+
+[=toHtmStream(memoread(GetDlmPath("aa00.txt")))]
+
+<h2>[="Sisukord"]</h2>
+
 <h2>[="Eessäna"]</h2>
+[=toHtmStream(memoread(GetDlmPath("aa01.txt")))]
+
 <h2>[="Tegevusaruanne"]</h2>
+
+[=toHtmStream(memoread(GetDlmPath("aa02.txt")))]
+
 <h2>[="Kasumi jaotamise ettepanek"]</h2>
+
 <h2>[="Raamatupidamisbilanss"]</h2>
+[*=DbfPeek(oDcl(),"003",{||Rep2Html("DCLDCF")},.f.)]
+
 <h2>[="Kasumiaruanne"]</h2>
+[*=DbfPeek(oDcl(),"004",{||Rep2Html("DCLDCF")},.f.)]
+
 <h2>[="Rahak„ibe aruanne"]</h2>
-[=DbfPeek(oDcl(),"002",{||Rep2Html("DCLDCF")},.f.)]
+[*=DbfPeek(oDcl(),"002",{||Rep2Html("DCLDCF")},.f.)]
+
 <h2>[="Omakapitali muutuste aruanne"]</h2>
 </body>
 </html>

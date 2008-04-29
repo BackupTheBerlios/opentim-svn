@@ -2,6 +2,6 @@
 
 #include "RANGES.DLG"
 
-after fparse("AA.HTM","TMP.HST","[]",.t.,.t.,NIL,NIL,"HTM")\
-  .and.OpenUrl("file:TMP.HST")
+after fparse("AA.HTM","TMP.HTM","[]",.t.,.t.,NIL,NIL,"HTM")\
+  .and.OpenUrl("file:TMP.HTM")
 

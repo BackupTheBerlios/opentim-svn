@@ -58,7 +58,7 @@
 #define DEF_LOGFILE
 #define DEF_TPL
 
-* #define DEF_MSG
+#define DEF_MSG
 
 
 // #define DEF_VNLATTR

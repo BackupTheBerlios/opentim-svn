@@ -314,7 +314,7 @@ static saBar   := NIL
   #define TXT_032   "Title"
   * #define TXT_033   "Page "
   * #define TXT_034   "(Keiner)"
-  #define MSG_ISOPEN_1 " : window is already open."
+  * #define MSG_ISOPEN_1 " : window is already open."
 #endif
 
 
@@ -480,7 +480,7 @@ slMustScan := .t.
 ** Nicht vergessen : ddSetKey() kann u.U. ein weiteres ddEdit()
 ** aktivieren, wenn z.B. qry[QRY_KEYVALUE] DbfPick() aufruft.
 if ddSetKey(qry,cKeyValue,xcKey,xlFilter)
-  if len(WinStack()) < 10  .or. Confirm( ;
+  if len(WinStack()) < 20  .or. Confirm( ;
       "Sie haben schon "+ntrim(len(WinStack()))+" Fenster offen.", ;
       "Trotzdem noch ein Fenster ”ffnen (J/N) ?", MSG_NO, "WRN054"  ;
     )
