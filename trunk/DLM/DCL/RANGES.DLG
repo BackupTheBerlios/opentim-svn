@@ -37,3 +37,6 @@ field caption=utr("Currency  ","W„hrung  ","Devise  ") \
       pick={|x|PickDev(x)}\
       valid={||DevExist(SetDevise())}
 
+field name="TechInfo" default="X" \
+      caption2=" with technical info" \
+      reader={|g|CbxReader(g)}

@@ -17,11 +17,21 @@ td.numberCell { text-align:right; }
 </head>
 <body>
 [=setvar("brutoPalk",-DcfPeek("004","1221  ",getvar("range1")))]
+[=setvar("sotsMaks",-DcfPeek("004","1222  ",getvar("range1")))]
+[=setvar("ttkMaks",-DcfPeek("004","1223  ",getvar("range1")))]
+[=setvar("kasumiJaak",-DcfPeek("003","2230  ",getvar("range1")))]
+[=setvar("aastaKasum",-DcfPeek("003","2240  ",getvar("range1")))]
+[=setvar("makstaValja",50000)]
 [etc do SetDecPos(0)]
+
+<h1>[="Majandusaasta aruanne"]</h1>
 
 [=toHtmStream(memoread(GetDlmPath("aa00.txt")))]
 
 <h2>[="Sisukord"]</h2>
+
+[=toHtmStream(memoread(GetDlmPath("aatoc.txt")))]
+
 
 <h2>[="Eessäna"]</h2>
 [=toHtmStream(memoread(GetDlmPath("aa01.txt")))]
@@ -32,15 +42,37 @@ td.numberCell { text-align:right; }
 
 <h2>[="Kasumi jaotamise ettepanek"]</h2>
 
+[=toHtmStream(memoread(GetDlmPath("aa03.txt")))]
+
 <h2>[="Raamatupidamisbilanss"]</h2>
-[*=DbfPeek(oDcl(),"003",{||Rep2Html("DCLDCF")},.f.)]
+[=DbfPeek(oDcl(),"003",{||Rep2Html("DCLDCF")},.f.)]
 
 <h2>[="Kasumiaruanne"]</h2>
-[*=DbfPeek(oDcl(),"004",{||Rep2Html("DCLDCF")},.f.)]
+[=DbfPeek(oDcl(),"004",{||Rep2Html("DCLDCF")},.f.)]
 
 <h2>[="Rahak„ibe aruanne"]</h2>
-[*=DbfPeek(oDcl(),"002",{||Rep2Html("DCLDCF")},.f.)]
+[=DbfPeek(oDcl(),"002",{||Rep2Html("DCLDCF")},.f.)]
 
 <h2>[="Omakapitali muutuste aruanne"]</h2>
+
+[=setvar("Lisa",0)]
+
+<h2>Lisa [=getctr("Lisa")] : [="Kasutatud arvestusmeetodid ja hindamisalused"]</h2>
+
+[=toHtmStream(memoread(GetDlmPath("aa04.txt")))]
+
+<h2>Lisa [=getctr("Lisa")] : [="Aruandeaasta tegevusalad"]</h2>
+
+<h2>Lisa [=getctr("Lisa")] : [="Maksuvälad ja maksude ettemaksed"]</h2>
+<h2>Lisa [=getctr("Lisa")] : [="Tingimuslik tulumaksukohustus"]</h2>
+
+<h2>Lisa [=getctr("Lisa")] : [="Mitmesugused tegevuskulud"]</h2>
+
+[=DbfPeek(oDcl(),"005",{||Rep2Html("DCLDCF")},.f.)]
+
+<h2>Lisa [=getctr("Lisa")] : [="Tehingud seotud osapooltega"]</h2>
+
+[=toHtmStream(memoread(GetDlmPath("aa99.txt")))]
+
 </body>
 </html>

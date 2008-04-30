@@ -1,0 +1,19 @@
+[=setvar("Lisa",0)]
+<table>
+<tr><td>Eessäna <td>2
+<tr><td>Tegevusaruanne  <td>2
+<tr><td>Kasumi jaotamise ettepanek      <td>2
+<tr><td>Raamatupidamisbilanss            <td>3
+<tr><td>Kasumiaruanne                     <td>4
+<tr><td>Rahak„ibe aruanne                  <td>5
+<tr><td>Omakapitali muutuste aruanne        <td>5
+<tr><td>Lisa [=getctr("Lisa")] : Kasutatud arvestusmeetodid ja hindamisalused<td>6
+<tr><td>Lisa [=getctr("Lisa")] : Aruandeaasta tegevusalad <td>6
+<tr><td>Lisa [=getctr("Lisa")] : Maksuvälad ja maksude ettemaksed       <td>7
+<tr><td>Lisa [=getctr("Lisa")] : Tingimuslik tulumaksukohustus           <td>7
+<tr><td>Lisa [=getctr("Lisa")] : Mitmesugused tegevuskulud                <td>7
+<tr><td>Lisa [=getctr("Lisa")] : Tehingud seotud osapooltega               <td>7
+<tr><td>Osanike nimekiri  <td>8
+<tr><td>Majandusaasta aruande allkirjad <td>8
+</table>
+

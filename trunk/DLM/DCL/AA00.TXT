@@ -1,0 +1,17 @@
+
+<table>
+<tr><td align="right">aruandeaasta algus:  <td>01.01.2007
+<tr><td align="right">aruandeaasta läpp:   <td>31.12.2007
+<tr>
+<tr><td align="right">„rinimi:             <td>Oš Rumma & Ko
+<tr><td align="right">registrikood:        <td>10501849
+<tr>
+<tr><td align="right">t„nav:<td>Tartu mnt. 71-5
+<tr><td align="right">vald:<td>Tallinn
+<tr><td align="right">postisihtnumber:<td>10115
+<tr><td align="right">maakond:<td>Harju
+<tr>
+<tr><td align="right">telefon:<td>4824548, 56258542, 56672435
+</table>
+
+

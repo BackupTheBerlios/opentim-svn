@@ -70,13 +70,17 @@ group key={||left(DCF->IdDcf,1) } \
 
 // group text={|x|"Gesamt"} when={||.t.}
 
-column header=tr("Item","Art.","Code") width=LenIdDcf() \
+#if .t..or.!empty(getvar("TechInfo"))
+column header=tr("Item","Art.","Code","","") width=LenIdDcf() \
        text={||DCF->IdDcf}
+#endif
 column header=tr("Description","Bezeichnung",\
-       "Description","Omschrijving") width=43 \
+       "Description","Omschrijving","") width=43 \
        text={||padr(space(len(trim(DCF->IdDcf))-1)+DcfName(NIL,TplLang()),43)}
 // column header="Sel" width=LenIdBil() text={||DCF->IdBil}
+#if !empty(getvar("TechInfo"))
 column header="Gen" width=LenIdGen() text={||DCF->IdGen}
+#endif
 column header=padl(trim(getvar("range1")),LenMntF()) \
        width=LenMntF() \
        value={||getvara("values",1,0)} \

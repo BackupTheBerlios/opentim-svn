@@ -592,6 +592,12 @@ if v != NIL
 endif
 RETURN .f.
 
+FUNCTION getctr(cName)
+local uValue := getvar(cName) + 1
+setvar(cName,uValue)
+RETURN ntrim(uValue)
+
+
 /**
 Collect a minimum value. Stores the value into variable cName if value
 is less than the currently stored value.

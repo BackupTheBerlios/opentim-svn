@@ -1,0 +1,19 @@
+Oš Rumma & Ko alustas 2001. aastal arvutialaste konsultatsioonide mki,
+palgates selleks spetsialisti, kes sai koolitust ja v„ljaäpet Belgias.
+Sellest ajast tegeles etteväte peamiselt arvutialaste konsultatsioonide
+mgiga. Firmal on umbes 30 klienti, kes asuvad peamiselt Belgias.
+
+Firma kolis 2007. aastal osaliselt maale. Selleks osales ta eramaja
+renoveerimise projektis Vana-Vigalas, rahastades 35% ehituskuludest.
+Oš Rumma & Ko juhatus koosneb hest liikmest. Juhatusele eraldi tasusid
+ei makstud.
+
+T””tajate keskmine arv oli 2007. aasta jooksul 2. T””tajate palkade
+brutosumma oli
+<b>[=ltrim(ntomf(getvar("brutoPalk")))]</b>
+krooni, millele lisandusid sotsiaalkindlustusmaksed summas
+<b>[=ltrim(ntomf(getvar("sotsMaks")))]</b>
+krooni ja t””tuskindlustusmaksed summas
+<b>[=ltrim(ntomf(getvar("ttkMaks")))]</b>
+krooni.
+

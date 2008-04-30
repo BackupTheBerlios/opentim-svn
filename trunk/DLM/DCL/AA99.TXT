@@ -1,0 +1,53 @@
+<h2>Osanike nimekiri</h2>
+
+Osanike nimekiri aruande kinnitamise hetkel:
+
+<table>
+<tr>
+<td>
+<td>Nimi
+<td>Isikukood
+<td>Aadress
+<td>osa nimi-v„„rtus
+<tr>
+<td>1.
+<td>Kusta Rumma
+<td>34203120237
+<td>Stiste tee 16-68
+<td>14000
+<tr>
+<td>2.
+<td>Ly Rumma
+<td>46804270284
+<td>Tartu mnt 71-5
+<td>13000
+<tr>
+<td>3.
+<td>Indrek Rumma
+<td>36909140251
+<td>Trummi 21a-4
+<td>13000
+</table>
+
+
+Kokku:
+40000
+
+<h2>Majandusaasta aruande allkirjad</h2>
+
+Majandusaasta aruande allkirjad
+
+Juhatuse nimekiri Oš Rumma & Ko juhatus on heliikmeline.
+Seega juhatuse nimekiri aruande kinnitamise hetkel:
+
+<table>
+<tr><td>Nimi <td>Isikukood<td>
+<tr><td>Kusta Rumma
+<td>34203120237
+<td>juhataja
+</table
+
+Allkiri:
+
+Kuup„ev :
+

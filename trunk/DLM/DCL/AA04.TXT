@@ -1,0 +1,45 @@
+<h2>Lisa [=getctr("Lisa")] : Kasutatud arvestusmeetodid ja hindamisalused</h2>
+
+<h3>Tulude arvestus</h3>
+
+Mgitulu kajastatakse vormistatud arvete alusel, millega teenused on
+ostjale le antud ning mille alusel on ostjal tekkinud tasumiskohustus.
+
+<h3>Näuete hindamine</h3>
+
+Ostjatelt laekumata arved on bilansis hinnatud l„htuvalt täen„oliselt
+laekuvatest summadest. Seejuures hinnatakse iga konkreetse kliendi
+laekumata arveid eraldi, arvestades teadaolevat informatsiooni kliendi
+makseväime kohta.
+
+<h3>Varude kajastamine</h3>
+
+Omandatud kaubad on väetud arvele soetusmaksumuses, mis koosneb
+ostuhinnast ja (kaupade impordi korral) transpordikulust. Varude
+arvestamisel on l„htutud FIFO meetodist. Bilansis on varud hinnatud
+l„htudes sellest, mis on madalam, kas soetusmaksumus väi
+netorealiseerimismaksumus. Aruandeaasta kaubaj„„gis kajastaud toodetele
+ei tehtud hinnaalandusi.  Kaubavarud on kajastatud bilansis vastavalt
+aastainventuuri tulemustele.
+
+<h3>Pähivara</h3>
+
+Alates 2001. aastast loetakse varasid kasuliku t””eaga le he aasta ja
+maksumusega alates 25000 krooni. Varad, mille kasulik t””iga on le he
+aasta, kuid soetusmaksumus alla 25 000 krooni, loetakse
+v„hev„„rtuslikuks ja kantakse kuludesse kasutusele vätmise momendil.
+Amortisatsiooni arvestamisel kasutatakse lineaarset meetodit.
+
+Amortisatsiooninorm m„„ratakse igale objektile eraldi, sältuvalt selle
+kasulikust t””east. Amortisatsiooninorm 30% aastas. Arendusv„ljaminekud
+kantakse kuludesse, v„lja arvatud selliste arendusprojektidega seotud
+kulud, tulevikus. millest oodatakse konkreetseid sissetulekuid
+tulevikus.
+
+<h3>V„lisvaluutas tehingute kajastamine</h3>
+
+V„lisvaluutas fikseeritud tehingute kajastamisel on aluseks väetud
+tehingu toimumise p„eval ametlikult kehtinud Eesti Panga valuutakursid.
+V„lisvaluutas fikseeritud varad ja kohustused seisuga 31.12.2007 on
+mber hinnatud Eesti kroonidesse.
+

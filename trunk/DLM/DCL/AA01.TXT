@@ -1,0 +1,29 @@
+Oš Rumma & Ko juhataja on koostanud [=trim(getvar("range1"))]. aasta
+tegevusaruande ja
+raamatupidamise aruande. Aruande periood on
+01.01.[=trim(getvar("range1"))]
+-
+31.12.[=trim(getvar("range1"))].
+Arvandmed on Eesti kroonides.
+
+Kinnitatud tegevusaruanne ja raamatupidamise aastaaruanne on 8 lehel.
+Juhataja kinnitab leheklgedel 1 kuni 8 toodud Oš Rumma & Ko
+aastaaruande koostamise äigsust ja t„ielikkust. Majandusaasta aruanne on
+koostatud juhatuse poolt, arvestades Eesti Vabariigi
+raamatupidamisseadust, „riseadustikku ja head raamatupidamistava ning
+see kajastab äigesti ja äiglaselt „rihingu vara, kohustusi ja
+omakapitali ning majandustegevuse tulemust.
+
+Raamatupidamise aastaaruandes kajastuvad olulised vara ja kohustuste
+hindamist mäjutavad asjaolud, mis ilmnesid bilansi kuup„evaga
+31.12.[=trim(getvar("range1"))] ja aastaaruande koostamisp„eva vahemikul.
+
+Vara ja kohustusi on hinnatud kaalutletud ja konservatiivsetel alustel.
+Raamatupidamise aastaaruande koostamine näuab hinnangute andmist. Need
+hinnangud pähinevad aktuaalsel informatsioonil „rihingu seisundist ja
+kavatsustest ning riskidest raamatupidamise aastaaruande koostamisp„eva
+seisuga.
+
+Juhatuse hinnagul on Oš Rumma & Ko j„tkuvalt edukalt tegutsev
+majandusksus.
+

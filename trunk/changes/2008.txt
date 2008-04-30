@@ -309,3 +309,6 @@
 
 20080424
 - DEF_DCL : Die Entscheidung, ob alle Journale oder nur die Kassen- und Bankjournale bercksichtigt werden, findet jetzt nicht mehr fr die ganze Deklaration auf einmal statt, sondern pro Deklarationsfeld. Also DCL->JnlType wird DCF->JnlType. Denn die beiden letzten Zeilen im Cash Flow Statement, die mit den Bankkontost„nden, die mssen alle Journale bercksichtigen. Die anderen Felder dagegen, die mit dem eigentlich Cash Flow, die drfen nur in die Kassen- und Bankjournale bercksichtigen.
+
+20080430
+- Neue Funktion getctr(). Wird bentuzt in dlm\dcl\aa.htm
