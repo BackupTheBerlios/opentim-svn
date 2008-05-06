@@ -436,6 +436,23 @@ if DLS->IdDls != cIdDls
 endif
 RETURN &x
 
+#ifdef DEF_PIN
+
+FUNCTION DlsZahlart
+local c
+RETURN DLS->Zahlart if !empty(DLS->Zahlart) 
+if !empty(DLS->IdPin)
+  c := DbfPeek(oPin(),DLS->IdPin,"PIN->Zahlart","")
+  RETURN c if !empty(c)
+endif
+if !empty(DLS->IdPrj)
+  c := DbfPeek(oPrj(),DLS->IdPrj,"PRJ->Zahlart","")
+  RETURN c if !empty(c)
+endif
+RETURN " "
+
+#endif
+
 FUNCTION DlsCanEdit
 RETURN .t. if empty(DLS->IdUsr)
 // RETURN .t. if USRATTR_B $ UsrAttrib()

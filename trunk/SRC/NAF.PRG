@@ -471,7 +471,11 @@ if oStart != NIL
 endif
 open area oPar(), oVen(), oArt()
   browse array aPnf using {|m| ;
-      padr(m[PNF_MATCH],25);
+      padr(iif(empty(m[PNF_MATCH]),;
+        utrp("(no externale ref.)",;
+          "(ohne externe Ref.)",;
+          "(sans r‚f‚rence ext.)"),;
+        m[PNF_MATCH]),25);
       +" "+m[PNF_IDJNL];
       +" "+m[PNF_IDDOC];
       +" "+dtoc(m[PNF_DATE]);

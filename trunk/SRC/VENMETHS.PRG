@@ -465,11 +465,19 @@ local cNB1 := ""
   if JNLATTR_A $ jnl[JNL_ATTRIB]
     RETURN .f. if ! PnfCollect(aPnf,jnl,VEN->IdPar,VEN->IdPar,VEN->Date) // ,xlVnaFilter)
     RETURN .f. if len(aPnf) == 0
-    if len(aPnf) == 1 .or. IFCATTR_X $ ifc[IFC_ATTRIB] // no dialog
+    if len(aPnf) == 1 .or. IFCATTR_X $ ifc[IFC_ATTRIB] 
+      // no ParPnfPick dialog
       pnf := aPnf[1]
+      RETURN .f. if !VnaTag( ;
+          pnf[PNF_AVNA],;
+          pnf[PNF_IDPAR],;
+          trim(ParName(pnf[PNF_IDPAR])) + " : " + MsgVnaTag(), ;
+          jnl[JNL_IDJNL];
+        )
     else
       do while .t.
-        pnf := ParPnfPick(aPnf,pnf,"R‚f‚rences externes "+trim(ParName()))
+        pnf := ParPnfPick(aPnf,pnf,;
+          "R‚f‚rences externes "+trim(ParName()))
         RETURN .f. if pnf == NIL
         if VnaTag( ;
           pnf[PNF_AVNA],;

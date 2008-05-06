@@ -15,7 +15,6 @@ ddAddField("IdPrj","C",LenIdPrj(),0,"",iif(HasDlm("PRJ"),"","H"),\
   },{|x|PickPrj(x)},\
   {||.t.},{|x|GetNum(x)}\
 )
-
 ddPreCreate("setvar('a',CopyRec())")
 ddPreCreate("Confirm('Neue Dienstleistung erfassen ? (J/N)')")
 // ddPreCreate('DlgDefine("id",DbfAutoInc(oDls()))')
