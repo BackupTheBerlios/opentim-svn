@@ -501,7 +501,8 @@ endif
 if rpt[RPT_TOCSV]
   fclose(fd)
   if lOkay
-    AppShell("excel.bat " + cOutFile)
+    OpenCsv(cOutFile)
+    // AppShell("excel.bat " + cOutFile)
   endif
 elseif rpt[RPT_TOHTML]
   RETURN .f. if ! toStream("</TABLE>")

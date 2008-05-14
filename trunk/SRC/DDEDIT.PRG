@@ -2164,7 +2164,12 @@ for i := 1 to len(a)
 next i
 RETURN .t.
 
-
+** Execute an optional Clipper expression. 
+** Return .t. if the expression is empty.
+**
+FUNCTION DoEvent(xlEvent)
+RETURN .t. if empty(xlEvent)
+RETURN &xlEvent
 
 STATIC FUNCTION PreSkip()  // 20030301
 * #ifdef __XPP__

@@ -1360,7 +1360,7 @@ RETURN substr(c,nPos+1)
 **
 ** ImpAuto() - Jahresabschluss und šbertrag
 **
-FUNCTION ImpAuto()
+FUNCTION ImpAuto(lDebug)
 local lToggle := .f.
 local grb
 local fd
@@ -1403,6 +1403,7 @@ default cPeriode1 to str(year(UserDate())-1901,LEN_YEAR) + "99"
 default cPeriode2 to str(year(UserDate())-1900,LEN_YEAR) + "00"
 default cIdJnlClo to padr("CLO",LenIdJnl())
 default cIdJnlHH  to padr("HHš",LenIdJnl())
+default lDebug to .f.
 cIdBud1 := SayIdBud(trim(cIdBud1))
 cIdBud2 := SayIdBud(trim(cIdBud2))
 if file(DbPath() + "\IMPAUTO.ERR")
@@ -1462,6 +1463,9 @@ do while .t.
   endif
   exit
 enddo
+if !lDebug .or. Warning(;
+  "Wir sind im Debug-Modus, also kommen mehr Meldungen")
+endif
 RETURN .f. if (jnlClose := JnlLocate(cIdJnlClo)) == NIL
 RETURN .f. if (jnlHH := JnlLocate(cIdJnlHH)) == NIL
 cName := "šbertrag " + cPeriode1 + "-" + cPeriode2
@@ -1507,7 +1511,7 @@ open area oMvi(), oBud(), oImp()
     KeyGoBottom(cIdCtr+trim(cIdBud2),"MVI->DC+MVI->IdBud")
   endif
   lOkay := .t.
-  do while lOkay .and. ! bof()
+  do while lOkay .and. ! bof() .and. ! eof()
     if ! empty(cIdCtr)
       if MVI->DC != cIdCtr
         exit
@@ -1543,8 +1547,8 @@ open area oMvi(), oBud(), oImp()
                 MVI->Periode + " " + MVI->MontUs ;
               )
               if JnlIdCdc(MVI->IdJnl) != MemIdCdc
-                fwrite(fd, ;
-                  " ! " + MVI->IdJnl + " zentralisiert nicht nach " + MemIdCdc ;
+                fwrite(fd, " ! " + MVI->IdJnl + ;
+                  " zentralisiert nicht nach " + MemIdCdc ;
                 )
               else
                 aIml := {}
@@ -1564,10 +1568,9 @@ open area oMvi(), oBud(), oImp()
                         aCtb      := {}
                         if DocCreate(jnlClose, ;
                           {|x| cIdDoc := x, ;
-                          ImpAppend( ;
-                            jnlClose,x,aIml,aCtb, ;
-                            cPeriode1, UserDate(), UserDate(), aImlSuite, ;
-                            aLines ;
+                          ImpAppend( jnlClose,x,aIml,aCtb, ;
+                            cPeriode1, UserDate(), UserDate(), ;
+                            aImlSuite, aLines ;
                           ) ;
                         } ) == DDCREATE_DONE
                           fwrite(fd, ;
@@ -1594,7 +1597,8 @@ open area oMvi(), oBud(), oImp()
                         ** "Eierlegen"
                         open area oBud()
                           if SRVATTR_K $ srv[SRV_ATTRIB]
-                            seek aIml[1][IML_DC] + NewIdBud(aIml[1][IML_IDBUD],cPeriode1)
+                            seek aIml[1][IML_DC] + ;
+                              NewIdBud(aIml[1][IML_IDBUD],cPeriode1)
                             if eof()
                               seek aIml[1][IML_DC] + aIml[1][IML_IDBUD]
                               if eof()
@@ -1606,12 +1610,14 @@ open area oMvi(), oBud(), oImp()
                                 aBuf := CopyRec()
                                 if dbAddRec()
                                   PasteRec(aBuf)
-                                  BUD->IdBud := NewIdBud(aIml[1][IML_IDBUD],cPeriode1)
+                                  BUD->IdBud := NewIdBud(;
+                                    aIml[1][IML_IDBUD],cPeriode1)
                                   BUD->DatCrea  := UserDate()
                                   BUD->IdFcb := "000"
                                   if ! empty(srv[SRV_CODTOT])
                                     BUD->CodTot := srv[SRV_CODTOT]
-                                    if (grb := GrbLocate(BUD->CodTot)) == NIL
+                                    if (grb := GrbLocate(;
+                                        BUD->CodTot)) == NIL
                                       Warning( ;
                                         SayIdBud(BUD->IdBud) ;
                                         + " : " + srv[SRV_CODTOT] ;
@@ -1650,7 +1656,8 @@ open area oMvi(), oBud(), oImp()
                                 BUD->IdBud + " : ddRecLock() failed" ;
                               )
                             endif
-                            aIml[1][IML_IDBUD]   := NewIdBud(aIml[1][IML_IDBUD],cPeriode1)
+                            aIml[1][IML_IDBUD] := ;
+                              NewIdBud(aIml[1][IML_IDBUD],cPeriode1)
                           endif
                         close area
                         aIml[1][IML_PERIODE] := cPeriode2
@@ -1774,23 +1781,27 @@ open area oMvi(), oBud(), oImp()
   enddo
 close area
 UnlockData()
-fseek(fd,0)
-open printer SetTplIni() preview SetPreview() ;
-     width len(cTit2) ;
-     titblock {|| PrintHeader( ;
-         MSG_CLOSE + " " + cPeriode1 + " -> " + cPeriode2, ;
-         PerText({||.f.}), ;
-       ), ;
-       PrintLine(cTit1), ;
-       PrintLine(cTit2)  ;
-     }
-do while (cLine := freadline(fd)) != NIL
-  PrintLine(cLine)
-enddo
-close printer
+if !lDebug .or. Confirm("Beanstandungen drucken (J/N)?")
+  fseek(fd,0)
+  open printer SetTplIni() preview SetPreview() ;
+       width len(cTit2) ;
+       titblock {|| PrintHeader( ;
+           MSG_CLOSE + " " + cPeriode1 + " -> " + cPeriode2, ;
+           PerText({||.f.}), ;
+         ), ;
+         PrintLine(cTit1), ;
+         PrintLine(cTit2)  ;
+       }
+  do while (cLine := freadline(fd)) != NIL
+    PrintLine(cLine)
+  enddo
+  close printer
+endif
 fclose(fd)
 if cDoIt == BUTTON_OFF
-  delete file (DbPath() + "\IMPAUTO.ERR")
+  if !lDebug .or. Confirm("IMAUTO.ERR l”schen (J/N)?")
+    delete file (DbPath() + "\IMPAUTO.ERR")
+  endif
 endif
 RETURN MnuDone()
 
