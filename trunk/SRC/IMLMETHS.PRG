@@ -425,7 +425,8 @@ if ! empty(IML->IdPar2)
 endif
 if empty(IMP->Compte1)
   if empty(IML->Compte1)
-    IML->Compte1 := PAR->Compte1
+    // IML->Compte1 := PAR->Compte1
+    IML->Compte1 := ImlCompte()
   endif
 else
   IML->Compte1 := IMP->Compte1

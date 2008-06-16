@@ -69,21 +69,6 @@ action b key K_ENTER   prompt NIL block DclDcfEdit(DCL->IdDcl)
 ddEndDef()
 RETURN b
 
-FUNCTION DclDcfEdit(cIdBil)
-cIdBil := trim(cIdBil)
-RETURN DbfEdit( ;
-  {oDcf(),oBil()},trim(DCL->Name1),"DCFDCL",;
-  NIL,NIL,cIdBil,NIL;
-)
-
-FUNCTION DclWait() ; RETURN NIL
-
-FUNCTION BilDcfCount(cIdDcl)
-local nCount := DbfSum({oDcf()},"1",3, ;
-  FIELD->IdBil+cIdDcl,;
-  "DCF->IdBil+DCF->IdDcl=='"+FIELD->IdBil+cIdDcl+"'")
-RETURN nCount
-
 **
 ** DCF : Declaration Fields
 **
@@ -139,6 +124,38 @@ action b key K_ENTER   prompt "General accounts [Enter]" ;
          block DcfGenEdit()
 ddEndDef()
 RETURN b
+
+**
+** DCP : Declaration Periods
+**
+FUNCTION oDcp()
+static b := NIL
+if b != NIL ; RETURN b ; endif
+define data b    ;
+  name DCP            ;
+  create RecCreate()   
+ddIndex b on DCP->IdDcp
+ddFld IdDcp   ,C, 4,0 picture PIC_ID
+ddFld Mont1   ,C, LenMont(),0 ;
+              pick PickNum(FIELD->Mont1)
+ddEndDef()
+RETURN b
+
+
+FUNCTION DclDcfEdit(cIdBil)
+cIdBil := trim(cIdBil)
+RETURN DbfEdit( ;
+  {oDcf(),oBil()},trim(DCL->Name1),"DCFDCL",;
+  NIL,NIL,cIdBil,NIL;
+)
+
+FUNCTION DclWait() ; RETURN NIL
+
+FUNCTION BilDcfCount(cIdDcl)
+local nCount := DbfSum({oDcf()},"1",3, ;
+  FIELD->IdBil+cIdDcl,;
+  "DCF->IdBil+DCF->IdDcl=='"+FIELD->IdBil+cIdDcl+"'")
+RETURN nCount
 
 FUNCTION DcfGenEdit()
 // RETURN BilGenEdit(DCF->IdBil) if empty(DCF->IdGen)

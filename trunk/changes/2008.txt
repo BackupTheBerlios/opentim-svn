@@ -315,3 +315,14 @@
 
 20080514
 - ImpAuto() machte in gewissen Netzkonfigurationen eine endlose Schleife beim Vorlauf. Test "do while !bof()" erg„nzt durch   ".and.!eof()", dadurch wurde das Problem behoben.
+
+20080515
+- DEF_DCL : Neue Tabelle DCP.
+
+20080530
+- DCLTVA.ACT : Umsatz MWSt-Code 19M ("19% Deutschland mit Montage") wurde nicht im Feld 47 der MWSt-Erkl„rung eingetragen.
+- hstven.rep : In der Kolonne "Feld 47" werden jetzt auch Ums„tze angezeigt und summiert, die bisher lediglich in Kolonne "Umsatz Ausland" standen. Solche Ums„tze stehen dann also in zwei Kolonnen gleichzeitig.
+
+20080516
+- DEF_IMP: Neuer Konfig-Eintrag ImlCompte, damit man Domizilierungsauftr„ge verwalten kann. 
+- Neue Funktion ImpWriteDom(cFilename), die eine Domizilierungsauftragsdatei im Bankstandardformat DOM'80 generiert.

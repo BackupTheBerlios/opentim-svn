@@ -11,7 +11,7 @@ area { oDcf() }
 order 1
 start DCL->IdDcl
 while {||DCF->IdDcl==DCL->IdDcl}
-#exec setvar("decpos",0)
+#exec setvar("decpos",2)
 
 // ValidateRecord {||setvar("values",\
   DcfValues(getvar("range1"),getvar("range2"),getvar("range3"),\

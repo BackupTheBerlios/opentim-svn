@@ -28,7 +28,7 @@ DlgDefine("03",CttBase('DC=="D".and.IdCtr=="V".and.IdCtf!="**".and.IdTax$"20 ,21
 DlgDefine("45",CttBase('DC=="D".and.IdCtr=="V".and.IdTax$"C  "'))
 DlgDefine("46",CttBase('DC=="D".and.IdCtr=="V".and.IdTax$"IM ,IM6"'))
 DlgDefine("47",CttBase('\
-  DC=="D".and.IdCtr=="V".and.IdTax$"IS ,X  ,7  ,15 ,16 ,19 ,L  ,D0 "\
+  DC=="D".and.IdCtr=="V".and.IdTax$"IS ,X  ,7  ,15 ,16 ,19 ,19M,L  ,D0 "\
 '))
 // 48 : notes de cr‚dit vente [et corrections n‚gatives] relatives aux
 // op‚rations inscrites en grille 46
@@ -38,7 +38,7 @@ DlgDefine("48",-CttBase('\
 // 49 : notes de cr‚dit vente [et corrections n‚gatives] relatives aux
 // autres op‚rations du cadre II
 DlgDefine("49",-CttBase('\
-  DC=="C".and.IdCtr=="V".and.!IdTax$"IM ,IM6,15 ,16 ,19 ,L  ,07 ,A  ,B  "\
+  DC=="C".and.IdCtr=="V".and.!IdTax$"IM ,IM6,15 ,16 ,19 ,19M,L  ,07 ,A  ,B  "\
 '))
 
 // 54 : taxe due sur les ventes (grilles 01, 02 et 03)
@@ -96,7 +96,7 @@ DlgDefine("63",-CttTaxe('\
   .and.left(IdTax,1)!="N"\
   .and.left(IdTax,1)!="I"\
   .and.left(IdTax,1)!="C"\
-  .and.!IdTax$"15 ,16 ,19 ,L  ,07 "\
+  .and.!IdTax$"15 ,16 ,19 ,19M,L  ,07 "\
 '))
 //      - les NC achat d‚clar‚es … l'‚tranger
 //  .and.!IdTax$"15 ,16 ,07 "\
@@ -104,7 +104,7 @@ DlgDefine("63",-CttTaxe('\
 // 64 : taxe sur les notes de cr‚dit vente
 // 20030309 : sans compter les NCV … l'‚tranger
 DlgDefine("64",\
-  -CttTaxe('IdCtr=="V".and.DC=="C".and.!IdTax$"15 ,16 ,19 ,L  ,07 ,A  ,B  "')\
+  -CttTaxe('IdCtr=="V".and.DC=="C".and.!IdTax$"15 ,16 ,19 ,19M,L  ,07 ,A  ,B  "')\
 )
 DlgDefine("65",0)
 DlgDefine("66",0)

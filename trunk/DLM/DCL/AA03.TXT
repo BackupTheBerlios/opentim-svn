@@ -1,6 +1,6 @@
 <table>
 <tr><td>Eelmiste perioodide jaotamata kasumi j„„k       <td>[=ntomf(getvar("kasumiJaak"))]
-<tr><td>2007.aastal teenitud kasum    <td>[=ntomf(getvar("aastaKasum"))]
+<tr><td>Aruanneperioodil teenitud kasum    <td>[=ntomf(getvar("aastaKasum"))]
 <tr><td>Maksta v„lja dividende        <td>[=ntomf(getvar("makstaValja"))]
 <tr><td>Jaotamata kasumi j„„k         <td>[=ntomf(\
   getvar("kasumiJaak")+getvar("aastaKasum")-getvar("makstaValja"))]

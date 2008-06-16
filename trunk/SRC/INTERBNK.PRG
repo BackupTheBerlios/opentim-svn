@@ -52,12 +52,8 @@ static xnMont := NIL
 #ifdef DEF_IMP
 
 **
-** ImpOtiWrite()
 **
 STATIC FUNCTION ImpOtiWrite(fd,jnl)
-* local cFileName
-* local fd
-* local jnl := JnlLocate(IMP->IdJnl)
 local cText
 local cCommunic
 local nSeq := 0
@@ -66,9 +62,7 @@ local nSumComptes := 0
 local dExec := UserDate()
 local lCommStruct
 LOCAL cComSep := "*"  // Separator fr Mitteilung in šberweisung
-if ! OtiHeader(jnl,fd,IMP->Date2)
-  RETURN .f.
-endif
+RETURN .f. if ! OtiHeader(jnl,fd,IMP->Date2)
 open area oIml(), oPar(), oPlz(), oNat(), oBud()
   softseek IMP->IdJnl + IMP->IdDoc
   do while ! eof() .and. IML->IdDoc == IMP->IdDoc ;
@@ -145,6 +139,94 @@ OtiFooter(fd,nSeq,nSum,nSumComptes)
 * fclose(fd)
 RETURN .t.
 
+
+**
+**
+STATIC FUNCTION ImpDomWrite(fd,jnl)
+local cText
+local cCommunic
+local nSeq := 0
+local nSum := 0
+local nSumComptes := 0
+local dExec := UserDate()
+local lCommStruct
+LOCAL cComSep := "*"  // Separator fr Mitteilung in šberweisung
+RETURN .f. if ! OtiHeader(jnl,fd,IMP->Date2)
+open area oIml(), oPar(), oPlz(), oNat(), oBud()
+  softseek IMP->IdJnl + IMP->IdDoc
+  do while ! eof() .and. IML->IdDoc == IMP->IdDoc ;
+                   .and. IML->IdJnl == IMP->IdJnl ;
+                   .and. ! TaskInter()
+    nSeq++
+    seek IML->IdPar  in PAR
+    seek PAR->Pays + PAR->CP in PLZ
+    seek IML->DC+IML->IdBud in BUD
+    cText := ""
+    cCommunic := ""
+    // Interbank-Datei (Teil 1)
+    ** drin lassen falls (...)
+    ** if IsCommStruct(IML->NB2) // substr(IML->NB2,4,1) == "/" .and. substr(IML->NB2,9,1) == "/" .and. len(trim(IML->NB2))==14
+    **   cCommunic := padr(strtran(trim(IML->NB2),"/"),106)
+    **   lCommStruct := .t.
+    ** else
+      cCommunic := ZauComPrefix()+trim(IML->NB2)
+      cCommunic += cComSep + trim(PAR->Firme)
+      cCommunic += cComSep + IML->IdJnl + " " + IML->IdDoc
+      cCommunic := padr(cCommunic,106)
+      lCommStruct := .f.
+    ** endif
+    if empty(IML->IdPar2)
+      seek IML->IdPar  in PAR
+    else
+      seek IML->IdPar2 in PAR
+    endif
+    seek PAR->Pays + PAR->CP in PLZ
+    cText := ""
+    cText += "1"
+    cText += spacezero(nSeq,4,0)
+    cText += "        "
+    cText += "0000000000"
+    cText += OtiCompte(IML->Compte1)
+    cText += spacezero(&xnMont,12,snDecPos)
+    nSum += &xnMont // val(IML->Mont)
+    nSumComptes += val(OtiCompte(IML->Compte1))
+    cText += padr(upper(PAR->Firme),26)
+    cText += OtiLangue(PAR->Langue) // Langue b‚n‚ficiaire
+    cText += UPPER(substr(cCommunic,1,53))
+    cText += if(lCommStruct,"8","3")
+    cText += CR_LF
+    fwrite(fd,dos2latin1(cText))
+    // Interbank-Datei (Teil 2)
+    cText := ""
+    cText += "2"
+    cText += spacezero(nSeq,4,0)
+    cText += "0"
+    cText += padr(upper(ParStreet()),26)
+    cText += left(PAR->CP,4)
+    cText += left(upper(PLZ->Nom),22)
+    if lCommStruct
+      cText += space(53)
+    else
+      cText += UPPER(substr(cCommunic,54,53))
+    endif
+    if left(IML->Compte1,2) == "99" ;
+       .and. substr(IML->Compte1,5,7) == repl("0",7)
+      cText += "1"  // code frais
+    else
+      cText += "0"  // code frais
+    endif
+    cText += space(12)
+    cText += space(4)
+    cText += CR_LF
+    fwrite(fd,dos2latin1(cText))
+    skip
+  enddo
+close area
+OtiFooter(fd,nSeq,nSum,nSumComptes)
+RETURN .t.
+
+
+
 **
 ** OtiFooter()
 **
@@ -210,11 +292,6 @@ cHeader := dos2latin1(cHeader) // 20040202
 fwrite(nFile,cHeader + CR_LF)
 RETURN .t.
 
-
-* FUNCTION OtiFile()
-* local c := scOtiFile
-* scOtiFile := "(none)"
-* RETURN c
 
 #endif DEF_IMP
 
@@ -911,6 +988,17 @@ default cFilename to AppRoot() + "\" + substr(IMP->IdJnl,2,2) + IMP->IdDoc
     RETURN .f.
   endif
 #endif
+RETURN cReturn
+
+FUNCTION ImpWriteDom(cFilename)
+local cReturn := ""
+local jnl := JnlLocate(IMP->IdJnl)
+default cFilename to AppRoot() + "\" + substr(IMP->IdJnl,2,2) + IMP->IdDoc
+if fgenerate(cFilename+".DOM", {|fd|ImpDomWrite(fd,jnl)})
+  cReturn := cFilename+".DOM"
+else
+  RETURN .f.
+endif
 RETURN cReturn
 
 

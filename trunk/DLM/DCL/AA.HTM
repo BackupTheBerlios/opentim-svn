@@ -16,12 +16,14 @@ td.numberCell { text-align:right; }
 </style>
 </head>
 <body>
-[=setvar("brutoPalk",-DcfPeek("004","1221  ",getvar("range1")))]
-[=setvar("sotsMaks",-DcfPeek("004","1222  ",getvar("range1")))]
-[=setvar("ttkMaks",-DcfPeek("004","1223  ",getvar("range1")))]
-[=setvar("kasumiJaak",-DcfPeek("003","2230  ",getvar("range1")))]
-[=setvar("aastaKasum",-DcfPeek("003","2240  ",getvar("range1")))]
-[=setvar("makstaValja",50000)]
+[=setvar("brutoPalk",-DcfPeek("004","151221",getvar("range1")))]
+[=setvar("sotsMaks",-DcfPeek("004","151222",getvar("range1")))]
+[=setvar("ttkMaks",-DcfPeek("004","151223",getvar("range1")))]
+[=setvar("kasumiJaak",DcfPeek("003","2230  ",getvar("range2")))]
+[=setvar("aastaKasum",DcfPeek("003","2240  ",getvar("range1")))]
+[=setvar("makstaValja",DbfPeek(oDcp(),trim(getvar("range1")),\
+"val(DCP->Mont1)",NIL))]
+[=getvar("makstaValja")!=NIL.or.!SetMsg("No DCP entry for range1")]
 [etc do SetDecPos(0)]
 
 <h1>[="Majandusaasta aruanne"]</h1>

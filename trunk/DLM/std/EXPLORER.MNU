@@ -19,12 +19,15 @@ MnuAddItem("~TAX.DBF : V.A.T. codes    ",{||DbfEdit({oTax(),oGen()})})
 
 MnuAddTitle("~Financial")
 MnuAddItem("~FIN.DBF : FinancialDocuments",{||DbfEdit({oFin()})})
-MnuAddItem("~FNL.DBF : FIN contents      ",{||DbfEdit({oFnl(),oPar(),oGen()})})
+MnuAddItem("FN~L.DBF : FIN contents      ",{||DbfEdit({oFnl(),oPar(),oGen()})})
 MnuAddSep()
 MnuAddItem("~HST.DBF : history           ",{||DbfEdit({oHst(),oVen(),oFin(),oPar(),oGen()})})
-MnuAddItem("~CTT.DBF                     ",{||DbfEdit({oCtt()})})
-MnuAddItem("~CTG.DBF                     ",{||DbfEdit({oCtg()})})
-MnuAddItem("~CTP.DBF                     ",{||DbfEdit({oCtp()})})
+MnuAddItem("~CT~T.DBF                     ",{||DbfEdit({oCtt()})})
+MnuAddItem("~CT~G.DBF                     ",{||DbfEdit({oCtg()})})
+MnuAddItem("~CT~P.DBF                     ",{||DbfEdit({oCtp()})})
+#if HasDcl()!=NIL
+MnuAddItem("~DCP : Deklarationsperioden",{||DbfEdit({oDcp()})})
+#endif
 
 #if GetTableDef("KRL")!=NIL
 MnuAddTitle("~Kitz")
@@ -44,7 +47,8 @@ MnuAddTitle("~Other")
 MnuAddItem("~DLS : Dienstleistungen",{||DbfEdit({oDls(),oPar(),oDla()})})
 #endif
 #if oDlp()!=NIL
-MnuAddItem("DL~P : Anwesenheiten",{||DbfEdit({oDlp(),oDls(),oPar(),oDla()})})
+MnuAddItem("DL~P : Anwesenheiten",\
+  {||DbfEdit({oDlp(),oDls(),oPar(),oDla()})})
 #endif
 
 MnuAddItem("~MSG.DBF Correspondence      ",{||DbfEdit({oMsg(),oPar()})})

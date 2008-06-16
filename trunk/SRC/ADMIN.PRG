@@ -120,6 +120,7 @@ static sbPerDevFixed := {|| .f. }
 
 #ifdef DEF_IMP
   static sbZauComPrefix := {||""}
+  static sbImlCompte := {|| PAR->Compte1 }
 #endif DEF_IMP
 
 
@@ -1797,6 +1798,7 @@ aadd( a, oNat() )
 #ifdef DEF_DCL
   aadd( a, oDcl() )
   aadd( a, oDcf() )
+  aadd( a, oDcp() )
 #endif DEF_DCL
 #ifdef DEF_KVK
   aadd( a, oKvk() )
@@ -4867,6 +4869,7 @@ RETURN eval(sbPerDevFixed,cPeriode,cIdDev)
 
 #ifdef DEF_IMP
   FUNCTION ZauComPrefix ; RETURN eval(sbZauComPrefix)
+  FUNCTION ImlCompte ; RETURN eval(sbImlCompte)
 #endif DEF_IMP
 
 #ifdef DEF_PLP
@@ -5733,10 +5736,14 @@ AddIniCmd( { "DevDefault" , {|x| (saDevDefault := xparse(x)) != NIL;
            .and.len(saDevDefault)==2 } } )
 AddIniCmd( { "PerDevFixed" , {|x| (sbPerDevFixed := xparse(x)) != NIL } } )
 #ifdef DEF_TRA
-  AddIniCmd( { "TrlCompte"    , {|x| (sbTrlCompte := cblock(x)) != NIL } } )
+  AddIniCmd( { "TrlCompte"    , ;
+    {|x| (sbTrlCompte := cblock(x)) != NIL } } )
 #endif DEF_TRA
 #ifdef DEF_IMP
-  AddIniCmd( { "ZauComPrefix" , {|x| (sbZauComPrefix := cblock(x)) != NIL } } )
+  AddIniCmd( { "ZauComPrefix" , ;
+    {|x| (sbZauComPrefix := cblock(x)) != NIL } } )
+  AddIniCmd( { "ImlCompte"    , ;
+    {|x| (sbImlCompte := cblock(x)) != NIL } } )
 #endif DEF_IMP
 #ifdef DEF_PLP
   AddIniCmd( { "ParSexe"    , {|x| (sbParSexe := xparse(x)) != NIL } } )

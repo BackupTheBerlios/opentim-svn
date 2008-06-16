@@ -31,7 +31,7 @@ if errorlevel 1 goto err_copy
 
 [=left(AppPath(),2)]
 cd [=AppPath()]
-zip [=AppRoot()]\dist\bin.zip tim4.exe tim4.ico \
+zip [=AppRoot()]\dist\bin.zip tim4.exe tim4.ico tim.ini \
   choice.com prn2file.com \
   zip.exe zipsplit.exe setup.bat
 if errorlevel 1 goto err_zip
