@@ -2971,13 +2971,15 @@ endif
 RETURN !SetMsg(utos(cFormat) + " : invalid format")
 
 FUNCTION TpcToHtml(cFormat)
-if cFormat $ "br,ul,ol,para"
+if cFormat $ "br,ul,ol,para,comma"
   RETURN TpcRefToStream() if TpcIsContainer()
   toTxtStream(trim(TpcName()))
-  if !empty(TPC->URL)
-    toStream(" &uarr;"+url2html(TPC->URL))
+  if ! cFormat $ "comma"
+    if !empty(TPC->URL)
+      toStream(" &uarr;"+url2html(TPC->URL))
+    endif
+    xt_abstract(LngExpr("TPC->Memo"))
   endif
-  xt_abstract(LngExpr("TPC->Memo"))
   *if empty(TPC->Memo1)
   *  BeginList("comma")
   *  DbfScan({oTpc()},xt_TreeIndex(),TPC->IdTpc,NIL,NIL,{||;
@@ -4482,7 +4484,7 @@ RETURN cId
 
 FUNCTION LngSuffix(cIdLng)
 default cIdLng to TplLang()
-RETURN "" if cIdLng==MemLang1
+RETURN "" if cIdLng==MemLang1 .or. cIdLng=="*"
 RETURN "_"+lng2iso(cIdLng)
 
 
