@@ -2019,7 +2019,8 @@ RETURN .f. if ! OnParSelect()
     cIdPar := FIELD->IdPar2
   endif
   seek cIdPar in PAR
-  FIELD->Compte1 := PAR->Compte1
+  // 20080703 FIELD->Compte1 := PAR->Compte1
+  FIELD->Compte1 := ImlCompte()
 #endif DEF_IMP
 RETURN .t. // ph_Refresh()
 

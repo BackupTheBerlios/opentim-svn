@@ -244,12 +244,12 @@ fwrite(nFile,cFooter)
 RETURN NIL
 
 
-**
-** OtiHeader()
-**
+/*
+   writes the first line of an OTI file
+*/
 STATIC FUNCTION OtiHeader(jnl,nFile,dExec)
 LOCAL cHeader := ""
-cHeader += "0"                       // Identification de l'enregistrement
+cHeader += "0"                     // Identification de l'enregistrement
 cHeader += "0000"
 cHeader += dtoOti(UserDate())        // Date de cr‚ation du support
 cHeader += jnl[JNL_CODEBQE]          // Num‚ro de code de la banque.

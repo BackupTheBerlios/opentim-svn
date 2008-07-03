@@ -1,11 +1,12 @@
 //
-// generated 10.12.07
+// generated 01.07.08
 // for PAR.FOX
 //
 
 box 1 0 13 79
 box 1 58 4 79
 box 4 51 10 79
+
 
 string 2 59 ID
 string 4 2 Familienname
@@ -42,9 +43,6 @@ get 31 7 24 pict @K@S26
 get 5 8 15 pict @k@s23
 get 39 8 39
 get 40 8 44
-get 9 10 6 pict @k@s19
-get 10 11 6
-get 49 12 6
 get 1 2 62 pict @K@!
 get 7 2 69 pict @K@!
 get 28 2 71
@@ -57,6 +55,9 @@ get 12 7 61 pict @K@!
 get 11 8 59 pict @k@s26
 get 21 9 61 pict @K@!
 get 47 9 75 pict @k@!
+get 9 10 6 pict @k@s19
+get 10 11 6
+get 49 12 6
 get 48 11 31 pict @k@s48
 get 50 12 31 pict @k@s48
 get 37 14 1 pict 41x7
