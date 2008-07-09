@@ -326,3 +326,8 @@
 20080516
 - DEF_IMP: Neuer Konfig-Eintrag ImlCompte, damit man Domizilierungsauftr„ge verwalten kann. 
 - Neue Funktion ImpWriteDom(cFilename), die eine Domizilierungsauftragsdatei im Bankstandardformat DOM'80 generiert.
+
+20080709
+- JNL->CodeCli ist jetzt nicht mehr 3 sondern 11 Zeichen lang. Fr
+  Domizilierungen. Deses Feld wird nur beim Generieren von Interbankdateien benutzt. Fr OTI und VME muss der Inhalt 3 Zeichen
+  lang sein, fr DOM-Dateien 11 Zeichen. Neue Fehlermeldungen, wenn das nicht stimmt.

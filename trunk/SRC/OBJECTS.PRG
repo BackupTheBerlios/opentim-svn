@@ -989,7 +989,7 @@ do while !eof()
     JNL->IdGrj, ;             // JNL_IDGRJ
     FieldIdCdc(), ;           // JNL_IDCDC
     trim(JNL->IdDbv), ;       // JNL_IDDBV
-    JNL->CodeCli, ; // JNL_CODECLI
+    trim(JNL->CodeCli), ; // JNL_CODECLI
     JNL->Compte,  ; // JNL_COMPTE
     JNL->CodeBqe, ; // JNL_CODEBQE
     val(JNL->TaxDecPos),; // JNL_TAXDECPOS

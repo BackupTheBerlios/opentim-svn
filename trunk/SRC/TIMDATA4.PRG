@@ -81,7 +81,7 @@ ddFld DocLib2N,C,25,0
 ddFld DocLib3N,C,25,0
 ddFld IdDbv   ,C, 5,0 picture PIC_ID ;
                       pick PickQry(JNL->Alias,".QRY",JNL->IdDbv)
-ddFld CodeCli   ,C, 3,0 picture PIC_ID
+ddFld CodeCli   ,C, 11,0 picture PIC_ID
 ddFld CodeBqe   ,C, 3,0 picture PIC_ID
 ddFld Compte    ,C, 14,0 picture PIC_ID ;
                          postedit {|x| BqePostEdit(x,"B  ") } ;
@@ -115,6 +115,7 @@ ddFld SeqType   ,C, 1,0 picture PIC_ID ;
   ddFld DocLib4N,C,25,0 attrib H
   ddFld DocLib4 ,C,25,0 attrib H
 #endif DEF_4LANG
+// ddFld IdBenef   ,C, 11,0 picture PIC_ID // Domizilierungen
 
 * action b key K_F9 prompt "Buchungsperioden [F9]" ;
 *          block JnlPerEdit(JNL->IdJnl)

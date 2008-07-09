@@ -178,6 +178,10 @@ cHeader += padr(MemName2,26) // Adresse donneur d'ordre
 cHeader += left(MemName3,4)  // CPOST donneur d'ordre
 cHeader += padr(substr(MemName3,6),22) // Loc. donneur d'ordre
 cHeader += "3"                      // code langue
+if len(jnl[JNL_CODECLI]) != 3
+  SetMsg(jnl[JNL_CODECLI] + " : ungÅltiger CodeCli fÅr OTI-Dateien !")
+  RETURN .f.
+endif
 cHeader += jnl[JNL_CODECLI] + "0000000"    // numÇro d'identification du fichier
 * bis 19980616 : Version 1
 * cHeader += "1"                      // code version
@@ -206,7 +210,18 @@ cHeader := dos2latin1(cHeader) // 20040202
 fwrite(nFile,cHeader + CR_LF)
 RETURN .t.
 
-
+/*
+*/
+FUNCTION ImpWriteDom(cFilename)
+local cReturn := ""
+local jnl := JnlLocate(IMP->IdJnl)
+default cFilename to AppRoot() + "\" + substr(IMP->IdJnl,2,2) + IMP->IdDoc
+if fgenerate(cFilename+".DOM", {|fd|ImpDomWrite(fd,jnl)})
+  cReturn := cFilename+".DOM"
+else
+  RETURN .f.
+endif
+RETURN cReturn
 
 **
 **
@@ -273,8 +288,12 @@ cHeader += jnl[JNL_CODEBQE]          // NumÇro de code de la banque.
                                      // CCB = "050"
 cHeader += "02"                  // Code de l'application
 cHeader += IMP->IdJnl+IMP->IdDoc // numÇro rÇf. du fichier
-cHeader += padr(jnl[JNL_CODECLI],11) // id. du remettant
-cHeader += padr(jnl[JNL_CODECLI],11) // id. du crÇancier
+if len(jnl[JNL_CODECLI]) != 11
+  SetMsg(jnl[JNL_CODECLI] + " : ungÅltiger CodeCli fÅr DOM-Dateien !")
+  RETURN .f.
+endif
+cHeader += jnl[JNL_CODECLI] // id. du remettant
+cHeader += jnl[JNL_CODECLI] // id. du crÇancier
 cHeader += padr(strtran(jnl[JNL_COMPTE],"-",""),12) // no compte du crÇancier
 cHeader += "5"                       // 2 ou 5
 cHeader += " "                       // <D>uplicata ou non
@@ -282,6 +301,19 @@ cHeader += dtoOti(dExec)             // Date pivot souhaitÇe
 cHeader += space(60) // blancs
 cHeader := dos2latin1(cHeader) 
 fwrite(nFile,cHeader + CR_LF)
+if IMP->IdDev == "BEF"
+  snDecPos := 0
+elseif IMP->IdDev == "EUR"
+  snDecPos := 2
+else
+  SetMsg(IMP->IdDev + " : unbekannte WÑhrung fÅr OTI-Dateien !")
+  RETURN .f.
+endif
+if IMP->IdDev == DevDefault(IMP->Periode)
+  xnMont := "val(IML->Mont)"
+else
+  xnMont := "val(IML->MontDev)"
+endif
 RETURN .t.
 
 **
@@ -1001,17 +1033,6 @@ default cFilename to AppRoot() + "\" + substr(IMP->IdJnl,2,2) + IMP->IdDoc
 #endif
 RETURN cReturn
 
-FUNCTION ImpWriteDom(cFilename)
-local cReturn := ""
-local jnl := JnlLocate(IMP->IdJnl)
-default cFilename to AppRoot() + "\" + substr(IMP->IdJnl,2,2) + IMP->IdDoc
-if fgenerate(cFilename+".DOM", {|fd|ImpDomWrite(fd,jnl)})
-  cReturn := cFilename+".DOM"
-else
-  RETURN .f.
-endif
-RETURN cReturn
-
 
 
 #ifdef DEF_IBAN
@@ -1086,6 +1107,10 @@ if len(jnl[JNL_CODEBQE]) != 3
   RETURN !SetMsg(jnl[JNL_CODEBQE]+" : code banque invalide")
 endif
 cText += "51"                      // Code application : 51
+if len(jnl[JNL_CODECLI]) != 3
+  SetMsg(jnl[JNL_CODECLI] + " : ungÅltiger CodeCli fÅr VME-Dateien !")
+  RETURN .f.
+endif
 cText += jnl[JNL_CODECLI] + "0000000"  // numÇro d'identification du fichier
                                        // N¯ de rÇfÇrence du fichier attribuÇ par le remettant
 cText += padr('',11) // N¯TVA (d'immatriculation) du remettant du fichier
@@ -1439,6 +1464,10 @@ if len(jnl[JNL_CODEBQE]) != 3
   RETURN !SetMsg(jnl[JNL_CODEBQE]+" : code banque invalide")
 endif
 cText += "51"                      // Code application : 51
+if len(jnl[JNL_CODECLI]) != 3
+  SetMsg(jnl[JNL_CODECLI] + " : ungÅltiger CodeCli fÅr VME-Dateien !")
+  RETURN .f.
+endif
 cText += jnl[JNL_CODECLI] + "0000000"  // numÇro d'identification du fichier
                                        // N¯ de rÇfÇrence du fichier attribuÇ par le remettant
 cText += padr('',11) // N¯TVA (d'immatriculation) du remettant du fichier
