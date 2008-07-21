@@ -121,7 +121,8 @@ for i := 1 to len(saVol)
   vol := saVol[i]
   if a[1]==vol[VOL_ID]
   *if lower(left(x,len(vol[VOL_ID])+1))==vol[VOL_ID]+":"
-    x:=substr(x,len(vol[VOL_ID])+2)
+    // x:=substr(x,len(vol[VOL_ID])+2)
+    x := strtran(a[2],"\","/")
     if left(x,1)=="/"
       x:=substr(x,2)
     endif

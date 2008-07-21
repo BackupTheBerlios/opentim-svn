@@ -222,10 +222,12 @@ static snCtpCredit  := 0
 FUNCTION PlzString(cPays,cCP,cZipCode)
 local cLoc := ""
 RETURN trim(NatName(cPays)) if empty(cCP)
+#ifndef DEF_WWW
 if cPays != MemPays
   * cLoc += trim(cPays) + " - "
   cLoc += trim1(NatCountry(cPays)," - ")
 endif
+#endif DEF_WWW
 default cZipCode to left(cCp,7)
 cLoc += trim1(cZipCode) + PlzName(cPays,cCp)
 RETURN trim(cLoc)

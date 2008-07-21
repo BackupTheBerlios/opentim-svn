@@ -331,3 +331,9 @@
 - JNL->CodeCli ist jetzt nicht mehr 3 sondern 11 Zeichen lang. Fr
   Domizilierungen. Deses Feld wird nur beim Generieren von Interbankdateien benutzt. Fr OTI und VME muss der Inhalt 3 Zeichen
   lang sein, fr DOM-Dateien 11 Zeichen. Neue Fehlermeldungen, wenn das nicht stimmt.
+  
+20080714
+- volsplit() macht jetzt auch dann strtran("\","/"), wenn es kein Laufwerksbuchstabe sondern ein echts Volume ist.
+
+20080716
+- PlzString() setzt jetzt kein L„nderkrzel mehr vor die PLZ, wenn es eine Adresse im Ausland ist. Aber das gilt nur wenn #ifdef DEF_WWW ist.
