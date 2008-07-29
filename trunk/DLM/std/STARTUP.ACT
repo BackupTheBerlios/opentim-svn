@@ -1,7 +1,24 @@
 // STARTUP.ACT called from rpt_open()
 !file("C:\AUTOEXEC.ACT").or.ActExec("C:\AUTOEXEC")
+// You can override default values for PC and USER 
+// either in C:\AUTOEXEC.ACT or in TIM.INI or TIM.DBI
 DlgDefault("USER",alltrim(upper(getenv("USER"))))
 DlgDefault("PC",alltrim(upper(getenv("PC"))))
-RETURN .t. if !PathExist(AppPath()+"\HOME")
-ChDir(AppPath()+"\HOME\"+getvar("PC"))
+// DlgDefault("USER",alltrim(upper(\
+  iif(empty(getenv("USER")),getenv("USERNAME"),getenv("USER"))\
+)))
+// DlgDefault("PC",alltrim(upper(\
+  iif(empty(getenv("PC")),getenv("COMPUTERNAME"),getenv("PC"))\
+)))
+RETURN LogConsole("Single-user mode (no " + \
+  AppRoot()+"\HOME"+" directory)") .and. \
+  FileDelete(".\after.bat",.f.,.t.) \
+  if !PathExist(AppRoot()+"\HOME")
+LogConsole("Multi-user mode in "+AppRoot()+"\HOME")
+PathExist(AppRoot()+"\HOME\"+getvar("PC")).or.(\
+  Confirm("Create dir "+AppRoot()+"\HOME\"+getvar("PC")\
+  +" (Y/N) ?",NIL,"N")\
+  .and.LogConsole("Create dir "+AppRoot()+"\HOME\"+getvar("PC"))\
+    .and.CreateDir(AppRoot()+"\HOME\"+getvar("PC")))
+ChDir(AppRoot()+"\HOME\"+getvar("PC"))
 FileDelete(".\after.bat",.f.,.t.)
