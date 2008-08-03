@@ -628,7 +628,7 @@ local a := { ;
   { "style", {|x|cStyle:=x}   }  ;
 }
 RETURN .f. if ! parse_kw(cParams,a)
-cName := DrvCvtString(cName)
+// cName := DrvCvtString(cName)
 avol := volsplit(cName)
 RETURN !SetMsg(cName+" : invalid volume specifier!") if avol == NIL
 * default cAltText to cName
@@ -638,6 +638,7 @@ endif
 if !empty(cHeight).and. "/" $ cHeight
   cHeight := ntrim(int(xparse("400*"+cHeight)))
 endif
+// RETURN .f. if !Confirm(cName)
 cSrcUrl := eval(avol[1][VOL_URL],avol[1],trim(avol[2]))
 * confirm(sSrcUrl)
 * cSrcURL:=vol2url(cName)
@@ -660,7 +661,7 @@ elseif avol[1][VOL_TYPE] == "maketn"
   cFilename := root_suffix(;
     avol[1][VOL_PATH] + "\"+ strtran(avol[2],"/","\"), "_web")
   cSrcUrl := root_suffix(cSrcUrl,"_web")
-  RETURN !SetMsg(cFilename + MsgFileExist()) if ! file(cFilename)
+  // RETURN !SetMsg(cFilename + MsgFileExist()) if ! file(cFilename)
 endif
 s := '<a href="'+ cRefURL+'"'
 if cTitle != NIL

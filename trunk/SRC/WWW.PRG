@@ -4795,6 +4795,7 @@ local lOkay
 * if cRefMode != NIL
 *   scRefMode := cRefMode
 * endif
+// lOkay := sparse(hardcr(cMemo),cSource,.f.)
 lOkay := sparse(DrvCvtString(hardcr(cMemo)),cSource,.f.)
 * scRefMode := cSaveRefMode
 RETURN lOkay
