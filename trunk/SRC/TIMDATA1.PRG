@@ -1139,7 +1139,8 @@ action b key K_ALT_F7 prompt MsgMnuAttrib() block ParPickAttrib()
 #endif DEF_IMP
 #ifdef DEF_HST
   action b key K_F9 prompt MSG012 ;
-           block ParHstEdit(PAR->IdPar)
+           block ParHstEdit(PAR->IdPar) ;
+           when USRATTR_C $ UsrAttrib()
 #endif DEF_HST
 #ifdef DEF_TLG
   action b key NIL prompt "Tilgungs~plan                  " ;
@@ -1151,7 +1152,8 @@ action b key K_ALT_F7 prompt MsgMnuAttrib() block ParPickAttrib()
 #endif DEF_TIL
 #ifdef DEF_CTP
   action b key K_SH_F9 prompt MSG013 ;
-           block  ParCtpEdit(PAR->IdPar)
+           block  ParCtpEdit(PAR->IdPar) ;
+           when USRATTR_C $ UsrAttrib()
 #endif DEF_CTP
 #ifdef DEF_MEMO
   action b key K_F12 prompt MnuMemoEdit() block ParMemoEdit()

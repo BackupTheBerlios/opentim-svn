@@ -13,7 +13,8 @@ OnParSelect (!"G"$PAR->Attrib).or.Confirm(\
 
 OnMainMenu memodisplay(\
   StrParse(DlmMemoRead("news.txt"),"[]"),\
-  1,0,maxrow()-4,maxcol()-2\
+  1,0,maxrow()-4,maxcol()-2,\
+  CfgFullScreenColor()\
 )
 // ParName {|| trim(PAR->Firme) + trims(PAR->Allo,", ","") }
 ParName {|| trim(PAR->Firme) + trims(PAR->Vorname," ","")+ trims(PAR->Allo,", ","") }

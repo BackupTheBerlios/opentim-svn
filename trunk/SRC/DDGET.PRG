@@ -164,6 +164,7 @@ if mskget[MSKGET_FLDHANDLE] == 0
 else
   ag := ad[AD_FIELDS][mskget[MSKGET_FLDHANDLE]]
   RETURN NIL if FLDATTR_H $ ag[AG_ATTRIB]
+  RETURN NIL if FLDATTR_C $ ag[AG_ATTRIB] .and. !USRATTR_C $ UsrAttrib()
   fld := ag2get(ag, mskget[MSKGET_ROW],;
                     mskget[MSKGET_COL],;
                     mskget[MSKGET_PICTURE])
@@ -506,17 +507,17 @@ next i
 Warning(cName + MsgFldExist())
 RETURN .f.
 
-*FUNCTION ddFldSetAttr(cName,cAttrib)
-*local i
-*for i := 1 to len(sadCurrent[AD_FIELDS])
-*  if sadCurrent[AD_FIELDS][i][AG_NAME] == cName
-*    RETURN !SetMsg("was already set") if ;
-*      cAttrib $ sadCurrent[AD_FIELDS][i][AG_ATTRIB]
-*    sadCurrent[AD_FIELDS][i][AG_ATTRIB] += cAttrib
-*    RETURN .t.
-*  endif
-*next i
-*RETURN !SetMsg(cName + MsgFldExist())
+FUNCTION ddFldSetAttr(cName,cAttrib)
+local i
+for i := 1 to len(sadCurrent[AD_FIELDS])
+  if sadCurrent[AD_FIELDS][i][AG_NAME] == cName
+    RETURN !SetMsg("was already set") if ;
+      cAttrib $ sadCurrent[AD_FIELDS][i][AG_ATTRIB]
+    sadCurrent[AD_FIELDS][i][AG_ATTRIB] += cAttrib
+    RETURN .t.
+  endif
+next i
+RETURN !SetMsg(cName + MsgFldExist())
 
 FUNCTION ddFldClearAttr(cName,cAttrib)
 local i
@@ -534,18 +535,18 @@ RETURN !SetMsg(cName + MsgFldExist())
 **
 ** ddFldSetValidate() -
 **
-FUNCTION ddFldSetValidate(cName,b)
-local i
-if valtype(b)=="C"; b := cblock(b) ; endif
-// local bValid := xparse("{||"+xlValid+"}")
-for i := 1 to len(sadCurrent[AD_FIELDS])
-  if sadCurrent[AD_FIELDS][i][AG_NAME] == cName
-    sadCurrent[AD_FIELDS][i][AG_VALID] := b // wird oGet:postBlock
-    RETURN .t.
-  endif
-next i
-Warning(cName + MsgFldExist())
-RETURN .f.
+*FUNCTION ddFldSetValidate(cName,b)
+*local i
+*if valtype(b)=="C"; b := cblock(b) ; endif
+*// local bValid := xparse("{||"+xlValid+"}")
+*for i := 1 to len(sadCurrent[AD_FIELDS])
+*  if sadCurrent[AD_FIELDS][i][AG_NAME] == cName
+*    sadCurrent[AD_FIELDS][i][AG_VALID] := b // wird oGet:postBlock
+*    RETURN .t.
+*  endif
+*next i
+*Warning(cName + MsgFldExist())
+*RETURN .f.
 
 **
 ** ddFldSetWhen() -

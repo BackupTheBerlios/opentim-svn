@@ -2854,6 +2854,7 @@ local fldBlock
 local lIsMemo 
 local fld := ad[AD_FIELDS][col[COL_FLDHANDLE]]
 RETURN .f. if FLDATTR_H $ fld[AG_ATTRIB]  // removed field
+RETURN .f. if FLDATTR_C $ fld[AG_ATTRIB]  .and. !USRATTR_C $ UsrAttrib()
 * RETURN .f. if fld:type == "M" // memo-fields never occur in browse view
 * fld:picture := col[COL_PICTURE]
 if col[COL_BLOCK] == NIL

@@ -813,7 +813,7 @@ RETURN .t.
 FUNCTION WinEdit( ;
   ad, ;
   cTitle, cIdQry, ;
-  bAfter, ;
+    bAfter, ;
   bKeyBlock, cKeyValue ;
 )
 default cIdQry to ad[AD_NAME]

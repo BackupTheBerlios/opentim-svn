@@ -1,28 +1,8 @@
 [=p_SetWidth(76)]
 [set dateformat dd.mm.yy]
-
-
-
-
-
-
-
-
-
-
-   [=trim(PAR->Allo)]
-   [=trim1(PAR->Vorname)+trim(PAR->Firme)]
-   [par street]
-   [par city]
-
-
-
-
-
-
+[=fparse("ADRPAR.TPL")]
 
 Datum : [=dtocf(UserDate())]
-
 
 [etc if getvar("IstLetzte")=="X"]
 LETZTE MAHNUNG
@@ -61,3 +41,5 @@ zu betrachten.
 Mit freundlichen GrÅ·en
 
 
+[=UsrName()]
+[=Fonction()]
