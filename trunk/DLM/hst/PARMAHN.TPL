@@ -1,4 +1,4 @@
-[=p_SetWidth(76)]
+[=p_SetWidth(70)]
 [set dateformat dd.mm.yy]
 [=fparse("ADRPAR.TPL")]
 

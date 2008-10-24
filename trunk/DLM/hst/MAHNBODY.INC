@@ -14,11 +14,11 @@
 [tab end]
 
 [etc if ParCredit()!=0]
-[=padl("Total",40)] : [par hstdebit] [par hstcredit]
-[=padl("Saldo",40)] : [par hstsolde d] [par hstsolde c]
+[=padl("Total",p_cpl()-35)] : [par hstdebit] [par hstcredit]
+[=padl("Saldo",p_cpl()-35)] : [par hstsolde d] [par hstsolde c]
 [etc endif]
 [etc if !empty(getvar("Kosten"))]
-[=padl("Kosten",40)] : [=ntomf(val(getvar("Kosten")))]
+[=padl("Kosten",p_cpl()-35)] : [=ntomf(val(getvar("Kosten")))]
 [etc endif]
-[=padl("Zu zahlen",40)] : [=ntomf(\
+[=padl("Zu zahlen",p_cpl()-35)] : [=ntomf(\
   val(getvar("Kosten"))+ParDebit()-ParCredit())] [= PAR->IdDev]

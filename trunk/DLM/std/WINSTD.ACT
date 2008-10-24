@@ -5,7 +5,7 @@ SetAsMail().or.SetAsPdf().or.SetSpooler('\
     "prnprint"\
     +iif(empty(getvar("fontName")),""," --fontName "+chr(34)+getvar("fontName")+chr(34))\
     +iif(empty(p_setport()),""," -p "+p_setport())\
-    +" preview.prn")')
+    +" "+SetPrnFile())')
 !SetAsPdf().or.p_SetCopies(1)
 !SetAsPdf().or.FileDelete(trim(getvar("PRN2PDF.out")),.f.,.t.)
 !SetAsPdf().or.SetSpooler('runbg(\
@@ -13,7 +13,7 @@ SetAsMail().or.SetAsPdf().or.SetSpooler('\
   "prn2pdf "+iif(SetBatch().or.SetAsMail(),"-b ","")\
             +iif(empty(getvar("fontName")),"","--fontName "+chr(34)+getvar("fontName")+chr(34))+" "\
             +"-o "+trim(getvar("PRN2PDF.out"))\
-    +" preview.prn")')
+    +" "+SetPrnFile())')
 RETURN .t. if !SetAsMail().or.empty(getvar("mailto"))
 empty(getvar("mailhost"))\
   .or.AddSpooler('\
