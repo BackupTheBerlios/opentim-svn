@@ -770,6 +770,8 @@ default cTplType to TPLTYPE_MSG
 if cPickTitle != NIL
   cIdTpl := PickTpl(cTplType,cIdTpl,PAR->Langue,NIL, cPickTitle)
   RETURN .f. if cIdTpl == NIL
+elseif empty(cIdTpl)
+  RETURN !SetMsg("Kann nicht drucken weil keine Druckmaske angegeben.")
 endif
 open area oPlz(), oAmk(), oPxs()
   SetTplLang(PAR->Langue)
