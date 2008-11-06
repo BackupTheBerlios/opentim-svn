@@ -535,18 +535,16 @@ RETURN !SetMsg(cName + MsgFldExist())
 **
 ** ddFldSetValidate() -
 **
-*FUNCTION ddFldSetValidate(cName,b)
-*local i
-*if valtype(b)=="C"; b := cblock(b) ; endif
-*// local bValid := xparse("{||"+xlValid+"}")
-*for i := 1 to len(sadCurrent[AD_FIELDS])
-*  if sadCurrent[AD_FIELDS][i][AG_NAME] == cName
-*    sadCurrent[AD_FIELDS][i][AG_VALID] := b // wird oGet:postBlock
-*    RETURN .t.
-*  endif
-*next i
-*Warning(cName + MsgFldExist())
-*RETURN .f.
+FUNCTION ddFldSetValidate(cName,b)
+local i
+if valtype(b)=="C"; b := cblock(b) ; endif
+for i := 1 to len(sadCurrent[AD_FIELDS])
+  if sadCurrent[AD_FIELDS][i][AG_NAME] == cName
+    sadCurrent[AD_FIELDS][i][AG_VALID] := b // wird oGet:postBlock
+    RETURN .t.
+  endif
+next i
+RETURN !SetMsg(cName + MsgFldExist())
 
 **
 ** ddFldSetWhen() -

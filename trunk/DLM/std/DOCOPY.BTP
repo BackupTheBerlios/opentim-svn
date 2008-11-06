@@ -1,0 +1,64 @@
+@echo off
+rem ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+rem ³  Copyright(c) PAC Systems / Rumma & Ko                                ³
+rem ³  Authors : Luc Saffre, Tom Htten                                     ³
+rem ³  IMPORTANT : read fparse.txt before modifying this file !             ³
+rem ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+rem *****
+rem *** If the file error.txt has been found, don't continue processing
+rem *****
+if exist [=AppPath()]\backup\error.txt goto ende
+
+:anfang
+
+rem *********
+rem *** confirm each disk
+rem *********
+echo [=utr("","Kopie %2 nach Diskette","Copier %2 vers disquette")]
+choice /c[=utr('','jn "Diskette bereit "',\
+  'on "La disquette est-elle prˆte "')]
+if errorlevel 2 goto ende
+
+echo [=utr("","%2 wird nach Diskette geschrieben...",\
+  "Copier %2 vers disquette...")]
+
+
+rem ***
+rem *** user may re-use any old backup disk
+rem ***
+rem format a: /u/q/v:"%1 1"
+if exist a:\%1.* del a:\%1.*
+if exist a:\bin.arj del a:\bin.arj
+rem if exist a:\*.* goto err_copy
+
+xcopy %2 a: /v
+if errorlevel 1 goto err_copy
+goto ende
+
+
+:error3
+echo [=utr("","(Sicherheitskopie wurde nicht vollst„ndig ausgefhrt)",\
+     "(Abandon par l'utilisateur)")]
+echo USER ABORT > [=AppPath()]\backup\error.txt
+pause
+goto ende
+
+
+
+
+:err_copy
+choice /c[=utr('','jn "M”chten Sie noch mal probieren "',\
+  'on "Voulez-vous r‚essayer la copie "')]
+if errorlevel 2 goto err_copy_2
+goto anfang
+
+:err_copy_2
+
+echo docopy.btp: XCOPY error %errorlevel% > [=AppPath()]\backup\error.txt
+type [=AppPath()]\backup\error.txt >> console.msg
+type [=AppPath()]\backup\error.txt
+pause
+
+
+:ende
+

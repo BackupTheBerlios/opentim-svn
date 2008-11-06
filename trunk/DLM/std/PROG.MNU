@@ -13,10 +13,12 @@ MnuAddTitle(utr("~Program","~Programm","~Programme"))
   MnuAddItem(utr("~Who's using TIM?","~Wer ist in TIM ?","Qui est dans ~TIM?"),{||ShowLogList(MnuItemName())})
 #endif
 #if SetDialog()
+#if AppCompiler() != "clipper"
   MnuAddItem(utr("Select ~Font",\
                  "~Font ausw„hlen",\
                  "S‚lectio~nner police"),\
                  {||SelectFont()})
+#endif
   MnuAddItem(utr("~Database Check      ","~Datenbank-Check     ","Test base de ~donn‚es"),{||ActExec("DBCHECK")})
   MnuAddItem("~Login               ",{||Relogin()})
   MnuAddItem(utr("Ab~out               ","Inf~o                ","… prop~os            "),{||AppAbout()})

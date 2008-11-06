@@ -62,8 +62,6 @@ shift
 goto restart
 
 :error1
-[=left(AppRoot(),2)]
-cd [=AppRoot()]
 echo [=utr( \
   "ERROR : %1 : no such database in",\
   "FEHLER : %1 : Datenbank nicht gefunden in")] [=DataRoot()]
@@ -73,8 +71,6 @@ if not x%1 == x goto restart
 goto ende
 
 :err_zip
-[=left(AppRoot(),2)]
-cd [=AppRoot()]
 echo [=utr( \
   "Error during compression",\
   "FEHLER : Datei konnte nicht komprimiert werden")]
@@ -82,8 +78,6 @@ pause
 goto ende
 
 :err_copy
-[=left(AppRoot(),2)]
-cd [=AppRoot()]
 echo [=utr( \
   "Error while copying some files",\
   "FEHLER : Datei konnte nicht kopiert werden")]
@@ -97,3 +91,5 @@ echo where dbname_1 through n are database names
 pause
 
 :ende
+[=left(AppPath(),2)]
+cd [=AppPath()]
