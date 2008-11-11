@@ -533,8 +533,7 @@ next i
 RETURN !SetMsg(cName + MsgFldExist())
 
 **
-** ddFldSetValidate() -
-**
+** override the validate block of a field in the current table
 FUNCTION ddFldSetValidate(cName,b)
 local i
 if valtype(b)=="C"; b := cblock(b) ; endif

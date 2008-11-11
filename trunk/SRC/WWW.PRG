@@ -2441,17 +2441,17 @@ if i > 1
   c2 := eval(xcTitle)+":"+eval(k2title,k)
   MsgDisplay(c)
   RETURN .f. if ! BeginHtmPage(c, c2, UserDate())
-  toStream('<div class="titleArea">')
+  toStream('<div id="titleArea">')
   toStream('<p class="superTitle"></p>')
   toStream('<H1>')
   toTxtStream(getvar("Title"))
   toStream('</H1>')
-  toStream('</div><!-- class="titleArea" -->')
-  toStream('<div class="mainArea">')
+  toStream('</div><!-- titleArea -->')
+  toStream('<div id="mainArea">')
 endif
-toStream('<div class="browserPanel">')
+toStream('<div id="browserPanel">')
 arrayscan(aKeys,k2text)
-toStream('</div><!-- class="browserPanel"-->')
+toStream('</div><!-- id="browserPanel"-->')
 BeginList(cFormat)
 DbfScan(aTables,nOrder,k,NIL,;
   xlFilter,;
@@ -2459,16 +2459,7 @@ DbfScan(aTables,nOrder,k,NIL,;
 )
 EndList()
 if i > 1
-  toStream('</div><!-- class="mainArea" -->')
-  *if !empty(MemLang2)
-  *  LngLoop({||;
-  *  toStream('<a href="';
-  *    + GetBasePath()+strtran(eval(xcDir),"\","/");
-  *    + '/index'+HTMLEXT+'">' );
-  *  .and.toStream('<img src="'+GetBasePath();
-  *    +'/images/buttons/lang-'+lower(TplLang())+'.png" width="20" border=0></a> ');
-  *  })
-  *endif
+  toStream('</div><!-- mainArea -->')
   RETURN .f. if ! EndHtmPage()
 endif
 RETURN .t.
@@ -4191,13 +4182,13 @@ if nPgNum > 1
   cTitle += " (page "+ntrim(nPgNum)+" of "+ntrim(nPgCount)+")"
   MsgDisplay(cFilename)
   RETURN .f. if ! BeginHtmPage(cFilename, cTitle, UserDate())
-  toStream(CR_LF+'<div class="titleArea"><H1>')
+  toStream(CR_LF+'<div id="titleArea"><H1>')
   toTxtStream(cTitle)
   toStream('</H1></div>')
-  toStream(CR_LF+'<div class="mainArea">')
+  toStream(CR_LF+'<div id="mainArea">')
 endif
 if nPgCount > 1
-  toStream(CR_LF+'<div class="browserPanel">')
+  toStream(CR_LF+'<div id="browserPanel">')
   * if nPgNum == 1
   *   toStream(' 1 ')
   * else
@@ -4295,14 +4286,14 @@ RETURN '/index'+lngsuffix()+HTMLEXT
 
 FUNCTION SiteMenu(cMySelf,nMaxLevel)
 if !empty(MemLang2)
-  toStream(CR_LF+'<p class="langSelector">')
+  toStream(CR_LF+'<ul id="langSelector">')
   LngLoop({||;
-    toStream('<a href="'+GetBasePath()+xt_trurl()+'">' );
+    toStream('<li><a href="'+GetBasePath()+xt_trurl()+'">' );
     .and.toStream('<img src="'+GetBasePath();
       +'/images/buttons/lang-'+lng2iso(TplLang());
-      +'.png" width="20" border=0></a> ');
+      +'.png" width="20" border=0></a></li>'+CR_LF);
   })
-  toStream(CR_LF+'</p>')
+  toStream(CR_LF+'</ul>')
 endif
 default nMaxLevel to 2
 RETURN MnuToStream(iif(TplLang()=="*",MemLang1,TplLang()),1,space(LenIdMsx()),cMySelf,nMaxLevel)
@@ -4320,7 +4311,7 @@ open area oNav()
       toStream(CR_LF+'<ul class="menu'+ntrim(nLevel)+'">')
     endif
     if FIELD->IdXrf == cMyself
-      toStream(CR_LF+'<li class="selectedItem">')
+      toStream(CR_LF+'<li id="selectedItem">')
     else
       toStream(CR_LF+'<li>')
     endif

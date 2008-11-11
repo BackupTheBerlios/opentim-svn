@@ -2,7 +2,7 @@
 CSV .t.
 // SeekKey is NIL
 LineValidate i_fields[7]==FIN->IdDev
-LineValidate i_fields[10]+","$"MK,PT,K,TT,X,M,S,I,"
+LineValidate i_fields[10]+","$"MK,PT,K,TT,X,M,S,I,MD,KM,"
 
 FieldUpdate FNL->DC if(i_fields[8]=="D","D","C")
 FieldUpdate FNL->Date ctod(i_fields[3])

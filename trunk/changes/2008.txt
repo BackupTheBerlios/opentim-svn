@@ -337,3 +337,8 @@
 
 20080716
 - PlzString() setzt jetzt kein L„nderkrzel mehr vor die PLZ, wenn es eine Adresse im Ausland ist. Aber das gilt nur wenn #ifdef DEF_WWW ist.
+
+20081106
+- ddFldSetValidate() war rauskommentiert, keine Ahnung weshalb. Jetzt wieder rein.
+
+- dbback.btp ist wieder da, jetzt in dlm\std und fr den neuen Parser konvertiert.
