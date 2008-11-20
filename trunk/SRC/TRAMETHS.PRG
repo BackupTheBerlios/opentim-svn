@@ -925,8 +925,8 @@ if cLstTitle != NIL
       cLine := space(LenIdJnl())
       cLine += " " + padr("Summe", LEN_PERIODE + 1 + LenIdDoc())
       cLine += " " + space(LenMntF())
-      cLine += " " + space(LenMntF())
       cLine += " " + ntomf(nJnlSum) // ,nDecPos)
+      cLine += " " + space(LenMntF())
       cLine += " " + cIdDev
       PrintLine(cLine)
       SendConsole(cLine)
