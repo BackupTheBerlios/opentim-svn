@@ -342,3 +342,6 @@
 - ddFldSetValidate() war rauskommentiert, keine Ahnung weshalb. Jetzt wieder rein.
 
 - dbback.btp ist wieder da, jetzt in dlm\std und fÅr den neuen Parser konvertiert.
+
+20081124
+- In Sto·zeiten kann es passieren, dass zwei Benutzer die gleiche Sitzungsnummer erwischen. Der schnellere merkt nichts davon, aber der langsamere kriegt dann von TIM gesagt "...\9.LOG : Exklusivzugriff verweigert. Neu versuchen?". Wenn er dann J antwortet, wird jetzt neuerdings wenigstens die Sitzungsnummer erhîht, so dass er in der Regel nach einem ENTER reinkommt.

@@ -1192,3 +1192,6 @@ memvar MemPickArtMode
 #define PNF_IDDOC   8 // of first document
 #define PNF_DATE    9 // of first document
 #define PNF_ALEN    9
+
+
+#define DBFATTR_S "S" // detailed changelog

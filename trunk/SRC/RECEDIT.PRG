@@ -79,7 +79,7 @@ for i = 1 to fcount()
   endif
 next i
 RETURN NIL if ! lFound
-SendConsole(cMsg) // rpt_write(cLine)
+SendConsole(cMsg)
 RETURN NIL
 
 #endif DEF_CONSOLE

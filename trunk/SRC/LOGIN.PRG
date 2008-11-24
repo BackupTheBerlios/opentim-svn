@@ -703,17 +703,10 @@ if nUsrCount > MrkMaxUsers
 endif
 nSessId += 1
 do while snLogFile == -1
-  * if file(scLogPath + "\" + cUserId + ".LOG")
-  *  slLogFile := .T.
-  *  snLogFile := fopen(scLogPath + "\" + cUserId + ".LOG", FO_READWRITE+FO_EXCLUSIVE)
-  *else
-  *  slLogFile := .f.  // 20000628
-  *  snLogFile := fcreate(scLogPath + "\" + cUserId + ".LOG")
-  *endif
   scLogFile := scLogPath + "\" + ntrim(nSessId) + ".LOG"
   if (snLogFile := fcreate(scLogFile)) != -1
     /* 20021212 fcreate() leaves the file open in read/write + FO_COMPAT
-    Im ™SHZ zeigte ShowLogList() dann sp„ter ?@? an.
+    Bei gx zeigte ShowLogList() dann sp„ter ?@? an.
     Deshalb ”ffnen wir die Datei jetzt mit "richtigem" Exklusivzugriff.
     Was immer das auch heiáen mag.
     */
@@ -728,6 +721,12 @@ do while snLogFile == -1
       * slLogFile := .F.
       RETURN .F.
     endif
+    /* 20081124 es kann in Stoázeiten passieren, dass ein anderer
+       Benutzer mir die Sitzungsnummer vor der Nase weggeschnappt hat.
+       Nehmen wir einfach die n„chste Nummer, damit kein Streit
+       aufkommt: 
+    */
+    nSessId += 1 
   endif
 enddo
 fwrite(snLogFile,getvar("USER")+"@"+getvar("PC")+CR_LF)

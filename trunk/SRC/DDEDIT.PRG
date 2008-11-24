@@ -1280,7 +1280,7 @@ FldFreshAll( msk, ad, .t. )
 SayLeg(LEG_READ)
 ddBefore(ad)
 setcursor(if(readinsert(),SC_INSERT,SC_NORMAL))
-if "S" $ ad[AD_ATTRIB]
+if DBFATTR_S $ ad[AD_ATTRIB]
   aBuf := CopyRec()
 endif
 ReadModal(GetList,NIL,NIL,msk) ; GetList := {} // 19980422
@@ -1294,7 +1294,7 @@ if updated() .or. snRecStat == RS_UNKNOWN .or. lastkey() != K_ESC
   snRecStat := RS_UNKNOWN
   ddPostEdit()
   #ifdef DEF_CONSOLE
-    if "S" $ ad[AD_ATTRIB]
+    if aBuf != NIL
       RecConsole(aBuf)
     endif
   #endif DEF_CONSOLE
@@ -1635,7 +1635,7 @@ if ! ddOnPreEdit(saData)
 endif
 * nRecNo := recno()
 RETURN .f. if ! ddRecLock()
-if "S" $ saData[AD_ATTRIB]
+if DBFATTR_S $ saData[AD_ATTRIB]
   aBuf := CopyRec()
 endif
 slModify := .f.
