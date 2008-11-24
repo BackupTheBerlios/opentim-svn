@@ -1194,4 +1194,3 @@ memvar MemPickArtMode
 #define PNF_ALEN    9
 
 
-#define DBFATTR_S "S" // detailed changelog

@@ -345,3 +345,5 @@
 
 20081124
 - In Stoázeiten kann es passieren, dass zwei Benutzer die gleiche Sitzungsnummer erwischen. Der schnellere merkt nichts davon, aber der langsamere kriegt dann von TIM gesagt "...\9.LOG : Exklusivzugriff verweigert. Neu versuchen?". Wenn er dann J antwortet, wird jetzt neuerdings wenigstens die Sitzungsnummer erh”ht, so dass er in der Regel nach einem ENTER reinkommt.
+
+- VnaScan() setzt die VNA jetzt nur noch dann auf befriedigt, wenn QteUs Null ist (und nicht wie bisher wenn sie <= 0 ist). Denn wenn ich eine NCV entregistriere, die einen negativen BLV befriedigt, dann wurde der BLV nicht entfriedigt weil seine QteUs negativ ist.

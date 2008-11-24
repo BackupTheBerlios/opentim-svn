@@ -34,7 +34,8 @@ MnuAddItem("~Kostenanweisungen"         ,{||DbfEdit({oFrf()}, MnuItemName())})
 #if oUnt()!=NIL
 MnuAddItem("~Liefereinheiten           ",{||WinEdit(oUnt(), MnuItemName())})
 #endif
-#if HasDlm("VNA")
+#if GetTableDef("TRN") != NIL 
+// HasDlm("VNA")
 MnuAddItem("Befriedi~gungstabelle      ",{||WinEdit(oTrn(), MnuItemName())})
 #endif
 MnuAddItem("~Zentralisierungsarten     ",{||WinEdit(oCtr(), MnuItemName())})

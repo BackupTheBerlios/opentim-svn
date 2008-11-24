@@ -1834,10 +1834,8 @@ open area oVnl(VEN->Etat), oGen(), oArt(), oVna()
   enddo
 close area
 if ! lOkay
-  * if Confirm(MsgIdJnlDoc()+": "+SetMsg(),MsgSetError())
   SendConsole(MsgIdJnlDoc() + MsgDocStatError())
   VEN->Etat := DocStatError()
-  * endif
   RETURN .f.
 endif
 #ifdef DEF_VNA
@@ -1857,10 +1855,6 @@ endif
   close area
   if lDlg
     if ! lOkay .and. USRATTR_E $ UsrAttrib()
-      *cMsg := SetMsg()
-      *if empty(cMsg)
-      *  cMsg := MsgVnaUndo()
-      *endif
       lOkay := Confirm(SetMsg()+CR_LF+;
       "Only reply 'Yes' if you know what you do!", MsgSure(),MSG_NO)
     endif
@@ -2225,11 +2219,9 @@ open area oVna()
     if TaskInter() ; lOkay := .f. ; exit ; endif
     nQtePs  := qton1(aVna[i][VNA_QTE])
     aVna[i][VNA_QTEUS] := aVna[i][VNA_QTE]
-    * nQteR  := 0 // qton1(aVna[i][VNA_QTE])
     if !empty(aVna[i][VNA_MATCH])
       seek aVna[i][VNA_MATCH]
       if ! eof() .and. aVna[i][VNA_IDART] == VNA->IdArt
-        * if empty(VNA->Satis)
         if (trn := VnaTrnLocate(jnl)) != NIL
           if ddRecLock()
             if TRNATTR_I $ trn[TRN_ATTRIB]
@@ -2242,10 +2234,6 @@ open area oVna()
               nQtePs *= -1
             endif
             if TRNATTR_R $ trn[TRN_ATTRIB]
-              * aVna[i][VNA_QTEUS] := ntoq( ;
-              *   qton1(aVna[i][VNA_QTEUS]) + nQtePs, ;
-              *   aVna[i][VNA_QTEFORM] ;
-              * )
               aVna[i][VNA_QTEUS] := ntoq(0,aVna[i][VNA_QTEFORM])
               aVna[i][VNA_QTE] := ntoq(0,aVna[i][VNA_QTEFORM])
             endif
@@ -2255,8 +2243,10 @@ open area oVna()
                 aVna[i][VNA_QTEFORM] ;
               )
             endif
-            if qton1(VNA->QteUs) <= 0
+            if qton1(VNA->QteUs) == 0
               VNA->Satis := "*"
+            elseif qton1(VNA->QteUs) < 0
+              VNA->Satis := " " // before 20081124 : "*"
             else
               VNA->Satis := " "
             endif

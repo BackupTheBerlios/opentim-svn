@@ -260,3 +260,5 @@ if (<lIf>) ; RETURN (<uReturn>) ; endif
 #ifdef DEF_GUI
 #include "XBP.CH"
 #endif DEF_GUI
+
+#define DBFATTR_S "S" // detailed changelog. ddSetAttrib()
