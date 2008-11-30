@@ -2719,6 +2719,7 @@ for i := 1 to len(aData)
 next i
 RETURN !SetMsg("Nichts zu aktualisieren.") if nUpdates == 0
 if lDlg
+  SendConsole("TagUpdate() : show dialog")
   aadd(aActions, { K_SPACE , {|row,i| ;
     aTagged[i] := ! aTagged[i], ;
     K_DOWN ;
@@ -2731,11 +2732,13 @@ if lDlg
     actions aActions
   RETURN .f. if LastChoice() == 0
 endif
+SendConsole("TagUpdate() : assign tagged fields")
 for i := 1 to len(aTagged)
   if aTagged[i]
     &(aData[aIndexes[i]][ROW_FIELD]) := aData[aIndexes[i]][ROW_VALUE]
   endif
 next i
+SendConsole("TagUpdate() "+alias()+"("+ntrim(recno())+") : done")
 RETURN .t.
 
 #ifdef DEF_INDEX

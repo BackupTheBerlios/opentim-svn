@@ -78,9 +78,8 @@ for i = 1 to fcount()
     lFound := .t.
   endif
 next i
-RETURN NIL if ! lFound
-SendConsole(cMsg)
-RETURN NIL
+RETURN .t. if ! lFound
+RETURN LogConsole(cMsg)
 
 #endif DEF_CONSOLE
 
