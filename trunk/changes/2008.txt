@@ -339,11 +339,19 @@
 - PlzString() setzt jetzt kein LÑnderkÅrzel mehr vor die PLZ, wenn es eine Adresse im Ausland ist. Aber das gilt nur wenn #ifdef DEF_WWW ist.
 
 20081106
+
 - ddFldSetValidate() war rauskommentiert, keine Ahnung weshalb. Jetzt wieder rein.
 
 - dbback.btp ist wieder da, jetzt in dlm\std und fÅr den neuen Parser konvertiert.
 
 20081124
+
 - In Sto·zeiten kann es passieren, dass zwei Benutzer die gleiche Sitzungsnummer erwischen. Der schnellere merkt nichts davon, aber der langsamere kriegt dann von TIM gesagt "...\9.LOG : Exklusivzugriff verweigert. Neu versuchen?". Wenn er dann J antwortet, wird jetzt neuerdings wenigstens die Sitzungsnummer erhîht, so dass er in der Regel nach einem ENTER reinkommt.
 
 - VnaScan() setzt die VNA jetzt nur noch dann auf befriedigt, wenn QteUs Null ist (und nicht wie bisher wenn sie <= 0 ist). Denn wenn ich eine NCV entregistriere, die einen negativen BLV befriedigt, dann wurde der BLV nicht entfriedigt weil seine QteUs negativ ist.
+
+20081126
+
+- RecEdit() gibt jetzt .t. statt bisher NIL zurÅck. Weil das logischer ist falls man es in einer act-Datei verwendet. Bei gx wird das in der PAREID.ACT benutzt, um énderungen in der PAR, die beim Einlesen einer eID geschehen ebenfalls in der console.nsg zu protokollieren. Anwendung: Bei gx steht in der PAR.DEF ein ``ddSetAttrib("S")``
+
+- Das Tabellenattribut "S" ist jetzt im Code als Konstante DBFATTR_S benutzt.
