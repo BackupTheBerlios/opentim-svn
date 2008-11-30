@@ -1,11 +1,16 @@
-# -*- coding: utf8 -*-
+Ôªø2008
+====
 
 20080103
-- FileDelete() macht jetzt ein trim(cFilename). Denn das Lîschen funktioniert auch, wenn da z.B. noch 100 spaces hinter sind. Aber wenn das Lîschen dann aus einem anderen Grund fehlschlÑgt, dann wird die Fehlermeldung nicht richtig am Bildschirm angezeigt (nur der Dateiname und nicht das MsgDosError())
+--------
+- FileDelete() macht jetzt ein trim(cFilename). Denn das L√∂schen funktioniert auch, wenn da z.B. noch 100 spaces hinter sind. Aber wenn das L√∂schen dann aus einem anderen Grund fehlschl√§gt, dann wird die Fehlermeldung nicht richtig am Bildschirm angezeigt (nur der Dateiname und nicht das MsgDosError())
 
 20080107
+--------
 - oDcf() macht jetzt einen zweiten Index:
+
     ddIndex b on DCF->IdBil+DCF->IdDcl+DCF->IdDcf
+    
   Damit man von einem GEN aus alle Felder sehen kann, die dieses Konto benutzen. Weil mir ein Betrag in der Bilanz fehlt und es ist nicht leicht zu finden, welches GEN da falsch deklariert ist.
   
 - DLM\HST\GEN.DEF und DLM\BIL\BIL.DEF: neue Funktion F5 zeigt alle Bilanzfelder, in denen der Bilanzposten benutzt wird.
@@ -17,25 +22,28 @@
 - ChkPeriode() und GenCtgMont() haben jetzt ein neues optionales   Parameterpaar cPer1 und cPer2, mit dem man die globalen Variablen   MemPer1 und MemPer2 umgehen kann. 
 
 20080107
-
+--------
 - DistKtg() : Neue Warnung "51 Forfaits konnten keinem Kontingent
-  zugewiesen werden! Stammdaten Kontingente prÅfen und dann neu
+  zugewiesen werden! Stammdaten Kontingente pr√ºfen und dann neu
   fakturieren!"
 
-- RepPrint() hat jetzt auch wie RepExec() einen neuen optionalen   Parameter lToCsv, mit man auch ohne include TOCSV.DLG einen Report par dÇfaut immer als CSV laufen lassen kann. 
+- RepPrint() hat jetzt auch wie RepExec() einen neuen optionalen   Parameter lToCsv, mit man auch ohne include TOCSV.DLG einen Report par d√©faut immer als CSV laufen lassen kann. 
 
 - Kolonnentitel in einer Kolonne mit bekannter Breite werden jetzt nicht mehr abgeschnitten, wenn toCSV 
 
 20080108
+--------
 - DLM\DCL\DCLDCF.REP:
+
   - Zwischensummen werden jetzt bis Level 4 gemacht (bisher: Level 3)
   
-  - Wenn AsCSV angekreuzt war, kam ein RTE. Habe jetzt fÅr die Kolonnen mit Betrag type="T" gesetzt, und text und xsum rauskommentiert.  Funktioniert jetzt mit oder ohne CSV.
+  - Wenn AsCSV angekreuzt war, kam ein RTE. Habe jetzt f√ºr die Kolonnen mit Betrag type="T" gesetzt, und text und xsum rauskommentiert.  Funktioniert jetzt mit oder ohne CSV.
   
 - report.prg : wenn rpt[RPT_TOCSV] ist, dann wird jetzt kein
-  tagged("b") mehr eingefÅgt.
+  tagged("b") mehr eingef√ºgt.
 
 20080110
+--------
 - Copyright "-2007" ersetzt durch "-2008"
 - Neue Funktion RptToCsv()
 - solde2() kann jetzt auch in einem CSV-Report bentuzt werden.
@@ -43,39 +51,42 @@
 
 20080110
 
- DCL soll die Konten optional jetzt auch Åber GEN->IdGen statt
- GEN->IdBil selektionieren. Die Bilanzkonten (BIL) sind nÑmlich
+ DCL soll die Konten optional jetzt auch √ºber GEN->IdGen statt
+ GEN->IdBil selektionieren. Die Bilanzkonten (BIL) sind n√§mlich
  -glaube ich- Quatsch. Die habe ich erfunden, weil ich die IdGen
- nicht Ñndern wollte.
+ nicht √§ndern wollte.
 
 - Neues Feld DCL->IdGen. DCF->IdBil wird nur noch beachtet, wenn
   DCF->IdGen leer ist.
   DCF*.NTX :
   - neuer index 2 on IdGen
-  - bisheriger index 2 (on IdBil) wird 3. Kommt spÑter vielleicht raus
+  - bisheriger index 2 (on IdBil) wird 3. Kommt sp√§ter vielleicht raus
 - modified DcfGenFilter()
 - new DcfGenEdit()
 
 
 20080114
+
 - Neue Funktion SetBatch(). Wenn die auf .t. gesetzt ist, dann zeigt
   DlgExec() die Dialogfenster nicht mehr an ("default lDlg to
   SetBatch()"), Warning() zeigt keine Warnungen mehr, und winstd.drv
   startet die generierte PDF-Datei nicht (ruft prn2pdf mit "-b").
   FileExec() restort nach dem Beenden einer act-Datei den vorigen Wert
   in SetBatch(). Also wenn eine act-Datei es auf .t. setzt, dann ist
-  spÑtestens nach dem Ende der Datei wieder alles normal.
+  sp√§testens nach dem Ende der Datei wieder alles normal.
 
 - Neue Funktion SetPause(). Kann man einschalten, um nach dem Aufruf
   externer Programme eventuelle Fehlermeldungen zu sehen, die ansonsten nur kurz am Bildschirm erscheinen.
-  AppShell() macht jetzt 
+  :meth:`AppShell()` macht jetzt::
+  
     default lConfirm to SetPause()
     default lPause to SetPause()
+    
   Statt bisher auf das User-Attribut "E" zu schauen. Denn auch Experten
   wollen die Dinger nicht immer sehen...
 
 - Alle AppShell()-Aufrufe in WINSTD.DRV setzen jetzt den dritten
-  Parameter auf .f.. Also auch fÅr Experten keine Pause mehr, nachdem
+  Parameter auf .f.. Also auch f√ºr Experten keine Pause mehr, nachdem
   der Befehl erfolgreich gelaufen hat.
 
 - Historik Partner- und Generalkonten wiederholen die Bezeichnung des
@@ -84,28 +95,30 @@
   DLM\HST\HSTPAR.REP
   DLM\HST\HSTGEN.REP
 
-- _report() macht jetzt ein MsgDisplay() des RPT_HDR1. Sonst wei· man in GL2PDF Åberhaupt nicht wo er gerade dran ist.
+- _report() macht jetzt ein MsgDisplay() des RPT_HDR1. Sonst wei√ü man in GL2PDF √ºberhaupt nicht wo er gerade dran ist.
 
-- Ideal wÑre ja auch noch eine Wiederholungszeile "Konto 400000 Kunden
+- Ideal w√§re ja auch noch eine Wiederholungszeile "Konto 400000 Kunden
   (Fortsetzung)" am Anfang jeder Seite...
 
 - Neue Funktion is0() wird benutzt in GENHST.REP. is0(n) ist das Gleiche wie abs(n) < tolerance(SetDecPos())
 
 20080115
+--------
 - VenMake() ruft jetzt CheckIdDoc() auf, bevor sie ein Dokument
   erstellt. VH hat deshalb aus Versehen die ersten 20  Rechnungen von Januar 2008 mit einer Nummer 07 generiert und rausgeschickt.
 
 - Neue Funktion JnlIsActive(cIdJnl,dDate) wird benutzt in USRAUTO.DLG
-  und NAFAUTO.DLG und macht ggf. die Warnung "070789 : ungÅltige
-  Dokumentnummer f¸r Periode 0801" noch bevor die Automatikfakturierung
+  und NAFAUTO.DLG und macht ggf. die Warnung "070789 : ung√ºltige
+  Dokumentnummer f¬≥r Periode 0801" noch bevor die Automatikfakturierung
   gestartet wird.
 
 - Neue Funktion prixind(nPrix1,cPer1,cPer2)
 
 20080116
+--------
 - Neue Funktion AppRoot(). Das ist normalerweise das Gleiche wie
-  AppPath(). Au√°er wenn AppPath() mit "\BIN" endet, dann wird das
-  entfernt. Also AppPath() zeigt ins BIN-Verzeichnis, w‰hrend AppRoot()
+  AppPath(). Au‚îúƒ™er wenn AppPath() mit "\BIN" endet, dann wird das
+  entfernt. Also AppPath() zeigt ins BIN-Verzeichnis, w√µhrend AppRoot()
   ins Hauptverzeichnis zeigt.
 
 - splitted winstd.drv : OnSelect ActExec("WINSTD.ACT")
@@ -117,7 +130,7 @@
 
 20080117
 - Der mit /exec: in der Kommandozeile angegebene Clipper-Ausdruck muss
-  jetzt .t. zurÅckgeben, ansonsten startet das Programm nicht weiter.
+  jetzt .t. zur√ºckgeben, ansonsten startet das Programm nicht weiter.
   Dadurch kann ich in  der setup.bat AppClose() aufrufen.
 
 - Im CbxReader() (getsysxb.prg) wurde get:postBlock nie aufgerufen, weil
@@ -125,19 +138,19 @@
 
 20080125
 - BeginOStream() setzte zwar snPrnStatus auf PRN_CONTINUE, aber
-  EndOStream() setzte ihn nicht zurÅck. Deshalb kam die Meldung "cannot
-  open 2 streams at once" wenn man spÑter irgendwann etwas drucken
-  wollte. Hiermit ist ein Bug behoben, Åber den FG sich schon lange
-  Ñrgerte.
+  EndOStream() setzte ihn nicht zur√ºck. Deshalb kam die Meldung "cannot
+  open 2 streams at once" wenn man sp√§ter irgendwann etwas drucken
+  wollte. Hiermit ist ein Bug behoben, √ºber den FG sich schon lange
+  √§rgerte.
 
 20080126
-- PrintTemplate() gab wegen 20080125 nicht mehr .t. zurÅck, weil
+- PrintTemplate() gab wegen 20080125 nicht mehr .t. zur√ºck, weil
   nach ClosePrinter() der snPrnStatus jetzt nicht mehr stehen blieb.
   Bug-Gefahr.
 
 20080126
-- GetTableDef() benutzte bisher xparse() und gab dann NIL zurÅck wenn
-  eine Tabelle nicht existiert. Aber das fÅhrt zu einem RTE wenn
+- GetTableDef() benutzte bisher xparse() und gab dann NIL zur√ºck wenn
+  eine Tabelle nicht existiert. Aber das f√ºhrt zu einem RTE wenn
   SetTrapErrors(.f.) gesetzt ist. Jetzt macht sie stattdessen einen loop
   durch die AppDataList()
 
@@ -151,12 +164,12 @@
       snRecStat := RS_VALID
 
 - TryRecLockM(aAliases,bTry) wird jetzt in der Clipper-Version 
-  nicht gemacht, weil das sowieso nicht funktionierte, weil fÅr
+  nicht gemacht, weil das sowieso nicht funktionierte, weil f√ºr
   Clipper der Name zu lang ist.
 
-- Die Fehlermeldung "rÇfÇrence de suite invalide!" kommt jetzt nur noch,
+- Die Fehlermeldung "r√©f√©rence de suite invalide!" kommt jetzt nur noch,
   wenn diese Dokumentzeile nicht existiert. Aber wenn nur der Artikel
-  wechselt, dann zÑhlt das nicht mehr als Fehler.
+  wechselt, dann z√§hlt das nicht mehr als Fehler.
 
 - VnaTest() machte Fehlwarnung :
   [243] VNA->ABO000001.001 Brumes, Herrn : QteUs is 1 (expected -10)
@@ -176,57 +189,57 @@
   
 20080201
 
-- NafDelete() verweigert das Lîschen jetzt, wenn ARTATTR_S nicht gesetzt
+- NafDelete() verweigert das L√∂schen jetzt, wenn ARTATTR_S nicht gesetzt
   ist und JNLATTR_Q wohl. Bei PAC sollen CDA eines Artikels mit
-  Lagerverwaltung nicht einfach manuell lîschbar sein. Dazu muss man
+  Lagerverwaltung nicht einfach manuell l√∂schbar sein. Dazu muss man
   eine negative CDA machen. Aber Bemerkungen und Titel aus dem Angebot
-  sollen manuell lîschbar sein.
+  sollen manuell l√∂schbar sein.
   
 20080208
 - fprint() kann jetzt u.a. lAsPdf und lAsMail kriegen und gibt die dann an OpenPrinter weiter. Denn wenn man in VEN2PRN.DLG "als PDF" ankreuzte, so wurde dies ignoriert.
   
 20080215 
-- TvaTrim() holte fÑlschlicherweise die erste Position von allen
+- TvaTrim() holte f√§lschlicherweise die erste Position von allen
   belgischen MWSt-Nummern raus.
 
 - function NafLine() zeigt ein "OK" jetzt auch dann an, wenn ARTATTR_S
   gesetzt ist. Ticket #496.
   
 20080221
-- Neue Funktion VnaAuto2() macht eine Automatikfakturierung wie die bisherige VnaAuto(), aber mit einem abrowse(), in dem zun‰chst alle zu erstellenden Dokumente aufgelistet werden und separat angrekreuzt werden kînnen. 
+- Neue Funktion VnaAuto2() macht eine Automatikfakturierung wie die bisherige VnaAuto(), aber mit einem abrowse(), in dem zun√µchst alle zu erstellenden Dokumente aufgelistet werden und separat angrekreuzt werden k√∂nnen. 
 
 20080222
-- Neues JNLATTR_1 wird benutzt fÅr GX wenn DEF_IMP und DEF_TRA.
+- Neues JNLATTR_1 wird benutzt f√ºr GX wenn DEF_IMP und DEF_TRA.
   Ticket #518. Patch 20080222b.
 
 20080225
-- VnaAuto() prÅfte bei padr(m[PNV_MATCH],9) nicht nach, ob dort ein NIL stand. Dadurch kam dann das Layout durcheinander.
-- VnaAuto2() : wenn &xcVnaMatch leer zur¬Åckgibt, dann z‰hlt das jetzt nicht mehr als eine rupture. Denn wenn FG fÅr einen Kunden mit PARATTR_1 in einem BLV manuell Transportkosten hinzu fÅgt, dann soll das nicht auf eine eigene Rechnung kommen.
+- VnaAuto() pr√ºfte bei padr(m[PNV_MATCH],9) nicht nach, ob dort ein NIL stand. Dadurch kam dann das Layout durcheinander.
+- VnaAuto2() : wenn &xcVnaMatch leer zur‚î¨√ºckgibt, dann z√µhlt das jetzt nicht mehr als eine rupture. Denn wenn FG f√ºr einen Kunden mit PARATTR_1 in einem BLV manuell Transportkosten hinzu f√ºgt, dann soll das nicht auf eine eigene Rechnung kommen.
   
 20080229
 
-- Neue énderungen in der Automatikfakturierung. ini-Eintrag VnaMatch ist bei FG auf VEN->NB1 und dient als Selektor. Wenn Selektor nicht leer ist, dann erstellt TIM fÅr jeden Selektor ein neues Folgedokument. VnaCopyFilter habe ich rausgeschmissen; ich glaube nicht, dass das noch jemand benutzt.
+- Neue √Ñnderungen in der Automatikfakturierung. ini-Eintrag VnaMatch ist bei FG auf VEN->NB1 und dient als Selektor. Wenn Selektor nicht leer ist, dann erstellt TIM f√ºr jeden Selektor ein neues Folgedokument. VnaCopyFilter habe ich rausgeschmissen; ich glaube nicht, dass das noch jemand benutzt.
 
 20080303
 
-- Neuer Eintrag VnaVenMemo in tim.dbi fÅr FG. Weitere énderungen in 
+- Neuer Eintrag VnaVenMemo in tim.dbi f√ºr FG. Weitere √Ñnderungen in 
   Automatikfakturierung.
   
-- (wenn DEF_GRA nicht defniert ist:) oGra() ist jetzt eine Funktion, die NIL zurÅck gibt. "oGra()" im Code wird dagegen weiterhin mit xtranslate nach NIL umgewandelt 
+- (wenn DEF_GRA nicht defniert ist:) oGra() ist jetzt eine Funktion, die NIL zur√ºck gibt. "oGra()" im Code wird dagegen weiterhin mit xtranslate nach NIL umgewandelt 
   
 20080306
-- dlm\hst\gen.def : Feld Match ist jetzt rauskommentiert. Weil das von niemandem (au·er vielleicht noch JS) benutzt wird und bei RR dann in allen Datenbanken konvertiert werden mÅsste.
+- dlm\hst\gen.def : Feld Match ist jetzt rauskommentiert. Weil das von niemandem (au√üer vielleicht noch JS) benutzt wird und bei RR dann in allen Datenbanken konvertiert werden m√ºsste.
   
 - dlm\sprl\vatlist.dbc wird jetzt nicht mehr benutzt. Die beiden Listen sind doch zu unterschiedlich und es ist besser, auch die DLG-Dateien einfach zu trennen. Ist nur ein bisschen doppelt gemoppelt.
 
-  geÑndert:
+  ge√§ndert:
   dlm\sprl\vatlist.dlg 
   dlm\std\print.mnu
   neu:
   dlm\sprl\vatintra.dlg
   dlm\sprl\vatintra.xml
 - Neue Funktion SetQuarter(nYear,nQuarter) setzt MemPer1 und MemPer1 accordingly. 
-  Respektiert auch PerShift. Wird benutzt fÅr VATINTRA.DLG
+  Respektiert auch PerShift. Wird benutzt f√ºr VATINTRA.DLG
   
 20080316
 - RepPrint() setzt jetzt SetAsPdf(.f.) und SetAsMail(.f.) vor dem eventuellen Aufruf der DLG-Datei.
@@ -235,7 +248,7 @@
 20080318
 - csvsep() akzeptiert jetzt einen optionalen Parameter und kann also   
   benutzt werden, um das Trennzeichen zu setzen, das TIM beim Generieren von CSV-Dateien benutzt. Bisher gab csvsep() immer     
-  iif(slExcelUser,";",",") zurÅck.
+  iif(slExcelUser,";",",") zur√ºck.
 
 - Neuer Konfigurationseintrag OpenCsv in der TIM.DBI: hier kann der  komplette Pfad einer exe-Datei angegeben werden. Also entweder Excel oder OpenOffice. Wenn OpenCsv nicht gesetzt ist, dann startet ddListing() jetzt nicht mehr:
 
@@ -245,21 +258,21 @@
   
     AppShell("START TMP.CSV")
   
-  Der Vorteil ist, dass die Xbase-Version von TIM dann kein temporÑres DOS-Fenster mehr îffnet, um Excel oder OOo zu starten. Zumindest bei ddListing() (also Sh-F7)
+  Der Vorteil ist, dass die Xbase-Version von TIM dann kein tempor√§res DOS-Fenster mehr √∂ffnet, um Excel oder OOo zu starten. Zumindest bei ddListing() (also Sh-F7)
   
   In .EXP-Dateien sollte die Zeile
     OnSuccess AppShell("excel.bat "+i_OutputFile(),NIL,.f.)
   ersetzt werden durch:
     OnSuccess OpenCsv(i_OutputFile())    
-  Dann ist die excel.bat nicht mehr nîtig.
+  Dann ist die excel.bat nicht mehr n√∂tig.
 
-- Der bisherige Eintrag WebBrowser hei·t jetzt OpenUrl. Es gibt also inzwischen 3 Ñhnliche EintrÑge: OpenMail, OpenUrl und OpenCsv. OpenMail ist anders, weil er keinen String will, sondern einen Codeblock.
+- Der bisherige Eintrag WebBrowser hei√üt jetzt OpenUrl. Es gibt also inzwischen 3 √§hnliche Eintr√§ge: OpenMail, OpenUrl und OpenCsv. OpenMail ist anders, weil er keinen String will, sondern einen Codeblock.
 
-- Bug behoben: wenn in der TIM.INI ein Syntaxfehler war, dann schimpfte TIM nicht, sondern ignorierte den Eintrag schweigend. Jetzt kommt dann eine MsgBox() mit der Fehlermeldung. WÑhrend AppSys() ist ja weder qout() noch rpt_write() mîglich.
+- Bug behoben: wenn in der TIM.INI ein Syntaxfehler war, dann schimpfte TIM nicht, sondern ignorierte den Eintrag schweigend. Jetzt kommt dann eine MsgBox() mit der Fehlermeldung. W√§hrend AppSys() ist ja weder qout() noch rpt_write() m√∂glich.
   
 20080318b
 
-- AppClose() ist jetzt keine eigene Funktion mehr, sondern in AppAbort() integriert. In errorsysxb.prg wurde fÑlschlicherweise AppClose() statt AppAbort() aufgerufen (aber nur wenn xpperror.log nicht erstellt werden konnte, was m.W. noch niemandem passiert ist).
+- AppClose() ist jetzt keine eigene Funktion mehr, sondern in AppAbort() integriert. In errorsysxb.prg wurde f√§lschlicherweise AppClose() statt AppAbort() aufgerufen (aber nur wenn xpperror.log nicht erstellt werden konnte, was m.W. noch niemandem passiert ist).
 
 - Neue Funktion SetRteHandler()
   
@@ -269,23 +282,23 @@
 - Nachtrag 20080316 RepPrint() : SetAsPdf(.f.) und SetAsMail(.f.) werden jetzt nur gemacht, wenn cIdDlg nicht NIL ist. Denn z.B. DLM\DCL\DCLPRINT.ACT ruft zuerst DlgExec() und dann je nach Auswahl verschiedene RepPrint() ohne weiteren Dialog.
 
 - DLM\DCL\DCLDCF.REP 
-  a) druckt alle Zahlen jetzt ohne Nachkommastellen. In Estland wird die Buchhaltung zwar auf den Cent genau gefÅhrt (DevDecPos("EEK") ist 2), aber in der Bilanz muss man die BetrÑge runden.
+  a) druckt alle Zahlen jetzt ohne Nachkommastellen. In Estland wird die Buchhaltung zwar auf den Cent genau gef√ºhrt (DevDecPos("EEK") ist 2), aber in der Bilanz muss man die Betr√§ge runden.
   
-  b) Ich definiere jetzt eine bcDcfText, die ich als GRP_TEXT fÅr alle Gruppen benutze. Der Codeblock in dieser Variablen bentuzt RptGroup() um den Level rauszufinden.
+  b) Ich definiere jetzt eine bcDcfText, die ich als GRP_TEXT f√ºr alle Gruppen benutze. Der Codeblock in dieser Variablen bentuzt RptGroup() um den Level rauszufinden.
   
-  c) Neue Mîglichkeit M+ fÅr DCF->Type. In DcfValues() habe ich ein paar eher Ñsthetische énderungen gemacht.
+  c) Neue M√∂glichkeit M+ f√ºr DCF->Type. In DcfValues() habe ich ein paar eher √§sthetische √Ñnderungen gemacht.
   
 20080320
-- Das GRP_WHEN bekam als nCount und nDtlCount meistens 1 statt des tatsÑchlichen Wertes. Dadurch konnte effektiv kein Gruppentitel definiert werden, der nur erscheint, wenn mehr als 1 Record in der Gruppe vorkommen. Jetzt geht das.
-- Wenn GRP_BEFORE .f. zurÅck gibt, dann galt das bisher als Filter (gewisse Totals wurden dann nicht gedruckt). Jetzt gilt es als Fehler und TIM fragt dann MsgContinue().
-- GRP_TEXT kann jetzt NIL zurÅck geben, und das bedeutet, dass fÅr diese Instanz der Gruppe weder Titel noch Summen gedruckt werden sollen.
-- Einige fundamentale énderungen im Reportgenerator. Buggefahr.
+- Das GRP_WHEN bekam als nCount und nDtlCount meistens 1 statt des tats√§chlichen Wertes. Dadurch konnte effektiv kein Gruppentitel definiert werden, der nur erscheint, wenn mehr als 1 Record in der Gruppe vorkommen. Jetzt geht das.
+- Wenn GRP_BEFORE .f. zur√ºck gibt, dann galt das bisher als Filter (gewisse Totals wurden dann nicht gedruckt). Jetzt gilt es als Fehler und TIM fragt dann MsgContinue().
+- GRP_TEXT kann jetzt NIL zur√ºck geben, und das bedeutet, dass f√ºr diese Instanz der Gruppe weder Titel noch Summen gedruckt werden sollen.
+- Einige fundamentale √Ñnderungen im Reportgenerator. Buggefahr.
 - DLM\DCL\DCLDCF.REP weiter optimiert
-- DcfValues() weiter optimiert. Neue Mîglichkeit "M-" (oder "I-" oder "F-") zeigt die Zahl nur an, wenn sie negativ ist.
+- DcfValues() weiter optimiert. Neue M√∂glichkeit "M-" (oder "I-" oder "F-") zeigt die Zahl nur an, wenn sie negativ ist.
 
 20080321
-- cust\stdd.ch : nicht mehr DEF_BIL, sondern DEF_DCL. DEF_BIL erklÑre ich jetzt als obsolete. Das Feld DCF->IdBil verschwindet ebenfalls.
-- Wenn TIM eine unterbrochene Sitzung feststellt, dann verschiebt er die benutzerlose SESSION.RPT ja ins RtpArchive (normalerweise .\RPT). Das RptArchive musste bisher auf dem gleichen Laufwerk liegen. Jetzt darf es auf einem anderen Laufwerk liegen. Und wenn das Verzeichnis nicht existiert, dann legt TIM es selber stillschweigend an (und nur falls das auch noch fehlschlÑgt, meldet er die neue Warnung "Could not create directory for session reports!"). rpt_clean()
+- cust\stdd.ch : nicht mehr DEF_BIL, sondern DEF_DCL. DEF_BIL erkl√§re ich jetzt als obsolete. Das Feld DCF->IdBil verschwindet ebenfalls.
+- Wenn TIM eine unterbrochene Sitzung feststellt, dann verschiebt er die benutzerlose SESSION.RPT ja ins RtpArchive (normalerweise .\RPT). Das RptArchive musste bisher auf dem gleichen Laufwerk liegen. Jetzt darf es auf einem anderen Laufwerk liegen. Und wenn das Verzeichnis nicht existiert, dann legt TIM es selber stillschweigend an (und nur falls das auch noch fehlschl√§gt, meldet er die neue Warnung "Could not create directory for session reports!"). rpt_clean()
   Das Ganze funktioniert wohl nur mit der xbase-Version, nicht mit der Clipper-Version.
 - oError:args wird jetzt auch in den TIM-Sitzungsbericht geschrieben. Diese Info stand bisher immer nur in der xpperror.log
 - Man kann jetzt (theoretisch) TIM auf der Standarddatenbank von einem runtergeladenen SVN-Baum aus benutzen.
@@ -295,63 +308,66 @@
 - DcfGenFilter() schaute auch ohne DEF_BIL noch auf DCF->IdBil.
 
 20080414
-- DLM\STD\WINSTD.DRV : Zeilenhîhen leicht verÑndert (entsprechend der neuen Resultate mit docs\examples\textprinter\7.prn), neue Schriftgrî·en 11, 18 und 19, ein Bug bei 14 cpi.
+- DLM\STD\WINSTD.DRV : Zeilenh√∂hen leicht ver√§ndert (entsprechend der neuen Resultate mit docs\examples\textprinter\7.prn), neue Schriftgr√∂√üen 11, 18 und 19, ein Bug bei 14 cpi.
 
 - DLM\HST: 
   - Neue Datei MAHN.DLG, die momentan lediglich PREVIEW.DLG und
-    ASPDF.DLG included. FÅr BM.
+    ASPDF.DLG included. F√ºr BM.
   - Die Standardmahnung PARMAHN.DLG (die momentan noch keiner benutzt)
     hat jetzt auch ASPDF.DLG
     
 20080423
 - 
-- FinAuto() hatte einen Bug, so dass die öbertragsbuchung falsche Zahlen enthielt wenn sich der Periodenbereich Åber mehrere Jahre erstreckte. Behoben.
+- FinAuto() hatte einen Bug, so dass die √úbertragsbuchung falsche Zahlen enthielt wenn sich der Periodenbereich √ºber mehrere Jahre erstreckte. Behoben.
 
 20080424
-- DEF_DCL : Die Entscheidung, ob alle Journale oder nur die Kassen- und Bankjournale berÅcksichtigt werden, findet jetzt nicht mehr fÅr die ganze Deklaration auf einmal statt, sondern pro Deklarationsfeld. Also DCL->JnlType wird DCF->JnlType. Denn die beiden letzten Zeilen im Cash Flow Statement, die mit den BankkontostÑnden, die mÅssen alle Journale berÅcksichtigen. Die anderen Felder dagegen, die mit dem eigentlich Cash Flow, die dÅrfen nur in die Kassen- und Bankjournale berÅcksichtigen.
+- DEF_DCL : Die Entscheidung, ob alle Journale oder nur die Kassen- und Bankjournale ber√ºcksichtigt werden, findet jetzt nicht mehr f√ºr die ganze Deklaration auf einmal statt, sondern pro Deklarationsfeld. Also DCL->JnlType wird DCF->JnlType. Denn die beiden letzten Zeilen im Cash Flow Statement, die mit den Bankkontost√§nden, die m√ºssen alle Journale ber√ºcksichtigen. Die anderen Felder dagegen, die mit dem eigentlich Cash Flow, die d√ºrfen nur in die Kassen- und Bankjournale ber√ºcksichtigen.
 
 20080430
 - Neue Funktion getctr(). Wird benutzt in dlm\dcl\aa.htm
 
 20080514
-- ImpAuto() machte in gewissen Netzkonfigurationen eine endlose Schleife beim Vorlauf. Test "do while !bof()" ergÑnzt durch   ".and.!eof()", dadurch wurde das Problem behoben.
+- ImpAuto() machte in gewissen Netzkonfigurationen eine endlose Schleife beim Vorlauf. Test "do while !bof()" erg√§nzt durch   ".and.!eof()", dadurch wurde das Problem behoben.
 
 20080515
+--------
 - DEF_DCL : Neue Tabelle DCP.
 
 20080530
-- DCLTVA.ACT : Umsatz MWSt-Code 19M ("19% Deutschland mit Montage") wurde nicht im Feld 47 der MWSt-ErklÑrung eingetragen.
-- hstven.rep : In der Kolonne "Feld 47" werden jetzt auch UmsÑtze angezeigt und summiert, die bisher lediglich in Kolonne "Umsatz Ausland" standen. Solche UmsÑtze stehen dann also in zwei Kolonnen gleichzeitig.
+--------
+- :file:`DCLTVA.ACT` : Umsatz MWSt-Code 19M ("19% Deutschland mit Montage") wurde nicht im Feld 47 der MWSt-Erkl√§rung eingetragen.
+- :file:`hstven.rep` : In der Kolonne "Feld 47" werden jetzt auch Ums√§tze angezeigt und summiert, die bisher lediglich in Kolonne "Umsatz Ausland" standen. Solche Ums√§tze stehen dann also in zwei Kolonnen gleichzeitig.
 
 20080516
-- DEF_IMP: Neuer Konfig-Eintrag ImlCompte, damit man DomizilierungsauftrÑge verwalten kann. 
+--------
+
+- DEF_IMP: Neuer Konfig-Eintrag ImlCompte, damit man Domizilierungsauftr√§ge verwalten kann. 
+
 - Neue Funktion ImpWriteDom(cFilename), die eine Domizilierungsauftragsdatei im Bankstandardformat DOM'80 generiert.
 
 20080709
-- JNL->CodeCli ist jetzt nicht mehr 3 sondern 11 Zeichen lang. FÅr
-  Domizilierungen. Deses Feld wird nur beim Generieren von Interbankdateien benutzt. FÅr OTI und VME muss der Inhalt 3 Zeichen
-  lang sein, fÅr DOM-Dateien 11 Zeichen. Neue Fehlermeldungen, wenn das nicht stimmt.
+--------
+- :field:`JNL->CodeCli` ist jetzt nicht mehr 3 sondern 11 Zeichen lang. F√ºr Domizilierungen. Dieses Feld wird nur beim Generieren von Interbankdateien benutzt. F√ºr OTI und VME muss der Inhalt 3 Zeichen
+  lang sein, f√ºr DOM-Dateien 11 Zeichen. Neue Fehlermeldungen, wenn das nicht stimmt.
   
 20080714
-- volsplit() macht jetzt auch dann strtran("\","/"), wenn es kein Laufwerksbuchstabe sondern ein echts Volume ist.
+--------
+- :meth:`volsplit()` macht jetzt auch dann strtran("\","/"), wenn es kein Laufwerksbuchstabe sondern ein echts Volume ist.
 
 20080716
-- PlzString() setzt jetzt kein LÑnderkÅrzel mehr vor die PLZ, wenn es eine Adresse im Ausland ist. Aber das gilt nur wenn #ifdef DEF_WWW ist.
+--------
+- :meth`PlzString()` setzt jetzt kein L√§nderk√ºrzel mehr vor die PLZ, wenn es eine Adresse im Ausland ist. Aber das gilt nur wenn #ifdef DEF_WWW ist.
 
 20081106
-
+--------
 - ddFldSetValidate() war rauskommentiert, keine Ahnung weshalb. Jetzt wieder rein.
 
-- dbback.btp ist wieder da, jetzt in dlm\std und fÅr den neuen Parser konvertiert.
+- dbback.btp ist wieder da, jetzt in dlm\std und f√ºr den neuen Parser konvertiert.
 
 20081124
-
-- In Sto·zeiten kann es passieren, dass zwei Benutzer die gleiche Sitzungsnummer erwischen. Der schnellere merkt nichts davon, aber der langsamere kriegt dann von TIM gesagt "...\9.LOG : Exklusivzugriff verweigert. Neu versuchen?". Wenn er dann J antwortet, wird jetzt neuerdings wenigstens die Sitzungsnummer erhîht, so dass er in der Regel nach einem ENTER reinkommt.
+--------
+- In Sto√üzeiten kann es passieren, dass zwei Benutzer die gleiche Sitzungsnummer erwischen. Der schnellere merkt nichts davon, aber der langsamere kriegt dann von TIM gesagt "...\9.LOG : Exklusivzugriff verweigert. Neu versuchen?". Wenn er dann J antwortet, wird jetzt neuerdings wenigstens die Sitzungsnummer erh√∂ht, so dass er in der Regel nach einem ENTER reinkommt.
 
 - VnaScan() setzt die VNA jetzt nur noch dann auf befriedigt, wenn QteUs Null ist (und nicht wie bisher wenn sie <= 0 ist). Denn wenn ich eine NCV entregistriere, die einen negativen BLV befriedigt, dann wurde der BLV nicht entfriedigt weil seine QteUs negativ ist.
-
-20081126
-
-- RecEdit() gibt jetzt .t. statt bisher NIL zurÅck. Weil das logischer ist falls man es in einer act-Datei verwendet. Bei gx wird das in der PAREID.ACT benutzt, um énderungen in der PAR, die beim Einlesen einer eID geschehen ebenfalls in der console.nsg zu protokollieren. Anwendung: Bei gx steht in der PAR.DEF ein ``ddSetAttrib("S")``
 
 - Das Tabellenattribut "S" ist jetzt im Code als Konstante DBFATTR_S benutzt.

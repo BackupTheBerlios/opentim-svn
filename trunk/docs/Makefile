@@ -3,6 +3,7 @@
 
 SITENAME     = otimdev
 TEMPDIR      = C:\temp\otimdev
+OPENHTML     = 'C:\Program Files\Mozilla Firefox\firefox.exe'
 BUILDDIR     = $(TEMPDIR)\html
 CACHEDIR     = $(TEMPDIR)\doctrees
 
@@ -31,12 +32,14 @@ help:
 	@echo "  linkcheck to check all external links for integrity"
 
 clean:
-	-rm -rf .build/*
+	-rm -rf $(CACHEDIR)/*
+	-rm -rf $(BUILDDIR)/*
 
 html:
 	mkdir -p $(CACHEDIR) 
 	mkdir -p $(BUILDDIR)
 	$(SPHINXBUILD) -b html -d $(CACHEDIR) $(ALLSPHINXOPTS) . $(BUILDDIR)
+	$(OPENHTML) $(BUILDDIR)\index.html
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)."
   

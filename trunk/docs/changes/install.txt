@@ -1,28 +1,31 @@
-# -*- coding: utf8 -*-
+ÔªøUpgrade notes
+=============
+
+When you upgrade an existing TIM installation then you should read and execute the instructions between the dates of the old and the new version. 
 
 19970702 
 
-- Der IntegritÑtstest sucht jetzt ebenfalls nach einer Datei VEN.WRN, die zumindest existieren sollte (selbst wenn sie leer ist).
+- Der Integrit√§tstest sucht jetzt ebenfalls nach einer Datei VEN.WRN, die zumindest existieren sollte (selbst wenn sie leer ist).
 
 19970708 
 
-- Die bisherigen Datenobjekte MVP (Historik Partnerkonten) und MVT (Historik Generalkonten) sind jetzt in einem einzigen Datenobjekt HST zusammengefasst. Die Konvertiertung geschieht grî·tenteils automatisch (970708.ind). hst*.qry aus Standarddatenbank Åbernehmen. mvp*.* und mvt*.* kînnen nach der Konvertierung gelîscht werden. Eventuell FLT.DBF aus der Standarddatenbank Åbernehmen (oder manuell anpassen). mnu*.dbc manuell anpassen.
+- Die bisherigen Datenobjekte MVP (Historik Partnerkonten) und MVT (Historik Generalkonten) sind jetzt in einem einzigen Datenobjekt HST zusammengefasst. Die Konvertiertung geschieht gr√∂√ütenteils automatisch (970708.ind). hst*.qry aus Standarddatenbank √ºbernehmen. mvp*.* und mvt*.* k√∂nnen nach der Konvertierung gel√∂scht werden. Eventuell FLT.DBF aus der Standarddatenbank √ºbernehmen (oder manuell anpassen). mnu*.dbc manuell anpassen.
 
 10. Juli 1997. Verschiedene Rechnungsbuchkolonnen in der
-Standard-Datenbank wurden aus mnemotechnischen GrÅnden umbenannt, um mit
-den entsprechenden Rasternummern der MWSt-ErklÑrung Åberein zu stimmen :
-Einkauf : abzugsfÑhige MWSt. Belgien ("02") wird "59"; MWSt. Intracom
+Standard-Datenbank wurden aus mnemotechnischen Gr√ºnden umbenannt, um mit
+den entsprechenden Rasternummern der MWSt-Erkl√§rung √ºberein zu stimmen :
+Einkauf : abzugsf√§hige MWSt. Belgien ("02") wird "59"; MWSt. Intracom
 ("03") wird "55"; MWSt. Vertragspartner ("04") wird "57". Verkauf :
-(Ñhnlich) 14. Juli 1997. Die Funktion XtvEdit() habe ich
+(√§hnlich) 14. Juli 1997. Die Funktion XtvEdit() habe ich
 rausgeschmissen; falls noch darauf zugegriffen wird: mnu.dbc manuell
 anpassen.
 
-24. Juli 1997 Finanzjournale kînnen jetzt ebenfalls das Attribut F
+24. Juli 1997 Finanzjournale k√∂nnen jetzt ebenfalls das Attribut F
 (chronologische Erfassung forcieren) kriegen. Normalerweise sollte
-dieses Attribut fÅr alle FIN-Journale gesetzt werden.
+dieses Attribut f√ºr alle FIN-Journale gesetzt werden.
 
 5. August 1997. In den Datenzeilen aller *.hcl-Dateien muss am Ende ein
-weiteres Alt-124 ("|") hinzugefÅgt werden. Default-Wert fÅr dieses neue
+weiteres Alt-124 ("|") hinzugef√ºgt werden. Default-Wert f√ºr dieses neue
 Feld ist "ntomf(nSum)" (braucht nicht eingetragen zu werden).
 
 30. August 1997. Analytische Buchhaltung : HistAna() wurde komplett neu
@@ -31,70 +34,69 @@ geschrieben (bei Installation beachten)
 4. September 1997. Analytische Buchhaltung. Ein Korrespondenz-Eintrag
 kann jetzt auch einem Analysekonto zugewiesen werden (neues Feld
 MSG->IdAna und neue Indexdatei MSG3). [Shift-F8] auf einem Analysekonto
-zeigt die Korrespondenz pro Dossier. Anwendung : TIM fÅr AnwÑlte.
+zeigt die Korrespondenz pro Dossier. Anwendung : TIM f√ºr Anw√§lte.
 
 5. September 1997. Seit heute gibt es die Standard-Datenbank auch in 
-franzîsisch. 
+franz√∂sisch. 
 Neue Funktionen DbfSwapLng(adTables,cRootFieldname,c1,c2) und SwapLng(c1,c2). 
 
-6. September 1997. Neuer Eintrag LineFeed in Druckertreibern. Standardwert = 
-CR_LF. Beim Ausdrucken mit dem Druckertreiber HTML.DRV kann das CR_LF um ein 
-"<br>" erweitert werden. 
-Au·erdem wird seit heute die Escape-Sequenz von Initialize, {set special} und 
-des Schriftgrads nur noch zu Beginn der ersten Seite gedruckt. 
+6. September 1997. 
 
-7. September 1997. Ein paar Erweiterungen fÅr Export-Filter : Header, Trailer, 
-convert...to... und NoTitles sowie die Mîglichkeit, Feldnamen mit einem Ausdruck 
+- Neuer Eintrag LineFeed in Druckertreibern. Standardwert = CR_LF. Beim Ausdrucken mit dem Druckertreiber HTML.DRV kann das CR_LF um ein "<br>" erweitert werden. 
+- Au√üerdem wird seit heute die Escape-Sequenz von Initialize, {set special} und des Schriftgrads nur noch zu Beginn der ersten Seite gedruckt. 
+
+7. September 1997. Ein paar Erweiterungen f√ºr Export-Filter : Header, Trailer, 
+convert...to... und NoTitles sowie die M√∂glichkeit, Feldnamen mit einem Ausdruck 
 statt eines konstanten Strings zu definieren. Die Funktion Daten exportieren 
-wurde intern leicht verÑndert. Es gibt jetzt die neue Funktion 
+wurde intern leicht ver√§ndert. Es gibt jetzt die neue Funktion 
 DbfExport(adTables,nOrder,cStart,xlWhile,xlFilter,cExpFile), die man z.B. in 
-einer MenÅ-Datei benutzen kann, um oft verwendete Datenexporte 
+einer Men√º-Datei benutzen kann, um oft verwendete Datenexporte 
 benutzerfreundlicher einzubauen. Bei Installation beachten: ArtEdit(), 
 ParMviEdit(), LnkLniEdit() und PickGen() : der Parameter bFilter ist jetzt nicht 
-mehr ein code block, sondern ein Ausdruck. Eventuell MenÅdateien anpassen. 
+mehr ein code block, sondern ein Ausdruck. Eventuell Men√ºdateien anpassen. 
 Exportfilter : Der Eintrag OutputFile muss jetzt einen Ausdruck, nicht mehr 
 einen konstanten Wert haben. Manuell anpassen. 
 
 30. September 1997. Agenda. Die Tarife, die man einem Termin zuweisen kann, sind 
 jetzt nicht mehr als Artikel zu definieren, sondern in einer eigenen Datei. Bei 
-Installation beachten : Bestehende Druckmasken fÅr Dienstleistungsberichte 
-mÅssen manuell angepasst werden. Evtl. kînnen die Tarife aus der ART.DBF 
-Åbernommen werden. Dateien TAC*.QRY, TAC*.MSK und TRMTAC.QRY aus der 
-Standard-Datenbank Åbernehmen. TRM4.NTX neu erstellen. In der Datei TRM.DBF 
-wurden einige Felder umbenannt, falls der Inhalt Åbernommren werden soll, muss 
+Installation beachten : Bestehende Druckmasken f√ºr Dienstleistungsberichte 
+m√ºssen manuell angepasst werden. Evtl. k√∂nnen die Tarife aus der ART.DBF 
+√ºbernommen werden. Dateien TAC*.QRY, TAC*.MSK und TRMTAC.QRY aus der 
+Standard-Datenbank √ºbernehmen. TRM4.NTX neu erstellen. In der Datei TRM.DBF 
+wurden einige Felder umbenannt, falls der Inhalt √ºbernommren werden soll, muss 
 sie vor dem tim /check manuell angepasst werden: TRM->IdArt wird TRM->IdTac. 
   
-8. Oktober 1997. Man kann jetzt in den RechnungsbÅchern das Format der (bisher 
+8. Oktober 1997. Man kann jetzt in den Rechnungsb√ºchern das Format der (bisher 
 hard-codierten) Kolonnen "Dok.Nr.", "Datum" und "Konto" selbst bestimmen. Bei 
-Installation beachten : Bestehende Layout-Dateien (*.hcl) mÅssen wie folgt 
-manuell konvertiert werden (aus Standard-Datenbank Åbernehmen). (1) hcl-Dateien 
-fÅr HistJnl() mÅssen jetzt ebenfalls die drei Kolonnen "Dok.Nr.", "Datum" und 
-"Konto" definieren. (2) hcl-Dateien fÅr VnlListe() mÅssen die Kolonnen "Art.Nr" 
-und "Bezeichnung" definieren. (3) hcl-Dateien fÅr HistAna() mÅssen die Kolonnen 
+Installation beachten : Bestehende Layout-Dateien (*.hcl) m√ºssen wie folgt 
+manuell konvertiert werden (aus Standard-Datenbank √ºbernehmen). (1) hcl-Dateien 
+f√ºr HistJnl() m√ºssen jetzt ebenfalls die drei Kolonnen "Dok.Nr.", "Datum" und 
+"Konto" definieren. (2) hcl-Dateien f√ºr VnlListe() m√ºssen die Kolonnen "Art.Nr" 
+und "Bezeichnung" definieren. (3) hcl-Dateien f√ºr HistAna() m√ºssen die Kolonnen 
 "Konto" und "Bezeichnung" definieren. 
-Technische Dokumentation : die Funktion HclIsFirst() gibt true zurÅck, wenn der 
+Technische Dokumentation : die Funktion HclIsFirst() gibt true zur√ºck, wenn der 
 erste Record einer Gruppe gedruckt wird. HistJnl() gruppiert pro Dokument 
 (HST->IdJnl+HST->IdDoc). VnlListe() gruppiert pro Artikel (VNL->IdArt). 
 HistAna() gruppiert pro Analysekonto (MVA->IdAna). HclHistPar() gruppiert pro 
-Partner (HST->IdPar). Die Funktion IsSame(uValue) gibt true zurÅck, wenn sie 
-beim vorherigen Aufruf bereits mit dem gleichen Wert fÅr uValue gerufen wurde. 
+Partner (HST->IdPar). Die Funktion IsSame(uValue) gibt true zur√ºck, wenn sie 
+beim vorherigen Aufruf bereits mit dem gleichen Wert f√ºr uValue gerufen wurde. 
 Ein Aufruf ohne Parameter, bzw. IsSame(NIL), reinitialisiert die Funktion und 
-gibt immer true zurÅck. IsSame() wird in HistJnl() automatisch vor jedem Beginn 
+gibt immer true zur√ºck. IsSame() wird in HistJnl() automatisch vor jedem Beginn 
 einer neuen Record-Gruppe reinitialisiert. 
 
 15. Oktober 1997. (Fakturation) Bei Installation beachten : wenn in
 einer Datenbank die Gutschriften in einem eigenen Journal erfasst
-werden, dann kann es vorkommen, dass die MWSt-ErklÑrung dies extra
-berÅcksichtigen muss. Die Funktionen CttBase() und CttTaxe() sehen
-nÑmlich alle BetrÑge als positiv an, deren Dokument die gleiche
+werden, dann kann es vorkommen, dass die MWSt-Erkl√§rung dies extra
+ber√ºcksichtigen muss. Die Funktionen CttBase() und CttTaxe() sehen
+n√§mlich alle Betr√§ge als positiv an, deren Dokument die gleiche
 Buchungsrichtung (D/C) hat wie das Journal. In den Feldern 81 bis 83
-mÅssen die Gutschriften jedoch abgezogen (nicht hinzugezÑhlt) werden.
+m√ºssen die Gutschriften jedoch abgezogen (nicht hinzugez√§hlt) werden.
 
 20. Oktober 1997. Bei Installation beachten : (Konfiguration
-MWSt-ErklÑrung). Die MWSt in Einkauf-Gutschriften auf
+MWSt-Erkl√§rung). Die MWSt in Einkauf-Gutschriften auf
 innergemeinschaftliche Warenlieferungen darf nicht im Feld 63 vermerkt
 werden, sondern wird jetzt in den Feldern 61 und 62 eingetragen. Das
-MWSt-Amt achtet nÑmlich darauf, dass der Betrag im Feld 63 nicht hîher
+MWSt-Amt achtet n√§mlich darauf, dass der Betrag im Feld 63 nicht h√∂her
 als 21% des Betrags im Feld 85 (Basis der "normalen" Gutschriften).
 
 21. Oktober 1997. Die Funktion HclHistPar() (sh. 8.10.1997) wurde
@@ -103,12 +105,12 @@ Eintrag NoCheckIdDoc in der tim.dbi erkennt jetzt eine weitere Klausel
 "until".
 
 [technisch] ClnTit2() setzt jetzt die Kolonnentitel von numerischen
-Kolonnengegen den rechten Rand, wÑhrend die Titel der anderen Kolonnen
+Kolonnengegen den rechten Rand, w√§hrend die Titel der anderen Kolonnen
 weiterhin gegen den linken Rand gesetzt sind. Dies wird z.B. sichtbar
-beim Ausdruck der RechnungsbÅcher.
+beim Ausdruck der Rechnungsb√ºcher.
 
-30. Oktober 1997. In der NAT.DBC muss eine neue Kolonne StandardwÑhrung 
-hinzugefÅgt werden. 
+30. Oktober 1997. In der NAT.DBC muss eine neue Kolonne Standardw√§hrung 
+hinzugef√ºgt werden. 
 
 5. November 1997. Neue Kolonne PGP_IDDEV in der PGP.DBC manuell anpassen. 
 
@@ -116,35 +118,38 @@ hinzugefÅgt werden.
 
 9. November 1997. Neues Feld IPB->IdDev, Buchungsanweisungen. 
 
-12. November 1997. VNL->Date ist jetzt kein standardmÑ·ig definiertes Feld mehr.
-Gegebenenfalls in der vnl.act definieren und CustData VNL eintragen. Die Felder 
-VNL->_VenDate, VNL->_IdDev, VNL->IsMemo sind verschoben, also ggf. die 
-vnl*qry-Dateien anpasssen: 
+12. November 1997. 
+
+- VNL->Date ist jetzt kein standardm√§√üig definiertes Feld mehr. Gegebenenfalls in der vnl.act definieren und CustData VNL eintragen. Die Felder VNL->_VenDate, VNL->_IdDev, VNL->IsMemo sind verschoben, also ggf. die vnl*qry-Dateien anpasssen: 
+
     s/column 27/column 25/
     s/column 25/column 26/ 
     s/column 26/column 27/ 
+    
     24 = IdInt, 25 = IsMemo (oder QteStat), 26 = _VenDate, 27 = _IdDev
 
 13. November 1997.
-- PAR->_ParName ist jetzt au·erdem standardmÑ·ig 40 statt 32 Zeichen
-  lang. VEN->ParName wurde von 30 auf 40 Zeichen verlÑngert.
+
+- PAR->_ParName ist jetzt au√üerdem standardm√§√üig 40 statt 32 Zeichen
+  lang. VEN->ParName wurde von 30 auf 40 Zeichen verl√§ngert.
   Gegebenenfalls also picture "@k@s30" in den entsprechenden Kolonnen
   der qry-Dateien festlegen.
  
 17. November 1997.
-- VNA3.NTX muss rekonstruiert werden, weil der SortierschlÅssel erweitert
-  wurde : wenn mehrere EintrÑge pro Tag pro Artikel, dann sind diese jetzt
-  zusÑtzlich noch nach der Partnernummer sortiert.
-- MnuLoad() macht jetzt kein padr(MenuItem,30) mehr. Also mÅssen alle
-  EintrÑge in den mnu*.dbc-Dateien die korrekte LÑnge haben. Vorteil :
-  Man kann jetzt auch ein MenÅ haben, dessen Optionen breiter als 30
+
+- VNA3.NTX muss rekonstruiert werden, weil der Sortierschl√ºssel erweitert
+  wurde : wenn mehrere Eintr√§ge pro Tag pro Artikel, dann sind diese jetzt
+  zus√§tzlich noch nach der Partnernummer sortiert.
+- MnuLoad() macht jetzt kein padr(MenuItem,30) mehr. Also m√ºssen alle
+  Eintr√§ge in den mnu*.dbc-Dateien die korrekte L√§nge haben. Vorteil :
+  Man kann jetzt auch ein Men√º haben, dessen Optionen breiter als 30
   Zeichen sind.
 
 22. November 1997. (nicht beachten; wieder annulliert am 25.11.97) Im
-Datumformat fÅr dtocf() muss jetzt ein Backslash ("\") vor jedem Platzhalter 
+Datumformat f√ºr dtocf() muss jetzt ein Backslash ("\") vor jedem Platzhalter 
 stehen. 
 
-26. November 1997 (DEF_REMISE). VNL->PrixR berÅcksichtigt jetzt nicht mehr die 
+26. November 1997 (DEF_REMISE). VNL->PrixR ber√ºcksichtigt jetzt nicht mehr die 
 Menge (VNL->Qte). TIM macht die Konvertierung automatisch (971126.ind) 
 
 Sonntag, 14. Dezember 1997 ?                                           
@@ -165,13 +170,13 @@ Bei Installation beachten :
 Automatik-Fakturierung.
 VEN->[F6] gibt es jetzt nicht mehr. Wer will, kann das in der ven.act
 definieren:
-ddAddSpecial({||ParVnaEdit(VEN->IdPar)},"~FakturierungsvorschlÑge [F6]",-5)
+ddAddSpecial({||ParVnaEdit(VEN->IdPar)},"~Fakturierungsvorschl√§ge [F6]",-5)
 
 08.01.1998
 *.tcs-Dateien vom HELP-Verzeichnis ins Datenbankverzeichnis verschieben.
 
 12.01.1998
-Zahlungsverkehr mit FremdwÑhrung (allgemeine Buchhaltung). Die neuen
+Zahlungsverkehr mit Fremdw√§hrung (allgemeine Buchhaltung). Die neuen
 Felder _DevDebit und _DevCredit sollten in FNLDEV.QRY eingebaut werden.
 
 19980114
@@ -183,24 +188,24 @@ Felder _DevDebit und _DevCredit sollten in FNLDEV.QRY eingebaut werden.
 - Kundenliste nach Umsatz.
   - Datei MNUPRINT.DBC :
     ~Fakturierung|~Kundenliste Umsatz|RepPrint("PAR002","PAR002","...")
-  - PAR002.REP und PAR002.DLG : Aus Standard-Datenbank Åbernehmen.
+  - PAR002.REP und PAR002.DLG : Aus Standard-Datenbank √ºbernehmen.
 
 19980116
 Automatik-Fakturierung.
 PAR->[F6] gibt es jetzt nicht mehr. Wer will, kann das in der par.act
 definieren:
-ddAddSpecial({||ParVnaEdit(PAR->IdPar)},"~FakturierungsvorschlÑge [F6]",-5)
+ddAddSpecial({||ParVnaEdit(PAR->IdPar)},"~Fakturierungsvorschl√§ge [F6]",-5)
 
 19980127
-- Die neue Tabelle IPR.DBF (Basispreise) Åbernimmt ab heute die
+- Die neue Tabelle IPR.DBF (Basispreise) √ºbernimmt ab heute die
   Entscheidung, welches Preisfeld der Artikelstammdaten in einem
   Fakturationsdokument als Standardvorgabe verwendet werden soll.
   Damit entlastet sie die Tabelle PGP.DBC, die wieder zu ihrem
-  ursprÅnglichen Ziel zurÅckschrumpft, nÑmlich eine Tabelle der
+  urspr√ºnglichen Ziel zur√ºckschrumpft, n√§mlich eine Tabelle der
   Partner-Preisgruppen zu sein.
   Bei Installation beachten :
   - Befehl "Basispreise" in MNUBOSS.DBC einbauen.
-  - Bisherige PGP.DBC manuell in die IPR.DBF Åbertragen.
+  - Bisherige PGP.DBC manuell in die IPR.DBF √ºbertragen.
   - PGP.DBC manuell anpassen.
 
 19980204
@@ -210,12 +215,12 @@ ddAddSpecial({||ParVnaEdit(PAR->IdPar)},"~FakturierungsvorschlÑge [F6]",-5)
 19980209
 - Report-Generator (RepPrint()). Die when= Klausel eines total kriegt
   jetzt nicht mehr nGroup als Parameter, sondern die Anzahl der Records,
-  die (fÅr diese Gruppe) in diesem Total berÅcksichtigt wurden.
+  die (f√ºr diese Gruppe) in diesem Total ber√ºcksichtigt wurden.
   => "q *.rep" und nachschauen, ob dieser Parameter benutzt wird.
 
 19980216
 - Bei Installation beachten : Der Eintrag Inputfile aller *.imp-Dateien
-  muss jetzt zwischen AnfÅhrungszeichen stehen.
+  muss jetzt zwischen Anf√ºhrungszeichen stehen.
   => "q *.imp" und
     Inputfile import.txt
   ersetzen durch
@@ -223,12 +228,12 @@ ddAddSpecial({||ParVnaEdit(PAR->IdPar)},"~FakturierungsvorschlÑge [F6]",-5)
 
 19980227
 - Daten exportieren. Wenn der Dateiname im Exportfilter (*.exp) keine
-  Pfadangabe enthÑlt, schreibt TIM die Datei jetzt nicht mehr nach
+  Pfadangabe enth√§lt, schreibt TIM die Datei jetzt nicht mehr nach
   c:\tim\export, sondern nach c:\tim\temp.
 
 19980305
 - Wenn DEF_ART und nicht DEF_ACF, dann ist das Feld ART->RefExt jetzt
-  standardmÑ·ig vordefiniert. Bei Installation beachten : wenn in der
+  standardm√§√üig vordefiniert. Bei Installation beachten : wenn in der
   ART.ACT also ein Feld RefExt definiert war, muss dieses versteckt
   (Attribut H setzen) und die ART*.MSKs sowie die ART*.QRYs angepasst
   werden. Eintrag LenRefExt in der TIM.DBI ist das gleiche wie
@@ -237,11 +242,11 @@ ddAddSpecial({||ParVnaEdit(PAR->IdPar)},"~FakturierungsvorschlÑge [F6]",-5)
 19980309
 - DEF_MULT. Neues Feld VNL->Mult = Multiplikator.
   Field handles von cust-Feldern aus der VNL.ACT haben sich dadurch um 1
-  erhîht. Also "q vnl*.qry" und "q vnl*.msk" : handle++ if handle >= 38.
+  erh√∂ht. Also "q vnl*.qry" und "q vnl*.msk" : handle++ if handle >= 38.
 
 19980312
-- Das DLGATTR_R wird jetzt nicht mehr berÅcksichtigt.
-  Bei Installation beachten : fÅr jedes field mit attrib="R" muss
+- Das DLGATTR_R wird jetzt nicht mehr ber√ºcksichtigt.
+  Bei Installation beachten : f√ºr jedes field mit attrib="R" muss
   stattdessen ein "before DlgDefine()" angegeben werden.
   Also q *.dlg und nach attrib="R" suchen.
 
@@ -259,7 +264,7 @@ xxxx
     "~Fakturationsdokumente  [F5]",\
     -4\
   )
-  Eine mîgliche Alternative zur bisherigen Belegung wÑre :
+  Eine m√∂gliche Alternative zur bisherigen Belegung w√§re :
   ddAddSpecial(\
     {||DbfEdit(\
        { oVen(),oPar(),oPlz() },\
@@ -278,7 +283,7 @@ xxxx
 19980326
 - In der tim.dbi kann jetzt ein neuer Eintrag OnMainMenu stehen (oder
   mehrere). Bei Installation beachten : die bisherigen Standardvorgaben
-  folgenderma·en eintragen :
+  folgenderma√üen eintragen :
   OnMainMenu SayAgenda(UserDate())  // DEF_PRESTO
   oder
   OnMainMenu memodisplay(\
@@ -287,15 +292,15 @@ xxxx
   )
 
 19980330
-- Die Artikelattribute sind jetzt nicht mehr hard-codiert und kînnen und
-  mÅssen jetzt in der Datei ARTATTR.DBC definiert werden.
+- Die Artikelattribute sind jetzt nicht mehr hard-codiert und k√∂nnen und
+  m√ºssen jetzt in der Datei ARTATTR.DBC definiert werden.
 
 19980402
 - PLZ.QRY kopieren nach PLZNAT.QRY
 
 19980421
 - DEF_VNA. Um das bisherige Verhalten bei [Insert] auf der VNA.DBF
-  beizubehalten, mÅssen folgende EintrÑge in der tim.dbi hinzugefÅgt
+  beizubehalten, m√ºssen folgende Eintr√§ge in der tim.dbi hinzugef√ºgt
   werden:
   PreVnaCreate "B" $ UsrAttrib()
   PreVnaCreate Confirm(\
@@ -305,12 +310,12 @@ xxxx
 
 19980423
 - DEF_TAX und DEF_VEN. REGATTR_A in der REGATTR.DBC eintragen und
-  eventuell fÅr alle MWSt-Regimes einschalten.
+  eventuell f√ºr alle MWSt-Regimes einschalten.
 - DEF_VNA. Die Taste [F6] auf einem Artikel war bisher noch
   hard-codiert. Jetzt nicht mehr. Datei ART.ACT anpassen :
   ddAddSpecial(\
     {||ArtVnaEdit(ART->IdArt)},\
-    "Fakturierungs~vorschlÑge   [F6]",\
+    "Fakturierungs~vorschl√§ge   [F6]",\
     -5\
   )
 
@@ -328,7 +333,7 @@ xxxx
 19980507
 - Neuer Eintrag PrePerAppend in der tim.dbi.
   Standardwert = {||.f.}.
-  Au·er in AusnahmefÑllen (CUST_CPAS) ist folgende Belegung
+  Au√üer in Ausnahmef√§llen (CUST_CPAS) ist folgende Belegung
   angebrachter:
   PrePerAppend {|cPeriode|Confirm(\
     cPeriode + MsgPerExist(), \
@@ -348,7 +353,7 @@ xxxx
 
 19980526 DEF_IVT
 - [Shift-F7] in einer Artikelliste zeigt jetzt kein
-  ZwischenmenÅ mehr an. FÅr DEF_IVT bei Installation beachten.
+  Zwischenmen√º mehr an. F√ºr DEF_IVT bei Installation beachten.
 
 19980603
 - Aufrufe VenPrint() umbenennen nach VenDoPrint(),
@@ -363,7 +368,7 @@ xxxx
   )
 
 19980610
-- Datei GRAATTR.DBC aus Standarddatenbank Åbernehmen.
+- Datei GRAATTR.DBC aus Standarddatenbank √ºbernehmen.
 - GraPickAttrib() in der GRA.DEF zuweisen :
   ddAddSpecial(\
     {||GraPickAttrib()}, \
@@ -376,79 +381,79 @@ xxxx
 19980611
 - PreVnaCollect in der TIM.DBI kann z.B. entscheiden, ob
   die Zwischensummen automatisch weiterfakturiert werden sollen. Siehe
-  auch énderung vom 19980512. Standardwert:
+  auch √Ñnderung vom 19980512. Standardwert:
   PreVnaCollect {|| VNL->Code $ "GAFTM#"}
 
 19980617
 - Das neue Tool fparse.exe ersetzt ab sofort die bisherige btp2bat.exe.
 - CUST_CPAS. ParSalden() setzt jetzt nicht mehr die PUBLIC-Variable
-  MemParSalden. Dieser Mechanismus versagt nÑmlich, wenn mehrere
+  MemParSalden. Dieser Mechanismus versagt n√§mlich, wenn mehrere
   Benutzer gleichzeitig auf die Idee kommen, die Prozedur zu starten.
-  Stattdessen: (1) siehe nÑchster Punkt.
+  Stattdessen: (1) siehe n√§chster Punkt.
                (2) Eintrag OnMainMenu in der tim.dbi:
                OnMainMenu DlgDefine("ParSalDate",IndDate("PARSALD"))
                (3) in der PARMAHN.MSK das virtuelle Feld "MemParSalden"
                ersetzen durch DlgValue("ParSalDate")
 - Arbeiten mit Indikatordateien.
   Die folgenden Funktionen sind interessant, (1) um zu kontrollieren, ob
-  (und wenn ja, wann) eine Prozedur zuletzt ausgefÅhrt worden ist, bzw.
-  (2) um zu gewÑhrleisten, dass eine Prozedur nur von einem Benutzer auf
-  einmal ausgefÅhrt werden kann:
-  - IndOpen("TEST") îffnet eine Datei TEST.IND im Datenbankverzeichnis.
-    Die Datei bleibt exklusiv geîffnet, bis IndClose() oder IndDelete()
+  (und wenn ja, wann) eine Prozedur zuletzt ausgef√ºhrt worden ist, bzw.
+  (2) um zu gew√§hrleisten, dass eine Prozedur nur von einem Benutzer auf
+  einmal ausgef√ºhrt werden kann:
+  - IndOpen("TEST") √∂ffnet eine Datei TEST.IND im Datenbankverzeichnis.
+    Die Datei bleibt exklusiv ge√∂ffnet, bis IndClose() oder IndDelete()
     gerufen wird (oder bis dass TIM beendet wird).
-  - IndClose("TEST") schlie·t die Datei und lÑsst sie stehen.
-  - IndDelete("TEST") schlie·t und lîscht die Datei.
+  - IndClose("TEST") schlie√üt die Datei und l√§sst sie stehen.
+  - IndDelete("TEST") schlie√üt und l√∂scht die Datei.
   - IndDate("TEST") gibt das Datum der Datei (oder ctod("") wenn sie
     nicht existiert)
-  - IndExist("TEST") gibt .t. zurÅck, wenn die Datei existiert.
+  - IndExist("TEST") gibt .t. zur√ºck, wenn die Datei existiert.
   Anwendungsbeispiel: Statt die Funktion ParSalden() direkt aus der
   MNU.DBC heraus zu rufen, wird mit ActExec("PARSALD") die Datei
-  PARSALD.ACT ausgefÅhrt, die folgenden Inhalt hat:
+  PARSALD.ACT ausgef√ºhrt, die folgenden Inhalt hat:
     !IndExist("PARSALD").or.Confirm(\
-      "Wurde zuletzt am "+dtoc(IndDate("PARSALD"))+" ausgefÅhrt.",\
+      "Wurde zuletzt am "+dtoc(IndDate("PARSALD"))+" ausgef√ºhrt.",\
       MsgSure(),"N"\
     )
     IndOpen("PARSALD","(Partnersalden)").or.!Warning(\
-      "Wird momentan von einem anderen Benutzer ausgefÅhrt !"\
+      "Wird momentan von einem anderen Benutzer ausgef√ºhrt !"\
     )
     ParSalden().or.!IndDelete("PARSALD")
     IndClose("PARSALD")
     SetMnuDone()
 
 19980623
-- Konfiguration MWSt-ErklÑrung. Nicht-abzugsfÑhige MWSt wurde im Feld 84
-  und 85 nicht berÅcksichtigt.
+- Konfiguration MWSt-Erkl√§rung. Nicht-abzugsf√§hige MWSt wurde im Feld 84
+  und 85 nicht ber√ºcksichtigt.
 - mnu*.dbc : in den Aufrufen von VenTvaListe() muss cIdReg manuell durch
   xlParFilter ersetzt werden. Der bisherige Parameter cIdReg wurde
   intern in der Bedingung "PAR->IdReg $ cIdReg" ausgewertet.
 
 19980630
-- DEF_ARC (AufrÑumen). Die bisherige Funktion Aufraeumen() hei·t jetzt
+- DEF_ARC (Aufr√§umen). Die bisherige Funktion Aufraeumen() hei√üt jetzt
   JnlClean() : MNUBOSS.DBC anpassen.
   + Datei JNLPICK.QRY machen.
 
 19980701
-- Datei setup.btp im Programmverzeichnis lîschen Diese Datei (die nichts
+- Datei setup.btp im Programmverzeichnis l√∂schen Diese Datei (die nichts
   anderes tut als FPARSE mit den korrekten Installationsparametern
   aufzurufen) wird jetzt einmalig von der install.bat erstellt. Datei
   setup.bat ggf. korrigieren.
 
 19980702
-- Wenn DEF_CONSOLE, mÅssen die folgenden EintrÑge in der par.def hinzu
-  gefÅgt werden:
+- Wenn DEF_CONSOLE, m√ºssen die folgenden Eintr√§ge in der par.def hinzu
+  gef√ºgt werden:
     ddOnDelete('\
       SendConsole("PAR delete " + PAR->IdPar + " : " + trim(ParName()))\
     ')
     ddOnCreate('\
       SendConsole("PAR create " + PAR->IdPar)\
     ')
-    // diese Konsolenmeldung war eigentlich unnîtig...
+    // diese Konsolenmeldung war eigentlich unn√∂tig...
     // ddPreEdit({||ParPreEdit().and.\
     //   SendConsole("PAR modify " + PAR->IdPar + " : " + trim(ParName()))\
     // })
     ddSetAttrib("S")
-    // Tabellenattribut "S" hei·t, dass jede einzelne énderung in der
+    // Tabellenattribut "S" hei√üt, dass jede einzelne √Ñnderung in der
     // Vollbildmaske zur console.msg protokolliert wird.
 - "keep report on" in der tim.ini ersetzen durch
     OnLogin() SetKeepReport(.t.)
@@ -461,38 +466,38 @@ xxxx
     field name="preview" ... value="X" ...
   muss ersetzt werden durch
     field block={|x|SetPreview(x)}
-  Dadurch ist es jetzt mîglich, den Druckparametersatz und Seitenbereich
+  Dadurch ist es jetzt m√∂glich, den Druckparametersatz und Seitenbereich
   (Seite von... bis) in eine dlg-Datei einzubauen. Bisher war das nicht
-  mîglich. Dazu benutzt man den folgenden field-Befehl :
+  m√∂glich. Dazu benutzt man den folgenden field-Befehl :
     field block={|x|SetRange(x)} [value=space(10)]
     field block={|x|SetTplIni(x)} [value="STD"]
 
 19980720
 - CUST_AVOD :
-  - Aus Standarddatenbank AVOD Åbernehmen :
+  - Aus Standarddatenbank AVOD √ºbernehmen :
     *.dlg, *.rep, 980617.ind, *.def, ipr*.*, dev*.qry, gen.qry, ifc.qry,
     reg.qry, ven.wrn, flt.dbf, fnl*.qry, fin*.qry, hst*.qry, ctr*.qry,
     *.def
   - Anpassen : tim.dbi, mnu*.dbc, ctr.dbf
-  - Lîschen : ???.act
-  - Manuell Ñndern : Generalkonten 4010..4060 umbenennen nach
+  - L√∂schen : ???.act
+  - Manuell √§ndern : Generalkonten 4010..4060 umbenennen nach
     6010..6060.
 
 19980722 (CUST_HOLZ)
 - STM.DEF : Felder VKLIdDoc und VKLLine sowie EKLIdDoc und EKLLine
   manuell definieren.
-- Bestehende Daten manuell konvertieren. Anschlie·end evtl. die Felder
-  STM->IdJnl, STM->IdDoc und STM->Line lîschen. Sie werden nicht mehr
+- Bestehende Daten manuell konvertieren. Anschlie√üend evtl. die Felder
+  STM->IdJnl, STM->IdDoc und STM->Line l√∂schen. Sie werden nicht mehr
   benutzt.
 - STMVEN.QRY -> STMVKL.QRY und STMEKL.QRY
-- EintrÑge OnStmCreate oder PreStmCopy in der tim.dbi sind jetzt evtl.
-  nicht mehr nîtig.
+- Eintr√§ge OnStmCreate oder PreStmCopy in der tim.dbi sind jetzt evtl.
+  nicht mehr n√∂tig.
 
 19980727
 - DEF_VNLALT : in tim.dbi und vnl.def alle "VNL->" durch "FIELD->"
   ersetzen.
   vor tim /check : ren vnl.db* vnldef.*
-  ! alle Fakturationsdokumente mÅssen registriert sein !
+  ! alle Fakturationsdokumente m√ºssen registriert sein !
 - Die Funktion Umbenennen [Alt-F2] muss (wenn man sie benutzen will)
   manuell in der jeweiligen def-Datei deklariert werden. K_ALT_F2 = -31
   - GEN.DEF :
@@ -509,28 +514,28 @@ xxxx
     ddAddSpecial({||FinRename()}, MsgMnuRename(), -31 )
   - PLS.DEF :
     ddAddSpecial({||PlsRename()}, MsgMnuRename(), -31 )
-- Neue Funktion HstDevTest() ins VerwaltermenÅ einbauen.
+- Neue Funktion HstDevTest() ins Verwaltermen√º einbauen.
 
 19980811
 - DEF_VNLALT :
-  - Dateien VNLDEF.QRY und VNLPRE.QRY aus 300D Åbernehmen.
+  - Dateien VNLDEF.QRY und VNLPRE.QRY aus 300D √ºbernehmen.
   - MNUBOSS.DBC manuell anpassen :
   |~Globallisten|~VNLPRE.DBF                   |ArtVnlInit()!=NIL.and.DbfEdit({oVnl(DocStatOpen()),oVen(),oPar(),oArt(),oGen()},"VNLPRE.DBF")
   |~Globallisten|~VNLDEF.DBF                   |ArtVnlInit()!=NIL.and.DbfEdit({oVnl(DocStatClosed()),oVen(),oPar(),oArt(),oGen()},"VNLDEF.DBF")
   |~Globallisten|~VnlClean()                   |VnlClean()
   |~Globallisten|~unregistrierte Dokumente     |DbfEdit(...)
-  - Alle Dokumente mÅssen registriert sein. Datei VNL.DB* umbenennen
-    nach VNLDEF.DB*. Dateien VNL*.NTX lîschen. TIM /CHECK.
+  - Alle Dokumente m√ºssen registriert sein. Datei VNL.DB* umbenennen
+    nach VNLDEF.DB*. Dateien VNL*.NTX l√∂schen. TIM /CHECK.
 
 19980907 CUST_CPAS
-  Vorbereitungen Euro fÅr ôSHZ :
-  - Verschiedene Journale werden immer nur in der GrundwÑhrung (je nach
-    Periode) ausgestellt. Die WÑhrung soll zwar sichtbar, aber nicht
+  Vorbereitungen Euro f√ºr √ñSHZ :
+  - Verschiedene Journale werden immer nur in der Grundw√§hrung (je nach
+    Periode) ausgestellt. Die W√§hrung soll zwar sichtbar, aber nicht
     editierbar sein.
     - TIM.DBI : CustData +IMP
     - IMP.DEF (neu) : ddFldSetWhen("IdDev","IMP->IdJnl$'REG GUT ...'")
-  - Folgende Dateien mÅssen aus der bisherigen Testdatenbank EURO
-    Åbernommen werden:
+  - Folgende Dateien m√ºssen aus der bisherigen Testdatenbank EURO
+    √ºbernommen werden:
     IMP*.QRY, IMP*.MSK
     IML*.QRY,
     TPL.DB*
@@ -545,20 +550,20 @@ xxxx
     MVI*.QRY
 
 19980907 DEF_VEN
-  In der VEN.DEF folgenden Eintrag hinzufÅgen :
+  In der VEN.DEF folgenden Eintrag hinzuf√ºgen :
   ddEditDetail("VEN->Etat!=DocStatNew().or.VenDetail()")
-  hinzufÅgen. Ansonsten kommt nach dem Bearbeiten des oberen
+  hinzuf√ºgen. Ansonsten kommt nach dem Bearbeiten des oberen
   Bildschirmteils nicht mehr automatisch der untere, sondern man muss
-  ein zusÑtzliches [Enter] drÅcken...
+  ein zus√§tzliches [Enter] dr√ºcken...
 
 19980925 DEF_PLS
-Die Aufrufe ParMbrEdit(PAR->IdPar) ("Info-EintrÑge" oder "ist Mitglied
+Die Aufrufe ParMbrEdit(PAR->IdPar) ("Info-Eintr√§ge" oder "ist Mitglied
 in ...") und ParMbrBrowse(PAR->IdPar) ("Info-Editor") sind jetzt nicht
 mehr hard-codiert.
-Also in der PAR.DEF hinzufÅgen :
+Also in der PAR.DEF hinzuf√ºgen :
   ddAddSpecial( \
     {||ParMbrEdit(PAR->IdPar)},   \
-    "~Info-EintrÑge          [Sh-F6]" , \
+    "~Info-Eintr√§ge          [Sh-F6]" , \
     -15\
   )
   ddAddSpecial( \
@@ -568,7 +573,7 @@ Also in der PAR.DEF hinzufÅgen :
   )
 
 19980930 DEF_PLS
-- Datei PLSATTR.DBC aus Standarddatenbank Åbernehmen.
+- Datei PLSATTR.DBC aus Standarddatenbank √ºbernehmen.
 - PlsPickAttrib() in der PLS.DEF zuweisen :
   ddAddSpecial(\
     {||PlsPickAttrib()}, \
@@ -577,19 +582,19 @@ Also in der PAR.DEF hinzufÅgen :
   )
 
 19981019
-- DEF_RPQ (Mengenrabatte) IFCATTR_U. Testen: wird VnlReset(StÅckpreis)
-  korrekt ausgefÅhrt, wenn bei Sammelrechnung ein neuer Mengenrabatt
+- DEF_RPQ (Mengenrabatte) IFCATTR_U. Testen: wird VnlReset(St√ºckpreis)
+  korrekt ausgef√ºhrt, wenn bei Sammelrechnung ein neuer Mengenrabatt
   anwendbar ist?
 
 19981028
 - Statt VnlPuMult() gibt es jetzt VnlPu() und VnlPuF(). Die erstere gibt
-  den (gerundeten) StÅckpreis als numerischen Wert, die zweitere das
+  den (gerundeten) St√ºckpreis als numerischen Wert, die zweitere das
   gleiche in formatiert (Leerzeichen wenn 0).
 
 19981113
 - Die Tabelle NAT.DBC ist jetzt als DBF-Datei implementiert.
   - Dateien NAT.DEF, NAT.QRY, NATPICK.QRY, NAT.MSK und NATCREA.DLG
-    aus Standarddatenbank Åbernehmen.
+    aus Standarddatenbank √ºbernehmen.
   - Die Konvertierung an sich geht automatisch (981113.ind; tim /check).
   - Achtung: die Funktion NatField(cIdNat,nField) wurde ersetzt durch
     NatField(cIdNat,xuField).
@@ -598,14 +603,14 @@ Also in der PAR.DEF hinzufÅgen :
 19981116
 - Fakturation mit Zwischensummen: Evtl. VNL.DEF anpassen
     ddPostDelete("VnlTotRefresh()")
-  Dadurch werden nach dem Lîschen eines Records auch die Zwischensummen
+  Dadurch werden nach dem L√∂schen eines Records auch die Zwischensummen
   neu berechnet.
-- Maskenbefehle, die mit {==xcExpr} beginnen, kînnen (und mÅssen) manuell
-  auf {=xcExpr} verÑndert werden. Maskenbefehle vom Typ {=xcExpr} wurden
+- Maskenbefehle, die mit {==xcExpr} beginnen, k√∂nnen (und m√ºssen) manuell
+  auf {=xcExpr} ver√§ndert werden. Maskenbefehle vom Typ {=xcExpr} wurden
   bisher nochmals intern durch StrParse() geschickt, bevor sie durch
-  xparse() geschickt wurden. Das doppelte "=" hie· dann, dass xcExpr
+  xparse() geschickt wurden. Das doppelte "=" hie√ü dann, dass xcExpr
   *nicht* durch StrParse() geschickt werden soll. Seit heute aber wird
-  xcExpr Åberhaupt nicht mehr durch StrParse() geschickt.
+  xcExpr √ºberhaupt nicht mehr durch StrParse() geschickt.
 
 19981218
 - DEF_ACF. Allgemeine Parameter, MemPickArtMode "P" gibt es jetzt nicht
@@ -641,7 +646,7 @@ Also in der PAR.DEF hinzufÅgen :
 - FinOtiCreate() macht jetzt Interbankdateien in Version 3 oder 5 statt
   bisher 2
 - Der Parameter cRemise in ParVnaAuto() wurde wieder rausgeholt.
-  VEN->Remise muss z.B. Åber eine ddOnCreate()-Anweisung gesetzt werden.
+  VEN->Remise muss z.B. √ºber eine ddOnCreate()-Anweisung gesetzt werden.
 
 19990217
 - Liste der innergemeinschaftlichen Kunden.
@@ -650,9 +655,9 @@ Also in der PAR.DEF hinzufÅgen :
   - evtl. INC-Textblock TVA-I anpassen. pnQuarter() statt PerText()
 
 19990223
-- DEF_VENREMISE. Dateien VNR*.* aus Standarddatenbank Åbernehmen. Evtl.
-  auch Befehl "Konfigurierung|ErmÑ·igungen" in MNUBOSS.DBC eintragen.
-  Letzteres ist nur nîtig, wenn man die Standardeinstellungen verÑndern
+- DEF_VENREMISE. Dateien VNR*.* aus Standarddatenbank √ºbernehmen. Evtl.
+  auch Befehl "Konfigurierung|Erm√§√üigungen" in MNUBOSS.DBC eintragen.
+  Letzteres ist nur n√∂tig, wenn man die Standardeinstellungen ver√§ndern
   will.
 
 19990225
@@ -667,35 +672,35 @@ Also in der PAR.DEF hinzufÅgen :
   in der TIM.DBI ersetzen durch
     VenMatch xyz
   (also keine Codeblock-Klammern mehr).
-- StaticMemo-EintrÑge in der tim.dbi durch #static-Anweisungen in den
+- StaticMemo-Eintr√§ge in der tim.dbi durch #static-Anweisungen in den
   betreffenden Dateien ersetzen.
 
 19990308
-- VenTvaListe(). PrÅfen, ob CTR->DC richtig gesetzt ist:
+- VenTvaListe(). Pr√ºfen, ob CTR->DC richtig gesetzt ist:
   Verkauf D, Einkauf C.
 
 19990312
-- DEF_STK. Neuer Typ STKTYPE_LAST ("L") fÅr EintrÑge in der STK.DBC. Die
+- DEF_STK. Neuer Typ STKTYPE_LAST ("L") f√ºr Eintr√§ge in der STK.DBC. Die
   STK.DBC muss ein weiteres Feld auf jeder Zeile haben, das nur benutzt
-  wird fÅr STKTYPE_LAST.
+  wird f√ºr STKTYPE_LAST.
 
 19990319
-- Dateien DCLTVA.* aus Standarddatenbank 220D Åbernehmen.
+- Dateien DCLTVA.* aus Standarddatenbank 220D √ºbernehmen.
 - Sammelhistoriken rekonstruieren wegen CttRebuild()
 
 19990323
 - CUST_CPAS.
   - MNU.DBC anpassen : TraCentral() ersetzen durch ActExec("TRACTL")
   - Dateien TRACTL.ACT, RLB*.ACT und TRACTL.DLG aus Standarddatenbank
-    Åbernehmen.
+    √ºbernehmen.
 
 19990331
-- *.hcl-Dateien evtl. aus Standarddatenbank Åbernehmen.
+- *.hcl-Dateien evtl. aus Standarddatenbank √ºbernehmen.
    - Kolonne "Datum" verbreitern oder dtocf() verwenden.
    - FINDEV und FINDB : "Endsaldo" -> "Salden"
 
 19990331
-- CUST_CPAS : die folgenden Textblocks mÅssen gemacht werden
+- CUST_CPAS : die folgenden Textblocks m√ºssen gemacht werden
   (ggf. leer sein)
    HHR R12A
    HHR R12E
@@ -722,12 +727,12 @@ Also in der PAR.DEF hinzufÅgen :
 19990503
 - DEV->Cours2 muss jetzt *dividiv* sein (also nicht mehr mulitiplikativ,
   sondern so, wie der Wechselkurs normalerweise in den offiziellen
-  Tabellen steht). WÑhrungstabelle anpassen.
+  Tabellen steht). W√§hrungstabelle anpassen.
 - TIM.DBI : ggf. PerDevFixed eintragen.
 
 19990701
 - Hier ein Trick, um die "letzte Dokumentnummer" komfortabler verwalten
-  zu kînnen.
+  zu k√∂nnen.
   1. // JNLIDDOC.DLG :
      before DlgDefine("IdDoc",DbfPeek(oJnl(),FIELD->IdJnl,"IdDoc",space(6)))
      // before DlgDefine("OrdIdDoc",DbfPeek(oJnl(),"ORD","IdDoc",space(6)))
@@ -751,17 +756,17 @@ Also in der PAR.DEF hinzufÅgen :
      )
 
 19990720
-- VNA3.NTX (ORD_VNA_ARTDATE) enthÑlt jetzt nicht mehr die Periode. Also
-  neu erstellen und prÅfen, ob auch alle reports noch funktionieren
+- VNA3.NTX (ORD_VNA_ARTDATE) enth√§lt jetzt nicht mehr die Periode. Also
+  neu erstellen und pr√ºfen, ob auch alle reports noch funktionieren
 
 19990801
 - evtl. HSTDELE.DLG aufspielen
 
 19990820
-- evtl. PLZ*.QRY und entsprechende EintrÑge in der FLT.DBF aufspielen.
+- evtl. PLZ*.QRY und entsprechende Eintr√§ge in der FLT.DBF aufspielen.
 
 19990915
-- CUST_RZKB : FnlHstFill() Defaultwert fÅr scTagLine wurde verÑndert.
+- CUST_RZKB : FnlHstFill() Defaultwert f√ºr scTagLine wurde ver√§ndert.
 
 19991020
 - HSTFIN.REP und HSTVEN.REP anpassen :
@@ -771,21 +776,21 @@ Also in der PAR.DEF hinzufÅgen :
 
 - DEF_ACF : ArtAcfEdit() ruft xlAfter jetzt immer auf, nicht nur, wenn
   man mit F10 rausgegangen ist. Evtl. in der aufgerufenen ACT-Datei
-  hinzufÅgen:
+  hinzuf√ºgen:
   RETURN .t. if ddLastKey() == 27
 
 19991021
 - DEF_HST. Evtl. HSTPAR.PKG und PARHST01.REP aufspielen.
 
 19991124
-- CUST_CPASANA. In der BUD.DEF hinzufÅgen :
+- CUST_CPASANA. In der BUD.DEF hinzuf√ºgen :
   ddAddField("IdGen","C",LenIdGen(),0,\
     "@k@!",NIL,\
     NIL,NIL,\
     NIL,{|x|PickGen(NIL,x)},NIL, \
     {|x| GetIdGen(x) } \
   }
-- Folgende Dateien aus TEST Åbernehmen :
+- Folgende Dateien aus TEST √ºbernehmen :
   ANA*.QRY+MSK+DB*
   MVA*.QRY
   CTA*.QRY
@@ -795,7 +800,7 @@ Also in der PAR.DEF hinzufÅgen :
   BUD.MSK
 - Journal "ANA" (Typ ODA) erstellen
 - MNU.DBC anpassen
-- JNLATTR_Y setzen fÅr REG und/oder AAW
+- JNLATTR_Y setzen f√ºr REG und/oder AAW
 
 
 19991214
@@ -803,26 +808,26 @@ Also in der PAR.DEF hinzufÅgen :
   Ciri-Interbank-Spezifikation entspricht.
 
 19991221
-- Evtl. FNLFILL.DLG aus der 220D Åbernehmen ("Zahlungsziel bis zum")
+- Evtl. FNLFILL.DLG aus der 220D √ºbernehmen ("Zahlungsziel bis zum")
 
-19991223 : DEF_TAX : MWSt-ErklÑrung
+19991223 : DEF_TAX : MWSt-Erkl√§rung
 - VenCttUpdate() registriert ein negatives Dokument jetzt
   automatisch als Gutschrift. Also Sammelhistorik rekonstruieren.
 - HSTVEN.REP anpassen : VenIsNc()
 - DCLTVA.PKG aufspielen
 - TAX.QRY aufspielen und RegList und xlValid eintragen.
 - VNL.DEF : Die diversen Tests IdTax/IdReg mit ddOnPostEdit() sind nun
-  unnÅtz und sollten rausgeschmissen werden.
+  unn√ºtz und sollten rausgeschmissen werden.
 
 20000117
 - evtl. DCLTVA.ACT aufspielen.
-- evtl. alle *.dlg prÅfen und "Seiten von-bis" einbauen.
+- evtl. alle *.dlg pr√ºfen und "Seiten von-bis" einbauen.
 
 20000124
 - Jedes [etc if] muss jetzt ein [etc endif]
   haben, denn wenn man mehrere [etc if]'s ohne [etc endif]
-  hintereinander hatte, dann kînnen anschlie·ende [etc endif]
-  Åberraschende Resultate hervorrufen.
+  hintereinander hatte, dann k√∂nnen anschlie√üende [etc endif]
+  √ºberraschende Resultate hervorrufen.
 
 20000127
 - CUST_ETS :
@@ -839,7 +844,7 @@ Also in der PAR.DEF hinzufÅgen :
 20000215
 - Dateien jnl*.qry und jnl.msk aufspielen.
 - tim /check wegen JNL->SeqType. A00215.IND initialisiert JNL->SeqType.
-  Nummerierungsart nachprÅfen.
+  Nummerierungsart nachpr√ºfen.
   NoCheckIdDoc in der tim.dbi kann jetzt im Prinzip raus.
   CheckIdDoc ebenfalls.
 - Der folgende Eintrag in der tim.dbi fehlte bisher :
@@ -848,9 +853,9 @@ Also in der PAR.DEF hinzufÅgen :
 20000221
 - Evtl. DBCHECK.DLG und DBCHECK.ACT aufspielen. (Auch in der MNU.DBC
   DlgExec() durch ActExec() ersetzen !)
-  - "Der letzte IntegritÑtstest..."
-  - FÑllt nicht mehr drauf rein, wenn man alle Ankreuzfelder ausschaltet
-    und dann bestÑtigt.
+  - "Der letzte Integrit√§tstest..."
+  - F√§llt nicht mehr drauf rein, wenn man alle Ankreuzfelder ausschaltet
+    und dann best√§tigt.
 
 20000504
 - Memo2Tex() erkennt jetzt selber, wenn ein Memotext mit "#TeX" beginnt
@@ -859,7 +864,7 @@ Also in der PAR.DEF hinzufÅgen :
     [=Memo2Tex(x)]
   ersetzen durch
   [etc do ToStream(Memo2Tex(x))]
-- NachprÅfen, ob in der tim.dbi der folgende Eintrag steht
+- Nachpr√ºfen, ob in der tim.dbi der folgende Eintrag steht
   OnRebuild {|cText| IndDelete("TIMTEST",cText)}
   wenn ja, ersetzen durch
   OnRebuild {|cText| IndDelete("TIMTEST")}
@@ -870,24 +875,24 @@ Also in der PAR.DEF hinzufÅgen :
 
 20000515
 - Evtl. ddAddSpecial({||ddPaste()},NIL,-1) in der VNL.DEF oder STM.DEF
-  einfÅgen.
+  einf√ºgen.
 
 20000605
 - evtl. makepdf.drv, prn2pdf.bat und pakepdf.exe aufspielen.
-- (nicht mehr nîtig seit 20010701:)
+- (nicht mehr n√∂tig seit 20010701:)
   {=p_SetCopies(x)} ersetzen durch {etc do p_SetCopies(x)}
 
 20000706
-- CUST_CPAS : CDC->Expr und BUD.DEF anpassen, 20000706.act ausfÅhren.
+- CUST_CPAS : CDC->Expr und BUD.DEF anpassen, 20000706.act ausf√ºhren.
 
 20001127
 - Falls vorhanden,
   Remise(x,y) ersetzen durch str(Remise(x,y),6,2)+"%"
 
 2001-01-18
-- IntegritÑtstest laufen lassen :
+- Integrit√§tstest laufen lassen :
   - meldet jetzt Dokumente, in denen VEN->Mont nicht mit
-    HST->Mont Åbereinstimmte. VEN->Mont manuell korrigieren.
+    HST->Mont √ºbereinstimmte. VEN->Mont manuell korrigieren.
   - Wenn der TIM bereits 1996 benutzt wurde und "Inhalt widerspricht
     Historik" oder "MontDev ist leer" kommt :
     Historik 1996 rekonstruieren (vorher ggf. jnlundo)
@@ -896,17 +901,17 @@ Also in der PAR.DEF hinzufÅgen :
 - HSTGEN.REP und GENHST.REP aufspielen und aktivieren. HistGen() und
   BalGen() sollten nicht mehr benutzt werden, weil sie den Beginnsaldo
   (noch) nicht richtig errechnen.
-- In der MNUBOSS.DBC den Befehl Datenbank|öbertragsbuchung aktivieren.
+- In der MNUBOSS.DBC den Befehl Datenbank|√úbertragsbuchung aktivieren.
   Der wird benutzt, um von BEF nach EUR zu konvertieren.
-- JNL->IdDev fÅr REP sollte auf BEF stehen, damit FNL->MontDev in BEF
-  fÅr Generalkonten beibehalten wird.
-- In allen FIN*.MSK und FIN*.QRY die WÑhrung sichtbar machen.
-  Oder besser FINOPD.QRY und FINOPD.MSK aus 220d Åbernehmen.
-- Eventuell JNLATTR_B fÅr FIN-Journale mit JNL->IdDev == "BEF" setzen.
+- JNL->IdDev f√ºr REP sollte auf BEF stehen, damit FNL->MontDev in BEF
+  f√ºr Generalkonten beibehalten wird.
+- In allen FIN*.MSK und FIN*.QRY die W√§hrung sichtbar machen.
+  Oder besser FINOPD.QRY und FINOPD.MSK aus 220d √ºbernehmen.
+- Eventuell JNLATTR_B f√ºr FIN-Journale mit JNL->IdDev == "BEF" setzen.
 
 2001-01-24
 - Der dritte Parameter von fparse() ist jetzt nicht mehr nBytes, sondern
-  cCmdTags. LaTeX : texparse.act anpassen : "[]" als dritten Parameter fÅr
+  cCmdTags. LaTeX : texparse.act anpassen : "[]" als dritten Parameter f√ºr
   fparse()
 
 2001-02-01 : DEF_BIL jetzt wieder im tim220d drin.
@@ -928,12 +933,12 @@ Also in der PAR.DEF hinzufÅgen :
   in TIM.DBI)
 
 2001-02-21
-- DEF_INT (Intrastat) : JNLATTR_I setzen fÅr Journale, die HSI
+- DEF_INT (Intrastat) : JNLATTR_I setzen f√ºr Journale, die HSI
   generieren.
 
 2001-04-11
 - tim /check wegen HST->IdDev. A10411.IND erstellen lassen.
-- aus Standarddatenbank Åbernehmen :
+- aus Standarddatenbank √ºbernehmen :
   - HST*.QRY aufspielen.
   - FNL*.EXP und FNL*.IMP
   - GENHST.REP
@@ -942,14 +947,14 @@ Also in der PAR.DEF hinzufÅgen :
 
 2001-04-18
 - DCLTVA.* aktualisieren.
-- Neuen MWSt-Code IS0 anlegen. FÅr MWSt-Code IS Warnung "nicht in
-  Gutschriften" einbauen. IntegritÑtstest laufen lassen um evtl.
+- Neuen MWSt-Code IS0 anlegen. F√ºr MWSt-Code IS Warnung "nicht in
+  Gutschriften" einbauen. Integrit√§tstest laufen lassen um evtl.
   gebuchte Dokumente auszumachen. Falls es davon welche gibt:
   ddFldSetWhen("Etat","'E'$UsrAttrib()") in der VEN.DEF einbauen und
   diese Dokumente manuell korrigieren.
 
 2001-04-19
-- PrÅfen, ob StkReset() irgendwo aufgerufen wird. Ggf. MenÅs anpassen.
+- Pr√ºfen, ob StkReset() irgendwo aufgerufen wird. Ggf. Men√ºs anpassen.
 
 2001-04-20
 - Folgende *.dlg-Dateien riefen PickGen(x) statt PickGen(NIL,x) auf:
@@ -957,12 +962,12 @@ Also in der PAR.DEF hinzufÅgen :
 
 2001-04-21
 - HSTVEN.* aufspielen. Jetzt kann man auch mit "*" eine Kolonne
-  "hors dÇcl." drucken lassen.
+  "hors d√©cl." drucken lassen.
 
 2001-05-10 :
 - tim.dbi : ArtIdDev "BEF" oder ArtIdDev "EUR" eintragen.
 
-VerwaltermenÅ Konfigurierung|Basispreise:
+Verwaltermen√º Konfigurierung|Basispreise:
 val(ART->Prix1)
 ersetzen durch
 ArtPrix1(VEN->Periode)
@@ -974,7 +979,7 @@ ArtPrixR(VEN->Periode)
 - evtl. OnLogin SetPeriode(PerActive()) in der tim.dbi
   eintragen. Sonst werden die Salden in "Offene Posten Partner" mal in
   BEF und mal in EUR angezeigt (je nach Inhalt von MemPer1, und MemPer1
-  hÑngt davon ab, welche Liste man zuletzt ausgedruckt hat... das ist
+  h√§ngt davon ab, welche Liste man zuletzt ausgedruckt hat... das ist
   irritierend)
 
 2001-07-12
@@ -985,13 +990,13 @@ ArtPrixR(VEN->Periode)
 - HSTPARD.QRY und hstparm.qry zeigen jetzt die Summen korrekt an.
 
 2001-07-17
-- HSTVEN.REP aufspielen. (Nimmt jetzt auch BasisbetrÑge mit MWSt-Code
+- HSTVEN.REP aufspielen. (Nimmt jetzt auch Basisbetr√§ge mit MWSt-Code
   "NC " in Fach 87 rein.)
 
 2001-07-18
 - hstven.* und ctr.qry aufspielen.
   tim/check und manuell CTR->HstCols setzen. (Standard ist "0ANCIS")
-  DlgDefault("HstVenCols") in der tim.dbi ist jetzt nicht mehr nîtig.
+  DlgDefault("HstVenCols") in der tim.dbi ist jetzt nicht mehr n√∂tig.
 - genhst.* aufspielen
 
 2001-07-19
@@ -1001,37 +1006,37 @@ ArtPrixR(VEN->Periode)
   AddDllDir AppPath()
 
 2001-07-23
-- dcltva.rtf aufspielen. Kînnte jetzt den Anforderungen des MWSt-Amts
+- dcltva.rtf aufspielen. K√∂nnte jetzt den Anforderungen des MWSt-Amts
   entsprechen.
 - evtl. rtf.drv aufspielen.
 
 2001-07-23
-- PARHST.* Åbernehmen.
+- PARHST.* √ºbernehmen.
 - HSTSATIS.* aufspielen und in MNUBOSS.DBC
   einbauen (Datenbank|Lettrierungen rekonstruieren)
   Um die Beginnsalden der Partnerkonten ins erste EUR-Jahr zu
-  Åbernehmen, mÅssen diese im letzten BEF-Jahr (Periode 99)
-  abgeschlossen und im ersten EUR-Jahr (Periode 00) wieder erîffnet
+  √ºbernehmen, m√ºssen diese im letzten BEF-Jahr (Periode 99)
+  abgeschlossen und im ersten EUR-Jahr (Periode 00) wieder er√∂ffnet
   werden.
 - FNLFILL.DLG aufspielen.
 
 2001-07-31
 - tim /check weil jetzt DEF_PRJ und DEF_ANA ggf. leere Dateien erstellen
   wollen.
-- DEF_PRJ und DEF_ANA (au·er wenn DEF_IMP). Nach dem Aufspielen der
-  neuen Version muss der Installationscode geÑndert werden, weil DEF_PRJ
-  jetzt nicht mehr die Option J bewirkt. Idem fÅr DEF_ANA mit Option Y.
+- DEF_PRJ und DEF_ANA (au√üer wenn DEF_IMP). Nach dem Aufspielen der
+  neuen Version muss der Installationscode ge√§ndert werden, weil DEF_PRJ
+  jetzt nicht mehr die Option J bewirkt. Idem f√ºr DEF_ANA mit Option Y.
 
 2001-08-02
 - TIM.DBI :
     AddDllDir AppPath()
-  Jetzt obligatorisch fÅr alle.
+  Jetzt obligatorisch f√ºr alle.
   Denn Druckertreiber werden jetzt ebenfalls nach dem DLL-Konzept
   gesucht.
 
 2002-01-08 :
 - Falls nText() irgendwo direkt aufgerufen wird:
-  Interface geÑndert:
+  Interface ge√§ndert:
   Vorher : nText(nMont,cLangue,lFull,nDecPos)
   Jetzt : nText(cMont,cLangue,lFull)
 
@@ -1039,17 +1044,17 @@ ArtPrixR(VEN->Periode)
 - HSTGEN.* und DCLTVA.* aufspielen.
 - IPB.QRY aufspielen
 - tim /check wegen IPB->IdDma
-- evtl. Datei DMA.DBC (domaines d'activitÇ (GeschÑftsbereiche)) anlegen.
+- evtl. Datei DMA.DBC (domaines d'activit√© (Gesch√§ftsbereiche)) anlegen.
   Falls mindestens ein IPB->IdDma nicht leer ist, dann muss in der ART.DEF
   ein Feld IdDma definiert werden:
 ddAddField("IdDma","C",1,0,"@k@!",NIL,\
   NIL,NIL,NIL,\
-  {|x|PickDbcCode("DMA.DBC",x,"GeschÑftsbereich")}\
+  {|x|PickDbcCode("DMA.DBC",x,"Gesch√§ftsbereich")}\
 )
 
 2002-01-10
 - tim /check wegen CTR->TplIni
-- HSTVEN.DLG und CTR.QRY aus STD Åbernehmen
+- HSTVEN.DLG und CTR.QRY aus STD √ºbernehmen
 - MNUBOSS.DBC : Editor|inc-Dateien
 
 2002-01-11
@@ -1057,9 +1062,9 @@ Die folgenden Anweisungen sind alle optional :
 - Standard-DLM's aufspielen.
 - (optinal) Falls mehrere Datenbanken : tim.ini bearbeiten
   SetDataRoot AppPath()+"\DATA"
-- tim.DBI aufrÑumen : eigentlich sollte dort jetzt nur noch
+- tim.DBI aufr√§umen : eigentlich sollte dort jetzt nur noch
   LoadDlm "SPRL"
-  stehen, und dahinter nur noch die EintrÑge, die kundenspezifisch sind.
+  stehen, und dahinter nur noch die Eintr√§ge, die kundenspezifisch sind.
   "AddDllDir AppPath()" ist ersetzt durch das automatische AddDlm("STD")
   nach der TIM.INI
 - *.col, *.drv vom Programmverzeichnis nach DLM\STD verschieben.
@@ -1067,35 +1072,35 @@ Die folgenden Anweisungen sind alle optional :
 2002-01-14 DEF_FIN :
 - DEV.QRY aus Standarddatenbank aufspielen.
 
-- Falls komplette Buchhaltung: DEV->Delta fÅr die
-  GrundwÑhrungen setzen. Zum Beispiel 30 BEF, 0.75 EUR.
+- Falls komplette Buchhaltung: DEV->Delta f√ºr die
+  Grundw√§hrungen setzen. Zum Beispiel 30 BEF, 0.75 EUR.
   Wenn das Feld leer ist, testet TIM nicht.
 
 2002-01-15
 - #exec SetCmdTags("[","]") und FixY2K in der tim.dbi setzen.
   Die waren bisher in der STD.INI.
-  Beide EintrÑge mÅssen noch *vor* dem LoadDlm "SPRL" kommen.
-  Evtl. auch PerDevFixed prÅfen.
+  Beide Eintr√§ge m√ºssen noch *vor* dem LoadDlm "SPRL" kommen.
+  Evtl. auch PerDevFixed pr√ºfen.
   Der Standard ist jetzt eine Positivliste
 
 
 2002-01-15 Inventur :
 - JNL->IdGrj des Inventuren-Journals sollte "IVT", nicht "INV" sein.
 - (storniert am 20020117) AddOption "IVT" einschalten. Die
-  Standardroutinen sind jetzt vielleicht fÅr quasi alle FÑlle nutzbar.
+  Standardroutinen sind jetzt vielleicht f√ºr quasi alle F√§lle nutzbar.
 
 2002-01-16 DEF_ANA :
 - (storniert am 20020117) Wer analytische Buchhaltung benutzt, der muss
   jetzt in seiner TIM.DBI AddOption "ANA" eintragen.
 
 2002-01-17 : CUST_HANSEN
-- Falls AddOption-EintrÑge in der TIM.DBI waren : wieder rausholen und
+- Falls AddOption-Eintr√§ge in der TIM.DBI waren : wieder rausholen und
   statt dessen die kundenspezifische .exe-Datei aufspielen.
 - q *.rep : onNoValue durch OnNoValue ersetzen.
 
 20020118 CUST_MATHAR:
 - OnParSatisfy kriegt jetzt keinen Parameter mehr. Eintrag einfach
-  lîschen. Steht ja jetzt in der SPRL.INI
+  l√∂schen. Steht ja jetzt in der SPRL.INI
 
 20020119
 - AppShell() + "cmd /c" (wenn Win200) kommt jetzt automatisch
@@ -1110,13 +1115,13 @@ Die folgenden Anweisungen sind alle optional :
 20020212 DEF_ARC:
 - TIM macht jetzt nicht mehr automatisch ein AddArchive der aktuellen
   Datenbank.
-  Also muss in der tim.dbi noch ein weiterer AddArchive-Eintrag fÅr die
-  aktuelle Datenbank eingefÅgt werden.
+  Also muss in der tim.dbi noch ein weiterer AddArchive-Eintrag f√ºr die
+  aktuelle Datenbank eingef√ºgt werden.
   Vorschlag: die archivierenden
   Tabellen (xyz.dbf, xyz.dbt und xyz*.ntx) aus dem
   Haupt-Datenbankverzeichnis in ein Unterverzeichnis LFD verschieben und
   #exec AddArchive("LFD",NIL,"Aktuelle Datenbank",.f.)
-  in der tim.dbi (noch VOR den bisherigen AddArchive-Eintrégen)
+  in der tim.dbi (noch VOR den bisherigen AddArchive-Eintr√Ñgen)
 
 20020503 (DEF_JNL)
 - tim /check wegen IFC->IdPar
@@ -1128,17 +1133,17 @@ Die folgenden Anweisungen sind alle optional :
 - HSIVEN.QRY anpassen.
 
 20020620
-- SetPrnFile() gibt jetzt nicht mehr NIL, sondern .t. zurÅck
+- SetPrnFile() gibt jetzt nicht mehr NIL, sondern .t. zur√ºck
 
 20020923
-- .msk-Dateien, in denen Strings mit "=" beginnen, mÅssen manuell
+- .msk-Dateien, in denen Strings mit "=" beginnen, m√ºssen manuell
   konvertiert werden. Sonst kommt "Error BASE/1449  Syntax error: &"
-  weil TIM solche Strings jetzt ausfÅhrt.
+  weil TIM solche Strings jetzt ausf√ºhrt.
 
 20020925
-- PrÅfen, ob getenv() benutzt wird. Evtl. auf getvar() umsteigen.
+- Pr√ºfen, ob getenv() benutzt wird. Evtl. auf getvar() umsteigen.
 - DLM\STD aktualisieren.
-- Bei CUST_AGV : Dateien c:\autoexec.act noch mal nachprÅfen : sollten
+- Bei CUST_AGV : Dateien c:\autoexec.act noch mal nachpr√ºfen : sollten
   nur die beiden DlgDefine() machen und sonst nichts.
 
 20021028
@@ -1151,9 +1156,9 @@ Die folgenden Anweisungen sind alle optional :
 
 20021118
 - "initialize" in einer .rep-Datei muss jetzt ein Ausdruck, nicht ein zu
-  parsender String sein. Wenn ein Report fÅr []-Tags geschrieben war,
+  parsender String sein. Wenn ein Report f√ºr []-Tags geschrieben war,
   dann funktionierte er nicht in einer Datenbank mit {}-Tags. Und
-  umgekehrt. Au·erdem ist das jetzt viel logischer.
+  umgekehrt. Au√üerdem ist das jetzt viel logischer.
 
 - (storniert) *.mnu and mnu*.dbc :
   replace FinAuto(cIdJnl,cIdGen,lDcInvert,cTitle,cIdGen1,cIdGen2,cNB)
@@ -1191,11 +1196,11 @@ Die folgenden Anweisungen sind alle optional :
 
 20030128 DEF_MSG
 - [Sh-F8] auf einem Partner jetzt nicht mehr hard-codiert.
-- MSG*.NTX jetzt anders. m¸
+- MSG*.NTX jetzt anders. m¬≥
 
 200302..
 
-- (nicht mehr nîtig seit 20030412) Falls Fakturationsdokumente mit
+- (nicht mehr n√∂tig seit 20030412) Falls Fakturationsdokumente mit
   Artikeln im Einkauf erstellt werden: ddAddField ART->IdCtrE
 
 
@@ -1239,7 +1244,7 @@ Die folgenden Anweisungen sind alle optional :
 
 20050209
 
-- JNLATTR_M fÅr FIN-Journale setzen, um bisheriges Verhalten weiter zu
+- JNLATTR_M f√ºr FIN-Journale setzen, um bisheriges Verhalten weiter zu
   haben.
 
 20050225
@@ -1247,7 +1252,7 @@ Die folgenden Anweisungen sind alle optional :
 - mirror.btp hat eine neue Kommandozeilensyntax.
 
 20050908
-- OnVenClose wird jetzt auch beim ENTregistrieren ausgefÅhrt
+- OnVenClose wird jetzt auch beim ENTregistrieren ausgef√ºhrt
 
 20050911
 - AfterVenClose ebenfalls.
@@ -1258,7 +1263,7 @@ Die folgenden Anweisungen sind alle optional :
 - DEF_HSI : bei marmor musste ich nach dem Upgrade in der tim.dbi
   deklarieren:
     VnlIntdefault ""
-  Weil das scheinbar vorher nie ausgefÅllt wurde und die das bei marmor
+  Weil das scheinbar vorher nie ausgef√ºllt wurde und die das bei marmor
   gar nicht mehr benutzen. Sonst kam beim Registrieren "??????????
   unbekannte Zollnummer"
 
@@ -1268,18 +1273,18 @@ Die folgenden Anweisungen sind alle optional :
 
 20051215
 
-- rocatec : vnl.def kann wieder vereinfacht werden. Anschlie·end testen,
+- rocatec : vnl.def kann wieder vereinfacht werden. Anschlie√üend testen,
   ob in VNLART.QRY die Summen noch kommen.
 
 20060109
 
 - tim.btp schaut jetzt nach, ob eine backup.bat existiert. Die wird dann
-  immer ausgefÅhrt, auch wenn kein Datenbankname angegeben ist. Die
+  immer ausgef√ºhrt, auch wenn kein Datenbankname angegeben ist. Die
   dbback.btp mit %1 wird nicht mehr von tim.btp aus gestartet.
 
 20060113
 - bei AGV : Wenn neue DLM aufgespielt wird, muss in den
-  DruckparametersÑtzen auch HPLJ4 nach HPLJ6 geÑndert werden. Testen, ob
+  Druckparameters√§tzen auch HPLJ4 nach HPLJ6 ge√§ndert werden. Testen, ob
   Produktionsplanung (LISTEX) richtig rauskommt.
 
 20060126
@@ -1306,7 +1311,7 @@ Die folgenden Anweisungen sind alle optional :
 20060731
 
 - Wenn in VNL.DEF oder VEN.DEF eine ddOnPostEdit() war, die auch im
-  IntegritÑtstest wichtig ist, dann muss die jetzt ddOnTest hei·en.
+  Integrit√§tstest wichtig ist, dann muss die jetzt ddOnTest hei√üen.
 
 
 20060810
@@ -1319,9 +1324,9 @@ Die folgenden Anweisungen sind alle optional :
 
 20060825
 - DEF_VNA.
-  ZunÑchst in VNA.DEF ein manuelles Feld "Match" definieren, damit die
+  Zun√§chst in VNA.DEF ein manuelles Feld "Match" definieren, damit die
   Angaben nicht verloren gehen.
-  Konvertierungsroutine fÅr VNL->Match schreiben. VNL->Match enthÑlt
+  Konvertierungsroutine f√ºr VNL->Match schreiben. VNL->Match enth√§lt
   jetzt immer den primary key der befriedigten VNA. Eine VNA-Serie gibt
   es nicht mehr.
 
@@ -1353,48 +1358,63 @@ do SetTest("CtbBudTest",{||CtbBudTest(\
   setvar("PC"...) durch DlgDefault("PC"...) ersetzt werden.
 
 20061020
-- IntegritÑtstest vorher und nachher vergleichen: wegen den neuen
+
+- Integrit√§tstest vorher und nachher vergleichen: wegen den neuen
   Rundungsregeln in VenMvtRound().
 
 20070530
-- DbfEdit() gibt jetzt .t. zurÅck. Das .f. war doch einfach unlogisch,
-  und ich habe nicht das GefÅhl, dass das viel Schaden anrichten wird.
+
+- DbfEdit() gibt jetzt .t. zur√ºck. Das .f. war doch einfach unlogisch,
+  und ich habe nicht das Gef√ºhl, dass das viel Schaden anrichten wird.
 
 Bei Umstieg Clipper/Xbase:
+
 - dlm aktualisieren
+
 - eupper() durch upper() ersetzen in allen Dateien (vor allem *.def,
   *.act, *.dlg, *.exp)
   
 
 20071003-20071231
-- Irgendwann in dieser Periode habe ich eine ƒnderung gemacht, 
+
+- Irgendwann in dieser Periode habe ich eine √Ñnderung gemacht, 
   durch die nach dem Upgrade Rundungsdifferenzen beim 
-  IntegritÑtstest kommen:
-  VKP A62250 : Total du document (60.60) en dÈsaccord avec contenu (60.58)
+  Integrit√§tstest kommen:
+  
+  VKP A62250 : Total du document (60.60) en dƒ∑saccord avec contenu (60.58)
   
 
 
 20071120
 
 - AfterVenClose in der TIM.DBI : durfte bisher nur einmal vorkommen.
-  Jetzt mehrmals. Und jetzt dÅrfen keine Codeblock-Klammern mehr drum
+  Jetzt mehrmals. Und jetzt d√ºrfen keine Codeblock-Klammern mehr drum
   sein, sondern es ist ein einfaches Event ohne Parameter.
 
 20071126
-- PrioritÑt zwischen IPB_GENBASE (IPB->IdGen) und ArtIdGen()
-  (ART->IdGenX) wieder geÑndert. Evtl. muss UseArtIdGen benutzt werden.
+
+- Priorit√§t zwischen IPB_GENBASE (IPB->IdGen) und ArtIdGen()
+  (ART->IdGenX) wieder ge√§ndert. Evtl. muss UseArtIdGen benutzt werden.
   Siehe auch 20040116.
 
-- NafDelete() : neue Pr¸fung "Suppression manuelle uniquement pour articles sans stock!"
+- NafDelete() : neue Pr¬≥fung "Suppression manuelle uniquement pour articles sans stock!"
 
 20080229
+
 - Automatik-Fakturierung testen. VnaCopyfilter gibt es nicht mehr.
 
 20080318
+
 - In .EXP-Dateien sollte die Zeile
+
     OnSuccess AppShell("excel.bat "+i_OutputFile(),NIL,.f.)
+    
   ersetzt werden durch:
+  
     OnSuccess OpenCsv(i_OutputFile())    
-  Dann ist die excel.bat nicht mehr nîtig.
+    
+  Dann ist die excel.bat nicht mehr n√∂tig.
+  
 20080320
-- Einige fundamentale énderungen im Reportgenerator. Buggefahr.
+
+- Einige fundamentale √Ñnderungen im Reportgenerator. Buggefahr.
