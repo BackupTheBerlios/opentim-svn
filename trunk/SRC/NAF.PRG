@@ -217,7 +217,7 @@ RETURN .f.
 
 #ifdef DEF_VNA
 
-#define LEG_PNFBROWSE "[Leertaste] ausw„hlen [*] Ausw.umkehren [F6] Detail [Enter] Weiter [Escape] Abbrechen"
+#define LEG_PNFBROWSE "[Leertaste] ausw„hlen [*] Ausw.umkehren [Enter] Weiter [Escape] Abbrechen"
 
 FUNCTION VnaAuto2( cTitle,;
   cIdJnl,dDate,;
@@ -235,9 +235,11 @@ local aNafSim := {}
 local jnl := JnlLocate(cIdJnl)
 local jnlt, jnli
 local ifc
-local n,i
+local n,i,j
 local nErr := 0
 local nNew := 0
+local pnf
+local nMont
 default xcZahler to "PAR->IdPar"
 default xcAkte to "PAR->IdPar"
 default dDate to UserDate()
@@ -264,13 +266,23 @@ RETURN .f. if ! PnfCollect(aPnf,jnl,cIdPar1,cIdPar2,dDate,xlVnaFilter,xlParFilte
 RETURN .f. if ! PnfSelect(aPnf,cTitle,jnl)
 open area oPar(), oVen()
   for i := 1 to len(aPnf)
-    if aPnf[i][PNF_TAGGED]
-      if aPnf[i][PNF_MONT] < 0 .and. jnli != NIL
+    pnf:=aPnf[i]
+    if pnf[PNF_TAGGED]
+      if lVnaTag
+        VnaTag(pnf[PNF_AVNA],pnf[PNF_IDPAR],;
+          pnf[PNF_MATCH]+": "+MsgVnaTag(),jnl[JNL_IDJNL])
+        pnf[PNF_MONT] := 0
+        for j := 1 to len(pnf[PNF_AVNA])
+          nMont := qton(pnf[PNF_AVNA][j][VNA_QTEUS])*val(pnf[PNF_AVNA][j][VNA_PRIXU])
+          pnf[PNF_MONT] += nMont
+        next j
+      endif
+      if pnf[PNF_MONT] < 0 .and. jnli != NIL
         jnlt:= jnli
       else
         jnlt := jnl
       endif
-      seek aPnf[i][PNF_IDPAR]
+      seek pnf[PNF_IDPAR]
       if (ifc := IfcLocate(jnlt[JNL_IDCTR],jnlt[JNL_IDJNL],PAR->IdMfc)) == NIL
         SetMsg( ;
           PAR->IdPar + " : " + ;
@@ -279,9 +291,9 @@ open area oPar(), oVen()
         lOkay := .f.
       else
         n := ParVenAppend( ;
-          aPnf[i][PNF_AVNA],&xcZahler,jnlt,ifc,dDate,cPeriode,aPnf[i][PNF_MATCH],;
+          pnf[PNF_AVNA],&xcZahler,jnlt,ifc,dDate,cPeriode,pnf[PNF_MATCH],;
           lEdit, ;
-          lVnaTag, ;
+          .f., ;
           SetPreview(), ;
           PAR->IdMfc, ;
           &xcAkte, cMontMin, lSimulate, aNafSim ;
@@ -432,10 +444,10 @@ aadd(aActions, { K_SPACE , {|m| ;
   m[PNF_TAGGED] := !m[PNF_TAGGED], ;
   K_DOWN ;
 } } )
-aadd(aActions, { K_F6 , {|m| ;
-  VnaTag(m[PNF_AVNA],m[PNF_IDPAR],m[PNF_MATCH]+": "+MsgVnaTag(),jnl[JNL_IDJNL]), ;
-  NIL ;
-} } )
+*aadd(aActions, { K_F6 , {|m| ;
+*  VnaTag(m[PNF_AVNA],m[PNF_IDPAR],m[PNF_MATCH]+": "+MsgVnaTag(),jnl[JNL_IDJNL]), ;
+*  NIL ;
+*} } )
 open area oPar(), oVen(), oArt()
   browse array aPnf using {|m| ;
       iif(m[PNF_TAGGED],"X"," ");

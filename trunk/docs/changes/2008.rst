@@ -371,3 +371,9 @@
 - VnaScan() setzt die VNA jetzt nur noch dann auf befriedigt, wenn QteUs Null ist (und nicht wie bisher wenn sie <= 0 ist). Denn wenn ich eine NCV entregistriere, die einen negativen BLV befriedigt, dann wurde der BLV nicht entfriedigt weil seine QteUs negativ ist.
 
 - Das Tabellenattribut "S" ist jetzt im Code als Konstante DBFATTR_S benutzt.
+
+20081205
+--------
+
+- :meth:`runbg()` now always creates a file :file:`runbg.log` in the working directory, which can be consulted if the call fails. It contains both stdout and stderr of the last call.
+

@@ -5,6 +5,9 @@ title if(MemLang1=="D","MWSt-Erkl„rung","D‚claration TVA")
     caption=if(MemLang1=="D","Periode von-bis ","P‚riode de-… ") \
     pick={|x|PickPerRange(x)}
 before setvar("PRN2PDF.out",padr(AppRoot()+"\pdf\perkmd.pdf",200))
+before SetPeriode(ntrim(year(UserDate()-40)))
+before SetAsPdf(.t.)
+
 #include "PERIODE.DLG"
 #include "PREVIEW.DLG"
 #include "ASPDF.DLG"

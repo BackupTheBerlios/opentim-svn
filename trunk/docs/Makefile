@@ -1,11 +1,11 @@
-# Makefile for Sphinx documentation
+# Makefile for otimdev documentation
 #
 
 SITENAME     = otimdev
-TEMPDIR      = C:\temp\otimdev
-OPENHTML     = 'C:\Program Files\Mozilla Firefox\firefox.exe'
+TEMPDIR      = C:\temp\sphinxbuild\$(SITENAME)
 BUILDDIR     = $(TEMPDIR)\html
 CACHEDIR     = $(TEMPDIR)\doctrees
+OPENHTML     = 'C:\Program Files\Mozilla Firefox\firefox.exe'
 
 
 # You can set these variables from the command line.
@@ -19,7 +19,7 @@ PAPEROPT_letter = -D latex_paper_size=letter
 ALLSPHINXOPTS   = $(PAPEROPT_$(PAPER)) $(SPHINXOPTS)
 
 
-.PHONY: help clean html web pickle htmlhelp latex changes linkcheck
+.PHONY: help clean html show web pickle htmlhelp latex changes linkcheck
 
 help:
 	@echo "Please use \`make <target>' where <target> is one of"
@@ -39,9 +39,11 @@ html:
 	mkdir -p $(CACHEDIR) 
 	mkdir -p $(BUILDDIR)
 	$(SPHINXBUILD) -b html -d $(CACHEDIR) $(ALLSPHINXOPTS) . $(BUILDDIR)
-	$(OPENHTML) $(BUILDDIR)\index.html
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)."
+  
+show:
+	$(OPENHTML) $(BUILDDIR)\index.html
   
 upload:
 	rsync -r --progress --delete --times $(BUILDDIR)/ luc@saffre-rumma.ee:/var/cache/sphinxbuild/$(SITENAME)

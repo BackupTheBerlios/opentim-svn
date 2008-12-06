@@ -140,4 +140,4 @@
 
 #define DEF_EID
 
-
+// #define SIMULATE_CARD_READER

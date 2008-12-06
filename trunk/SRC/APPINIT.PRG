@@ -599,6 +599,9 @@ local uRetVal
 RETURN !SetMsg("runbg(): "+cProgram+MsgFileExist()) if ! file(cProgram)
 default cParams to ""
 #ifdef __XPP__
+  if .not. ">" $ cParams
+    cParams += " > runbg.log 2>&1"
+  endif
   uRetVal := RunShell(cParams,cProgram,.f.,.t.)
   RETURN .t. if uRetVal == 0
   RETURN !SetMsg("runbg("+cProgram+" "+cParams+") returned "+utos(uRetVal))
