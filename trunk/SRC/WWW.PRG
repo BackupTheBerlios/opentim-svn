@@ -4287,11 +4287,15 @@ RETURN '/index'+lngsuffix()+HTMLEXT
 FUNCTION SiteMenu(cMySelf,nMaxLevel)
 if !empty(MemLang2)
   toStream(CR_LF+'<ul id="langSelector">')
+  * LngLoop({||;
+  *   toStream('<li><a href="'+GetBasePath()+xt_trurl()+'">' );
+  *   .and.toStream('<img src="'+GetBasePath();
+  *     +'/images/buttons/lang-'+lng2iso(TplLang());
+  *     +'.png" width="20" border=0></a></li>'+CR_LF);
+  * })
   LngLoop({||;
     toStream('<li><a href="'+GetBasePath()+xt_trurl()+'">' );
-    .and.toStream('<img src="'+GetBasePath();
-      +'/images/buttons/lang-'+lng2iso(TplLang());
-      +'.png" width="20" border=0></a></li>'+CR_LF);
+    .and.toStream(upper(lng2iso(TplLang()))+'</a></li>'+CR_LF);
   })
   toStream(CR_LF+'</ul>')
 endif

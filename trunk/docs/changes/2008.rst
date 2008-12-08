@@ -377,3 +377,11 @@
 
 - :meth:`runbg()` now always creates a file :file:`runbg.log` in the working directory, which can be consulted if the call fails. It contains both stdout and stderr of the last call.
 
+20081208
+--------
+
+Wenn du Formatierungsbefehle wie {B} im Tabellenkopftext benutzt, 
+dann kam der Tabellenrahmen durcheinander. TabHeader() benutzt jetzt
+TextUnFormat(), um die richtige Breite in solchen FÄllen auch in den
+Kolonnentiteln zu ermitteln.
+

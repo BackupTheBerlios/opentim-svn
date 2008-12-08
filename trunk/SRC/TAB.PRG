@@ -293,6 +293,7 @@ local cSubLine
 local lFound := .t.
 local aHdrBuffer := {}
 local aLines := {}
+local nExtra
 RETURN aLines if len(saTabCols) == 0
 for i := 1 to len(saTabCols)
   cLine := strtran(saTabCols[i][TF_HEADER],";",CR_LF)
@@ -316,10 +317,11 @@ do while lFound // solange in mindestens einer Kolonne noch was drin war
       aHdrBuffer[i] := substr(aHdrBuffer[i],nPos+2)
       lFound := .t.
     endif
+    nExtra := len(cSubline) - len(TextUnFormat(cSubLine))
     if ALIGN_RIGHT $ saTabCols[i][TF_FORMAT]
-      cSubLine := padl(cSubLine,saTabCols[i][TF_WIDTH])
+      cSubLine := padl(cSubLine,saTabCols[i][TF_WIDTH] + nExtra)
     else
-      cSubLine := padr(cSubLine,saTabCols[i][TF_WIDTH])
+      cSubLine := padr(cSubLine,saTabCols[i][TF_WIDTH] + nExtra)
     endif
     cLine += cSubLine
     if i < len(aHdrBuffer)
