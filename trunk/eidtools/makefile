@@ -2,7 +2,8 @@
 
 XPPROOT = C:\ALASKA
 SDKROOT = C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2
-BEIDSDK = C:\eID_SDK_2.5\SDK
+#BEIDSDK = C:\eID_SDK_2.5\SDK
+BEIDSDK = C:\\eID_SDK_3.5\\beidlib\\C++
 
 INCLUDE = $(XPPROOT)\XPPW32\INCLUDE;$(XPPROOT)\DBEW32\INCLUDE;$(SDKROOT)\Include;$(SDKROOT)\Include\crt;$(BEIDSDK)\include
 
@@ -24,7 +25,7 @@ eidtools.exp eidtools.lib: eidtools.def
 	aimplib $<
 
 clean:
-	del eidtools.lib eidtools.dll eidtools.obj eidtools.exp sample.obj sample.exe
+	rm -f eidtools.lib eidtools.dll eidtools.obj eidtools.exp sample.obj sample.exe
 	
     
     

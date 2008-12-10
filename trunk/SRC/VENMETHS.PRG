@@ -2416,75 +2416,61 @@ local lOkay := .f.
 RETURN .t. if ! IFCATTR_A $ ifc[IFC_ATTRIB]
 open area oVna(), oArt(), oPar(), oVnl(DocStatOpen())
   lOkay := .t.
-  * if IFCATTR_A $ ifc[IFC_ATTRIB]
-    for i := 1 to len(aVna)
-      if qton1(aVna[i][VNA_QTEUS]) != 0
-        if dbAddRec()
-          VNA->IdJnl     := VEN->IdJnl
-          VNA->IdDoc     := VEN->IdDoc
-          VNA->IdPar     := VEN->IdPar
-          VNA->Periode   := VEN->Periode
-          VNA->NB1       := aVna[i][VNA_NB1      ]
-          VNA->Code      := aVna[i][VNA_CODE     ]
-          VNA->Memo      := aVna[i][VNA_MEMO     ]
-          VNA->Date      := VEN->Date
-          VNA->IdArt     := aVna[i][VNA_IDART    ]
-          VNA->Line      := aVna[i][VNA_LINE     ]
-          // 20060824 VNA->Match     := aVna[i][VNA_MATCH    ]
-          VNA->PrixU     := aVna[i][VNA_PRIXU    ]
-          // VNA->Mont      := aVna[i][VNA_MONT     ]
-          VNA->DC        := aVna[i][VNA_DC       ] // VEN->DC
-          VNA->Qte       := aVna[i][VNA_QTE      ]
-          ** [971026] Seltsam, VNA->QteForm wurde bisher gar nicht
-          ** abgespeichert. Dass sich da niemand drber beschwert hatte...
-          VNA->QteForm   := aVna[i][VNA_QTEFORM  ]
-          #ifdef DEF_INT
-            VNA->QteStat := aVna[i][VNA_QTESTAT  ]
-            VNA->IdInt   := aVna[i][VNA_IDINT    ]
-          #endif DEF_INT
-          #ifdef DEF_PROVI
-            VNA->PrixL := aVna[i][VNA_PRIXL]
-          #endif DEF_PROVI
-          #ifdef DEF_VNLATTR
-            VNA->Attrib := aVna[i][VNA_ATTRIB]
-          #endif DEF_VNLATTR
-          if IFCATTR_S $ ifc[IFC_ATTRIB]
-            VNA->Satis     := "*"
-          else
-            VNA->QteUs := aVna[i][VNA_QTEUS]
-            if qton1(VNA->QteUs) == 0
-              VNA->Satis := "*"
-            endif
-          endif
-          #ifdef DEF_VNAGENERATE
-            VNL->(dbgoto(aVna[i][VNA_RECNO]))
-          #endif
-          if ! OnVnaGenerate()
-            lOkay := .f.
-          endif
-          unlock record
+  for i := 1 to len(aVna)
+    if qton1(aVna[i][VNA_QTEUS]) != 0
+      if dbAddRec()
+        VNA->IdJnl     := VEN->IdJnl
+        VNA->IdDoc     := VEN->IdDoc
+        VNA->IdPar     := VEN->IdPar
+        VNA->Periode   := VEN->Periode
+        VNA->NB1       := aVna[i][VNA_NB1      ]
+        VNA->Code      := aVna[i][VNA_CODE     ]
+        VNA->Memo      := aVna[i][VNA_MEMO     ]
+        VNA->Date      := VEN->Date
+        VNA->IdArt     := aVna[i][VNA_IDART    ]
+        VNA->Line      := aVna[i][VNA_LINE     ]
+        // 20060824 VNA->Match     := aVna[i][VNA_MATCH    ]
+        VNA->PrixU     := aVna[i][VNA_PRIXU    ]
+        // VNA->Mont      := aVna[i][VNA_MONT     ]
+        VNA->DC        := aVna[i][VNA_DC       ] // VEN->DC
+        VNA->Qte       := aVna[i][VNA_QTE      ]
+        ** [971026] Seltsam, VNA->QteForm wurde bisher gar nicht
+        ** abgespeichert. Dass sich da niemand drber beschwert hatte...
+        VNA->QteForm   := aVna[i][VNA_QTEFORM  ]
+        #ifdef DEF_INT
+          VNA->QteStat := aVna[i][VNA_QTESTAT  ]
+          VNA->IdInt   := aVna[i][VNA_IDINT    ]
+        #endif DEF_INT
+        #ifdef DEF_PROVI
+          VNA->PrixL := aVna[i][VNA_PRIXL]
+        #endif DEF_PROVI
+        #ifdef DEF_VNLATTR
+          VNA->Attrib := aVna[i][VNA_ATTRIB]
+        #endif DEF_VNLATTR
+        if IFCATTR_S $ ifc[IFC_ATTRIB]
+          VNA->Satis     := "*"
         else
+          VNA->QteUs := aVna[i][VNA_QTEUS]
+          if qton1(VNA->QteUs) == 0
+            VNA->Satis := "*"
+          endif
+        endif
+        #ifdef DEF_VNAGENERATE
+          VNL->(dbgoto(aVna[i][VNA_RECNO]))
+        #endif
+        if ! OnVnaGenerate()
           lOkay := .f.
-          exit
         endif
-        if ! lOkay
-          exit
-        endif
+        unlock record
+      else
+        lOkay := .f.
+        exit
       endif
-    next i
-  * endif
-  *for i := 1 to len(aUpdate)
-  *  goto aUpdate[i][UPDATE_RECNO]
-  *  if ddRecLock()
-  *    VNA->QteUs := aUpdate[i][UPDATE_QTEUS]
-  *    if empty(VNA->QteUs)
-  *      VNA->Satis := "*"
-  *    endif
-  *    unlock record
-  *  else
-  *    lOkay := .f.
-  *  endif
-  *next i
+      if ! lOkay
+        exit
+      endif
+    endif
+  next i
 close area
 RETURN lOkay
 
