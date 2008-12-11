@@ -364,6 +364,10 @@
 
 - dbback.btp ist wieder da, jetzt in dlm\std und für den neuen Parser konvertiert.
 
+20081119
+--------
+- In der Kontroll-Liste von :meth:`TraCentral()` war eine Summe falsch positioniert. Bug fixed.
+
 20081124
 --------
 - In Stoßzeiten kann es passieren, dass zwei Benutzer die gleiche Sitzungsnummer erwischen. Der schnellere merkt nichts davon, aber der langsamere kriegt dann von TIM gesagt "...\9.LOG : Exklusivzugriff verweigert. Neu versuchen?". Wenn er dann J antwortet, wird jetzt neuerdings wenigstens die Sitzungsnummer erhöht, so dass er in der Regel nach einem ENTER reinkommt.
