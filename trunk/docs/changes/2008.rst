@@ -389,3 +389,16 @@ dann kam der Tabellenrahmen durcheinander. TabHeader() benutzt jetzt
 TextUnFormat(), um die richtige Breite in solchen FÄllen auch in den
 Kolonnentiteln zu ermitteln.
 
+20081216
+--------
+
+Rechnungsbücher für Firmen mit MWSt-Nummer(n) im Ausland.
+Die Kolonne "Umsatz Ausland" enthielt 
+bisher eine hardcodierte Liste der MWSt-Codes, 
+die im Ausland verwendet werden. 
+Jetzt wird diese Liste dynamisch aus dem Inhalt von
+:file:`ausland.dbc' erstellt.
+:file:`dlm\hst\hstven.rep
+
+
+

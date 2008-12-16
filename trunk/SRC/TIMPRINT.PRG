@@ -1752,6 +1752,28 @@ open area oPar(), oPlz(), oNat(), oBud(), oPrj()
 close area
 RETURN MnuDone()
 
+**
+** Called from FFOIML.DLG in a DbfScan() loop.
+FUNCTION ImlPrint(cIdTpt,cIdTpl)
+local lOkay := .f.
+// sendconsole("ImlPrint()"+cIdTpt+","+cIdTpl)
+open area oPar(), oPlz(), oNat(), oBud(), oPrj()
+  if empty(IML->IdPar2)
+    seek IML->IdPar in PAR
+  else
+    seek IML->IdPar2 in PAR
+  endif
+  SetTplLang(PAR->Langue)
+  seek IML->IdPar in PAR
+  seek (IML->DC+IML->IdBud) in BUD
+  #ifdef DEF_PRJ
+    seek IML->IdPrj in PRJ
+  #endif
+  lOkay := PrintTemplate(cIdTpt,cIdTpl,SetPreview(),NIL,NIL,;
+    SetTplIni(),.f.,SetAsPdf(),SetAsMail())
+close area
+RETURN lOkay
+
 
 
 **

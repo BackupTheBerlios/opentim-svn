@@ -122,9 +122,13 @@ column header=utr("VAT","MWS","TVA") width=3 text={||HST->IdTax}
     "D"$DlgValue("HstVenCols")
     column header=utr("Exch.DE","Umsatz;Ausland","C.A. hors B") \
            width=LenMntF() \
-           when={||GEN->IdClj$"D1,N1,L1,F1".or.\
-             (GEN->IdClj=="..".and.HST->IdTax$"7  ,15 ,16 ,19 ")\
-           } \
+           when=cblock('GEN->IdClj$"D1,N1,L1,F1".or.\
+             (GEN->IdClj=="..".and.HST->IdTax$"'\
+             +trim(DbcText("AUSLAND.DBC","D",3))\
+             +trim(DbcText("AUSLAND.DBC","N",3))\
+             +trim(DbcText("AUSLAND.DBC","L",3))\
+             +trim(DbcText("AUSLAND.DBC","F",3))\
+             +'")') \
            value={||HstDcMont("C",SetDevise())} \
            text={|x|ntomf(x)} \
            xsum={|x| ntomf(x) }

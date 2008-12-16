@@ -290,16 +290,23 @@ RETURN .t.
 
 * sammelt alle anderen VNLs, die (rckw„rts oder vorw„rts)
 * mit dieser VNL verbunden sind, in aKeys ein
+/*
+examples:
+- SRV -> VNA -> NCV
+- 
+*/
 STATIC FUNCTION vnlkeycoll(aKeys,bKey)
-local a := {}
+// local a := {}
+// local cMatch 
 open area oVnl()
+  // go back to the root
   do while !eof().and.!empty(VNL->Match);
            .and.VNL->Match!=VNL->IdJnl+VNL->IdDoc+VNL->Line
     seek VNL->Match
   enddo
+  // cMatch := VNL->IdJnl+VNL->IdDoc+VNL->Line
   ddSetOrder(ORD_VNL_VNA)
   do while !eof() .and.VNL->Match!=VNL->IdJnl+VNL->IdDoc+VNL->Line
-    * cMatch := VNL->IdJnl+VNL->IdDoc+VNL->Line
     DictAddItem(aKeys,eval(bKey))
     seek VNL->IdJnl+VNL->IdDoc+VNL->Line
   enddo
