@@ -392,13 +392,27 @@ Kolonnentiteln zu ermitteln.
 20081216
 --------
 
-Rechnungsbücher für Firmen mit MWSt-Nummer(n) im Ausland.
-Die Kolonne "Umsatz Ausland" enthielt 
-bisher eine hardcodierte Liste der MWSt-Codes, 
-die im Ausland verwendet werden. 
-Jetzt wird diese Liste dynamisch aus dem Inhalt von
-:file:`ausland.dbc' erstellt.
-:file:`dlm\hst\hstven.rep
+- Rechnungsbücher für Firmen mit MWSt-Nummer(n) im Ausland.
+  Die Kolonne "Umsatz Ausland" enthielt bisher eine hardcodierte Liste
+  der MWSt-Codes, die im Ausland verwendet werden. 
+  Jetzt wird diese Liste dynamisch aus dem Inhalt von
+  :file:`ausland.dbc` erstellt.
+  :file:`dlm/hst/hstven.rep`
 
+20081218
+--------
 
+- :func:`ImpPrint()` positioniert :class:`PRJ` jetzt etwas anders als bisher: Wenn :attr:`IMP.IdPrj` leer ist, schaut TIM jetzt in der IML und wenn er dort eine Zeile findet, deren :attr:`IML.IdPrj` nicht leer ist, dann positioniert er PRJ darauf.
+  (N.N.: :func:`ImlPrint()` positioniert PRJ immer auf :attr:`IML.IdPrj`)
 
+- Neue Funktion :func:`PickPrfList`, mit der man in einem Dialogfeld 
+  mehrere Berufsgruppen auswählen lassen kann.
+
+- Facturation automatique: :func:`VnaAuto2` affiche d'abord les clients, puis (si `lVnaTag` est `.t.`) le détail de chaque document à générer (dialogue NAFTAG). Mais dans ce détail on ne voyait pas le nom du client. Résolu. 
+
+- En plus, si on faisait :kbd:`ESC` dans le dialogue NAFTAG, TIM générait quand-même le document. Résolu.
+
+20081219
+--------
+
+- Wenn :func:`p_setAlign` innerhalb eines nichtaktiven if/endif-Blocks steht, dann darf sie keine Wirkung haben. Ab heute tut sie das auch nicht mehr. 

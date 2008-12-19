@@ -268,44 +268,50 @@ open area oPar(), oVen()
   for i := 1 to len(aPnf)
     pnf:=aPnf[i]
     if pnf[PNF_TAGGED]
+      seek pnf[PNF_IDPAR]
       if lVnaTag
-        VnaTag(pnf[PNF_AVNA],pnf[PNF_IDPAR],;
-          pnf[PNF_MATCH]+": "+MsgVnaTag(),jnl[JNL_IDJNL])
+        lOkay := VnaTag(pnf[PNF_AVNA],pnf[PNF_IDPAR],;
+          trim1(ParName())+pnf[PNF_MATCH]+": ";
+            +MsgVnaTag(),jnl[JNL_IDJNL])
         pnf[PNF_MONT] := 0
         for j := 1 to len(pnf[PNF_AVNA])
           nMont := qton(pnf[PNF_AVNA][j][VNA_QTEUS])*val(pnf[PNF_AVNA][j][VNA_PRIXU])
           pnf[PNF_MONT] += nMont
         next j
-      endif
-      if pnf[PNF_MONT] < 0 .and. jnli != NIL
-        jnlt:= jnli
       else
-        jnlt := jnl
+        lOkay := .t.
       endif
-      seek pnf[PNF_IDPAR]
-      if (ifc := IfcLocate(jnlt[JNL_IDCTR],jnlt[JNL_IDJNL],PAR->IdMfc)) == NIL
-        SetMsg( ;
-          PAR->IdPar + " : " + ;
-          jnlt[JNL_IDJNL] + " & " + PAR->IdMfc + MsgIfcFail(), ;
-        )
-        lOkay := .f.
-      else
-        n := ParVenAppend( ;
-          pnf[PNF_AVNA],&xcZahler,jnlt,ifc,dDate,cPeriode,pnf[PNF_MATCH],;
-          lEdit, ;
-          .f., ;
-          SetPreview(), ;
-          PAR->IdMfc, ;
-          &xcAkte, cMontMin, lSimulate, aNafSim ;
-        )
-        if n < 0
-          nErr += 1
-          if ! Confirm(SetMsg(),MsgContinue())
-            lOkay := .f.
-            exit
-          endif
+      if lOkay
+        if pnf[PNF_MONT] < 0 .and. jnli != NIL
+          jnlt:= jnli
         else
-          nNew += n
+          jnlt := jnl
+        endif
+        if (ifc := IfcLocate(jnlt[JNL_IDCTR],;
+          jnlt[JNL_IDJNL],PAR->IdMfc)) == NIL
+          SetMsg( ;
+            PAR->IdPar + " : " + ;
+            jnlt[JNL_IDJNL] + " & " + PAR->IdMfc + MsgIfcFail(), ;
+          )
+          lOkay := .f.
+        else
+          n := ParVenAppend( ;
+            pnf[PNF_AVNA],&xcZahler,jnlt,ifc,dDate,cPeriode,pnf[PNF_MATCH],;
+            lEdit, ;
+            .f., ;
+            SetPreview(), ;
+            PAR->IdMfc, ;
+            &xcAkte, cMontMin, lSimulate, aNafSim ;
+          )
+          if n < 0
+            nErr += 1
+            if ! Confirm(SetMsg(),MsgContinue())
+              lOkay := .f.
+              exit
+            endif
+          else
+            nNew += n
+          endif
         endif
       endif
     endif

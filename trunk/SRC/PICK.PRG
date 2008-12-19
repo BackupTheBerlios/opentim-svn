@@ -1618,15 +1618,19 @@ open area b
   if cStart != NIL
     softseek cStart
   endif
-  * open window "S‚lection Code profession" size 15,60 help PICKPRF
   edit data b mode pick query "PRF" ;
             title "Auswahl Berufsgruppe"
-  * close window
   if ddLastReq(b) == DDEDIT_SELECT
     cId := PRF->IdPrf
   endif
 close area
 RETURN cId
+
+FUNCTION PickPrfList(cStart)
+local a := {}
+RETURN NIL if !DbfScan({oPrf()},1,NIL,NIL,".t.",;
+  {||aadd(a,{trim(PRF->IdPrf),PRF->Libell,.f.}),.t.})
+RETURN PickAttrib(a,"Auswahl Berufsgruppe(n)",cStart," ")
 
 #else
 

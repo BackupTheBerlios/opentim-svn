@@ -1732,6 +1732,7 @@ RETURN NIL
 FUNCTION ImpPrint(cIdTpl)
 local jnl := JnlLocate(IMP->IdJnl)
 * local cLangue := MemLang1
+local cIdPrj 
 RETURN .f. if jnl == NIL
 default cIdTpl to PickTpl(jnl[JNL_IDTPT],jnl[JNL_IDTPL])
 RETURN .f. if cIdTpl == NIL
@@ -1746,7 +1747,20 @@ open area oPar(), oPlz(), oNat(), oBud(), oPrj()
   seek IMP->IdPar in PAR
   seek (jnl[JNL_DC] + IMP->IdBud) in BUD
   #ifdef DEF_PRJ
-    seek IMP->IdPrj in PRJ
+    if empty(IMP->IdPrj)
+      
+      open area oIml()
+        softseek IMP->IdJnl+IMP->IdDoc
+        do while empty(cIdPrj) .and. !eof() ;
+          .and. IMP->IdDoc==IMP->IdDoc.and. IML->IdJnl==IMP->IdJnl
+          cIdPrj := IML->IdPrj 
+          skip
+        enddo
+      close area
+      seek cIdPrj in PRJ
+    else
+      seek IMP->IdPrj in PRJ
+    endif
   #endif
   PrintTemplate(jnl[JNL_IDTPT],cIdTpl)
 close area

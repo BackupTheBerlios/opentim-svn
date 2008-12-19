@@ -6,6 +6,7 @@
    
    tables/index
    changes/index
+   functions
    glossary
    
    

@@ -1511,6 +1511,7 @@ endif
 RETURN scAlign
 
 FUNCTION p_SetAlign(cPar)
+RETURN NIL if ! slPStream
 scAlign := upper(cPar)
 RETURN .t.
 
