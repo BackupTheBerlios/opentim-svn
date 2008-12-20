@@ -416,3 +416,18 @@ Kolonnentiteln zu ermitteln.
 --------
 
 - Wenn :func:`p_setAlign` innerhalb eines nichtaktiven if/endif-Blocks steht, dann darf sie keine Wirkung haben. Ab heute tut sie das auch nicht mehr. 
+
+
+20081220
+--------
+
+- :sfile:`DLM/sprl/TOTAL.INC` 
+  - testete ``if empty(VEN->Anzahlung)``, was zu einem RTE führte wenn
+    es diess Feld nicht gibt. Jetzt testet er dort 
+    ``if type("VEN->Anzahlung")=="C".and.empty(VEN->Anzahlung)``.
+
+  - Druckte "Ihre MWSt-Nummer" nicht bei MWSt-Regime D und L
+    (MWSt-Nummer(n) im Ausland).
+    
+  - Teilweise Übersetzung Englisch
+  

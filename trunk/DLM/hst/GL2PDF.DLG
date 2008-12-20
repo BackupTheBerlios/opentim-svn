@@ -1,5 +1,5 @@
 title "General Ledger to PDF"
-field name="year" default=year(userdate())-1 \
+field name="year" default=year(userdate()+30)-1 \
       caption="Jahr " \
       picture="9999"
 field name="GL2PDF.path" \

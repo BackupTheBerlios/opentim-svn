@@ -15,34 +15,34 @@ IntraStat : ÚÄ[=repl("Ä",10)]ÄÂÄ[=repl("Ä",LenQte())]ÄÂÄ[=repl("Ä",LenQte())]ÄÂÄ
 [etc if 'O'$VEN->Attrib]
 [set align r]
 [etc if !empty(VEN->Remise)]
-[=if(TplLang()=="D","Gesamt brutto","Total brut")] : [=ntomf(val(VEN->MontR))]
-[=if(TplLang()=="D","Rabatt","Remise")] [=ltrim(VEN->Remise)] % : [=ntomf(\
+[=tr("Total before discount","Gesamt brutto","Total brut")] : [=ntomf(val(VEN->MontR))]
+[=tr("Discount","Rabatt","Remise")] [=ltrim(VEN->Remise)] % : [=ntomf(\
   val(VEN->Mont)-val(VEN->MontT)-val(VEN->MontR)\
 )]
 [etc endif]
-[=if(TplLang()=="D","Gesamtbetrag :","Total :")] [ven htva]
+[=tr("Total","Gesamtbetrag :","Total :")] [ven htva]
 [ven memo_tax]
 [etc if VenMtva(VEN->IdDev)!=0]
-ÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
-[=if(TplLang()=="D","Gesamt inkl. MWSt. :","Total T.V.A. comprise :")] [ven tvac]
+[=repl("Ä",35)]
+[=tr("Total w/o taxes","Gesamt inkl. MWSt. :","Total T.V.A. comprise :")] [ven tvac]
 [etc endif]
-[etc do DlgDefine("zuZahlen",val(VEN->Mont))]
-[etc if !empty(VEN->Anzahlung)]
+[etc do setvar("zuZahlen",val(VEN->Mont))]
+[etc if type("VEN->Anzahlung")=="C".and.!empty(VEN->Anzahlung)]
 [etc do DlgPlus("zuZahlen",-val(VEN->Anzahlung))]
-[=if(TplLang()=="D","Anzahlung","Acompte")] : [=ntomf(-val(VEN->Anzahlung))]
-[=if(TplLang()=="D","zu zahlen","… payer")] : [=ntomf(\
-  DlgValue("zuZahlen")\
-)]
+[=tr("Account","Anzahlung","Acompte")] : [=ntomf(-val(VEN->Anzahlung))]
+[=tr("to pay","zu zahlen","… payer")] : [=ntomf(getvar("zuZahlen"))]
 [etc endif]
 ([=if(TplLang()=="D","Alle Preise in ","Tous les prix en ")+VEN->IdDev])
 [etc if VEN->IdDev!="EUR"]
 ([=MsgMontant(TplLang())] EUR : [=ltrim(ntomf(VenMont2Dev("EUR",DlgValue("zuZahlen")),2))])
 [etc endif]
+[etc if .f.]
 [etc if VEN->IdDev=="EUR".and.PAR->Pays=="D  "]
 ([=MsgMontant(TplLang())] DEM : [=ltrim(ntomf(VenMont2Dev("DEM",DlgValue("zuZahlen")),2))])
 [etc endif]
 [etc if VEN->IdDev=="EUR".and.PAR->Pays=="B  "]
 ([=MsgMontant(TplLang())] BEF : [=ltrim(ntomf(VenMont2Dev("BEF",DlgValue("zuZahlen")),0))])
+[etc endif]
 [etc endif]
 [set align l]
 [etc if VEN->IdReg=="M"]
@@ -63,13 +63,9 @@ Livraison intracommunautaire de marchandises. \
 Votre Id TVA : [=if(empty(PAR->NoTva),"(… nous communiquer s.v.p.!)",trim(PAR->NoTva))]
 [etc endif]
 [etc endif]
-[etc if .f..and.(VEN->IdReg$"AC".or.VEN->IdReg=="M")]
+[etc if VEN->IdReg$"ACMLD"]
 
-[etc if TplLang()=="D"]
-Ihre MWSt-Nr.: [=trim(PAR->NoTva)].
-[etc else]
-Votre nø T.V.A.: [=trim(PAR->NoTva)].
-[etc endif]
+[=tr("Your VAT id:","Ihre MWSt-Nr.:","Votre nø T.V.A.:")] [=trim(PAR->NoTva)].
 [etc endif]
 [etc endif]
 [etc if VEN->DC=='D'.and.!empty(VEN->IdMfc)]

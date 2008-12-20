@@ -2,7 +2,7 @@
 #
 
 SITENAME     = otimdev
-TEMPDIR      = C:\temp\sphinxbuild\$(SITENAME)
+TEMPDIR      = C:\\temp\\sphinxbuild\\$(SITENAME)
 BUILDDIR     = $(TEMPDIR)\html
 CACHEDIR     = $(TEMPDIR)\doctrees
 OPENHTML     = 'C:\Program Files\Mozilla Firefox\firefox.exe'
@@ -32,8 +32,8 @@ help:
 	@echo "  linkcheck to check all external links for integrity"
 
 clean:
-	-rm -rf $(CACHEDIR)/*
-	-rm -rf $(BUILDDIR)/*
+	-rm -rf $(CACHEDIR)
+	-rm -rf $(BUILDDIR)
 
 html:
 	mkdir -p $(CACHEDIR) 
