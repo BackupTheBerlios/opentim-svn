@@ -392,12 +392,11 @@ Kolonnentiteln zu ermitteln.
 20081216
 --------
 
-- Rechnungsbücher für Firmen mit MWSt-Nummer(n) im Ausland.
-  Die Kolonne "Umsatz Ausland" enthielt bisher eine hardcodierte Liste
-  der MWSt-Codes, die im Ausland verwendet werden. 
+- Rechnungsbücher (:xfile:`DLM/HST/HSTVEN.REP`) für Firmen mit MWSt-Nummer(n) im Ausland.
+  Die Kolonne "Umsatz Ausland" im Verkauf enthielt bisher eine hardcodierte Liste der MWSt-Codes, die im Ausland verwendet werden. 
   Jetzt wird diese Liste dynamisch aus dem Inhalt von
-  :file:`ausland.dbc` erstellt.
-  :file:`dlm/hst/hstven.rep`
+  :xfile:`AUSLAND.DBC` erstellt.
+  
 
 20081218
 --------
@@ -421,13 +420,15 @@ Kolonnentiteln zu ermitteln.
 20081220
 --------
 
-- :sfile:`DLM/sprl/TOTAL.INC` 
+- :xfile:`DLM/SPRL/TOTAL.INC` 
+
   - testete ``if empty(VEN->Anzahlung)``, was zu einem RTE führte wenn
-    es diess Feld nicht gibt. Jetzt testet er dort 
-    ``if type("VEN->Anzahlung")=="C".and.empty(VEN->Anzahlung)``.
+    es dieses Feld nicht gibt. Jetzt testet er dort ``if type("VEN->Anzahlung")=="C" .and.
+    empty(VEN->Anzahlung)``.
 
   - Druckte "Ihre MWSt-Nummer" nicht bei MWSt-Regime D und L
     (MWSt-Nummer(n) im Ausland).
     
   - Teilweise Übersetzung Englisch
   
+- :srcref:`DLM/HST/GL2PDF.ACT` vergaß, die neue Variable ``TechInfo`` zu setzen, die in :srcref:`DLM/DCL/DCLDCF.REP`` gebraucht wird (und normalweise in :srcref:`DLM/DCL/RANGES.DLG`` initialisiert wird).

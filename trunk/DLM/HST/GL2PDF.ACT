@@ -79,6 +79,7 @@ empty(getvar("GL2PDF.Historiken")).or.\
 setvar("range1",GetPeriode(ntrim(getvar("year"))))
 setvar("range2",GetPeriode(ntrim(getvar("year")-1)))
 setvar("range3","")
+setvar("TechInfo"," ")
 setvar("b",{||\
   setvar("PRN2PDF.out",trim(getvar("GL2PDF.path"))+"DCL"+DCL->IdDcl+".pdf"),\
   RepPrint("DCLDCF",NIL,"foo")\
