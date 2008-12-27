@@ -432,3 +432,8 @@ Kolonnentiteln zu ermitteln.
   - Teilweise Übersetzung Englisch
   
 - :srcref:`DLM/HST/GL2PDF.ACT` vergaß, die neue Variable ``TechInfo`` zu setzen, die in :srcref:`DLM/DCL/DCLDCF.REP`` gebraucht wird (und normalweise in :srcref:`DLM/DCL/RANGES.DLG`` initialisiert wird).
+
+20081227
+--------
+
+- Ein :pcmd:`img`-Befehl verträgt jetzt auch einen einfachen Text ohne keywords, der im HTML dann als ``title`` und ``alternate`` gerendert wird.

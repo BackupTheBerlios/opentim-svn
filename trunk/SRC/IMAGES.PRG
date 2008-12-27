@@ -627,7 +627,7 @@ local a := { ;
   { "href", {|x|cRefURL:=x}   }, ;
   { "style", {|x|cStyle:=x}   }  ;
 }
-RETURN .f. if ! parse_kw(cParams,a)
+RETURN .f. if ! parse_kw(cParams,a,{|x|cAltText:=cTitle:=x,.t.})
 // cName := DrvCvtString(cName)
 avol := volsplit(cName)
 RETURN !SetMsg(cName+" : invalid volume specifier!") if avol == NIL

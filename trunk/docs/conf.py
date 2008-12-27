@@ -200,9 +200,27 @@ def srcref_role(typ, rawtext, etext, lineno,
     refnode = nodes.reference('', '', refuri=posixpath.join(baseuri, text))
     refnode += nodes.literal(text, text)
     return [refnode], []
+    
+# 20081226 21:01 Georg Brandl in sphinx-dev@googlegroups.com:
+from itertools import groupby
+def handle_finished(app, error):
+    labels = app.builder.env.labels.items()
+    labels.sort(key=lambda x: x[1])
+    outfile = open(os.path.join(app.builder.srcdir, 'labels.txt'), 'w')
+    for docname, items in groupby(labels, key=lambda x: x[1][0]):
+        outfile.write('Labels in %s\n%s\n' % (
+          docname, '-' * (len(docname) + 10)))
+        for label in items:
+            outfile.write('%s %s\n' % (
+              label[0].ljust(30), label[1][2]))
+        outfile.write('\n')
+    outfile.close()
 
 def setup(app):
     app.add_role('srcref', srcref_role)
     app.add_config_value('srcref_base_uri', 
       'http://example.com/source', True)
     app.add_description_unit('file','xfile','pair: %s; file')
+    app.add_description_unit('parsercmd','pcmd','pair: %s; parser command')
+    app.connect('build-finished', handle_finished)
+    

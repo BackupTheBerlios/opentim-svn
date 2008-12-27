@@ -7,6 +7,8 @@
    tables/index
    changes/index
    functions
+   files
+   parser
    glossary
    
    

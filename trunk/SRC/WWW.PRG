@@ -4697,8 +4697,8 @@ FUNCTION oMtg() ; RETURN NIL
 #endif DEF_MTG
 
 
-FUNCTION parse_kw(cParams,a)
-* (c) Luc Saffre 2005
+FUNCTION parse_kw(cParams,a,bArgHandler)
+* (c) Luc Saffre 2005-2008
 local i
 local nPos
 local c
@@ -4706,6 +4706,7 @@ local cValue
 local cBefore
 local lOkay := .t.
 RETURN .t. if empty(cParams)
+default bArgHandler to {|x|!SetMsg("Unexpected argument '"+x+"'") }
 for i := 1 to len(a)
   nPos := at(a[i][1]+"=",lower(cParams))
   if nPos != 0
@@ -4740,7 +4741,7 @@ for i := 1 to len(a)
 next i
 RETURN .f. if ! lOkay
 if !empty(cParams)
-  RETURN !SetMsg("ParseError: couldn't parse "+cParams)
+  RETURN eval(bArgHandler,cParams)
 endif
 RETURN .t.
 
