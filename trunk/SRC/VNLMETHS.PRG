@@ -270,6 +270,7 @@ RETURN cMsg
 **
 FUNCTION GsbVnlTvac(x)
 local tax := TaxLocate(VnlIdCtr(),FIELD->IdTax,.f.,VEN->Date)
+local nMont
 if x != NIL
   if tax == NIL
     // 20041104 : (zu testen) jetzt kann man TVAC auch eingeben, wenn
@@ -282,12 +283,21 @@ if x != NIL
     RETURN NIL if tax == NIL
   endif
   x := strtran(x,",",".")
-  if slPuTvac 
-    FIELD->cMont := nToTax(netto(val(x),tax[TAX_TAUX]))
-  else
-    FIELD->cMont := VnlNtom(netto(val(x),tax[TAX_TAUX]))
+  if empty(tax[TAX_GENTIERS])
+    nMont := netto(val(x),tax[TAX_TAUX])
+  else // cocontractant und intracom: TVAC = HTVA
+    nMont := val(x) 
   endif
-  FIELD->MontT := nToTax(val(x)-val(FIELD->cMont))
+  if slPuTvac
+    FIELD->cMont := nToTax(nMont)
+  else
+    FIELD->cMont := VnlNtom(nMont)
+  endif
+  if empty(tax[TAX_GENTIERS])
+    FIELD->MontT := nToTax(val(x)-val(FIELD->cMont))
+  else // cocontractant und intracom: TVAC = HTVA, aber MTVA trotzdem != 0
+    FIELD->MontT := nToTax(val(x)*tax[TAX_TAUX]/100)
+  endif
   #ifdef DEF_ART
     if IsArtCode(FIELD->Code)
       ** 20041104 : (Nols) bei Eingabe von TVAC soll TIM Qte berechnen.

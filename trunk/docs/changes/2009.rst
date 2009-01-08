@@ -1,0 +1,13 @@
+2009
+====
+
+20090107
+--------
+- Ticket #644 (EKR mit IM oder C und Gesamtbetrag: Detail wird falsch belegt)
+
+  :func:`GsbVnlTvac` funktionierte nicht richtig, wenn man in einer 
+  Einkaufsrechnung mit Regime C oder I im Feld :attr:`VNL._TVAC` 
+  einen Betrag eingab. Das ist ein eher unlogischer Sonderfall, der 
+  aber indirekt auftreten kann, wenn man in :attr:`VEN.Mont` den 
+  Gesamtbetrag der Rechnung eintippt und TIM dann automatisch 
+  den Inhalt generiert. Dann wird diese Funktion auch benutzt.

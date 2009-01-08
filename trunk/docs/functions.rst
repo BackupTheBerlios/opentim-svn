@@ -45,3 +45,25 @@ Global functions
   blablablabl
   
   
+Date functions
+--------------
+
+.. function:: SkipMonth(dDate,nSkip)
+
+.. function:: FirstOfMonth(dDate)
+
+   Return the first day of the month of `dDate` as a DATE object.
+   
+   Example: 
+     FirstOfMonth(ctod("2008-12-24")) --> ctod("2008-12-01")
+
+.. function:: LastOfMonth(dDate)
+
+   Return the last day of the month of `dDate` as a DATE object.
+   
+   Example: 
+     LastOfMonth(ctod("2008-12-24")) --> ctod("2008-12-31")
+
+.. function:: GsbVnlTvac(x)
+   
+   Get/Set block for virtual field :attr:`VNL._TVAC`.
