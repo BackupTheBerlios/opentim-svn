@@ -407,24 +407,11 @@ endif
 saCmdSpooler := {}
 * slRtfMode := .f.
 * 20021111 scHeader := NIL
-sbHeader := NIL
-slNoFirst := .f.
-slNoLast := .f.
-scDrvSpecial := ""
-sbFooter := NIL
-snLMargin := 1
-snRMargin := 1
-snTMargin := 0
-snBMargin := 1
-snPapHeight  := 11.3   // inches paper height
-snPapWidth   := 8.27   // inches paper width
 scPort    := "PRN"     // printer port
-slFinalFF   := .t.
-scExport    := NIL
-scPageAlign := PAGEALIGN_LEFT
+scDrvSpecial := ""
 slPStream := .t.
+
 soLoop := NIL
-* saLoopStack := {}
 saIfStack := {.t.}
 scPreviewFile := NIL
 if ! AppIsInstalled()
@@ -440,9 +427,6 @@ if scDoPreview == BUTTON_OFF
     scDoPreview := BUTTON_ON
   endif
 endif
-snLIndent := 0
-snRIndent := 0
-scAlign   := ALIGN_LEFT
 scDoCapture := BUTTON_OFF
 scMntFormat := SetMntFormat()
 scSetSolde  := SetSolde()
@@ -451,25 +435,9 @@ snCopies    := NIL
 * snPrnStatus := PRN_CONTINUE
 sbPageHeader := bPageHeader
 sbPageFooter := NIL
-if ! empty(scTplIni)
-  if slActivePps // TptExist(TPLTYPE_INI)
-    if ! FileExec(trim(scTplIni)+".PPS")
-      snPrnStatus := PRN_ABORT
-      * Warning(SetMsg())
-    endif
-  else
-    if ! TplParse( TplValue(TPLTYPE_INI,scTplIni,{||;
-         TplMemo()},""),"INI:"+scTplIni,.f.)
-      Warning(SetMsg())
-    endif
-  endif
-  * if ! empty(cMsg)
-  *   cMsg := strtran(alltrim(cMsg),CR_LF)
-  *   Warning( ;
-  *     trim(scTplIni) + " : invalid initialization command !", ;
-  *     cMsg,"WRN020" ;
-  *   )
-  * endif
+if ! PpsExec(scTplIni)
+  Warning(SetMsg())
+  snPrnStatus := PRN_ABORT
 endif
 // 20030109 ab hier war *vor* AusfÅhrung des PPS
 BeginOStream({|x| PrnStream(x)},NIL,"Printer") // sbWriter
@@ -559,6 +527,29 @@ set printer to
 set printer off
 set console on
 RETURN .t.
+
+FUNCTION PpsExec(cTplIni)
+snLMargin := 1
+snRMargin := 1
+snTMargin := 0
+snBMargin := 1
+snPapHeight  := 11.3   // inches paper height
+snPapWidth   := 8.27   // inches paper width
+sbFooter := NIL
+sbHeader := NIL
+slNoFirst := .f.
+slNoLast := .f.
+slFinalFF   := .t.
+scExport    := NIL
+scPageAlign := PAGEALIGN_LEFT
+snLIndent := 0
+snRIndent := 0
+scAlign   := ALIGN_LEFT
+RETURN .t. if empty(cTplIni)
+RETURN FileExec(trim(cTplIni)+".PPS") if slActivePps 
+RETURN TplParse( TplValue(TPLTYPE_INI,cTplIni,{||TplMemo()},""),;
+       "INI:"+cTplIni,.f.)
+
 
 
 * FUNCTION SetPrinterTo()

@@ -1,5 +1,5 @@
 ** Copyright (c) 1992-2001 PAC Systems
-** Copyright (c) 2001-2008 Luc Saffre
+** Copyright (c) 2001-2009 Luc Saffre
 **
 ** This file is part of TIM.
 **
@@ -1783,8 +1783,12 @@ open area oPar(), oPlz(), oNat(), oBud(), oPrj()
   #ifdef DEF_PRJ
     seek IML->IdPrj in PRJ
   #endif
-  lOkay := PrintTemplate(cIdTpt,cIdTpl,SetPreview(),NIL,NIL,;
-    SetTplIni(),.f.,SetAsPdf(),SetAsMail())
+  if LstContinue()
+    lOkay := TplInclude(cIdTpt,cIdTpl)
+  else
+    lOkay := PrintTemplate(cIdTpt,cIdTpl,SetPreview(),NIL,NIL,;
+                           SetTplIni(),.f.,SetAsPdf(),SetAsMail())
+  endif
 close area
 RETURN lOkay
 

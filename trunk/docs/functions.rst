@@ -28,21 +28,37 @@ Global functions
 
   blablablabl
 
-.. function:: ImlPrint()
+  
+Printing
+--------
+  
+.. function:: PrintTemplate(cTplType,cIdTpl,cPreview,bTitBlock,;
+   bPrePrint,cIdOpt,lDlg,lAsPdf,lAsMail)  
+   
+   Locates the specified :class:`TPL` and parses it to the printer
+   (using PrnStream())
+   
+   
+.. function:: PrintAct(cActName,bTitBlock,cTplIni,cPreview,nWidth)
 
-  blablablabl
+   Opens the printer stream, then executes the specified .act file
+   inside this print job.
+   
+   
 
-.. function:: PickPrfList()
-
-  blablablabl
-
-.. function:: PickPrf()
-
-  blablablabl
+Process managment
+-----------------
 
 .. function:: runbg()
 
   blablablabl
+  
+Global settings
+---------------
+  
+.. function:: SetMont2CSV(bBlock)
+
+  blablabla
   
   
 Date functions
@@ -64,6 +80,3 @@ Date functions
    Example: 
      LastOfMonth(ctod("2008-12-24")) --> ctod("2008-12-31")
 
-.. function:: GsbVnlTvac(x)
-   
-   Get/Set block for virtual field :attr:`VNL._TVAC`.

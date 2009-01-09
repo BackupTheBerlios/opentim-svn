@@ -1,5 +1,5 @@
 ** Copyright (c) 1992-2001 PAC Systems
-** Copyright (c) 2001-2008 Luc Saffre
+** Copyright (c) 2001-2009 Luc Saffre
 **
 ** This file is part of TIM.
 **
@@ -723,25 +723,22 @@ if (tpl := TplValue(cTplType,cIdTpl,{|| TplInfo()})) == NIL
   SetMsg(cTplType+":"+cIdTpl+" : unbekannte Druckmaske!")
   RETURN .f.
 endif
-if LstContinue()
-  if tpl[TPL_WIDTH] != 0
-    p_SetWidth(tpl[TPL_WIDTH])
-  endif
-  TplParse(tpl[TPL_MEMO])
-else
-  default cIdOpt to tpl[TPL_IDOPT]
-  if OpenPrinter( ;
-    cIdOpt,cPreview, ;
-    tpl[TPL_WIDTH],bTitBlock, ;
-    NIL,bPrePrint,tpl[TPL_IDDLG], lDlg, lAsPdf, lAsMail ;
-  )
-    p_MsgDisplay(tpl[TPL_NAME])
-    TplParse(hardcr(tpl[TPL_MEMO]))
-    ClosePrinter()
-  else
-    RETURN .f.
-  endif
-endif
+* if LstContinue()
+*   if tpl[TPL_WIDTH] != 0
+*     p_SetWidth(tpl[TPL_WIDTH])
+*   endif
+*   TplParse(hardcr(tpl[TPL_MEMO]))
+*   RETURN .t.
+* endif
+default cIdOpt to tpl[TPL_IDOPT]
+RETURN .f. if ! OpenPrinter( ;
+  cIdOpt,cPreview, ;
+  tpl[TPL_WIDTH],bTitBlock, ;
+  NIL,bPrePrint,tpl[TPL_IDDLG], lDlg, lAsPdf, lAsMail ;
+)
+  p_MsgDisplay(tpl[TPL_NAME])
+  TplParse(hardcr(tpl[TPL_MEMO]))
+ClosePrinter()
 RETURN (LstError() == PRN_DONE)
 
 
@@ -749,7 +746,7 @@ RETURN (LstError() == PRN_DONE)
 ** TplInclude()
 **
 FUNCTION TplInclude(cIdTpt,cIdTpl)
-local cMemo
+local tpl
 local nPos
 if (nPos := at(" ",cIdTpl)) != 0
   cIdTpt := left(cIdTpl,nPos-1)
@@ -757,9 +754,15 @@ if (nPos := at(" ",cIdTpl)) != 0
 endif
 RETURN NIL if empty(cIdTpl)
 cIdTpl := trim(cIdTpl)
-cMemo := TplValue(cIdTpt,cIdTpl, {|| TplMemo() } )
-RETURN NIL if empty(cMemo)
-RETURN TplParse(cMemo)
+if (tpl := TplValue(cIdTpt,cIdTpl,{|| TplInfo()})) == NIL
+  SetMsg(cIdTpt+":"+cIdTpl+" : unbekannte Druckmaske!")
+  RETURN .f.
+endif
+RETURN NIL if empty(tpl[TPL_MEMO])
+if !empty(tpl[TPL_IDOPT])
+  RETURN .f. if ! PpsExec(tpl[TPL_IDOPT])
+endif
+RETURN TplParse(hardcr(tpl[TPL_MEMO]))
 
 
 FUNCTION TplConfig(cTitle)

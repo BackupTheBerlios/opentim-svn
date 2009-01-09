@@ -11,3 +11,33 @@
   aber indirekt auftreten kann, wenn man in :attr:`VEN.Mont` den 
   Gesamtbetrag der Rechnung eintippt und TIM dann automatisch 
   den Inhalt generiert. Dann wird diese Funktion auch benutzt.
+  
+20090108
+--------
+- :func:`PrintTemplate` no longer silently accepts to work when the printer stream is already open. Use :func:`TplInclude`in such cases.
+
+- Documentation: The following functions modify the left margin: 
+  :func:`p_MrgMirror`
+  :func:`p_SetLMargin`
+  :func:`p_SetWidth` (if PAGEALIGN_RIGHT)
+  
+- New function :func:`PpsExec` executes the printer parameter settings textblock. 
+  This was done only in :func:`OpenPrinter` so far, but now also in :func:`TplInclude`. 
+  
+  
+.. function:: p_MrgMirror()
+
+   Mirror the right and left margin (exchange their values)
+   
+.. function:: p_SetLMargin(nInches)
+
+   Set left margin in inches.
+   
+.. function:: p_SetWidth(nApsWidth)
+
+   Set the line width by selecting a font size so that at least
+   nApsWidth characters fit onto a line.
+
+.. function:: PpsExec(cTplIni) 
+
+  

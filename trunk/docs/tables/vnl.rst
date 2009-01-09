@@ -19,5 +19,12 @@ VNL
   
  .. attribute:: _TVAC
  
-    Virtual field showing the amount VAT included. It is usually the sum of :attr:`VEN.cMont`
-    and :attr:`VEN.MontT`. Exception: if :attr:`TAX.GenTiers` is not empty.
+    Virtual field showing the amount VAT included. 
+    It is usually the sum of :attr:`VEN.cMont`
+    and :attr:`VEN.MontT`. Exception: if :attr:`TAX.GenTiers` 
+    is not empty.
+    
+
+.. function:: GsbVnlTvac(x)
+   
+   Get/Set block for virtual field :attr:`VNL._TVAC`.

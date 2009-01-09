@@ -17,4 +17,7 @@ IML
   
     blablabl
   
+.. function:: ImlPrint()
+
+  Prints a single IML.
   
