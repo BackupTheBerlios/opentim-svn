@@ -1767,7 +1767,9 @@ close area
 RETURN MnuDone()
 
 **
-** Called from FFOIML.DLG in a DbfScan() loop.
+** Called from 
+** - FFOIML.DLG in a DbfScan() loop (with print stream already open)
+** - IMLPRINT.DLG (called from IML.DEF after F7 on an IML row)
 FUNCTION ImlPrint(cIdTpt,cIdTpl)
 local lOkay := .f.
 // sendconsole("ImlPrint()"+cIdTpt+","+cIdTpl)
@@ -1786,8 +1788,9 @@ open area oPar(), oPlz(), oNat(), oBud(), oPrj()
   if LstContinue()
     lOkay := TplInclude(cIdTpt,cIdTpl)
   else
-    lOkay := PrintTemplate(cIdTpt,cIdTpl,SetPreview(),NIL,NIL,;
-                           SetTplIni(),.f.,SetAsPdf(),SetAsMail())
+    lOkay := PrintTemplate(cIdTpt,cIdTpl)
+    // ,SetPreview(),NIL,NIL,;
+    // SetTplIni(),.t.,SetAsPdf(),SetAsMail())
   endif
 close area
 RETURN lOkay

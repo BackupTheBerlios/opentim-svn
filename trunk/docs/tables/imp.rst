@@ -17,4 +17,13 @@ IMP (Buchungsdokumente)
   
     blablabl
   
+  .. attribute:: Date
   
+    Buchungsdatum
+ 
+ 
+.. function:: ImpPrint()
+
+  Print the current IMP record.
+
+ 

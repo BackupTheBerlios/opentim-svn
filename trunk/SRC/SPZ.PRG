@@ -48,6 +48,27 @@ RETURN DbfPick( ;
   "DLS->IdDls";
 )
 
+#ifdef DEF_MSG
+
+FUNCTION DlsMsgTypes(nMaxLen)
+local c := ""
+if !empty(DLS->IdDls)
+  open area oMsg()
+    set order to 5
+    softseek DLS->IdDls
+    do while !eof() .and. MSG->IdDls == DLS->IdDls
+      if ! trim(MSG->Type) $ c
+        c += trim(MSG->Type) + " "
+      endif
+      skip
+    enddo
+  close area
+endif  
+RETURN c if nMaxLen == NIL 
+RETURN padr(c,nMaxLen)
+
+#endif DEF_MSG
+
 FUNCTION PickDla(cStart)
 RETURN DbfPick( ;
   {oDla()},;
@@ -489,6 +510,20 @@ local cIdDls := DLS->IdDls
     close area
   endif
 #endif DEF_DLP
+#ifdef DEF_MSG
+  if wwin[WIN_WAITKEY] == 2
+    b := oMsg()
+    open area b, oDls(), oPar(), oPlz()
+      ddSetOrder(5) // MSG->IdDls+dtos(MSG->Date)
+      edit data b key    MSG->IdDls ;
+                  value  cIdDls ;
+                  mode wait ;
+                  window wwin ;
+                  start top ;
+                  query "MSGDLS"
+    close area
+  endif
+#endif DEF_MSG
 #ifdef DEF_RFX
   RETURN NIL if DoRfxWait(wwin,alias(),DLS->IdDls)
 #endif DEF_RFX

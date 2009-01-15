@@ -597,7 +597,7 @@ fclose(fd)
 RETURN .T.
 
 FUNCTION CopyRight()
-RETURN "(c) 1993-2001 PAC Systems, (c) 2001-2008 Rumma & Ko"
+RETURN "(c) 1993-2001 PAC Systems, (c) 2001-2009 Rumma & Ko"
 
 
 ** #ifdef DEF_FFCOPYRIGHT

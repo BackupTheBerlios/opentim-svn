@@ -202,6 +202,7 @@ def srcref_role(typ, rawtext, etext, lineno,
     return [refnode], []
     
 # 20081226 21:01 Georg Brandl in sphinx-dev@googlegroups.com:
+# may cause UnicodeEncodeError if non-asci section headers exist
 from itertools import groupby
 def handle_finished(app, error):
     labels = app.builder.env.labels.items()
@@ -220,7 +221,11 @@ def setup(app):
     app.add_role('srcref', srcref_role)
     app.add_config_value('srcref_base_uri', 
       'http://example.com/source', True)
-    app.add_description_unit('file','xfile','pair: %s; file')
-    app.add_description_unit('parsercmd','pcmd','pair: %s; parser command')
-    app.connect('build-finished', handle_finished)
+    app.add_description_unit('file','xfile',
+      'pair: %s; file')
+    app.add_description_unit('parsercmd','pcmd',
+      'pair: %s; parser command')
+    app.add_description_unit('configcmd','configcmd',
+      'pair: %s; configuration command')
+    #app.connect('build-finished', handle_finished)
     

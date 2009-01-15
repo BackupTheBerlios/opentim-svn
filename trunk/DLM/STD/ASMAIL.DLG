@@ -1,6 +1,6 @@
+#if !empty(getvar("mailhost"))
 before setvar("mailto",padr(getvar("mailto",.f.,""),240))
 before setvar("mailbcc",padr(getvar("mailbcc",.f.,""),240))
-// #if !empty(getvar("mailhost"))
 field caption2=utr(" send as e-mail",\
         " als E-Mail verschicken", \
         " envoyer comme e-mail") \
@@ -28,4 +28,4 @@ field name="mailbody" \
 after setvar("mailhost",trim(getvar("mailhost")))
 after setvar("mailto",trim(getvar("mailto")))
 after setvar("mailbcc",trim(getvar("mailbcc")))
-// #endif
+#endif

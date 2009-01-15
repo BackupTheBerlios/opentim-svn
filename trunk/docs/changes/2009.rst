@@ -25,19 +25,16 @@
   This was done only in :func:`OpenPrinter` so far, but now also in :func:`TplInclude`. 
   
   
-.. function:: p_MrgMirror()
+20090113
+--------
+- :func:`DlsWait` now displays the messages per DLS (Notizen pro Dienstleistung) when WWIN_KEY is 2.
 
-   Mirror the right and left margin (exchange their values)
-   
-.. function:: p_SetLMargin(nInches)
-
-   Set left margin in inches.
-   
-.. function:: p_SetWidth(nApsWidth)
-
-   Set the line width by selecting a font size so that at least
-   nApsWidth characters fit onto a line.
-
-.. function:: PpsExec(cTplIni) 
-
+- Neue Funktion :func:`DlsMsgTypes` gibt eine Liste der Arten von 
+  Notizen zurück, die dieser DLS zugeordnet sind.
   
+  
+20090115
+--------
+
+- TIM (Modul :mod:`IMP`) unterstützt jetzt :ref:`topic_vcs`.
+

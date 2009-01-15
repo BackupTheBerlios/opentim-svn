@@ -733,22 +733,10 @@ Also in der PAR.DEF hinzufügen :
 19990701
 - Hier ein Trick, um die "letzte Dokumentnummer" komfortabler verwalten
   zu können.
-  1. // JNLIDDOC.DLG :
-     before DlgDefine("IdDoc",DbfPeek(oJnl(),FIELD->IdJnl,"IdDoc",space(6)))
-     // before DlgDefine("OrdIdDoc",DbfPeek(oJnl(),"ORD","IdDoc",space(6)))
-     title "Letzte Dokumentnummer setzen"
-     field caption=FIELD->IdJnl + " : " // + JnlName()
-     field name="IdDoc" \
-         caption="Letzte Dokumentnummer " \
-         pick={|x|PickDoc(FIELD->IdJnl,x)}
-         // block=DlgBlock("IdDoc")\
-         postedit={|x|GetIdDoc(x)}
-     after DbfSetField(oJnl(),FIELD->IdJnl,"IdDoc",DlgValue("IdDoc"))
-     after SetMsg(FIELD->IdJnl + " : Letzte Dokumentnummer jetzt " + \
-       if(empty(DlgValue("IdDoc")),"leer",DlgValue("IdDoc"))+"."\
-     )
-     after SetMnuDone()
-  2. VEN.DEF, FIN.DEF und ODS.DEF :
+  
+  - Datei JNLIDDOC.DLG
+     
+  - VEN.DEF, FIN.DEF und ODS.DEF ::
      ddAddSpecial(\
        {||DlgExec("JNLIDDOC")}, \
        "~Letzte Dokumentnummer         ",\

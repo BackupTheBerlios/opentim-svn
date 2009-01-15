@@ -4,12 +4,11 @@
 .. toctree::
    :maxdepth: 2
    
-   tables/index
    changes/index
+   topics/index
+   tables/index
+   modules/index
    functions
-   files
-   parser
-   glossary
    
    
 
