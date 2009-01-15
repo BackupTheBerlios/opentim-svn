@@ -1,68 +1,14 @@
-:mod:`IMP` -- Öffentlich-rechtliche Buchhaltung
-===============================================
+`DEF_IMP` -- Öffentlich-rechtliche Buchhaltung
+==============================================
 
 .. module:: IMP
 
-Definiert die Tabellen :class:`IMP`, :class:`IML`, :class:`MVI`
-              
+Definiert die Tabellen :class:`IMP`, :class:`IML` und :class:`MVI`.
 
-IMP -- Buchungsdokumente
-------------------------
-
-.. class:: IMP
-
-  blablabla
-
-  .. attribute:: IdJnl
-  
-    blablabl
-  
-  .. attribute:: IdDoc
-  
-    blablabl
-    
-  .. attribute:: IdPrj
-  
-    blablabl
-  
-  .. attribute:: Date
-  
-    Buchungsdatum
- 
- 
-.. function:: ImpPrint()
-
-  Print the current IMP record.
-
- 
-
-
-IML -- Inhalt Buchungssdokumente
-================================
-
-.. class:: IML
-
-  blablablabl
-
-  .. attribute:: IdJnl
-  
-    blablabl
-  
-  .. attribute:: IdDoc
-  
-    blablabl
-    
-  .. attribute:: Line
-  
-    blablabl
-    
-  .. attribute:: IdPrj
-  
-    blablabl
-  
-.. function:: ImlPrint()
-
-  Prints a single IML.
-                
-                
-                
+=====================  ==========================
+Öffentlich-rechtliche  Allgemeine 
+=====================  ==========================
+:class:`IMP`           :class:`VEN`, :class:`FIN`
+:class:`IML`           :class:`VNL`, :class:`FNL`
+:class:`MVI`           :class:`HST`
+=====================  ==========================

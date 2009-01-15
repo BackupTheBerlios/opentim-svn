@@ -1,5 +1,5 @@
-IML
-===
+IML -- Inhalt Buchungssdokumente
+================================
 
 .. class:: IML
 
@@ -13,6 +13,10 @@ IML
   
     blablabl
     
+  .. attribute:: Line
+  
+    blablabl
+    
   .. attribute:: IdPrj
   
     blablabl
@@ -20,4 +24,4 @@ IML
 .. function:: ImlPrint()
 
   Prints a single IML.
-  
+                
