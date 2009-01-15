@@ -3,14 +3,14 @@
 
 SITENAME     = otimdev
 TEMPDIR      = C:\\temp\\sphinxbuild\\$(SITENAME)
-BUILDDIR     = $(TEMPDIR)\html
-CACHEDIR     = $(TEMPDIR)\doctrees
-OPENHTML     = 'C:\Program Files\Mozilla Firefox\firefox.exe'
+BUILDDIR     = $(TEMPDIR)\\html
+CACHEDIR     = $(TEMPDIR)\\doctrees
+OPENHTML     = 'C:\\Program Files\\Mozilla Firefox\\firefox.exe'
 
 
 # You can set these variables from the command line.
 SPHINXOPTS    =
-SPHINXBUILD   = python 'l:\snapshot\sphinx\sphinx-build.py'
+SPHINXBUILD   = python l:\\snapshot\\sphinx\\sphinx-build.py
 PAPER         =
 
 # Internal variables.
@@ -46,7 +46,7 @@ show:
 	$(OPENHTML) $(BUILDDIR)\index.html
   
 upload:
-	rsync -r --progress --delete --times $(BUILDDIR)/ luc@saffre-rumma.ee:/var/cache/sphinxbuild/$(SITENAME)
+	cd $(BUILDDIR); cd ; rsync -r --progress --delete --times luc@saffre-rumma.ee:/var/cache/sphinxbuild/$(SITENAME)
 
 
 pickle:

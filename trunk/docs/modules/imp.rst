@@ -1,7 +1,7 @@
 `DEF_IMP` -- Öffentlich-rechtliche Buchhaltung
 ==============================================
 
-.. module:: IMP
+.. module:: DEF_IMP
 
 Definiert die Tabellen :class:`IMP`, :class:`IML` und :class:`MVI`.
 

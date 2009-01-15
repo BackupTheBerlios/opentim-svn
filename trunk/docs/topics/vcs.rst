@@ -23,7 +23,7 @@ Struktur der VCS-Nummer
 -----------------------
     
 Eine Buchung wird durch 
-:attr:`MVI.IdJnl` + :attr:`MVI.IdDoc` + :attr:`MVI.Line` 
+:attr:`HST.IdJnl` + :attr:`HST.IdDoc` + :attr:`HST.Line` 
 identifiziert.
 Die daraus resultierende von TIM generierte VCS-Nummer ist wie folgt konstruiert:
 
@@ -37,7 +37,7 @@ Die daraus resultierende von TIM generierte VCS-Nummer ist wie folgt konstruiert
    ===== ================================================
    
 N.B. Falls :configcmd:`FixY2K` gesetzt ist, wird ein 
-"A" oder "B" am Anfang von :attr:`MVI.IdDoc` 
+"A" oder "B" am Anfang von :attr:`HST.IdDoc` 
 durch "0" bzw. "1" ersetzt.
    
 
@@ -46,13 +46,14 @@ Funktionen
 
 .. function:: hst2vcs()
 
-   returns a formatted communication structurée for this MVI or IML
+   returns a formatted communication structurée for this 
+   :class:`FNL`, :class:`HST`, :class:`MVI` or :class:`IML` 
    record.
    
 .. function:: vcs2csv(cVcsText)
 
-   returns an array { IdJnl, IdDoc, Line } corresponding to 
-   the cVcsText.
+   returns an array { :attr:`HST.IdJnl`, :attr:`IdDoc`, :attr:`Line` }
+   corresponding to the cVcsText.
 
 Konfigurationsbefehle
 ---------------------

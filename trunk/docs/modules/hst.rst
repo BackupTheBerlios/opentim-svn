@@ -1,5 +1,6 @@
-:mod:`HST` -- Allgemeine Buchhaltung
-====================================
+:mod:`DEF_HST` -- Allgemeine Buchhaltung
+========================================
 
-.. module:: HST
-   :synopsis: Definiert die Tabelle :class:`HST`.
+.. module:: DEF_HST
+
+Definiert die Tabelle :class:`HST`.

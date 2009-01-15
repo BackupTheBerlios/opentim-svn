@@ -3,9 +3,12 @@
 
 .. toctree::
    :maxdepth: 2
+   :glob:
    
-   imp
-   hst
+   graph
+   common
+   
+   *
    
    
 
