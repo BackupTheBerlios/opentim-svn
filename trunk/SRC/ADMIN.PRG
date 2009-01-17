@@ -401,6 +401,10 @@ static saOnParSelect := {}
 #endif
 #endif DEF_VEN
 
+#ifdef DEF_VCS
+  static saVcsJournals := {}
+#endif DEF_VCS
+
 *#ifdef CUST_MOOR
 *static sblOnCarPassFile := {|cFilename| ;
 *  OpenUrl("https://professionals.car-pass.be/httpupload";
@@ -4807,7 +4811,10 @@ RETURN .t.
 #endif DEF_GEN
 
 
-FUNCTION FixY2K ; RETURN slFixY2K
+FUNCTION FixY2K(x) 
+RETURN slFixY2K if x == NIL
+slFixY2K := x
+RETURN .t.
 
 **
 ** DevToggle gibt an, ob wir uns *vor* oder *nach* dem Umstieg befinden.
@@ -5838,6 +5845,9 @@ AddIniCmd( { "PerShift" , {|x| snPerShift := val(x),.t. } } )
 #ifdef DEF_FAB
   AddIniCmd( { "LenIdFab" , {|x| snLenIdFab := val(x),.t. } } )
 #endif DEF_FAB
+#ifdef DEF_VCS
+  AddIniCmd( { "VcsJournals" , {|x| VcsJournals(x) } } )
+#endif DEF_VCS
 RETURN NIL
 
 
@@ -5855,6 +5865,9 @@ saTimTestAllow := {}
 #ifdef DEF_ODS
   saOnOdlPreClose := {}
 #endif DEF_ODS
+#ifdef DEF_VCS
+  saVcsJournals := {}
+#endif DEF_VCS
 itinit()
 RETURN IniLoad( AppIniCmds(), DbPath() + "\TIM.DBI", .t.)
 
@@ -5943,3 +5956,26 @@ RETURN .t.
 #endif DEF_FOX
 
 
+#ifdef DEF_VCS
+
+FUNCTION VcsJournals(x)
+RETURN saVcsJournals if x == NIL
+saVcsJournals := splitws(x)
+RETURN .t.
+
+FUNCTION JnlVcsPos(cIdJnl)
+local i
+cIdJnl := trim(cIdJnl)
+for i := 1 to len(saVcsJournals)
+    RETURN i-1 if saVcsJournals[i] == cIdJnl
+next i
+RETURN NIL
+
+FUNCTION VcsIdJnl(cVcs)
+local i := val(left(cVcs,1))
+RETURN NIL if i >= len(saVcsJournals)
+RETURN padr(saVcsJournals[i+1],LenIdJnl())
+  
+
+
+#endif

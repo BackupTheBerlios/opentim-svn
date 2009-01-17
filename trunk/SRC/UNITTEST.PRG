@@ -50,8 +50,13 @@
 *RETURN NIL
 
 FUNCTION TstEqual(v1,v2)
+local cMsg
 RETURN .t. if v1 == v2
-RETURN ! SetMsg(utor(v1)+" != "+utor(v2))
+cMsg := utor(v1)+" != "+utor(v2)
+if SetMsg() != NIL
+  cMsg += " (" + SetMsg() + ")"
+endif
+RETURN ! SetMsg(cMsg)
 
 
 FUNCTION RunTests() // cOutfile)
@@ -148,6 +153,7 @@ do while lOkay .and. (cLine := mreadline(fd)) != NIL
         PrintLine(cFileName + " [" + ntrim(mline(fd)) + "] " + cLine+" :")
         PrintLine(space(len(cFilename)+1) + cMsg)
       endif
+      SetMsg("")
     endif
   endif
 enddo

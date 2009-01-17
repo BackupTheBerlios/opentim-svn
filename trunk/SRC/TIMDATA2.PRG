@@ -336,8 +336,6 @@ RETURN b
 #endif DEF_ANW
 
 
-#ifdef DEF_IBAN
-
 // DOC : http://www.ecbs.org/Download/EBS204_V3.1.PDF
 
 FUNCTION LenIdBic() ; RETURN 12
@@ -369,7 +367,7 @@ RETURN DbfPick({oBic()},;
 
 FUNCTION ValIdBic(cIdBic)
 RETURN .t. if empty(cIdBic)
-Confirm(utos(cIdBic))
+// Confirm(utos(cIdBic))
 RETURN .t. if DbfPeek(oBic(),cIdBic,".t.",.f.)
 RETURN ! SetMsg(MsgBicExist(cIdBic))
 
@@ -383,19 +381,13 @@ RETURN DbfPeek(oBic(),padr(cIdBic,LenIdBic()),"NatCountry(BIC->IdNat)",NIL)
 FUNCTION BqePostEdit(x)
 local r := BqeParse(x)
 RETURN x if r == NIL
-* if r == NIL
-*   RETURN x if Confirm(SetMsg(),MsgSure())
-*   RETURN space(len(x))
-* endif
 RETURN r
-
 
 FUNCTION BqeValidate(x)
 RETURN (BqeParse(x) != NIL)
 
 FUNCTION IsIBAN(x)
 RETURN ":" $ x
-* RETURN ! left(x,1) $ "0123456789"
 
 
 /*
@@ -414,9 +406,7 @@ x := strtran(x," ")
 x := strtran(x,"-")
 x := strtran(x,".")
 nSplit := at(":",x)
-* lIsIBAN := ! left(x,1) $ "0123456789"
 if nSplit == 0 // also eine Inlands-Kontonummer
-  * if ! IsIBAN(x) // also eine Inlands-Kontonummer
   if MemPays == "B  "
     RETURN BqeBeParse(x)
   else
@@ -448,8 +438,6 @@ do while len(cIBAN) > 0
   cIBAN := substr(cIBAN,5)
 enddo
 RETURN trim(x)
-* RETURN cIdBic + ":" + left(cIBAN,4)+" "+cBBAN
-* RETURN left(x,4)+" "+cBBAN
 
 ** check digits at pos 3 and 4 of a IBAN
 STATIC FUNCTION ChkIBAN34(x)
@@ -459,23 +447,12 @@ local x2
 x2 := substr(x,5)+left(x,4)
 // Convert the letters into numerics in accordance with the conversion
 // table under 6.3.
-*local x2, c
-*x2 := ""
-*for i := 1 to len(x)
-*  c := substr(x,i,1)
-*  if c $ "0123456789"
-*    x2 += c
-*  else
-*    x2 += chr(ascii(
-*  endif
-*next i
 for i := 65 to 90
   x2 := strtran(x2,chr(i),ntrim(i-55))
 next i
 // Apply MOD 97-10 (see ISO 7064). For the check digits to be correct,
 // the remainder after calculating the modulus 97 must be 1.
 RETURN .t. if BigMod(x2,97) == 1
-* Warning(x,x2)
 SetMsg(alltrim(x) + " : bad check digits (MOD 97-10 failed)")
 RETURN .f.
 
@@ -514,55 +491,6 @@ SetMsg(alltrim(x) + " : not a valid Belgian bank account number !")
 RETURN NIL
 
 
-#else // Klassisches Format (vor DEF_IBAN)
-
-FUNCTION oBic() ; RETURN NIL
-
-FUNCTION LenBqe() ; RETURN 14
-
-FUNCTION BqePostEdit(cBqe,cPays)
-local cOld := cBqe
-RETURN cBqe if empty(cBqe)
-if cPays == "B  " .or. IsBqe(cBqe)
-  cBqe := strtran(cBqe," ")
-  cBqe := strtran(cBqe,"-")
-  cBqe := strtran(cBqe,".")
-  if len(cBqe) == 12
-    if val(left(cBqe,10)) % 97 == 0
-      RETURN transform(cBqe,"@R !!!-!!!!!!!-!!") if val(right(cBqe,2)) == 97
-    elseif val(right(cBqe,2)) == val(left(cBqe,10)) % 97
-      RETURN transform(cBqe,"@R !!!-!!!!!!!-!!")
-    endif
-  endif
-  RETURN cOld if Confirm(cOld + MSG033,MsgSure(),MSG_NO)
-  RETURN space(len(cOld))
-endif
-#ifdef LG_FRENCH
-  SetMsg("(Pas de contr“le du nø de compte)")
-#else
-  SetMsg("(Keine Kontrolle der Kontonummer)")
-#endif
-RETURN cOld
-
-FUNCTION IsBqe(cBqe)
-RETURN .f. if len(trim(cBqe)) != 14
-RETURN .f. if ! substr(cBqe,4,1) $ "-."
-RETURN .f. if ! substr(cBqe,12,1) $ "-."
-RETURN .t.
-
-FUNCTION BqeValidate(cBqe)
-cBqe := strtran(cBqe," ")
-cBqe := strtran(cBqe,"-")
-cBqe := strtran(cBqe,".")
-if val(left(cBqe,10)) % 97 == 0
-  RETURN .t. if val(right(cBqe,2)) == 97
-elseif val(right(cBqe,2)) == val(left(cBqe,10)) % 97
-  RETURN .t.
-endif
-RETURN .f.
-
-#endif DEF_IBAN
-
 * NISS : No. d'identification de securit‚ sociale
 *
 FUNCTION NissValidate(cNATREG)
@@ -580,31 +508,62 @@ if xtest<>int(val(substr(cnatreg,12,2)))
 endif
 RETURN .t.
 
-* 20071213 the following version has never been released:
-*FUNCTION NissValidate(cNatReg)
-*local xtest := strtran(trim(cNatReg),"-","")
-*local cCheck
-*xtest := strtran(xtest,"=","")
-*xtest := strtran(xtest,"*","")
-*cCheck := right(xtest,2)
-*xtest := left(xtest,9)
-*if substr(cnatreg,7,1) == "="
-*  xtest := "2"+xtest
-*endif
-*xtest := val(xtest)
-*xtest := abs((xtest-97*(int(xtest/97)))-97)
-*if xtest == 0
-*   xtest := 97
-*endif
-*if xtest<>int(val(cCheck))
-** if xtest<>int(val(substr(cnatreg,12,2)))
-*  RETURN !SetMsg("Fehlerhafte Nationalregisternummer")
-*endif
-*RETURN .t.
+#ifdef DEF_VCS
 
-* FUNCTION NissFormat(cNatReg,dGebDat)
-* x := strtran(x,"-","")
-* x := strtran(x,"=","")
-* x := left(x,6) + "-" + substr(x,7,3) ;
-*      + iif(year(dGebDat)<2000,"-","=") + substr(x,10,2)
-* RETURN x
+FUNCTION hst2vcs(cIdJnl,cIdDoc,cLine)
+local i := JnlVcsPos(cIdJnl)
+local c
+RETURN NIL if i == NIL
+RETURN NIL if !isdigit(cIdDoc)
+RETURN NIL if !isdigit(cLine)
+c := str(i,1)
+* if FixY2K()
+*   c += right(ntrim(pnYear(left(cIdDoc,2)+"01")),2) + right(cIdDoc,4)
+* else
+*   c += cIdDoc
+* endif
+c += cIdDoc
+c += cLine
+c += Check97(c)
+RETURN NIL if " " $ c
+RETURN left(c,3) + "/" + substr(c,4,4) + "/" + right(c,5)
+
+// return checkdigits for cData, using mod 97
+FUNCTION Check97(cData)
+RETURN strtran(str(BigMod(cData,97),2)," ","0")
+
+FUNCTION vcs2hst(cVcs)
+local cIdJnl := VcsIdJnl(cVcs)
+if cIdJnl == NIL
+  SetMsg(cVcs + " : kein VCS-Journal.")
+  RETURN NIL
+endif
+cVcs := VcsParse(cVcs)
+RETURN NIL if cVcs == NIL
+RETURN cIdJnl + substr(cVcs,2,6) + substr(cVcs,8,3)
+
+FUNCTION VcsParse(cVcs)
+local x := strtran(trim(cVcs),"/")
+if len(x) != 12
+  SetMsg(cVcs+" : L„nge VCS-Nummer muss 12+2 sein.")
+  RETURN NIL
+endif
+if Check97(left(x,10)) != right(x,2)
+  SetMsg(cVcs+" : ungltige Prfziffer in VCS-Nummer.")
+  RETURN NIL 
+endif
+RETURN x
+
+FUNCTION VcsValidate(x)
+RETURN (VcsParse(x) != NIL)
+
+* currently not used, but maybe later
+* FUNCTION VcsFormat(x)
+* RETURN left(x,3) + "/" + substr(x,4,4) + "/" + right(x,5)
+* 
+* FUNCTION VcsPostEdit(x)
+* local r := VcsParse(x)
+* RETURN x if r == NIL
+* RETURN VcsFormat(r)
+
+#endif

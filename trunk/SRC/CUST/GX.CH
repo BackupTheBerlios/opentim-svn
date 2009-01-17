@@ -138,6 +138,9 @@
 
 // #define DEF_DEBUG
 
+#define DEF_VCS
+
 #define DEF_EID
 
 // #define SIMULATE_CARD_READER
+

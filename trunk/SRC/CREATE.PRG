@@ -2106,10 +2106,20 @@ FUNCTION PrjValidate() ; RETURN .t.
 
 #ifdef DEF_IMP
 
-**
-** ImlGenerate()
-**
-** generates 0 to n lines in IML using contents of aIml
+#ifdef DEF_VCS
+
+FUNCTION ImlVcsCreate(cVcs)
+local aIml := {}
+local cIdMvi := vcs2hst(cVcs)
+RETURN .f. if cIdMvi == NIL
+if !DbfPeek(oMvi(),cIdMvi,{||MviImlCollect(aIml,.f.)},.f.)
+  RETURN !SetMsg(cVcs+" ("+cIdMvi+") : Buchung nicht gefunden!") 
+endif
+ImlGenerate(aIml,IMP->IdJnl,IMP->IdDoc)
+RETURN .t.
+
+#endif DEF_VCS
+
 **
 FUNCTION ImlGenerate(aIml,cIdJnl,cIdDoc) // ,cIdPar,cIdPar2)
 local i

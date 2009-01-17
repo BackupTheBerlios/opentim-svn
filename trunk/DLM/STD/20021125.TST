@@ -2,8 +2,10 @@
 // Neue Funktion dos2latin1()
 // dos2base64() hatte noch zwei Bugs. Jetzt funktioniert sie.
 TstEqual(dos2latin1("ABC"),"ABC")
-TstEqual(dos2latin1("”™α…ƒ‚“–—‰‡ρ δε„®―") , \
-           "ΔφΦόάίΰβικθξτϋωλη±αυΥδ«»")
+TstEqual(dos2latin1("”™α…ƒ‚“–—‰‡ρ δε„"),"ΔφΦόάίΰβικθξτϋωλη±αυΥδ")
+TstEqual(dos2latin1("®"),chr(171))
+TstEqual(dos2latin1("―"),chr(187))
+
 
 TstEqual(dos2base64("ABC") , "QUJD")
 TstEqual(dos2base64("‚")   , "w6k=")

@@ -463,7 +463,7 @@ a[IML_PERIODE  ] := MVI->Periode
 * a[IML_MEMO     ] := IML->Memo
 * a[IML_DATE3    ] := MVI->Date3
 aadd(aIml,a)
-RETURN NIL
+RETURN .t.
 
 
 
