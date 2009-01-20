@@ -1632,6 +1632,9 @@ for i := 1 to len(aLn)
     FNL->IdDev   := aLn[i][FNL_IDDEV]
     FNL->DC      := aLn[i][FNL_DC]
     FNL->Match   := aLn[i][FNL_MATCH]
+    if !empty(aLn[i][FNL_DATE])
+      FNL->Date   := aLn[i][FNL_DATE]
+    endif
     #ifdef DEF_ANAFIN
       if HasOption("ANA")
         FNL->IdAna := aLn[i][FNL_IDANA]

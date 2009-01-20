@@ -474,19 +474,15 @@ RETURN padr(cPassword,10)
 **
 FUNCTION UsrEdit
 local b := oUsr()
-* if ! USRATTR_B $ UsrAttrib()
-*   SetMsg(MsgNoAccess())
-*   RETURN .f.
-* endif
 open area b
   edit data b ;
             title (MSG019) ;
             start top ;
             query "USR" ;
+            mode DDMODE_FIND ;
             create {|| UsrCreate() }
 close area
-* RETURN .f. if ! ddSetUpdated()
-RETURN BecomeUser()
+RETURN BecomeUser() 
 
 FUNCTION UsrCreate
 local aBuf := CopyRec()
@@ -515,12 +511,12 @@ RETURN DDCREATE_REFRESH
 ** USR - Utilisateurs
 **
 FUNCTION oUsr()
-local b
-** static b := NIL
-** if b != NIL ; RETURN b ; endif
+** local b
+static b := NIL
+if b != NIL ; RETURN b ; endif
 define data b name USR
 ddindex b on USR->UserId
-ddFld UserId   ,C,  LenIdUsr(),0 picture PIC_ID
+ddFld UserId   ,C,  LenIdUsr(),0 picture PIC_ID when .f.
 ddFld IdMnu    ,C,  5,0 picture PIC_ID
 ddFld Birth    ,D,  8,0
 ddFld Heure    ,C,  8,0 attrib H
@@ -530,11 +526,8 @@ ddFld Fct1     ,C, 20,0
 ddFld Fct2     ,C, 20,0
 ddFld Fct3     ,C, 20,0
 ddFld Fct4     ,C, 20,0 attrib H
-ddFld Password ,X, 20,0  when .f.
+ddFld Password ,X, 20,0  
 ddFld Attrib   ,C, 10,0  picture PIC_ID pick UsrPickAttrib(USR->Attrib)
-* #ifdef DEF_ACT
-*   if IsCustData("USR") ; ActExec("USR") ; endif
-* #endif DEF_ACT
 ddEndDef()
 RETURN b
 

@@ -413,7 +413,8 @@
 #define FNL_MONTDEV   8
 #define FNL_LIBELL    9
 #define FNL_IDDEV    10
-#define FNL_ALEN     10
+#define FNL_DATE     11
+#define FNL_ALEN     11
 
 #define FIN_JNL       1
 #define FIN_DATE      2

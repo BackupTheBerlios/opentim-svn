@@ -1,5 +1,5 @@
 ** Copyright (c) 1992-2001 PAC Systems
-** Copyright (c) 2001-2008 Luc Saffre
+** Copyright (c) 2001-2009 Luc Saffre
 **
 ** This file is part of TIM.
 **
@@ -398,14 +398,6 @@ if rpt[RPT_FORLOOP] == NIL
           lOkay := Confirm(SetMsg(),MsgContinue())
           exit
         endif
-        // restart groups that have stopped:
-        *for i := 1 to len(rpt[RPT_GROUPS])
-        *  snGrpCurrent := i
-        *  grp := rpt[RPT_GROUPS][i]
-        *  if grp[GRP_STOP]
-        *    GrpReset(rpt,grp)
-        *  endif
-        *next i
       endif
     enddo
     if lOkay
@@ -429,8 +421,6 @@ else
   next i
   do while lOkay .and. suForValue <= rpt[RPT_FORLOOP][2]
     if TaskInter() ; lOkay := .f. ; exit ; endif
-    ** 19990628 : headers werden in umgekehrter Reihenfolge ausgefhrt.
-    ** Beispiel : Haushaltsplan BRF
     for i := 1 to len(rpt[RPT_GROUPS]) 
       if rpt[RPT_GROUPS][i][GRP_COUNT] == 0
         rpt[RPT_GROUPS][i][GRP_KEYVALUE] := ;
@@ -608,8 +598,6 @@ if rpt[RPT_TOHTML]
   cLine += "</tr>"
 endif
 aadd(rpt[RPT_LINES],cLine)
-// cLine += rpt[RPT_ROWSEP]
-// RETURN .f. if ! xeval(rpt[RPT_PRINTLINE],cLine)
 RETURN .t.
 
 FUNCTION rwriteln(cLine)
@@ -626,11 +614,11 @@ RETURN xeval(rpt[RPT_PRINTLINE],cLine)
 
 
 STATIC FUNCTION _rupture(lFinal)
+// print totals of groups that have stopped
 local lOkay := .t.
 local i,j
 local grp
 local cText
-RETURN .f. if ! xeval(rpt[RPT_PRETTL])
 for i := len(rpt[RPT_GROUPS]) to 1 step -1
   snGrpCurrent := i
   grp := rpt[RPT_GROUPS][i]
@@ -641,9 +629,11 @@ for i := len(rpt[RPT_GROUPS]) to 1 step -1
         lOkay := Confirm(SetMsg(),MsgContinue())
         exit
       endif
-      if ! xeval(grp[GRP_BEFORE],grp[GRP_COUNT],grp[GRP_DTLCOUNT]) 
-        lOkay := Confirm(SetMsg(),MsgContinue())
-        exit
+      if grp[GRP_DTLCOUNT] > 0
+        if ! xeval(grp[GRP_BEFORE],grp[GRP_COUNT],grp[GRP_DTLCOUNT]) 
+          lOkay := Confirm(SetMsg(),MsgContinue())
+          exit
+        endif
       endif
       grp[GRP_STARTED] := .t.
     endif
@@ -654,18 +644,7 @@ for j := 1 to len(rpt[RPT_LINES])
     rpt[RPT_LINES][j] + rpt[RPT_ROWSEP])
 next j
 rpt[RPT_LINES] := {}
-*  for i := 1 to len(rpt[RPT_GROUPS]) 
-*    snGrpCurrent := i
-*    grp := rpt[RPT_GROUPS][i]
-*    if lFinal .or. grp[GRP_STOP]
-*      if xeval(grp[GRP_WHEN], grp[GRP_COUNT],grp[GRP_DTLCOUNT] )
-*        for j := 1 to len(grp[GRP_LINES])
-*          RETURN .f. if ! xeval(rpt[RPT_PRINTLINE],;
-*            grp[GRP_LINES][j] + rpt[RPT_ROWSEP])
-*        next j
-*      endif
-*    endif
-*  next i
+RETURN .f. if ! xeval(rpt[RPT_PRETTL])
 for i := 1 to len(rpt[RPT_GROUPS])
   snGrpCurrent := i
   grp := rpt[RPT_GROUPS][i]

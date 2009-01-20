@@ -1894,7 +1894,7 @@ FUNCTION FnlHstFill( ;
   lDcInvert, ;
   lGroup, ;
   nMaxSize, ;
-  bIdle ;
+  bIdle, lWithDate ;
 )
 local aFnl := {}
 local aTag := {}
@@ -1940,7 +1940,7 @@ open area oHst(), oVen(), oFin(), oFnl(), oPar(), oGen()
   aTag := TagSelect(aTag,xcTagLine,NIL,NIL,NIL,bIdle)
   for i := 1 to len(aTag)
     goto (aTag[i][TAG_RECNO])
-    HstFnlCollect(aFnl,lDcInvert,lGroup,cPeriode)
+    HstFnlCollect(aFnl,lDcInvert,lGroup,cPeriode,lWithDate)
   next i
 close area
 if len(aFnl) == 0
@@ -1961,13 +1961,14 @@ FUNCTION HstCompte
 RETURN padr(HST->IdGen,LenCompte()) if empty(HST->IdCtr)
 RETURN padr(HST->IdPar,LenCompte())
 
-FUNCTION HstFnlCollect(aFnl,lDcInvert,lGroup,cPeriode)
+FUNCTION HstFnlCollect(aFnl,lDcInvert,lGroup,cPeriode,lWithDate)
 local fnl := NIL
 local i
 local nDebit
 local nDevDebit
 local aDevDefault := DevLocate(DevDefault(cPeriode))
 local cIdDev
+default lWithDate to .f.
 if lGroup
   for i := 1 to len(aFnl)
     if aFnl[i][FNL_CPTTYPE]  == HST->IdCtr
@@ -1984,6 +1985,9 @@ if fnl == NIL
   fnl[FNL_MATCH]   := HST->Match
   fnl[FNL_CPTTYPE] := HST->IdCtr
   fnl[FNL_COMPTE]  := HstCompte()
+  if lWithDate
+    fnl[FNL_DATE]    := HST->Date
+  endif
   * 19990727 fnl[FNL_LIBELL]  := "" // HST->Libell
   fnl[FNL_LIBELL]  := HstParLibell(HST->IdJnl,HST->IdDoc,HST->Line)
   fnl[FNL_MONT] := ntom( ;

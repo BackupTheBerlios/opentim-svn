@@ -442,10 +442,9 @@ ddFld Memo      ,M, 10,0 when DlsCanEdit()
 *      valid ph_refresh() ;
 *      when DlsCanRechnung()
 #ifdef DEF_DLP
-  * action b key K_ENTER   prompt MnuInhalt() ;
-  *                        block DlsDlpEdit()
   action b key K_F8      prompt "Anwesenheiten pro Sitzung [F8]" ;
-                         block DlsDlpEdit()
+                         block DlsDlpEdit() ;
+                         when "the" $ SetGroups()
 #endif DEF_DLP
 ddEndDef()
 RETURN b
@@ -497,7 +496,7 @@ local b
 local cIdDls := DLS->IdDls
 // confirm("DlsWait()")
 #ifdef DEF_DLP
-  if wwin[WIN_WAITKEY] == 1
+  if wwin[WIN_WAITKEY] == 1 .and. "the" $ SetGroups()
     b := oDlp()
     open area b, oDls(), oPar(), oPlz()
       ddSetOrder(1)
@@ -511,7 +510,7 @@ local cIdDls := DLS->IdDls
   endif
 #endif DEF_DLP
 #ifdef DEF_MSG
-  if wwin[WIN_WAITKEY] == 2
+  if wwin[WIN_WAITKEY] == 2 .and. "the" $ SetGroups()
     b := oMsg()
     open area b, oDls(), oPar(), oPlz()
       ddSetOrder(5) // MSG->IdDls+dtos(MSG->Date)

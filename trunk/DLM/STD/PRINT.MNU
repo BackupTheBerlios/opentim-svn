@@ -10,7 +10,7 @@ MnuAddItem(tr("Invoice ~daybooks","Rechnungs~bÅcher","~Facturiers"),{|| RepPrint
 MnuAddItem("MWSt.-Erk~lÑrung drucken",{|| ActExec("DCLTVA") })
 MnuAddSep()
 MnuAddItem("Kundenliste ~Intracom InterVAT",{|| DlgExec("VATINTRA") })
-MnuAddItem("Kundenliste Intracom d~rucken"      ,{|| DlgExec("LSTTVAI") })
+MnuAddItem("Kundenliste Intracom d~rucken" ,{|| DlgExec("LSTTVAI") })
 MnuAddSep()
 MnuAddItem("Kundenliste ~MWSt InterVAT",{|| DlgExec("VATLIST") })
 MnuAddItem("Kundenliste MWSt dr~ucken",{|| DlgExec("LSTTVAA") })
@@ -29,17 +29,21 @@ MnuAddTitle(utr("~Accounting","~Buchhaltung","~ComptabilitÇ"))
 MnuAddItem( tr("Overview P/L","öbersicht G/V"),\
             {||RepPrint("PERGEN","PERGEN",MnuItemName())})
 #endif
-MnuAddItem(utr("Financial ~journals        ","Finanz~journale            ","~Journaux financiers       "),{|| RepPrint("HSTFIN","HSTFIN","KassenbÅcher") })
+MnuAddItem(utr("Financial ~journals",\
+               "Finanz~journale","~Journaux financiers"),{|| RepPrint("HSTFIN","HSTFIN",MnuItemName()) })
 MnuAddSep()
-MnuAddItem(utr("~General accounts balances ","Saldenliste ~Generalkonten ","Soldes comptes ~gÇnÇraux  "),{|| RepPrint("GENHST","GENHST",MnuItemName()) })
+MnuAddItem(utr("~General accounts balances ",\
+               "Saldenliste ~Generalkonten ",\
+               "Soldes comptes ~gÇnÇraux  "),\
+               {|| RepPrint("GENHST","GENHST",MnuItemName()) })
 //
 #if HasDlm("SPRL")
-  MnuAddItem("Saldenliste ~Kunden        ",{|| DlgDefine("IdCtr","V").and.RepPrint("PARHST","PARHST","Saldenliste Kunden") })
-  MnuAddItem("Saldenliste ~Lieferanten   ",{|| DlgDefine("IdCtr","E").and.RepPrint("PARHST","PARHST","Saldenliste Lieferanten") })
+  MnuAddItem("Saldenliste ~Kunden        ",{|| DlgDefine("IdCtr","V").and.RepPrint("PARHST","PARHST",MnuItemName()) })
+  MnuAddItem("Saldenliste ~Lieferanten   ",{|| DlgDefine("IdCtr","E").and.RepPrint("PARHST","PARHST",MnuItemName()) })
   MnuAddItem(utr("~Unmatched transactions    ",\
                "öbersicht ~offene Posten   ",\
                "öbersicht ~offene Posten   "),\
-  {|| RepPrint("PARHST02","PARHST02","öbersicht offene Posten") })
+  {|| RepPrint("PARHST02","PARHST02",MnuItemName()) })
 #endif
 #if HasDlm("FUND")
   MnuAddItem(utr("~Partner account balances  ",\
@@ -54,8 +58,8 @@ MnuAddItem(utr("G~eneral accounts history  ",\
                {|| RepPrint("HSTGEN","HSTGEN",MnuItemName()) })
 //
 #if HasDlm("SPRL")
-  MnuAddItem("Historik L~ieferanten      ",{|| setvar("IdCtrList","E").and.RepPrint("HSTPAR","HSTPAR","Historik Partner") })
-  MnuAddItem("Historik K~unden           ",{|| setvar("IdCtrList","V").and.RepPrint("HSTPAR","HSTPAR","Historik Partner") })
+  MnuAddItem("Historik L~ieferanten      ",{|| setvar("IdCtrList","E").and.RepPrint("HSTPAR","HSTPAR",MnuItemName()) })
+  MnuAddItem("Historik K~unden           ",{|| setvar("IdCtrList","V").and.RepPrint("HSTPAR","HSTPAR",MnuItemName()) })
 #endif
 MnuAddItem(utr("P~artner account history   ",\
                "Historik P~artnerkonten    ",\
