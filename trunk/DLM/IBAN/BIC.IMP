@@ -1,0 +1,19 @@
+// import from http://www.swift.com/biconline/ txt file
+Delimiter chr(9)
+SeekKey padr(i_fields[9],LenIdBic())
+
+LineValidate trim(i_fields[7])!="BIC CODE" // filter out first line
+LineValidate !empty(i_fields[9])
+// LineValidate !empty(i_fields[7])
+// LineValidate !empty(i_fields[17])
+
+FieldNew BIC->IdBic i_fields[9]
+FieldNew BIC->Name i_fields[4]
+FieldUpdate BIC->Country i_fields[16]
+FieldUpdate BIC->NBID i_fields[17] // national bank id
+
+InputFile "c:\temp\bics\BIDELTA_20080202.TXT"
+FieldDisplay BIC    i_fields[7]
+FieldDisplay Name   i_fields[4]
+FieldDisplay Country i_fields[16]
+FieldDisplay count        ntrim(i_count)

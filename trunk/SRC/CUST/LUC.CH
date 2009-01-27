@@ -176,3 +176,4 @@
 #define DEF_LOC
 
 #define DEF_VCS
+#define DEF_IBAN

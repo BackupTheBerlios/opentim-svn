@@ -336,11 +336,15 @@ RETURN b
 #endif DEF_ANW
 
 
+#ifdef DEF_IBAN
+
+
 // DOC : http://www.ecbs.org/Download/EBS204_V3.1.PDF
 
 FUNCTION LenIdBic() ; RETURN 12
-* FUNCTION LenIBAN() ; RETURN 34
 FUNCTION LenBqe() ; RETURN 47 // 12+1+34
+
+#define LEN_NBID 10
 
 **
 ** BIC - Bank Identifier Code (=Code SWIFT)
@@ -351,40 +355,45 @@ if b != NIL ; RETURN b ; endif
 define data b                  ;
   name BIC
 ddIndex b on BIC->IdBic
-ddFld IdBic   ,C,LenIdBic(),0 picture PIC_ID
-ddFld Name    ,C,40,0
-ddFld IdNat   ,C,LEN_IDNAT,0 picture PIC_ID pick {|x|PickNat(x)}
+ddIndex b on BIC->Country+BIC->NBID
+ddFld IdBic     ,C,LenIdBic(),0 picture PIC_ID
+ddFld Name      ,C,40,0
+ddFld Country   ,C, 2,0 // ISO2 country code
+ddFld NBID      ,C,LEN_NBID,0 // National Bank ID
+ddFld IdNat     ,C,LEN_IDNAT,0 picture PIC_ID pick {|x|PickNat(x)}
 ddEndDef()
 RETURN b
 
 FUNCTION PickBic(cStart,cIdNat)
 local xlFilter
 if cIdNat != NIL
-  xlFilter := "BIC->IdNat=='"+cIdNat+"'"
+  xlFilter := "BIC->Country=='"+NatCountry(cIdNat)+"'"
 endif
 RETURN DbfPick({oBic()},;
   "Select Bank Identifier Code","BICPICK",cStart,xlFilter)
 
-FUNCTION ValIdBic(cIdBic)
+FUNCTION BicValidate(cIdBic)
 RETURN .t. if empty(cIdBic)
 // Confirm(utos(cIdBic))
 RETURN .t. if DbfPeek(oBic(),cIdBic,".t.",.f.)
 RETURN ! SetMsg(MsgBicExist(cIdBic))
 
 FUNCTION MsgBicExist(cIdBic)
-RETURN cIdBic + " : no such Bank Identifier Code!"
-
+RETURN cIdBic + utrp(" : unknown BIC!",;
+  " : unbekannter BIC!",;
+  " : BIC inconnu!")
 
 FUNCTION BicCountry(cIdBic)
-RETURN DbfPeek(oBic(),padr(cIdBic,LenIdBic()),"NatCountry(BIC->IdNat)",NIL)
+RETURN DbfPeek(oBic(),padr(cIdBic,LenIdBic()),;
+  "iif(empty(BIC->Country),NatCountry(BIC->IdNat),BIC->Country)",NIL)
 
 FUNCTION BqePostEdit(x)
-local r := BqeParse(x)
+local r := BnkParse(x)
 RETURN x if r == NIL
 RETURN r
 
 FUNCTION BqeValidate(x)
-RETURN (BqeParse(x) != NIL)
+RETURN (BnkParse(x) != NIL)
 
 FUNCTION IsIBAN(x)
 RETURN ":" $ x
@@ -394,7 +403,7 @@ RETURN ":" $ x
   returns (1) the correctly formatted BIC:IBAN string or (2) NIL.
   If NIL, then SetMsg() contains the explanation
 */
-STATIC FUNCTION BqeParse(x)
+STATIC FUNCTION BnkParse(x)
 * local lIsIBAN // whether it is a domestic (.f.) or an IBAN number
 local nSplit
 local cCountry
@@ -414,8 +423,8 @@ if nSplit == 0 // also eine Inlands-Kontonummer
     RETURN x
   endif
 endif
-cIdBic := upper(left(x,nSplit-1))
-cIBAN  := upper(strtran(substr(x,nSplit+1)," "))
+cIdBic := left(x,nSplit-1)
+cIBAN  := strtran(substr(x,nSplit+1)," ")
 if (cCountry := BicCountry(cIdBic)) == NIL
   SetMsg(MsgBicExist(cIdBic))
   RETURN NIL
@@ -432,14 +441,15 @@ else
   // currently no other national validation algorithms supported
 endif
 RETURN NIL if cBBAN == NIL
-x := cIdBic+":"
-do while len(cIBAN) > 0
-  x += left(cIBAN,4)+" "
-  cIBAN := substr(cIBAN,5)
-enddo
-RETURN trim(x)
+RETURN cIdBic+":"+trim(cIBAN)
+* x := cIdBic+":"
+* do while len(cIBAN) > 0
+*   x += left(cIBAN,4)+" "
+*   cIBAN := substr(cIBAN,5)
+* enddo
+* RETURN trim(x)
 
-** check digits at pos 3 and 4 of a IBAN
+// check digits at pos 3 and 4 of a IBAN
 STATIC FUNCTION ChkIBAN34(x)
 local i
 local x2
@@ -477,7 +487,6 @@ End
 Return Suma % modulo
 
 
-
 FUNCTION BqeBeParse(x)
 x := strtran(x,"-")
 if len(x) == 12
@@ -490,6 +499,86 @@ endif
 SetMsg(alltrim(x) + " : not a valid Belgian bank account number !")
 RETURN NIL
 
+// http://fr.wikipedia.org/wiki/ISO_13616#Composition
+// http://www.europebanks.info/ibanguide.htm#5
+FUNCTION be2iban(cCompte)
+local cData
+cCompte := strtran(cCompte,"-","")
+cData := cCompte + "1114" // "BE" converted to numbers
+cData += "00" // the yet unknown control digits
+RETURN "BE"+strtran(str(98-BigMod(cData,97),2)," ","0")+cCompte
+
+// http://fr.wikipedia.org/wiki/ISO_13616#Composition
+FUNCTION be2bic(cCompte)
+local cNBID, cBIC 
+RETURN NIL if empty(cCompte)
+cNBID := left(cCompte,3)
+cBIC := DbfPeek(oBic(),"BE"+padr(cNBID,LEN_NBID),;
+        "trim(BIC->IdBIC)",NIL,2)
+if cBIC == NIL
+  SetMsg("BE."+cNBID + " : unbekannte Banknummer. BIC aktualisieren!") 
+  RETURN NIL
+endif
+RETURN cBIC
+
+
+#else // Klassisches Format (vor DEF_IBAN) 
+  		 
+FUNCTION oBic() ; RETURN NIL 
+  		 
+FUNCTION LenBqe() ; RETURN 14
+  		 
+FUNCTION BqePostEdit(cBqe,cPays) 		 
+local cOld := cBqe 		 
+RETURN cBqe if empty(cBqe) 		 
+if cPays == "B " .or. IsBqe(cBqe) 		 
+cBqe := strtran(cBqe," ") 		 
+cBqe := strtran(cBqe,"-") 		 
+cBqe := strtran(cBqe,".") 		 
+if len(cBqe) == 12 		 
+if val(left(cBqe,10)) % 97 == 0 		 
+RETURN transform(cBqe,"@R !!!-!!!!!!!-!!") if val(right(cBqe,2)) == 97
+elseif val(right(cBqe,2)) == val(left(cBqe,10)) % 97 		 
+RETURN transform(cBqe,"@R !!!-!!!!!!!-!!") 		 
+endif 		 
+endif 		 
+RETURN cOld if Confirm(cOld + MSG033,MsgSure(),MSG_NO) 		 
+RETURN space(len(cOld)) 		 
+endif 		 
+#ifdef LG_FRENCH 		 
+SetMsg("(Pas de controle du no de compte)")
+#else
+SetMsg("(Keine Kontrolle der Kontonummer)")
+#endif 		 
+RETURN cOld 		 
+  		 
+FUNCTION IsBqe(cBqe) 		 
+RETURN .f. if len(trim(cBqe)) != 14 		 
+RETURN .f. if ! substr(cBqe,4,1) $ "-." 		 
+RETURN .f. if ! substr(cBqe,12,1) $ "-." 		 
+RETURN .t. 		 
+  		 
+FUNCTION BqeValidate(cBqe) 		 
+cBqe := strtran(cBqe," ") 		 
+cBqe := strtran(cBqe,"-") 		 
+cBqe := strtran(cBqe,".") 		 
+if val(left(cBqe,10)) % 97 == 0 		 
+RETURN .t. if val(right(cBqe,2)) == 97 		 
+elseif val(right(cBqe,2)) == val(left(cBqe,10)) % 97 		 
+RETURN .t. 		 
+endif 		 
+RETURN .f. 		 
+  		 
+#endif DEF_IBAN
+
+
+// return checkdigits for cData, using mod 97
+FUNCTION Check97(cData)
+local n := BigMod(cData,97)
+if n == 0
+  n := 97
+endif
+RETURN strtran(str(n,2)," ","0")
 
 * NISS : No. d'identification de securit‚ sociale
 *
@@ -507,6 +596,7 @@ if xtest<>int(val(substr(cnatreg,12,2)))
   RETURN !SetMsg("Fehlerhafte Nationalregisternummer")
 endif
 RETURN .t.
+
 
 #ifdef DEF_VCS
 
@@ -527,10 +617,6 @@ c += cLine
 c += Check97(c)
 RETURN NIL if " " $ c
 RETURN left(c,3) + "/" + substr(c,4,4) + "/" + right(c,5)
-
-// return checkdigits for cData, using mod 97
-FUNCTION Check97(cData)
-RETURN strtran(str(BigMod(cData,97),2)," ","0")
 
 FUNCTION vcs2hst(cVcs)
 local cIdJnl := VcsIdJnl(cVcs)

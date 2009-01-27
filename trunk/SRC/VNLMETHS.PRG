@@ -880,7 +880,7 @@ if empty(FIELD->Desig)
     FIELD->Desig := "Total"
   #endif DEF_ART
 endif
-if ! TIMATTR_T $ MemAttrib
+if TIMATTR_T $ MemAttrib
   FIELD->Qte := ntoq(nQte,LnQteForm())
 endif
 // RETURN VnlTotFill(nQte,nQteStat)

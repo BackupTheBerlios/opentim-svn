@@ -11,7 +11,7 @@ MnuAddItem(\
       "~Nations (pays)"),\
       {||DbfEdit({oNat()},MnuItemName())})
 #if oBic()!=NIL
-MnuAddItem("~Bank Identifier Codes     ",{||DbfEdit({oBic()}, MnuItemName())})
+MnuAddItem("Bank ~Identifier Codes     ",{||DbfEdit({oBic()}, MnuItemName())})
 #endif
 MnuAddSep()
 MnuAddItem(utr("Database ~parameters       ","Datenbank~parameter        ","~Paramätres du dossier     "),{||ParaGen()})
