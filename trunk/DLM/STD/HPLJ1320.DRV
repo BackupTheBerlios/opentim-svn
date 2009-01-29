@@ -3,7 +3,7 @@
 //
 Name         HP Laserjet1320
 // Initialize   "E"+"(12U"
-Initialize   if(SetCurPage()==1,"E"+"(12U"+"&l1S","")
+Initialize   if(p_CurPage()==1,"E"+"(12U"+"&l1S","")
 // (Reset) + (PC-8 (CP437) symbol set)
 // Reset        ""
 Reset        "E"

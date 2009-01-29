@@ -3,7 +3,7 @@
 //
 Name         HP Laserjet4050
 // Initialize   "E"+"(12U"
-Initialize   if(SetCurPage()==1,"E"+"(12U"+"&l1S","")
+Initialize   if(p_CurPage()==1,"E"+"(12U"+"&l1S","")
 // (Reset) + (PC-850 (CP437) symbol set) + Duplex long edge
 Reset        "E"
 OnSelect     p_SetFinalFF(.f.)

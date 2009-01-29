@@ -594,15 +594,18 @@ RETURN ProgName() + " " + ntrim(AppVer()) + " - " + CopyRight()
 
 #ifdef DEF_SHELL
 
-FUNCTION runbg(cProgram,cParams)
+FUNCTION runbg(cProgram,cParams,lAsync,lBackground,lLog)
 local uRetVal
+default lAsync to .f.
+default lBackground to .t.
+default lLog to .t.
 RETURN !SetMsg("runbg(): "+cProgram+MsgFileExist()) if ! file(cProgram)
 default cParams to ""
 #ifdef __XPP__
-  if .not. ">" $ cParams
+  if lLog .and. .not. ">" $ cParams
     cParams += " > runbg.log 2>&1"
   endif
-  uRetVal := RunShell(cParams,cProgram,.f.,.t.)
+  uRetVal := RunShell(cParams,cProgram,lAsync,lBackground)
   RETURN .t. if uRetVal == 0
   RETURN !SetMsg("runbg("+cProgram+" "+cParams+") returned "+utos(uRetVal))
 #endif

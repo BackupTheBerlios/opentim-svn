@@ -723,13 +723,6 @@ if (tpl := TplValue(cTplType,cIdTpl,{|| TplInfo()})) == NIL
   SetMsg(cTplType+":"+cIdTpl+" : unbekannte Druckmaske!")
   RETURN .f.
 endif
-* if LstContinue()
-*   if tpl[TPL_WIDTH] != 0
-*     p_SetWidth(tpl[TPL_WIDTH])
-*   endif
-*   TplParse(hardcr(tpl[TPL_MEMO]))
-*   RETURN .t.
-* endif
 default cIdOpt to tpl[TPL_IDOPT]
 RETURN .f. if ! OpenPrinter( ;
   cIdOpt,cPreview, ;
@@ -752,7 +745,7 @@ if (nPos := at(" ",cIdTpl)) != 0
   cIdTpt := left(cIdTpl,nPos-1)
   cIdTpl := alltrim(substr(cIdTpl,nPos+1))
 endif
-RETURN NIL if empty(cIdTpl)
+RETURN .t. if empty(cIdTpl)
 cIdTpl := trim(cIdTpl)
 if (tpl := TplValue(cIdTpt,cIdTpl,{|| TplInfo()})) == NIL
   SetMsg(cIdTpt+":"+cIdTpl+" : unbekannte Druckmaske!")
@@ -762,6 +755,7 @@ RETURN NIL if empty(tpl[TPL_MEMO])
 if !empty(tpl[TPL_IDOPT])
   RETURN .f. if ! PpsExec(tpl[TPL_IDOPT])
 endif
+// RETURN .f. if ! PrnPrepare()
 RETURN TplParse(hardcr(tpl[TPL_MEMO]))
 
 
@@ -1067,8 +1061,6 @@ do while .t.
     RETURN DDCREATE_FAIL
   endif
   if ! IsNewId(cIdTpt + cIdTpl)
-  * seek cIdTpt + cIdTpl
-  * if ! eof()
     SetMsg(MsgIdExist()) // Cette identification existe d‚j….
     loop
   endif
@@ -1094,9 +1086,7 @@ TPL->Name    := cName
 if empty(TPL->Width)
   TPL->Width := " 76"
 endif
-* unlock record 19980430
 RETURN DDCREATE_DONE
-
 
 
 #ifdef DEF_TPLTEXT

@@ -3,7 +3,10 @@
 // TIM driver for lino.textprinter
 // vertical font sizes were determined using:
 // lino prn2pdf -s 12 docs\examples\textprinter\7.prn
-Name           Windows or PDF
+Name  =iif(SetAsPdf(),\
+  trim(getvar("PRN2PDF.out")),\
+  iif(empty(p_setport()),\
+      "Windows Standard Printer",p_setport()))
 Reset      ""
 FormFeed       chr(12)
 

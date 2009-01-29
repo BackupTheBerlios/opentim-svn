@@ -1722,8 +1722,6 @@ RETURN NIL
 
 
 
-
-
 #ifdef DEF_IMP
 
 **
@@ -1748,7 +1746,6 @@ open area oPar(), oPlz(), oNat(), oBud(), oPrj()
   seek (jnl[JNL_DC] + IMP->IdBud) in BUD
   #ifdef DEF_PRJ
     if empty(IMP->IdPrj)
-      
       open area oIml()
         softseek IMP->IdJnl+IMP->IdDoc
         do while empty(cIdPrj) .and. !eof() ;
@@ -1785,8 +1782,10 @@ open area oPar(), oPlz(), oNat(), oBud(), oPrj()
   #ifdef DEF_PRJ
     seek IML->IdPrj in PRJ
   #endif
-  if LstContinue()
+  if LstContinue() // print stream already open
+    p_PageNum(0)
     lOkay := TplInclude(cIdTpt,cIdTpl)
+    p_eject(.t.)
   else
     lOkay := PrintTemplate(cIdTpt,cIdTpl)
     // ,SetPreview(),NIL,NIL,;

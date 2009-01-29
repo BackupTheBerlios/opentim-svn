@@ -1,5 +1,5 @@
 ** Copyright (c) 1992-2001 PAC Systems
-** Copyright (c) 2001-2008 Luc Saffre
+** Copyright (c) 2001-2009 Luc Saffre
 **
 ** This file is part of TIM.
 **
@@ -478,7 +478,10 @@ next i
 RETURN NIL
 
 
-FUNCTION DrvName     ; RETURN scDrvName
+FUNCTION DrvName
+RETURN scDrvName if left(scDrvName,1) != "="
+RETURN &(substr(scDrvName,2))
+
 FUNCTION DrvInit
 RETURN if(scDrvInit=="","",xparse(scDrvInit))
 FUNCTION DrvReset

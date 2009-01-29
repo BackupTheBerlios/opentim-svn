@@ -1,0 +1,11 @@
+Confirm("Memofelder der TPL.DBF nach TPL\*.TPL exportieren.",MsgSure())
+setvar("b",{||\
+  (memowrit(DbPath()+"\TPL\"+trim(TPL->IdTpt)+trim(TPL->IdTpl)+\
+  MemLang1+".TPL",TPL->Memo1)\
+  .and.memowrit(DbPath()+"\TPL\"+trim(TPL->IdTpt)+trim(TPL->IdTpl)+\
+  MemLang2+".TPL",TPL->Memo2)\
+  .and.memowrit(DbPath()+"\TPL\"+trim(TPL->IdTpt)+trim(TPL->IdTpl)+\
+  MemLang3+".TPL",TPL->Memo3))\
+  .or.Confirm(TPL->IdTpt+TPL->IdTpl+" failed. Continue?")})
+DbfScan({oTpl()},1,NIL,NIL,NIL,getvar("b"))
+SetMsg("Alles klar.")

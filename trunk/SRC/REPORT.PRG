@@ -158,14 +158,13 @@ if ! rpt[RPT_TOCSV]
   RETURN .f. if ! OpenPrinter(SetTplIni(),SetPreview(),;
     NIL,NIL,NIL,NIL,NIL,NIL,SetAsPdf(),SetAsMail())
 endif
-// rpt[RPT_TOCSV] := (getvar("ToCSV")==BUTTON_ON)
 lOkay := _Report(cTitle==NIL)
 if !rpt[RPT_TOCSV]
   PrnFlush()
   close printer
   if LstError() != PRN_DONE
     lOkay := .f.
-  elseif p_curpage() == 0
+  elseif p_PageNum() == 0
       Warning(utrp("Nothing to print.",;
                    "Nichts zu drucken.",;
                    "Rien … imprimer."))

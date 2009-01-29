@@ -1,5 +1,5 @@
 ** Copyright (c) 1992-2001 PAC Systems
-** Copyright (c) 2001-2008 Luc Saffre
+** Copyright (c) 2001-2009 Luc Saffre
 **
 ** This file is part of TIM.
 **
@@ -175,35 +175,9 @@ static sbInputFilter := {|x|x}
   * #define MSG018 "Druckvorschau"
   static MSG019 := " have been printed"
   static MSG020 := " to print"
-  *#define MSG021 "Umfang : von Seite "
-  *#define MSG022 " bis "
-  *#define MSG023 "Abbruch : Lesefehler "
-  * #define MSG024 " Seite(n) zu drucken"
-  *#define MSG025 " [F8] Parameter Ñndern ≥ [F10] Druck starten ≥ [Escape] Abbrechen"
-  *#define MSG026 " [F10] Weiter ≥ [F2] Standard speichern ≥ [Escape] Abbrechen"
-  *#define MSG027 " neue Seite bestÑtigen    Fu·zeilenart "
-  *#define MSG028 " Seitensprung nachher   "
-  *#define MSG029 " Steuerzeichen unterdrÅcken "
-  *#define MSG030 "Papier :  Hîhe "
-  *#define MSG031 " Zeilen  -  Breite  "
-  *#define MSG032 " Zoll  "
-  *#define MSG033 "RÑnder :  Oben : "
-  *#define MSG034 " Zeilen   -  Links  : "
-  *#define MSG035 " Zeichen   "
-  *#define MSG036 "         Unten : "
-  *#define MSG037 " Zeilen   -  Rechts : "
-  *#define MSG038 " Zeichen"
-  *#define MSG039 "Druckertreiber     "
-  *#define MSG040 "Schriftart         "
-  *#define MSG041 "Anschlu· "
-  *#define MSG042 "Druckeranschlu·"
-  *#define MSG043 " Umleiten in Datei "
-  * #define MSG044 "Druckparameter speichern in "
   #define MSG045 "really print"
   #define MSG046 "copies "
   #define MSG047 "Printing, copy "
-  *#define MSG048 " : Datei nicht vorhanden."
-  * #define MSG049 "Sonder-Optionen    "
   static scDateFormat := "dd.mm.yy"
   static WIN_PRINT := "Print"
   #define MSG_NOTREADY "Printer is not ready"
@@ -226,8 +200,7 @@ static slIsLastPage
 
 * static scRange  := NIL
 static scTplIni := NIL
-static sbWriter := {|x|empty(x).or.raise( ;
-  "Attempted to print "+utos(x)+" while no output stream defined")}
+static sbWriter := {|x|NilWriter(x) }
 
 static scWarnStr := ""
 
@@ -237,7 +210,8 @@ static scWarnStr := ""
 
 ** interne Variablen, die z.B. in InitPrint() gesetzt werden
 **
-static snCurPage := 0  // current page number                <- LstP
+static snCurPage := 0  // current physical page number
+static snLogPage := 0  // current logical page number
 static snVPos := 0     // current vertical position (points) <- LstL
 static scPageAlign := PAGEALIGN_LEFT
 static snApsWidth := 76
@@ -440,55 +414,38 @@ if ! PpsExec(scTplIni)
   snPrnStatus := PRN_ABORT
 endif
 // 20030109 ab hier war *vor* AusfÅhrung des PPS
-BeginOStream({|x| PrnStream(x)},NIL,"Printer") // sbWriter
+BeginOStream({|x| PrnStream(x)},NIL,"Printer") 
 // 20030109 bis hier war *vor* AusfÅhrung des PPS
 if nWidth != NIL
   p_SetWidth(nWidth)
 endif
-*if empty(scPort)
-*  p_SetCapture(alltrim(scTplIni)+".TXT")
-*  * scDoCapture := BUTTON_ON
-*endif
 saPreBuffer := {}  // see PrnStream()
 scPrnBuffer := ""  // see PrnStream()
-snCurPage := 0     // current page number. value 0 as long as no page
-                   // has been printed
+snCurPage := 0     // current page number. 
+                   // value 0 as long as no page has been printed
+snLogPage := 0                   
 snVPos    := 0     // current vertical position (points)
                    // value 0 as long as nothing has been printed on
                    // current page
-snMaxVPos := snPapHeight - snBMargin
 scTime := time()
 if ! DrvOnSelect()
   EndOStream()
   snPrnStatus := PRN_ABORT
   RETURN .f.
 endif
-**
-** The following OPEN WINDOW has its close window only in ClosePrinter() !
-**
+// ! This OPEN WINDOW has its close window only in ClosePrinter():
 open window size 7,60 help PRINTING
 if scDoPreview == BUTTON_ON
   say MSG_PREVIEW + " : "
 else
-  #ifdef LG_GERMAN
-    say "Drucken : "
-  #else
-    say "Imprimer : "
-  #endif
+  say utrp("Print : ", "Drucken : ", "Imprimer : ")
 endif
 say DrvName()
 WinCr()
 say "  on " + iif( scDoCapture == BUTTON_OFF, scPort, scPrnFile )
 WinCr()
-#ifdef LG_GERMAN
-  say "[Escape] um abzubrechen"
-#endif
-#ifdef LG_FRENCH
-  say "[Escape] pour interrompre"
-#endif
-#ifdef LG_EN
-  say "[Escape] to interrupt"
-#endif
+say utrp("[Escape] to interrupt","[Escape] um abzubrechen",;
+         "[Escape] pour interrompre")
 WinCr()
 snRow := row()
 snCol := col()
@@ -529,6 +486,8 @@ set console on
 RETURN .t.
 
 FUNCTION PpsExec(cTplIni)
+local lOkay 
+local bWriter := sbWriter
 snLMargin := 1
 snRMargin := 1
 snTMargin := 0
@@ -546,86 +505,20 @@ snLIndent := 0
 snRIndent := 0
 scAlign   := ALIGN_LEFT
 RETURN .t. if empty(cTplIni)
-RETURN FileExec(trim(cTplIni)+".PPS") if slActivePps 
-RETURN TplParse( TplValue(TPLTYPE_INI,cTplIni,{||TplMemo()},""),;
-       "INI:"+cTplIni,.f.)
+// parameter sets may not produce text. whitespace is allowed but ignored.
+sbWriter := {|x|NilWriter(x)} 
+if slActivePps 
+  lOkay := FileExec(trim(cTplIni)+".PPS") 
+else
+  lOkay := TplParse( ;
+    TplValue(TPLTYPE_INI,cTplIni,{||TplMemo()},""),;
+    "INI:"+cTplIni,.f.)
+endif    
+snMaxVPos := snPapHeight - snBMargin
+sbWriter := bWriter 
+RETURN lOkay
+       
 
-
-
-* FUNCTION SetPrinterTo()
-* RETURN set(_SET_PRINTFILE)
-
-* FUNCTION SetParseBuffer(b)
-* if b != NIL
-*   sbWriter := b
-* endif
-* RETURN sbWriter
-
-**
-** ClosePrinter()
-**
-FUNCTION ClosePrinter(lNoWarn)
-local cMsg
-local cFontName
-local nPrnStatus
-default lNoWarn to .f.
-SetMntFormat(scMntFormat)
-SetSolde(scSetSolde)
-SetDateFormat(sSaveDateFormat)
-if snPrnStatus == PRN_IDLE .and. lNoWarn
-  Warning("ClosePrinter() : PRN_IDLE")
-  RETURN NIL
-endif
-PrnFlush()
-p_Eject(.t.)
-PrnOut( DrvReset() )
-*
-set printer to
-set printer off
-set console on
-close window // this close window is for the OpenWin() in OpenPrinter() !
-** [etc exit] wird nach einem vorherigen [etc do fparse()] benutzt,
-** um einen Druckjob ohne weitere Meldung zu beenden.
-cFontName := FntName()
-nPrnStatus := snPrnStatus // save status at end of stream
-EndOStream()
-* 20080125 : "etc exit" wird imho nirgendwo benutzt
-* if snPrnStatus == PRN_EXIT
-*   snPrnStatus := PRN_DONE
-*   RETURN NIL
-* endif
-if nPrnStatus == PRN_CONTINUE .or. nPrnStatus == PRN_DONE // normal end
-  snPrnStatus := PRN_DONE
-  if snCurPage == 0
-    RETURN NIL
-  else
-    cMsg := ntrim(snCurPage) + MSG_003
-    if scPreviewFile != NIL // 20000605
-      cMsg += MSG020 // " zu drucken"
-    else
-      cMsg += MSG019 // " wurden gedruckt"
-    endif
-    cMsg += " on " + DrvName()
-    cMsg += ", " + if( scDoCapture == BUTTON_OFF, scPort, scPrnFile )
-    SetMsg(cMsg)
-  endif
-elseif nPrnStatus == PRN_ABORT
-  snPrnStatus := PRN_ABORT
-  if empty(SetMsg())
-    SetMsg(MSG_004 + ntrim(snCurPage) + MSG_003)
-  else
-    Warning(SetMsg())
-    RETURN NIL
-  endif
-endif
-if scDoPreview == BUTTON_ON
-  RETURN .f. if ! ShowPreview(cFontName)
-endif
-if scPreviewFile != NIL
-  RETURN .f. if ! PrintPreview()
-endif
-DrvOnSuccess()
-RETURN NIL
 
 FUNCTION fdostream(fdout,s) // Ñhnlich wie PrnStream
 RETURN NIL if ! slPStream
@@ -640,9 +533,8 @@ RETURN NIL
 STATIC FUNCTION PrnStream(cStream)
 local nPos
 local cLine
-// RETURN scPrnBuffer if cStream == NIL
-// LogDebug("PrnStream("+utos(cStream)+")"+iif(slPStream,""," (off)"))
 RETURN NIL if ! slPStream
+// debug  ("PrnStream("+utos(cStream)+")")
 if soLoop != NIL
   soLoop[LOOP_TEXT] += cStream
   RETURN NIL
@@ -683,9 +575,8 @@ RETURN NIL
 **
 STATIC FUNCTION PrnSendLine(cLine)
 local nPad
-**
-** evtl wird die Zeile zentriert oder rechtsbÅndig gesetzt
-**
+// debug Sendconsole("PrnSendLine("+utos(cLine)+")")
+// evtl Zeile zentrieren oder rechtsbÅndig setzen
 if ALIGN_RIGHT $ scAlign
   nPad := t_cpl() - len(TextUnFormat(cLine))
   cLine := space(nPad) + cLine
@@ -693,16 +584,14 @@ elseif ALIGN_CENTER $ scAlign
   nPad := int( (t_cpl() - len(TextUnFormat(cLine))) / 2)
   cLine := space(nPad) + cLine
 endif
-**
-** evtl. wird die Zeile jetzt vom TabStream abgefangen
-**
+// evtl. wird die Zeile jetzt vom TabStream abgefangen:
 RETURN NIL if TabStream(cLine + CR_LF)
 PrintLine( padr(scFrame,snLIndent) + cLine + padr(scFrame,snRIndent) )
 RETURN NIL
 
 FUNCTION PrintLine(cLine)
-* local cLeftMargin
 default cLine to ""
+// debug SendConsole("PrintLine(" + utos(cLine) + ")")
 RETURN .t. if snPrnStatus != PRN_CONTINUE
 RETURN .t. if ColStream(cLine)
 RETURN .t. if ! PrnPrepare()
@@ -722,6 +611,68 @@ else
   PrnOut(space(int(snLMargin*FntPitch())) + cLine + DrvLineFeed())
 endif
 RETURN .t.
+
+
+
+
+**
+** ClosePrinter()
+**
+FUNCTION ClosePrinter(lNoWarn)
+local cMsg
+local cFontName
+local nPrnStatus
+default lNoWarn to .f.
+SetMntFormat(scMntFormat)
+SetSolde(scSetSolde)
+SetDateFormat(sSaveDateFormat)
+if snPrnStatus == PRN_IDLE .and. lNoWarn
+  Warning("ClosePrinter() : PRN_IDLE")
+  RETURN NIL
+endif
+PrnFlush()
+p_Eject(.t.)
+PrnOut( DrvReset() )
+*
+set printer to
+set printer off
+set console on
+close window // this close window is for the OpenWin() in OpenPrinter() !
+** [etc exit] wird nach einem vorherigen [etc do fparse()] benutzt,
+** um einen Druckjob ohne weitere Meldung zu beenden.
+cFontName := FntName()
+nPrnStatus := snPrnStatus // save status at end of stream
+EndOStream()
+if nPrnStatus == PRN_CONTINUE .or. nPrnStatus == PRN_DONE // normal end
+  snPrnStatus := PRN_DONE
+  RETURN NIL if snCurPage == 0 // nothing has been printed
+  cMsg := ntrim(snCurPage) + MSG_003
+  if scPreviewFile != NIL // 20000605
+    cMsg += MSG020 // " zu drucken"
+  else
+    cMsg += MSG019 // " wurden gedruckt"
+  endif
+  cMsg += " on " + DrvName()
+  cMsg += ", " + if( scDoCapture == BUTTON_OFF, scPort, scPrnFile )
+  SetMsg(cMsg)
+  // SendConsole(cMsg)
+elseif nPrnStatus == PRN_ABORT
+  snPrnStatus := PRN_ABORT
+  if empty(SetMsg())
+    SetMsg(MSG_004 + ntrim(snCurPage) + MSG_003)
+  else
+    Warning(SetMsg())
+    RETURN NIL
+  endif
+endif
+if scDoPreview == BUTTON_ON
+  RETURN .f. if ! ShowPreview(cFontName)
+endif
+if scPreviewFile != NIL
+  RETURN .f. if ! PrintPreview()
+endif
+DrvOnSuccess()
+RETURN NIL
 
 
 
@@ -845,7 +796,7 @@ RETURN c
 
 
 **
-** PrintPreview()
+** 
 **
 FUNCTION PrintPreview()
 local i := 1
@@ -860,8 +811,6 @@ if snCopies == NIL
   open window (MSG045) size 3,40 help PRINTPRV
   say MSG046
   @ row(), col() get snCopies picture "###"
-  * WinCr()
-  * von bis
   nKey := ReadScr()
   close window
   RETURN .f. if nKey == K_ESC
@@ -910,16 +859,16 @@ cMsg := ""
 if snCopies != 1
   cMsg += ntrim(snCopies) + " x "
 endif
-cMsg += ntrim(len(saPreBuffer)) + MSG_003
-#ifdef LG_GERMAN
-  cMsg += " wurden gedruckt auf "
-#else
-  cMsg += " ont ÇtÇ imprimÇes sur "
-#endif
+cMsg += ntrim(snCurPage) + MSG_003
+cMsg += utrp(" have been printed on "," wurden gedruckt auf "," ont ÇtÇ imprimÇes sur ")
 cMsg += DrvName()
 cMsg += ", " + if( scDoCapture == BUTTON_OFF, scPort, cFile )
 SetMsg(cMsg)
+// SendConsole(cMsg)
 RETURN .t.
+
+
+
 
 ** Beispiel :
 ** SetSpooler('AppShell("excel preview.prn","Excel wird gestartet")')
@@ -931,6 +880,8 @@ if valtype(x) == "C"
 endif
 saCmdSpooler := {x}
 RETURN .t.
+
+
 
 FUNCTION AddSpooler(x)
 if valtype(x) == "C"
@@ -948,36 +899,24 @@ RETURN .t.
 
 
 
-**
-** CheckRange()
-**
-*FUNCTION CheckRange
-*if snPrintUntil != 0 .and. snCurPage > snPrintUntil
-*  snPrnStatus := PRN_DONE
-*  RETURN .F.
-*endif
-*RETURN .F. if snPrintFrom != 0 .and. snCurPage < snPrintFrom
-*RETURN .T.
-
-
-
-
 
 **
-** p_PageBegin()
+**
 **
 STATIC FUNCTION p_PageBegin
 local cAnswer
-local i
+local i, b
 local aStatus
 local lKeepBlock := slKeepBlock
 RETURN NIL if snPrnStatus  != PRN_CONTINUE
 RETURN NIL if snPapHeight == 0 .and. snCurPage != 0 // continuous form
-snCurPage++
+snCurPage += 1
+snLogPage += 1
 if snPrintUntil != 0 .and. snCurPage > snPrintUntil
   snPrnStatus := PRN_DONE
   RETURN NIL
 endif
+// debug SendConsole("p_PageBegin() " + ntrim(snCurPage))
 snVPos := FntHeight()
 @ snRow + 1, snCol say MsgSeite(UsrLang()) + " " + ntrim(snCurPage)
 say " [" + FntName() + "]"
@@ -988,6 +927,7 @@ if snPrintFrom == 0 .or. snCurPage >= snPrintFrom
 endif
 // 20000117 bug
 if snPrintFrom == 0 .or. snCurPage >= snPrintFrom
+  // debug SendConsole("p_PageBegin() "+ ntrim(snCurPage) + " calls DrvJobBegin()")
   DrvJobBegin()
   PrnOut( DrvInit()+DrvSpecial(scDrvSpecial)+FntCtrl() )
   if snPapHeight != 0
@@ -995,43 +935,35 @@ if snPrintFrom == 0 .or. snCurPage >= snPrintFrom
   endif
 endif
 slKeepBlock := .f.
-* 20021111 if scHeader != NIL
 if sbHeader != NIL
-  if snCurPage > 1 .or. ! slNoFirst
+  if snLogPage > 1 .or. ! slNoFirst
     aStatus := SaveStatus()
     snTMargin := 0
     scPrnBuffer := ""
     scAlign := ALIGN_LEFT
-    // execute template
-    * PrintTemplate(TPLTYPE_HDR,scHeader)
-    * 20021111 TplParse(TplValue(TPLTYPE_HDR,scHeader,{||TplMemo()}))
-    eval(sbHeader)
+    b := sbHeader
+    sbHeader := NIL
+    // execute header template:
+    // debug SendConsole("p_PageBegin() "+ ntrim(snCurPage) + " executes sbHeader")
+    eval(b)
     PrnFlush()
     RestoreStatus(aStatus)
-    * PrnStream(cFntCtrl)
-    * scPrnBuffer := cPrnBuffer
-    * scAlign     := cAlign
-    * FntActivate(cIdFnt)
-    * snApsWidth  := nApsWidth
-    * snTMargin   := nTMargin
-    * snBMargin   := nBMargin
-    * if snVPos > snTMargin
-    *   Warning( ;
-    *     TPLTYPE_HDR + " " + scHeader + " : Textblock ist " + ntrim(snVPos) + ;
-    *     " Zoll hoch, ", ;
-    *     "{set margintop} nur " + ntrim(snTMargin) + " Zoll !", ;
-    *     "WRN022" ;
-    *   )
-    * endif
   endif
 endif
+if sbPageHeader != NIL
+  aStatus := SaveStatus()
+  snTMargin := 0
+  scPrnBuffer := ""
+  scAlign := ALIGN_LEFT
+  // debug SendConsole("p_PageBegin() "+ ntrim(snCurPage) + " executes sbPageHeader")
+  eval(sbPageHeader)
+  PrnFlush()
+  RestoreStatus(aStatus)
+endif
+// debug SendConsole("p_PageBegin() "+ ntrim(snCurPage) + " skip to first line after header")
 do while snVPos < snTMargin .and. snPrnStatus == PRN_CONTINUE
   PrintLine()
 enddo
-if sbPageHeader != NIL
-  eval(sbPageHeader)
-  * PrnFlush()
-endif
 slKeepBlock := lKeepBlock
 RETURN NIL
 
@@ -1046,6 +978,7 @@ aadd(a, FntCtrl()    )
 aadd(a, FntName()    )
 aadd(a, snApsWidth   )
 aadd(a, snMaxVPos    )
+aadd(a, sbHeader     )
 RETURN a
 
 ** restore state vars
@@ -1058,31 +991,13 @@ PrnOut(a[5]) // FntCtrl()
 FntActivate(a[6]) // FntName()
 snApsWidth  := a[7]
 snMaxVPos   := a[8]
+sbHeader    := a[9]
 RETURN NIL
 
 FUNCTION p_MsgDisplay(cMsg)
 @ snRow, snCol say padr(cMsg,56)
 RETURN NIL
 
-
-*FUNCTION PrintArray(a)
-*local i,j
-*local cLine
-*for i := 1 to len(a)
-*  if snColCount == 0
-*    PrintLine(a[i])
-*  else
-*    cLine := ""
-*    for j := 1 to snColCount
-*      cLine += a[i]
-*      if j < snColCount
-*        cLine += scColSep
-*      endif
-*    next j
-*    PrintLine(cLine)
-*  endif
-*next i
-*RETURN NIL
 
 FUNCTION SetPageHeader(bPageHeader)
 RETURN sbPageHeader if bPageHeader == NIL
@@ -1109,16 +1024,13 @@ if snPrintFrom != 0 .and. snCurPage < snPrintFrom
   RETURN NIL // virtual pages being printed
 endif
 if snColCount != 0
-  **
-  ** Falls in der Maske kein abschlie·endes {set columns off} steht
-  **
+  // Falls in der Maske kein abschlie·endes {set columns off} steht
   do while len(saColBuffer) != 0 .and. snPrnStatus == PRN_CONTINUE
     ColFlush()
   enddo
 endif
 default lFinal to .f.
 if (sbFooter != NIL .or. sbPageFooter != NIL) .and. !(lFinal .and. slNoLast)
-  // PrnFlush() // 20000922 (Problem fprint CPAS)
   if snPapHeight != 0
     do while snVPos < snMaxVPos
       PrintLine()
@@ -1191,6 +1103,7 @@ RETURN cText
 
 STATIC FUNCTION PrnOut(cText)
 ** RETURN NIL if print destination == NIL
+// debug SendConsole("PrnOut() " + utos(cText))
 begin sequence
   ?? cText
   * 20021219 ?? TextFormat(cText)
@@ -1199,9 +1112,7 @@ recover
 end sequence
 RETURN NIL
 
-* FUNCTION ToPrn(c)
-* PrnOut(c)
-* RETURN LstContinue()
+
 
 STATIC FUNCTION PreOut(c)
 local nLen := len(saPreBuffer)
@@ -1215,7 +1126,7 @@ RETURN NIL
 ** wartet, veranlasse alles Nîtige"
 ** returns : "kann die nÑchste Zeile gedruckt werden ?"
 **
-STATIC FUNCTION PrnPrepare
+FUNCTION PrnPrepare
 if snMaxVPos > 0
   if snVPos > snMaxVPos // .and. ! slFooterActive
     p_Eject(.f.) // (setzt u.a. snVPos auf 0)
@@ -1406,10 +1317,8 @@ endif
 if len(cTpl) <= LenIdTpl()
   cTpl := upper(cTpl)
   if cTpl == "NIL"
-    * 20021111 scHeader := NIL
     sbHeader := NIL
   else
-    * 20021111 scHeader := cTpl
     sbHeader := {||TplParse(TplValue(TPLTYPE_HDR,cTpl,{||TplMemo()},""))}
   endif
 else
@@ -1538,10 +1447,6 @@ snLMargin := snRMargin
 snRMargin := n
 RETURN NIL
 
-* FUNCTION SetSkipFilter()
-* scSkipFilter := cFilter
-* RETURN NIL
-
 **
 ** {etc dbskip}
 **
@@ -1549,17 +1454,13 @@ FUNCTION p_dbskip(c)
 dbskip()
 RETURN NIL
 
-**
-** {etc page [ <nWidth> ]}
-**
-FUNCTION p_PageNum()
-RETURN snCurPage
-* local nWidth := val(cPar)
-* RETURN ntrim(snCurPage) if nWidth == 0
-* RETURN str(snCurPage,nWidth,0)
-
-
-FUNCTION p_CurPage ; RETURN snCurPage
+FUNCTION p_PageNum(x)
+RETURN snLogPage if x == NIL
+snLogPage := x
+RETURN .t.
+// two aliases for backwards compatibility:
+FUNCTION p_CurPage(x) ; RETURN p_PageNum(x)
+FUNCTION SetCurPage(n) ; RETURN p_PageNum(n)
 
 **
 ** {etc block begin}
@@ -2076,18 +1977,16 @@ default lAllowInt to .t.
 default lFlatLongLines to .t.
 // LogDebug("TplParse() : " + valtype(cMemo) + " " + ntrim(len(cMemo)))
 if lFlatLongLines
-  cMemo := strtran(cMemo,"\"+CR_LF) // seit [970327], sh. unten...
+  cMemo := strtran(cMemo,"\"+CR_LF)
 endif
 scSource := cSource
-do while (nPos1 := at(scTagBegin,cMemo)) != 0 .and. snPrnStatus != PRN_ABORT
+do while (nPos1 := at(scTagBegin,cMemo)) != 0 ;
+         .and. snPrnStatus != PRN_ABORT
   if lAllowInt .and. TaskInter()
     snPrnStatus := PRN_ABORT
     exit
   endif
-  **
-  ** zunÑchst wird das StÅck bis *vor* den ersten "{" unverÑndert
-  ** Åbernommen :
-  **
+  // zunÑchst das StÅck bis vor dem ersten "{" unverÑndert Åbernehmen:
   eval(sbWriter,left(cMemo,nPos1-1))
   cMemo := substr(cMemo,nPos1)
   **
@@ -2192,7 +2091,7 @@ do while (nPos1 := at(scTagBegin,cMemo)) != 0 .and. snPrnStatus != PRN_ABORT
       cMemo := substr(cMemo,3)
     endif
   elseif valtype(cRetVal) == "C"
-    eval(sbWriter,DrvCvtString(cRetVal))  // 20021006 Bug-Gefahr!
+    eval(sbWriter,DrvCvtString(cRetVal))  
   elseif valtype(cRetVal) == "L"
     if cRetVal
       if left(cMemo,2) == CR_LF // new 20021112
@@ -2218,11 +2117,26 @@ saIfStack := aIfStack
 // 20030113 RETURN LstContinue()
 RETURN .t. // LstContinue() // lOkay // cNewMemo
 
+
+FUNCTION length2i(cLength)
+cLength := strtran(cLength,",",".")
+if right(cLength,2) == "mm"
+  cLength := left(cLength,len(cLength)-2)
+  RETURN val(cLength) / 25.4
+endif
+if right(cLength,2) == "cm"
+  cLength := left(cLength,len(cLength)-2)
+  RETURN val(cLength) / 2.54
+endif
+RETURN val(cLength)
+
+
 FUNCTION TcsEval(cIdTca,cIdTcs,p,c)
 local lReturn, aLoop, b
 local cMac
 local e
 local i
+// debug SendConsole("TcsEval "+cIdTca+" "+cIdTcs+" "+p)
 for i := 1 to len(saCmd)
   if saCmd[i][CMD_ID] == cIdTca
     RETURN xeval(saCmd[i][CMD_BLOCK],cIdTcs,p,c)
@@ -2236,16 +2150,15 @@ if cIdTca == "login"
   endif
 elseif cIdTca == "set"
   if     cIdTcs == "driver"        ; c:= DrvLoad(p)
-  * if     cIdTcs == "driver"        ; c:= if(DrvLoad(p),NIL,SetMsg())
   elseif cIdTcs == "special"       ; c:= p_SetSpecial(p)
   elseif cIdTcs == "option"        ; c:= p_SetSpecial(p)
   elseif cIdTcs == "finalff"       ; p_SetFinalFF(ctol(p)) ; c := NIL
-  elseif cIdTcs == "paperheight"   ; p_SetPapHeight(val(p)) ; c := NIL
-  elseif cIdTcs == "paperwidth"    ; c:= p_SetPapWidth(val(p))
-  elseif cIdTcs == "marginleft"    ; c:= if(p_SetLMargin(val(p)),NIL,SetMsg())
-  elseif cIdTcs == "marginright"   ; c:= if(p_SetRMargin(val(p)),NIL,SetMsg())
-  elseif cIdTcs == "margintop"     ; c:= if(p_SetTMargin(val(p)),NIL,SetMsg())
-  elseif cIdTcs == "marginbottom"  ; c:= if(p_SetBMargin(val(p)),NIL,SetMsg())
+  elseif cIdTcs == "paperheight"   ; p_SetPapHeight(length2i(p)) ; c := NIL
+  elseif cIdTcs == "paperwidth"    ; c:= p_SetPapWidth(length2i(p))
+  elseif cIdTcs == "marginleft"    ; c:= if(p_SetLMargin(length2i(p)),NIL,SetMsg())
+  elseif cIdTcs == "marginright"   ; c:= if(p_SetRMargin(length2i(p)),NIL,SetMsg())
+  elseif cIdTcs == "margintop"     ; c:= if(p_SetTMargin(length2i(p)),NIL,SetMsg())
+  elseif cIdTcs == "marginbottom"  ; c:= if(p_SetBMargin(length2i(p)),NIL,SetMsg())
   elseif cIdTcs == "pagealign"     ; scPageAlign := upper(p) ; c := NIL
   elseif cIdTcs == "indent"        ; c:= p_Indent(p)
   elseif cIdTcs == "outport"       ; c:= p_SetPort(p)
@@ -2253,10 +2166,7 @@ elseif cIdTca == "set"
   elseif cIdTcs == "apswidth"      ; p_SetWidth(val(p)) ; c:= FntCtrl()
   elseif cIdTcs == "header"        ; c:= p_SetHeader(p)
   elseif cIdTcs == "footer"        ; c:= p_SetFooter(p)
-  * elseif cIdTcs == "dialog"        ; c:= p_DoDialog(p)
-  * elseif cIdTcs == "preview"       ; c:= p_DoPreview(p)
   elseif cIdTcs == "capture"       ; c:= if(p_SetCapture(p),NIL,SetMsg())
-  * elseif cIdTcs == "manual"        ; c:= p_DoManual(p)
   elseif cIdTcs == "align"         ; c:= p_SetAlign(p)
   elseif cIdTcs == "columns"       ; c:= p_SetColumns(p)
   elseif cIdTcs == "montant"       ; SetMntFormat(p) ; c := NIL
@@ -2279,7 +2189,7 @@ elseif cIdTca == "etc"
   elseif cIdTcs == "goto"    ; c:= p_Goto(xparse(p))
   elseif cIdTcs == "dbskip"  ; c := p_dbskip(p)
   elseif cIdTcs == "block"   ; c:= p_Block(p)
-  elseif cIdTcs == "page"    ; c:= ntrim(snCurPage) // p_PageNum(p)
+  elseif cIdTcs == "page"    ; c:= ntrim(p_PageNum())
   elseif cIdTcs == "eject"   ; c:= p_Eject(.f.)
   elseif cIdTcs == "nextjob" ; c:= p_NextJob(p)
   elseif cIdTcs == "do"
@@ -2373,27 +2283,16 @@ local cRange := SetRange()
 WinCr()
 RETURN NIL
 
-* FUNCTION SetRange(cRange)
-* default scRange to ""
-* RETURN padr(scRange,10) if cRange == NIL
-* scRange := cRange
-* RETURN .t. // scRange
 
 FUNCTION GetTplIni(cTplIni)
-#ifdef LG_GERMAN
-  say "Druckparametersatz "
-#else
-  say "Paramätres imprimante "
-#endif
+say utrp("Printer parameter set", ;
+         "Druckparametersatz ", ;
+         "Paramätres imprimante ")
 @ CSR_POS get scTplIni picture PIC_ID ;
                        pick PickTpl(TPLTYPE_INI,scTplIni)
 WinCr()
 RETURN NIL
 
-* FUNCTION GsbTplIni(x)
-* RETURN scTplIni if x == NIL
-* scTplIni := padr(x,LenIdTpl())
-* RETURN NIL
 
 FUNCTION SetTplIni(x)
 default scTplIni to space(8)
@@ -2411,7 +2310,7 @@ OpenPrinter(cIdTplIni,scDoPreview,nWidth)
 saIfStack := aIfStack
 RETURN NIL
 
-FUNCTION ColCount ; RETURN snColCount // [960610] fÅr p_TabExec()
+FUNCTION ColCount ; RETURN snColCount // for p_TabExec()
 
 FUNCTION EtcScan(p)
 local cFormat  := ""
@@ -2480,23 +2379,10 @@ elseif cTpl != NIL
 endif
 RETURN .t.
 
-* FUNCTION MsgPreview ; RETURN MSG_PREVIEW
-
-* FUNCTION p_copies()
-* RETURN snCopies
 
 FUNCTION p_setCopies(nCopies)
 snCopies := nCopies
 RETURN .t.
-
-* FUNCTION p_NoTcs()
-* slRtfMode := .t.
-* RETURN NIL
-
-* FUNCTION RtfMode(lNew)
-* RETURN slRtfMode if lNew == NIL
-* slRtfMode := lNew
-* RETURN NIL
 
 FUNCTION SetCmdTags(cTagBegin,cTagEnd)
 local nLen
@@ -2518,12 +2404,15 @@ RETURN .t.
 FUNCTION Tagged(c) ; RETURN scTagBegin + c + scTagEnd
 
 
+FUNCTION MsgPrinting()
+RETURN utrp(" being printed", " wird gedruckt"," en cours d'impression")
 
-#ifdef LG_GERMAN
-  FUNCTION MsgPrinting() ; RETURN " wird gedruckt"
-#else
-  FUNCTION MsgPrinting() ; RETURN " en cours d'impression"
-#endif
+** FUNCTION MsgPrinting()
+** #ifdef LG_GERMAN
+**   FUNCTION MsgPrinting() ; RETURN " wird gedruckt"
+** #else
+**   FUNCTION MsgPrinting() ; RETURN " en cours d'impression"
+** #endif
 
 FUNCTION SetPreview(cPreview)
 RETURN scDoPreview if cPreview == NIL
@@ -2545,30 +2434,23 @@ RETURN cBlock
 ** fparse() derived from TplParse()
 ** funktioniert auch mit Dateien, die grî·er als 64K sind.
 ** énderung im Algoritmus :
-** Wenn nPos2 0 ist, dann wiurd nichts getan, sondern das nÑchste StÅck
+** Wenn nPos2 0 ist, dann wird nichts getan, sondern das nÑchste StÅck
 ** eingelesen.
 **
 FUNCTION fparse(cInFile,cOutFile,cCmdTags,;
   lAllowInt,lOverWrite,lAppend,nBytes,cDrvName,lInline;
 )
 local lOkay := .t.
-* local fdout
 local cFileName
 local fdin
 local cDllPath := GetDlmPath(cInFile)
 local bInputFilter := SetInputFilter()
-* local lXmlInput := SetXmlInput()
-* local lRtfInput := SetRtfInput()
 if cDllPath == NIL
   SetMsg(cInFile+MsgFileExist())
   RETURN .f.
 endif
 // Confirm("fparse("+utos(cInFile)+","+utos(cOutFile)+")")
-*#ifdef DEF_LFN
-*  fdin := lf_fopen(cDllPath)
-*#else
-  fdin := fopen(cDllPath)
-*#endif
+fdin := fopen(cDllPath)
 if fdin == -1
   SetMsg(cDllPath + MsgDosError(ferror()))
   RETURN .f.
@@ -2581,15 +2463,9 @@ if cOutFile != NIL
 else
   RETURN .f. if snPrnStatus != PRN_CONTINUE
 endif
-* scSource := cInFile
-* snSrcLine := nSaveSrcLine
 #ifdef DEF_DEBUG
   MsgDisplay(cInFile)
 #endif DEF_DEBUG
-* default lTrap to slTrap
-* slTrap := lTrap
-* SetXmlInput(.f.)
-* SetRtfInput(.f.)
 default nBytes to 200
 lOkay := parse( ;
   {||freader(fdin,nBytes)}, ;
@@ -2599,41 +2475,8 @@ fclose(fdin)
 if cOutFile != NIL
   EndOfstream()
 endif
-* slTrap := lSaveTrap
-* snSrcLine := 1
-* SetXmlInput(lXmlInput)
-* SetRtfInput(lRtfInput)
 SetInputFilter(bInputFilter)
 RETURN lOkay
-
-*#define IS_FD      1
-*#define IS_NAME    2
-*#define IS_CMDTAGS 3
-*
-*STATIC FUNCTION BeginIStream()
-*local fdin :=
-*aadd(saIsStack,{fdout,cFilename,sbWriter,scLangue}) // OS_ALEN
-*RETURN .t.
-
-
-*FUNCTION split(c,nMaxLen)
-*local a := {}
-*local nPos1 := at(" ",c)
-*local nPos2 := at(CR_LF,c)
-*RETURN { c } if nMaxLen == 1
-*if nPos1 == 0
-*  if nPos2 == 0
-*    RETURN { c }
-*  else
-*    a := split(ltrim(substr(c,nPos2+2)),nMaxLen-1)
-*    aadd(a,NIL)
-*    ains(a,1)
-*    a[1] := left(c,nPos2-1)
-*    RETURN a
-*  endif
-*else
-*
-*endif
 
 FUNCTION split(c,cDelim,nMaxLen,lSeqCountsOnce)
 local a := {}
@@ -2694,7 +2537,6 @@ local aIfStack := saIfStack
 local cSaveSource := scSource
 local nSaveSrcLine := snSrcLine
 local cSaveCmdTags := SetCmdTags()
-* local aSaveLoop := soLoop
 local lOkay := .t.
 local nPos1
 local nPos2
@@ -2892,7 +2734,6 @@ scSource := cSaveSource
 snSrcLine := nSaveSrcLine
 saIfStack := aIfStack
 SetCmdTags(cSaveCmdTags)
-* soLoop := aSaveLoop
 RETURN lOkay
 
 
@@ -3103,11 +2944,6 @@ asize(saIfStack,n-1)
 slPStream := IfStack()
 RETURN .t.
 
-FUNCTION SetCurPage(n)
-RETURN snCurPage if n == NIL // 20001012
-snCurPage := n
-RETURN .t.
-
 FUNCTION NextRefName(cDir,dDate)
 RETURN NextFileName(cDir,ntrim(val(dtocf(dDate,"yymmdd"))),"REF")
 
@@ -3159,23 +2995,6 @@ RETURN de if UsrLang() == "D"
 RETURN fr if UsrLang() == "F"
 RETURN en
 
-
-*FUNCTION LngString(s1,s2,s3,s4)
-*if scLangue == MemLang1
-*  RETURN s1 if ! empty(s1)
-*endif
-*if scLangue == MemLang2
-*  RETURN s2 if !empty(s2)
-*endif
-*if scLangue == MemLang3
-*  RETURN s3 if !empty(s3)
-*endif
-*#ifdef DEF_4LANG
-*  if scLangue == MemLang4
-*    RETURN s4 if !empty(s4)
-*  endif
-*#endif
-*RETURN s1
 
 FUNCTION LngExpr(x,cIdLng)
 local s
@@ -3272,4 +3091,11 @@ for i := 1 to mlcount(cMemo, nWidth)
   writeln(cLinePrefix+memoline(cMemo, nWidth, i ))
 next i
 RETURN .t.
+
+
+STATIC PROC NilWriter(x)
+if ! empty(x)
+  raise("Attempted to print "+utos(x)+" while no output stream defined")
+endif
+RETURN 
 

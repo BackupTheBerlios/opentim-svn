@@ -603,9 +603,9 @@ RETURN .t.
 FUNCTION hst2vcs(cIdJnl,cIdDoc,cLine)
 local i := JnlVcsPos(cIdJnl)
 local c
-RETURN NIL if i == NIL
-RETURN NIL if !isdigit(cIdDoc)
-RETURN NIL if !isdigit(cLine)
+RETURN "" if i == NIL
+RETURN "" if !isdigit(cIdDoc)
+RETURN "" if !isdigit(cLine)
 c := str(i,1)
 * if FixY2K()
 *   c += right(ntrim(pnYear(left(cIdDoc,2)+"01")),2) + right(cIdDoc,4)
@@ -615,8 +615,14 @@ c := str(i,1)
 c += cIdDoc
 c += cLine
 c += Check97(c)
-RETURN NIL if " " $ c
+RETURN "" if " " $ c
 RETURN left(c,3) + "/" + substr(c,4,4) + "/" + right(c,5)
+
+FUNCTION hst2nb(cIdJnl,cIdDoc,cLine)
+local cVcs := hst2vcs(cIdJnl,cIdDoc,cLine)
+RETURN cVcs if !empty(cVcs)
+RETURN trim1(cIdJnl)+trim(cIdDoc) if empty(cLine)
+RETURN trim(cIdJnl)+" "+trim(cIdDoc)+"-"+trim(cLine)
 
 FUNCTION vcs2hst(cVcs)
 local cIdJnl := VcsIdJnl(cVcs)
