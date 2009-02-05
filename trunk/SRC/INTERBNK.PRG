@@ -1083,7 +1083,7 @@ local lCommStruct
 local a
 local lOkay := .f.
 LOCAL cComSep := "*"  // Separator fÅr Mitteilung in öberweisung
-local cCompte := BqeBeParse(jnl[JNL_COMPTE])
+local cCompte := BanBeParse(jnl[JNL_COMPTE])
 RETURN .f. if cCompte == NIL
 cCompte := strtran(cCompte,'-')
 if len(cCompte) != 12
@@ -1440,7 +1440,7 @@ local lCommStruct
 local a
 local lOkay := .f.
 LOCAL cComSep := "*"  // Separator fÅr Mitteilung in öberweisung
-local cCompte := BqeBeParse(jnl[JNL_COMPTE])
+local cCompte := BanBeParse(jnl[JNL_COMPTE])
 RETURN .f. if cCompte == NIL
 cCompte := strtran(cCompte,'-')
 if len(cCompte) != 12
@@ -1684,7 +1684,7 @@ local lOkay := .f.
 local nDecPos
 local cNoTva := strtran(substr(MemNoTva,4),".","")
 local cIdBnk := jnl[JNL_CODEBQE]
-local cCompte := BqeBeParse(jnl[JNL_COMPTE])
+local cCompte := BanBeParse(jnl[JNL_COMPTE])
 RETURN .f. if cCompte == NIL
 cCompte := strtran(cCompte,'-')
 if len(cCompte) != 12

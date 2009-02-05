@@ -5,21 +5,22 @@ ParExist(FIELD->IdPar)
 // ParVnaAuto(FIELD->IdPar,"VKR",DlgValue("Date"),".t.",DlgValue("Edit"))
 //
 // nachher :
-DlgDefine("IdJnl","")
-VEN->IdJnl!="VKA".or.DlgDefine("IdJnl","VKR")
-VEN->IdJnl!="VKL".or.DlgDefine("IdJnl","VKR")
-DlgDefine("IdJnl", DbfPick(\
+setvar("IdJnl","")
+VEN->IdJnl!="VKA".or.setvar("IdJnl","VKR")
+VEN->IdJnl!="VKL".or.setvar("IdJnl","VKR")
+VEN->IdJnl!="VKR".or.setvar("IdJnl","VKR")
+setvar("IdJnl", DbfPick(\
   {oJnl()},\
   "Was fr ein Dokument erstellen?",\
   "JNLPICK",\
-  DlgValue("IdJnl"),\
+  getvar("IdJnl"),\
   "Alias=='VEN'"\
 ))
-!empty(DlgValue("IdJnl"))
-DlgDefine("VnaMatch",VEN->IdJnl+VEN->IdDoc)
+!empty(getvar("IdJnl"))
+setvar("VnaMatch",VEN->IdJnl+VEN->IdDoc)
 VenAppend(\
-    DlgValue("IdJnl"),\
-    DlgValue("IdJnl")+" erstellen als Kopie von " + MsgIdJnlDoc()\
+    getvar("IdJnl"),\
+    getvar("IdJnl")+" erstellen als Kopie von " + MsgIdJnlDoc()\
   )
 // Angebote kriegen jetzt ein "ok" reingeschrieben
 VEN->IdJnl!="VKA".or.TryRecLock({||(VEN->NB3:=trim(VEN->NB3)+"ok")!=NIL})

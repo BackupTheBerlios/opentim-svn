@@ -1183,12 +1183,6 @@ action b key K_ENTER prompt NIL  block ParDetail()
 #ifndef DEF_IMP
   ddFldRemove("IdBud")
 #endif
-* #ifndef DEF_ANA
-*   ddFldRemove("IdAna")
-* #endif
-* #ifndef DEF_VEN
-*   ddFldRemove("IdGen")
-* #endif
 #ifndef DEF_BIRTH
   ddFldRemove("Birth")
   ddFldRemove("_Age")
@@ -1211,21 +1205,6 @@ RETURN NatExist(cIdNat)
 FUNCTION ParStreet(cIdPar)
 // 20070921 sleep(5)
 RETURN ParField(cIdPar,{||trim1(PAR->Rue) + ltrim(PAR->RueNum) + " " + trim(PAR->RueBte)})
-
-*FUNCTION PickCliStatus(cStart)
-*local a := {}
-*#ifdef LG_FRENCH
-*  aadd(a, "1 Prospect      " )
-*  aadd(a, "2 Prospect actif" )
-*  aadd(a, "3 Client actif  " )
-*  aadd(a, "4 Ancien client " )
-*#else
-*  aadd(a, "1 Prospektionskunde" )
-*  aadd(a, "2 Erste Kontakte   " )
-*  aadd(a, "3 Aktiver Kunde    " )
-*  aadd(a, "4 Ehemaliger Kunde" )
-*#endif
-*RETURN ArrayPick( a,NIL,cStart)
 
 #ifdef DEF_PRESTO
 

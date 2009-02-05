@@ -399,10 +399,7 @@ FUNCTION IsIBAN(x)
 RETURN ":" $ x
 
 
-/*
-  returns (1) the correctly formatted BIC:IBAN string or (2) NIL.
-  If NIL, then SetMsg() contains the explanation
-*/
+// obsolete, replaced by BanParse() :
 STATIC FUNCTION BnkParse(x)
 * local lIsIBAN // whether it is a domestic (.f.) or an IBAN number
 local nSplit
@@ -417,7 +414,7 @@ x := strtran(x,".")
 nSplit := at(":",x)
 if nSplit == 0 // also eine Inlands-Kontonummer
   if MemPays == "B  "
-    RETURN BqeBeParse(x)
+    RETURN BanBeParse(x)
   else
     // No validation of domestic bank account number
     RETURN x
@@ -436,7 +433,7 @@ endif
 RETURN NIL if ! ChkIBAN34(cIBAN)
 cBBAN := substr(cIBAN,5) // Basic Bank Account Number
 if cCountry == "BE"
-  cBBAN := BqeBeParse(cBBAN)
+  cBBAN := BanBeParse(cBBAN)
 else
   // currently no other national validation algorithms supported
 endif
@@ -449,7 +446,54 @@ RETURN cIdBic+":"+trim(cIBAN)
 * enddo
 * RETURN trim(x)
 
-// check digits at pos 3 and 4 of a IBAN
+
+STATIC FUNCTION BanParse(cBan,cCountry)
+local nSplit
+// local cCountry
+local cIdBic
+local cIBAN
+local cNBAN 
+local x := cBan
+RETURN NIL if empty(x)
+// remove all formatting:
+x := strtran(x," ")
+x := strtran(x,"-")
+x := strtran(x,".")
+nSplit := at(":",x)
+// cCountry := nat2iso(cIdNat)
+if nSplit == 0 // national BAN, not an IBAN
+  if cCountry == "BE"
+    cBan := BanBeParse(x)
+  endif
+  RETURN NIL if cBan == NIL
+  RETURN { trim(cBan), "", "" }
+endif
+cIdBic := left(x,nSplit-1),;
+cIBAN := strtran(substr(x,nSplit+1)," ")
+if BicCountry(cIdBic)) != cCountry
+  SetMsg(utos(cIdBic) + " : BIC country != "+utos(cCountry))
+  RETURN NIL
+endif
+if left(cIBAN,2) != cCountry
+  SetMsg(cIBAN + " : IBAN must start with '"+cCountry+"' !")
+  RETURN NIL
+endif
+if len(cIBAN) > 28
+  SetMsg(cIBAN + " : IBAN longer than 28 !")
+  RETURN NIL 
+endif
+RETURN NIL if ! ChkIBAN34(cIBAN)
+cNBAN := substr(cIBAN,5) // Basic Bank Account Number
+if cCountry == "BE"
+  cNBAN := BanBeParse(cNBAN)
+else
+  // currently no other national validation algorithms supported
+endif
+RETURN NIL if cNBAN == NIL
+cIBAN := transform(cIBAN,"@R !!!! !!!! !!!! !!!! !!!! !!!! !!!!") 
+RETURN { cNBAN, cIdBic, trim(cIBAN) }
+
+
 STATIC FUNCTION ChkIBAN34(x)
 local i
 local x2
@@ -487,7 +531,7 @@ End
 Return Suma % modulo
 
 
-FUNCTION BqeBeParse(x)
+FUNCTION BanBeParse(x)
 x := strtran(x,"-")
 if len(x) == 12
   if val(left(x,10)) % 97 == 0
@@ -520,6 +564,17 @@ if cBIC == NIL
   RETURN NIL
 endif
 RETURN cBIC
+
+
+
+FUNCTION gsbNBAN(x,cIdNat,cFieldname)
+if x == NIL
+  RETURN iban2ban_be(&cFieldname) if nat2iso(cIdNat) == "BE"
+  RETURN ""
+endif
+
+FUNCTION iban2ban_be(cBan)
+local a := split(cBan,":")
 
 
 #else // Klassisches Format (vor DEF_IBAN) 

@@ -58,8 +58,8 @@ MnuAddItem(utr("G~eneral accounts history  ",\
                {|| RepPrint("HSTGEN","HSTGEN",MnuItemName()) })
 //
 #if HasDlm("SPRL")
-  MnuAddItem("Historik L~ieferanten      ",{|| setvar("IdCtrList","E").and.RepPrint("HSTPAR","HSTPAR",MnuItemName()) })
   MnuAddItem("Historik K~unden           ",{|| setvar("IdCtrList","V").and.RepPrint("HSTPAR","HSTPAR",MnuItemName()) })
+  MnuAddItem("Historik L~ieferanten      ",{|| setvar("IdCtrList","E").and.RepPrint("HSTPAR","HSTPAR",MnuItemName()) })
 #endif
 MnuAddItem(utr("P~artner account history   ",\
                "Historik P~artnerkonten    ",\

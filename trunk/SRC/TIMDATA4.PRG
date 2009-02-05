@@ -1870,6 +1870,16 @@ RETURN NatField(cIdNat,"IdDev")
 FUNCTION NatIntra(cIdNat)
 RETURN NatField(cIdNat,"Intra")
 
+FUNCTION Nat2iso(cIdNat)
+cIdNat := alltrim(cIdNat)
+RETURN "BE" if cIdNat == "B"
+RETURN "DE" if cIdNat == "D"
+RETURN "FR" if cIdNat == "F"
+RETURN "LU" if cIdNat == "L"
+RETURN "NL" if cIdNat == "NL"
+RETURN NatCountry(padr(cIdNat,3))
+
+
 /*
  returns the ISO 2-letter country code
 */

@@ -1961,21 +1961,6 @@ RETURN 0
 #endif DEF_ART
 
 
-* FUNCTION NatRefresh()
-* saNat := ReadArray("NAT.DBC",NAT_ALEN)
-* RETURN NIL
-
-*FUNCTION NatLocate( cId )
-*local i
-*if saNat == NIL ; NatRefresh() ; endif
-*for i := 1 to len(saNat)
-*  if saNat[i][NAT_IDNAT] == cId
-*    RETURN saNat[i]
-*  endif
-*next i
-*RETURN NIL
-
-
 **
 ** CtrRefresh()
 **
