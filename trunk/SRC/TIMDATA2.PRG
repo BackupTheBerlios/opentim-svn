@@ -463,9 +463,9 @@ nSplit := at(":",x)
 // cCountry := nat2iso(cIdNat)
 if nSplit == 0 // national BAN, not an IBAN
   if cCountry == "BE"
-    cBan := BanBeParse(x)
+    RETURN NIL if ! BanBeValidate(x)
+    cBan := BanBeFormat(x)
   endif
-  RETURN NIL if cBan == NIL
   RETURN { trim(cBan), "", "" }
 endif
 cIdBic := left(x,nSplit-1),;
@@ -485,11 +485,11 @@ endif
 RETURN NIL if ! ChkIBAN34(cIBAN)
 cNBAN := substr(cIBAN,5) // Basic Bank Account Number
 if cCountry == "BE"
-  cNBAN := BanBeParse(cNBAN)
+  RETURN NIL if ! BanBeValidate(cNBAN)
+  cNBAN := BanBeFormat(cNBAN)
 else
   // currently no other national validation algorithms supported
 endif
-RETURN NIL if cNBAN == NIL
 cIBAN := transform(cIBAN,"@R !!!! !!!! !!!! !!!! !!!! !!!! !!!!") 
 RETURN { cNBAN, cIdBic, trim(cIBAN) }
 
@@ -531,26 +531,29 @@ End
 Return Suma % modulo
 
 
-FUNCTION BanBeParse(x)
+FUNCTION BanBeFormat(x)
+RETURN transform(x,"@R !!!-!!!!!!!-!!") 
+
+FUNCTION BanBeValidate(x)
 x := strtran(x,"-")
 if len(x) == 12
   if val(left(x,10)) % 97 == 0
-    RETURN transform(x,"@R !!!-!!!!!!!-!!") if val(right(x,2)) == 97
+    RETURN .t. if val(right(x,2)) == 97
   elseif val(right(x,2)) == val(left(x,10)) % 97
-    RETURN transform(x,"@R !!!-!!!!!!!-!!")
+    RETURN .t.
   endif
 endif
-SetMsg(alltrim(x) + " : not a valid Belgian bank account number !")
-RETURN NIL
+RETURN !SetMsg(alltrim(x) + " : invalid Belgian bank account number !")
+
 
 // http://fr.wikipedia.org/wiki/ISO_13616#Composition
 // http://www.europebanks.info/ibanguide.htm#5
-FUNCTION be2iban(cCompte)
+FUNCTION be2iban(cNBAN)
 local cData
-cCompte := strtran(cCompte,"-","")
-cData := cCompte + "1114" // "BE" converted to numbers
+cNBAN := strtran(cNBAN,"-","")
+cData := cNBAN + "1114" // "BE" converted to numbers
 cData += "00" // the yet unknown control digits
-RETURN "BE"+strtran(str(98-BigMod(cData,97),2)," ","0")+cCompte
+RETURN "BE"+strtran(str(98-BigMod(cData,97),2)," ","0")+cNBAN
 
 // http://fr.wikipedia.org/wiki/ISO_13616#Composition
 FUNCTION be2bic(cCompte)
@@ -568,13 +571,18 @@ RETURN cBIC
 
 
 FUNCTION gsbNBAN(x,cIdNat,cFieldname)
+local cCountry := nat2iso(cIdNat)
+local aBan := BanParse(&cFieldname,cCountry)
 if x == NIL
-  RETURN iban2ban_be(&cFieldname) if nat2iso(cIdNat) == "BE"
-  RETURN ""
+  RETURN "" if aBan == NIL
+  RETURN aBan[1]
 endif
-
-FUNCTION iban2ban_be(cBan)
-local a := split(cBan,":")
+if cCountry == "BE"
+  &cFieldname := be2iban(x)
+else
+  &cFieldname := x
+endif
+RETURN x
 
 
 #else // Klassisches Format (vor DEF_IBAN) 

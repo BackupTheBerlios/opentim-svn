@@ -1,5 +1,5 @@
 //
-// JNL.QRY - generated 16/11/07
+// JNL.QRY - generated 05.02.09
 // for JNL.FOX
 //
 column 1 Jnl
@@ -27,5 +27,6 @@ column 13 Dokumentbezeichnung 3
 column 30 IdHcl pict @K@!
 column 25 CodeBqe pict @K@!
 column 26 Compte pict @K@!
+column 24 CodeCli pict @K@!
 mask JNL
 order 2
