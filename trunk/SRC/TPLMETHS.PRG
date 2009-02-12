@@ -755,6 +755,9 @@ RETURN NIL if empty(tpl[TPL_MEMO])
 if !empty(tpl[TPL_IDOPT])
   RETURN .f. if ! PpsExec(tpl[TPL_IDOPT])
 endif
+if !empty(tpl[TPL_WIDTH])
+  p_SetWidth(val(tpl[TPL_WIDTH]))
+endif
 // RETURN .f. if ! PrnPrepare()
 RETURN TplParse(hardcr(tpl[TPL_MEMO]))
 

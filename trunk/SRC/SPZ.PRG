@@ -1,4 +1,4 @@
-** Copyright (c) 2005-2008 Luc Saffre
+** Copyright (c) 2005-2009 Luc Saffre
 **
 ** This file is part of TIM.
 **

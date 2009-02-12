@@ -446,6 +446,9 @@ RETURN cIdBic+":"+trim(cIBAN)
 * enddo
 * RETURN trim(x)
 
+#define BAN_NBAN 1
+#define BAN_BIC  2
+#define BAN_IBAN 3
 
 STATIC FUNCTION BanParse(cBan,cCountry)
 local nSplit
@@ -573,12 +576,16 @@ RETURN cBIC
 FUNCTION gsbNBAN(x,cIdNat,cFieldname)
 local cCountry := nat2iso(cIdNat)
 local aBan := BanParse(&cFieldname,cCountry)
+local cBIC
+local cIBAN
 if x == NIL
   RETURN "" if aBan == NIL
   RETURN aBan[1]
 endif
 if cCountry == "BE"
-  &cFieldname := be2iban(x)
+  cIBAN := be2iban(x)
+  cBIC := be2bic(x)
+  &cFieldname := cBIC + ":" + cIBAN
 else
   &cFieldname := x
 endif
