@@ -5,6 +5,7 @@ SetAsMail().or.SetAsPdf().or.SetSpooler('\
     "prnprint"\
     +iif(empty(getvar("fontName")),""," --fontName "+chr(34)+getvar("fontName")+chr(34))\
     +iif(empty(p_setport()),""," -p "+p_setport())\
+    +" --config="+GetDlmPath("prnprint.ini")\
     +" "+SetPrnFile())')
 !SetAsPdf().or.p_SetCopies(1)
 !SetAsPdf().or.FileDelete(trim(getvar("PRN2PDF.out")),.f.,.t.)
