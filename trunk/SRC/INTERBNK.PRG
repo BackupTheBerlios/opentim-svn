@@ -1,5 +1,5 @@
 ** Copyright (c) 1992-2001 PAC Systems
-** Copyright (c) 2001-2008 Luc Saffre
+** Copyright (c) 2001-2009 Luc Saffre
 **
 ** This file is part of TIM.
 **
@@ -1083,12 +1083,8 @@ local lCommStruct
 local a
 local lOkay := .f.
 LOCAL cComSep := "*"  // Separator fÅr Mitteilung in öberweisung
-local cCompte := BanBeParse(jnl[JNL_COMPTE])
-RETURN .f. if cCompte == NIL
-cCompte := strtran(cCompte,'-')
-if len(cCompte) != 12
-  RETURN ! SetMsg(cCompte + " : LÑnge mÅsste 12 sein!")
-endif
+local cCompte := strtran(jnl[JNL_COMPTE],"-")
+RETURN .f. if !BanBeValidate(cCompte)
 if IMP->IdDev != "EUR"
   RETURN ! SetMsg(IMP->IdDev + " : WÑhrung wird nicht unterstÅtzt!")
 endif
@@ -1440,12 +1436,14 @@ local lCommStruct
 local a
 local lOkay := .f.
 LOCAL cComSep := "*"  // Separator fÅr Mitteilung in öberweisung
-local cCompte := BanBeParse(jnl[JNL_COMPTE])
-RETURN .f. if cCompte == NIL
-cCompte := strtran(cCompte,'-')
-if len(cCompte) != 12
-  RETURN ! SetMsg(cCompte + " : LÑnge mÅsste 12 sein!")
-endif
+local cCompte := strtran(jnl[JNL_COMPTE],"-")
+RETURN .f. if !BanBeValidate(cCompte)
+* local cCompte := BanBeParse(jnl[JNL_COMPTE])
+* RETURN .f. if cCompte == NIL
+* cCompte := strtran(cCompte,'-')
+* if len(cCompte) != 12
+*   RETURN ! SetMsg(cCompte + " : LÑnge mÅsste 12 sein!")
+* endif
 if FIN->IdDev != "EUR"
   RETURN ! SetMsg(FIN->IdDev + " : WÑhrung wird nicht unterstÅtzt!")
 endif
@@ -1684,12 +1682,14 @@ local lOkay := .f.
 local nDecPos
 local cNoTva := strtran(substr(MemNoTva,4),".","")
 local cIdBnk := jnl[JNL_CODEBQE]
-local cCompte := BanBeParse(jnl[JNL_COMPTE])
-RETURN .f. if cCompte == NIL
-cCompte := strtran(cCompte,'-')
-if len(cCompte) != 12
-  RETURN ! SetMsg(cCompte + " : LÑnge mÅsste 12 sein!")
-endif
+local cCompte := strtran(jnl[JNL_COMPTE],"-")
+RETURN .f. if !BanBeValidate(cCompte)
+* local cCompte := BanBeParse(jnl[JNL_COMPTE])
+* RETURN .f. if cCompte == NIL
+* cCompte := strtran(cCompte,'-')
+* if len(cCompte) != 12
+*   RETURN ! SetMsg(cCompte + " : LÑnge mÅsste 12 sein!")
+* endif
 if len(cIdBnk) != 3
   SetMsg(cIdBnk + " : code banque destinataire n'a pas 3 positions")
   RETURN .f. 

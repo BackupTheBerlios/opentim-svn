@@ -1,5 +1,5 @@
 ** Copyright (c) 1992-2001 PAC Systems
-** Copyright (c) 2001-2008 Luc Saffre
+** Copyright (c) 2001-2009 Luc Saffre
 **
 ** This file is part of TIM.
 **
@@ -364,19 +364,13 @@ ddFld IdNat     ,C,LEN_IDNAT,0 picture PIC_ID pick {|x|PickNat(x)}
 ddEndDef()
 RETURN b
 
-FUNCTION PickBic(cStart,cIdNat)
+FUNCTION PickBic(cStart,cCountry)
 local xlFilter
-if cIdNat != NIL
-  xlFilter := "BIC->Country=='"+NatCountry(cIdNat)+"'"
+if cCountry != NIL
+  xlFilter := "BIC->Country=="+utos(cCountry)
 endif
 RETURN DbfPick({oBic()},;
   "Select Bank Identifier Code","BICPICK",cStart,xlFilter)
-
-FUNCTION BicValidate(cIdBic)
-RETURN .t. if empty(cIdBic)
-// Confirm(utos(cIdBic))
-RETURN .t. if DbfPeek(oBic(),cIdBic,".t.",.f.)
-RETURN ! SetMsg(MsgBicExist(cIdBic))
 
 FUNCTION MsgBicExist(cIdBic)
 RETURN cIdBic + utrp(" : unknown BIC!",;
@@ -385,7 +379,16 @@ RETURN cIdBic + utrp(" : unknown BIC!",;
 
 FUNCTION BicCountry(cIdBic)
 RETURN DbfPeek(oBic(),padr(cIdBic,LenIdBic()),;
-  "iif(empty(BIC->Country),NatCountry(BIC->IdNat),BIC->Country)",NIL)
+  "iif(empty(BIC->Country),nat2iso(BIC->IdNat),BIC->Country)",NIL)
+
+
+FUNCTION IsIBAN(x)
+RETURN ":" $ x
+
+FUNCTION IsNBAN(x)
+RETURN .f. if empty(x)
+RETURN !isiban(x)
+
 
 FUNCTION BqePostEdit(x)
 local r := BnkParse(x)
@@ -395,11 +398,8 @@ RETURN r
 FUNCTION BqeValidate(x)
 RETURN (BnkParse(x) != NIL)
 
-FUNCTION IsIBAN(x)
-RETURN ":" $ x
 
-
-// obsolete, replaced by BanParse() :
+// obsolete, replaced by BanSplit() :
 STATIC FUNCTION BnkParse(x)
 * local lIsIBAN // whether it is a domestic (.f.) or an IBAN number
 local nSplit
@@ -414,7 +414,7 @@ x := strtran(x,".")
 nSplit := at(":",x)
 if nSplit == 0 // also eine Inlands-Kontonummer
   if MemPays == "B  "
-    RETURN BanBeParse(x)
+    RETURN BanBeValidate(x)
   else
     // No validation of domestic bank account number
     RETURN x
@@ -433,7 +433,7 @@ endif
 RETURN NIL if ! ChkIBAN34(cIBAN)
 cBBAN := substr(cIBAN,5) // Basic Bank Account Number
 if cCountry == "BE"
-  cBBAN := BanBeParse(cBBAN)
+  cBBAN := BanBeFormat(cBBAN)
 else
   // currently no other national validation algorithms supported
 endif
@@ -446,55 +446,96 @@ RETURN cIdBic+":"+trim(cIBAN)
 * enddo
 * RETURN trim(x)
 
-#define BAN_NBAN 1
-#define BAN_BIC  2
-#define BAN_IBAN 3
+// used by banclean.act
+FUNCTION banclean(x) 
+if IsIBAN(x)
+  // remove spaces and formatting:
+  x := strtran(x," ")
+  // x := strtran(x,"-")
+  // x := strtran(x,".")
+endif  
+RETURN x
 
-STATIC FUNCTION BanParse(cBan,cCountry)
+
+#define BAN_NBAN   1
+#define BAN_BIC    2
+#define BAN_IBAN   3
+
+STATIC FUNCTION BanSplit(cBan,cCountry)
 local nSplit
-// local cCountry
-local cIdBic
-local cIBAN
-local cNBAN 
-local x := cBan
-RETURN NIL if empty(x)
-// remove all formatting:
-x := strtran(x," ")
-x := strtran(x,"-")
-x := strtran(x,".")
+local cIdBic := ""
+local cIBAN := ""
+local cNBAN := ""
+local x := BanUnformat(cBan)
+// remove spaces and formatting:
+// x := strtran(x," ")
+// x := strtran(x,"-")
+// x := strtran(x,".")
+RETURN { x, cIdBic, cIBAN } if empty(x)
 nSplit := at(":",x)
 // cCountry := nat2iso(cIdNat)
-if nSplit == 0 // national BAN, not an IBAN
+if nSplit == 0 // National BAN, no IBAN
   if cCountry == "BE"
-    RETURN NIL if ! BanBeValidate(x)
-    cBan := BanBeFormat(x)
+    cIBAN := be2iban(x)
+    cIdBic := be2bic(x)
+    // cBan := BanBeFormat(x)
+  * else
+  *   cIBAN := x
+  *   cIdBic := ""
   endif
-  RETURN { trim(cBan), "", "" }
+  RETURN { trim(cBan), cIdBic, cIBAN }
 endif
-cIdBic := left(x,nSplit-1),;
-cIBAN := strtran(substr(x,nSplit+1)," ")
-if BicCountry(cIdBic)) != cCountry
-  SetMsg(utos(cIdBic) + " : BIC country != "+utos(cCountry))
-  RETURN NIL
-endif
-if left(cIBAN,2) != cCountry
-  SetMsg(cIBAN + " : IBAN must start with '"+cCountry+"' !")
-  RETURN NIL
-endif
-if len(cIBAN) > 28
-  SetMsg(cIBAN + " : IBAN longer than 28 !")
-  RETURN NIL 
-endif
-RETURN NIL if ! ChkIBAN34(cIBAN)
+cIdBic := left(x,nSplit-1)
+cIBAN := substr(x,nSplit+1)
 cNBAN := substr(cIBAN,5) // Basic Bank Account Number
 if cCountry == "BE"
-  RETURN NIL if ! BanBeValidate(cNBAN)
   cNBAN := BanBeFormat(cNBAN)
-else
-  // currently no other national validation algorithms supported
 endif
-cIBAN := transform(cIBAN,"@R !!!! !!!! !!!! !!!! !!!! !!!! !!!!") 
-RETURN { cNBAN, cIdBic, trim(cIBAN) }
+RETURN { cNBAN, cIdBic, cIBAN}
+
+
+
+FUNCTION BanValidate(x,cCountry)
+local aBan := BanSplit(x)
+default cCountry to nat2iso(PAR->Pays)
+RETURN .f. if !BicValidate(aBan[BAN_BIC],cCountry)
+RETURN .f. if !IbanValidate(aBan[BAN_IBAN],cCountry)
+RETURN .f. if !NbanValidate(aBan[BAN_NBAN],cCountry)
+RETURN .t.
+
+
+FUNCTION BicValidate(x,cCountry)
+local cBicCountry
+RETURN .t. if empty(x)
+cBicCountry := BicCountry(x)
+RETURN !SetMsg(MsgBicExist(x)) if cBicCountry == NIL
+RETURN .t. if empty(cCountry)
+if cBicCountry != cCountry
+  RETURN !SetMsg(utos(trim(x)) ;
+    + " : Landescode BIC (" + utos(cBicCountry) ; 
+    + ") != Partner ("+utos(cCountry) + ") !")
+endif
+RETURN .t.
+
+
+FUNCTION NbanValidate(x,cCountry)
+RETURN .t. if empty(x)
+if cCountry == "BE"
+  RETURN .f. if ! BanBeValidate(x)
+endif
+// currently no other national validation algorithms supported
+RETURN .t.
+
+FUNCTION IbanValidate(x,cCountry)
+RETURN .t. if empty(x)
+x := BanUnformat(x)
+if !empty(cCountry)
+  RETURN !SetMsg(x + " : IBAN muss mit '" ;
+    +cCountry+"' beginnen !") if left(x,2) != cCountry
+endif
+RETURN !SetMsg(x + " : IBAN l„nger als 28 !") if len(x) > 28
+RETURN ChkIBAN34(x)
+
 
 
 STATIC FUNCTION ChkIBAN34(x)
@@ -537,16 +578,18 @@ Return Suma % modulo
 FUNCTION BanBeFormat(x)
 RETURN transform(x,"@R !!!-!!!!!!!-!!") 
 
+FUNCTION IbanFormat(x)
+RETURN transform(x,"@R !!!! !!!! !!!! !!!! !!!! !!!! !!!!") 
+
 FUNCTION BanBeValidate(x)
-x := strtran(x,"-")
-if len(x) == 12
-  if val(left(x,10)) % 97 == 0
-    RETURN .t. if val(right(x,2)) == 97
-  elseif val(right(x,2)) == val(left(x,10)) % 97
-    RETURN .t.
-  endif
+x := BanUnFormat(x)
+RETURN !SetMsg(x + " : L„nge muss 12 sein!") if len(x) != 12
+if val(left(x,10)) % 97 == 0
+  RETURN .t. if val(right(x,2)) == 97
+elseif val(right(x,2)) == val(left(x,10)) % 97
+  RETURN .t.
 endif
-RETURN !SetMsg(alltrim(x) + " : invalid Belgian bank account number !")
+RETURN !SetMsg(alltrim(x) + " : ungltige Belgische Bankkontonummer!")
 
 
 // http://fr.wikipedia.org/wiki/ISO_13616#Composition
@@ -560,39 +603,91 @@ RETURN "BE"+strtran(str(98-BigMod(cData,97),2)," ","0")+cNBAN
 
 // http://fr.wikipedia.org/wiki/ISO_13616#Composition
 FUNCTION be2bic(cCompte)
-local cNBID, cBIC 
-RETURN NIL if empty(cCompte)
-cNBID := left(cCompte,3)
-cBIC := DbfPeek(oBic(),"BE"+padr(cNBID,LEN_NBID),;
-        "trim(BIC->IdBIC)",NIL,2)
-if cBIC == NIL
-  SetMsg("BE."+cNBID + " : unbekannte Banknummer. BIC aktualisieren!") 
-  RETURN NIL
-endif
-RETURN cBIC
+// local cNBID, cBIC 
+RETURN "" if empty(cCompte)
+// cNBID := left(cCompte,3)
+RETURN DbfPeek(oBic(),"BE"+padr(left(cCompte,3),LEN_NBID),;
+        "trim(BIC->IdBIC)","",2)
+* if cBIC == NIL
+*   // SetMsg(cNBID + " : unbekannte belgische Banknummer. BIC aktualisieren!") 
+*   RETURN ""
+* endif
+* RETURN cBIC
 
 
+#define LEN_NBAN 14
 
 FUNCTION gsbNBAN(x,cIdNat,cFieldname)
 local cCountry := nat2iso(cIdNat)
-local aBan := BanParse(&cFieldname,cCountry)
+local aBan 
 local cBIC
 local cIBAN
+local cMac
 if x == NIL
-  RETURN "" if aBan == NIL
-  RETURN aBan[1]
+  aBan := BanSplit(&cFieldname,cCountry)
+  RETURN padr(aBan[BAN_NBAN],LEN_NBAN)
 endif
-if cCountry == "BE"
-  cIBAN := be2iban(x)
-  cBIC := be2bic(x)
-  &cFieldname := cBIC + ":" + cIBAN
+cFieldname := "PAR->" + cFieldname
+if isiban(x)
+  aBan := BanSplit(x,cCountry)
+  &cFieldname := aBan[BAN_BIC] + ":" + aBan[BAN_IBAN]
 else
+  if cCountry == "BE"
+    x := BanBeFormat(BanUnformat(x))
+  endif
   &cFieldname := x
 endif
+RETURN NIL
+
+FUNCTION gsbBIC(x,cIdNat,cFieldname)
+local aBan := BanSplit(&cFieldname,nat2iso(cIdNat))
+RETURN padr(aBan[BAN_BIC],LenIdBic()) if x == NIL
+cFieldname := "PAR->" + cFieldname
+&cFieldname := alltrim(x) + ":" + aBan[BAN_IBAN]
+RETURN NIL
+
+FUNCTION BanUnformat(x)
+x := strtran(x," ")
+x := strtran(x,"-")
+x := strtran(x,".")
 RETURN x
 
+FUNCTION gsbIBAN(x,cIdNat,cFieldname)
+local aBan := BanSplit(&cFieldname,nat2iso(cIdNat))
+RETURN padr(IbanFormat(aBan[BAN_IBAN]),34) if x == NIL
+cFieldname := "PAR->" + cFieldname
+&cFieldname := aBan[BAN_BIC] + ":" + BanUnformat(x)
+RETURN NIL
 
-#else // Klassisches Format (vor DEF_IBAN) 
+
+FUNCTION ddAddBanFields(cFieldname)
+// NBAN
+ddAddField(cFieldname+"_A","C",LEN_NBAN,0,;
+  "@k@!","V",;
+  {|x|gsbNBAN(x,PAR->Pays,cFieldname)},NIL,;
+  {|x|NbanValidate(x:buffer,nat2iso(PAR->Pays))},NIL,;
+  {||PAR->Pays=="B  "})
+// BIC
+ddAddField(cFieldname+"_B","C",LenIdBic(),0,;
+  "@k@!","V",;
+  {|x|gsbBIC(x,PAR->Pays,cFieldname)},NIL,;
+  {|x|BicValidate(x:buffer,nat2iso(PAR->Pays))},;
+  {|x|PickBic(x,nat2iso(PAR->Pays))},{||.t.})
+// IBAN
+ddAddField(cFieldname+"_C","C",28,0,;
+  "@k@!","V",;
+  {|x|gsbIBAN(x,PAR->Pays,cFieldname)},NIL,;
+  {|x|IbanValidate(x:buffer,nat2iso(PAR->Pays))},NIL,{||.t.})
+  
+//  "@k@R !!!! !!!! !!!! !!!! !!!! !!!! !!!!","V",;
+ddOnTest("empty("+cFieldname+").or.BanValidate("+cFieldname+",nat2iso(PAR->Pays))")
+RETURN .t.
+
+
+#else 
+
+// the following was used before BIC and IBAN came.
+// still active for users who don't need any bank account numbers.
   		 
 FUNCTION oBic() ; RETURN NIL 
   		 
@@ -639,7 +734,7 @@ RETURN .t.
 endif 		 
 RETURN .f. 		 
   		 
-#endif DEF_IBAN
+#endif // not DEF_IBAN
 
 
 // return checkdigits for cData, using mod 97

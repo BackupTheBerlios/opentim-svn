@@ -224,8 +224,7 @@ local cLoc := ""
 RETURN trim(NatName(cPays)) if empty(cCP)
 #ifndef DEF_WWW
 if cPays != MemPays
-  * cLoc += trim(cPays) + " - "
-  cLoc += trim1(NatCountry(cPays)," - ")
+  cLoc += trim1(nat2iso(cPays)," - ")
 endif
 #endif DEF_WWW
 default cZipCode to left(cCp,7)

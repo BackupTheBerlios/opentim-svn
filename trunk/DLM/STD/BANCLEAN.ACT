@@ -1,0 +1,10 @@
+MsgDisplay("Partnerbankkonten s„ubern...")
+setvar("b",{|| \
+  PAR->Compte1:=banclean(PAR->Compte1),\
+  PAR->Compte2:=banclean(PAR->Compte2),\
+  .t.})
+DbfScan({oPar()},0,NIL,NIL,NIL,{||TryRecLock(getvar("b"))})
+
+//  PAR->Compte3:=banclean(PAR->Compte3),\
+//  PAR->CptSysI:=banclean(PAR->CptSysI),\
+//  PAR->Domi1  :=banclean(PAR->Domi1),\
