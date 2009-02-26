@@ -54,21 +54,25 @@ static xnMont := NIL
 **
 **
 STATIC FUNCTION ImpOtiWrite(fd,jnl)
+local lOkay := .f.
+local ban
 local cText
 local cCommunic
 local nSeq := 0
 local nSum := 0
 local nSumComptes := 0
 local dExec := UserDate()
+local cCompte
 local lCommStruct
 LOCAL cComSep := "*"  // Separator fr Mitteilung in šberweisung
 RETURN .f. if ! OtiHeader(jnl,fd,IMP->Date2)
 open area oIml(), oPar(), oPlz(), oNat(), oBud()
+  lOkay := .t.
   softseek IMP->IdJnl + IMP->IdDoc
   do while ! eof() .and. IML->IdDoc == IMP->IdDoc ;
                    .and. IML->IdJnl == IMP->IdJnl ;
                    .and. ! TaskInter()
-    if !IsIBAN(IML->Compte1)
+    if IsBelgian(IML->Compte1)
       nSeq++
       seek IML->IdPar  in PAR
       seek PAR->Pays + PAR->CP in PLZ
@@ -93,15 +97,21 @@ open area oIml(), oPar(), oPlz(), oNat(), oBud()
         seek IML->IdPar2 in PAR
       endif
       seek PAR->Pays + PAR->CP in PLZ
+      ban := BanParse(IML->Compte1)
+      if ban == NIL
+        lOkay := .f.
+        exit
+      endif
+      cCompte := OtiCompte(ban[BAN_NBAN])
       cText := ""
       cText += "1"
       cText += spacezero(nSeq,4,0)
       cText += "        "
       cText += "0000000000"
-      cText += OtiCompte(IML->Compte1)
+      cText += cCompte
       cText += spacezero(&xnMont,12,snDecPos)
       nSum += &xnMont // val(IML->Mont)
-      nSumComptes += val(OtiCompte(IML->Compte1))
+      nSumComptes += val(cCompte)
       cText += padr(upper(PAR->Firme),26)
       cText += OtiLangue(PAR->Langue) // Langue b‚n‚ficiaire
       cText += UPPER(substr(cCommunic,1,53))
@@ -121,8 +131,8 @@ open area oIml(), oPar(), oPlz(), oNat(), oBud()
       else
         cText += UPPER(substr(cCommunic,54,53))
       endif
-      if left(IML->Compte1,2) == "99" ;
-         .and. substr(IML->Compte1,5,7) == repl("0",7)
+      if left(cCompte,2) == "99" ;
+         .and. substr(cCompte,4,7) == repl("0",7)
         cText += "1"  // code frais
       else
         cText += "0"  // code frais
@@ -137,7 +147,7 @@ open area oIml(), oPar(), oPlz(), oNat(), oBud()
 close area
 OtiFooter(fd,nSeq,nSum,nSumComptes)
 * fclose(fd)
-RETURN .t.
+RETURN lOkay
 
 
 
@@ -1002,7 +1012,7 @@ local jnl := JnlLocate(IMP->IdJnl)
 * local lOkay := .t.
 default cFilename to AppRoot() + "\" + substr(IMP->IdJnl,2,2) + IMP->IdDoc
 #ifdef DEF_IBAN
-  if ImpImlFind("!IsIBAN(IML->Compte1)")
+  if ImpImlFind("IsBelgian(IML->Compte1)")
     if fgenerate(cFilename+".OTI", {|fd|ImpOtiWrite(fd,jnl)})
       cReturn := cFilename+".OTI"
     else
@@ -1013,7 +1023,7 @@ default cFilename to AppRoot() + "\" + substr(IMP->IdJnl,2,2) + IMP->IdDoc
   else
     cReturn := "(ohne *.OTI)"
   endif
-  if ImpImlFind("IsIBAN(IML->Compte1)")
+  if ImpImlFind("!IsBelgian(IML->Compte1)")
     if fgenerate(cFilename+".VME", {|fd|ImpVmeWrite(fd,jnl)})
       cReturn := trim1(cReturn,"; ") + cFilename+".VME"
     else
@@ -1061,9 +1071,9 @@ RETURN lFound
 * endif
 * RETURN a[1]
 
-#define IBAN_BIC  1
-#define IBAN_IBAN 2
-#define IBAN_ALEN 2
+* #define IBAN_BIC  1
+* #define IBAN_IBAN 2
+* #define IBAN_ALEN 2
 
 
 * Paiements ‚trangers
@@ -1080,7 +1090,7 @@ local nSum := 0
 local lCommStruct
 * local cIdBic
 * local cIBAN
-local a
+local ban
 local lOkay := .f.
 LOCAL cComSep := "*"  // Separator fr Mitteilung in šberweisung
 local cCompte := strtran(jnl[JNL_COMPTE],"-")
@@ -1125,21 +1135,19 @@ open area oIml(), oPar(), oPlz(), oNat()
   do while ! eof() .and. IML->IdDoc == IMP->IdDoc ;
                    .and. IML->IdJnl == IMP->IdJnl ;
                    .and. ! TaskInter()
-    if IsIBAN(IML->Compte1)
-      a := split(IML->Compte1,":")
-      if len(a) != IBAN_ALEN
-        SetMsg(IML->Compte1+" : ungltige IBAN")
+    if !IsBelgian(IML->Compte1)
+      ban=BanParse(IML->Compte1)
+      if ban == NIL
+        ** SetMsg(IML->Compte1+" : ungltige IBAN")
         lOkay := .f.
-        * break
         exit
       endif
-      if BicCountry(a[IBAN_BIC]) == NIL
-        SetMsg(a[IBAN_BIC] + " : unbekannte oder falsche BIC !")
+      if BicCountry(ban[BAN_BIC]) == NIL
+        SetMsg(ban[BAN_BIC] + " : unbekannte oder falsche BIC !")
         lOkay := .f.
-        * break
         exit
       endif
-      a[IBAN_IBAN] := strtran(a[IBAN_IBAN]," ") // neu 20040713
+      // a[IBAN_IBAN] := strtran(a[IBAN_IBAN]," ") // neu 20040713
       * cIdBic := IBAN2BIC(IML->Compte1)
       nSeq++
       if empty(IML->IdPar2)
@@ -1205,7 +1213,7 @@ open area oIml(), oPar(), oPlz(), oNat()
       cText += spacezero(nSeq,4,0) // 2-5
       cText += "04" // 6-7 : sous-division
       cText += space(80) // 8-87 : blancs
-      cText += padr(a[IBAN_BIC],35) // 88-122 : BIC (Id. de la banque du b‚n‚f)
+      cText += padr(ban[BAN_BIC],35) // 88-122 : BIC (Id. de la banque du b‚n‚f)
       cText += "1" // 123 : indicateur que 88-122 contient un BIC
       cText += space(5) // 124-128 : blancs
       cText += CR_LF
@@ -1221,11 +1229,11 @@ open area oIml(), oPar(), oPlz(), oNat()
       cText := "1"
       cText += spacezero(nSeq,4,0) // 2-5
       cText += "06" // 6-7 : sous-division
-      cText += padr(a[IBAN_IBAN],34) // 8-41 : IBAN
+      cText += padr(ban[BAN_IBAN],34) // 8-41 : IBAN
       cText += padr(PAR->Firme,35) // 42-76 : Nom du b‚n‚f.
       cText += padr(ParStreet(),35) //
       cText += "1" // 123 : indicateur que 8-41 contient un IBAN
-      cText += BicCountry(a[IBAN_BIC]) // Code ISO alphab‚tique du pays de  destination
+      cText += BicCountry(ban[BAN_BIC]) // Code ISO alphab‚tique du pays de  destination
       cText += space(14) // 115-128 : blancs
       cText += CR_LF
       fwrite(fd,dos2latin1(cText))
@@ -1274,7 +1282,7 @@ open area oIml(), oPar(), oPlz(), oNat()
       cText += space(6) //
       cText += space(12) // 59-70 : compte frais … d‚biter (si diff‚rent)
       cText += space(1) //
-      cText += BicCountry(a[IBAN_BIC]) // Code ISO alphab‚tique du pays de  destination
+      cText += BicCountry(ban[BAN_BIC]) // Code ISO alphab‚tique du pays de  destination
       cText += space(55) // blancs
       cText += CR_LF
       fwrite(fd,cText)
@@ -1326,7 +1334,7 @@ local jnl := JnlLocate(FIN->IdJnl)
 default cFilename to AppRoot() + "\" + substr(FIN->IdJnl,2,2) + FIN->IdDoc
 default xcFnlCompte to "PAR->Compte1"
 #ifdef DEF_IBAN
-  nCount := FinFnlCount(xcFnlCompte,"!IsIBAN("+xcFnlCompte+")")
+  nCount := FinFnlCount(xcFnlCompte,"IsBelgian("+xcFnlCompte+")")
   if nCount > 0
     if fgenerate(cFilename+".FBF", {|fd|FinOtiWrite(fd,jnl,xcFnlCompte)})
       cReturn := cFilename+".FBF"
@@ -1340,7 +1348,7 @@ default xcFnlCompte to "PAR->Compte1"
   else
     RETURN .f.
   endif
-  nCount := FinFnlCount(xcFnlCompte,"IsIBAN("+xcFnlCompte+")")
+  nCount := FinFnlCount(xcFnlCompte,"!IsBelgian("+xcFnlCompte+")")
   if nCount > 0
     if fgenerate(cFilename+".VME", {|fd|FinVmeWrite(fd,jnl,xcFnlCompte)})
       cReturn := trim1(cReturn,"; ") + cFilename+".VME"
@@ -1416,9 +1424,9 @@ RETURN lOkay
 * endif
 * RETURN a[1]
 
-#define IBAN_BIC  1
-#define IBAN_IBAN 2
-#define IBAN_ALEN 2
+* #define IBAN_BIC  1
+* #define IBAN_IBAN 2
+* #define IBAN_ALEN 2
 
 
 ** Copy of ImpVmeWrite(), replacing IMP and IMP by FIN and FNL
@@ -1433,7 +1441,7 @@ local cFnlCompte
 local lCommStruct
 * local cIdBic
 * local cIBAN
-local a
+local ban
 local lOkay := .f.
 LOCAL cComSep := "*"  // Separator fr Mitteilung in šberweisung
 local cCompte := strtran(jnl[JNL_COMPTE],"-")
@@ -1491,15 +1499,17 @@ open area oFnl(), oPar(), oPlz(), oNat()
       exit
     endif
     cFnlCompte := &xcFnlCompte
-    if IsIBAN(cFnlCompte)
-      a := split(cFnlCompte,":")
-      if len(a) != IBAN_ALEN
-        SetMsg(cFnlCompte+" : bad IBAN")
+    if !IsBelgian(cFnlCompte)
+      ban := BanParse(cFnlCompte)
+      *a := split(cFnlCompte,":")
+      *if len(a) != IBAN_ALEN
+      if ban == NIL
+        * SetMsg(cFnlCompte+" : bad IBAN")
         lOkay := .f.
         exit
       endif
-      if BicCountry(a[IBAN_BIC]) == NIL
-        SetMsg(a[IBAN_BIC] + " : unbekannte oder falsche BIC !")
+      if BicCountry(ban[BAN_BIC]) == NIL
+        SetMsg(ban[BAN_BIC] + " : unbekannte oder falsche BIC !")
         lOkay := .f.
         exit
       endif
@@ -1559,7 +1569,7 @@ open area oFnl(), oPar(), oPlz(), oNat()
       cText += spacezero(nSeq,4,0) // 2-5
       cText += "04" // 6-7 : sous-division
       cText += space(80) // 8-87 : blancs
-      cText += padr(a[IBAN_BIC],35) // 88-122 : BIC (Id. de la banque du b‚n‚f)
+      cText += padr(ban[BAN_BIC],35) // 88-122 : BIC (Id. de la banque du b‚n‚f)
       cText += "1" // 123 : indicateur que 88-122 contient un BIC
       cText += space(5) // 124-128 : blancs
       cText += CR_LF
@@ -1575,11 +1585,11 @@ open area oFnl(), oPar(), oPlz(), oNat()
       cText := "1"
       cText += spacezero(nSeq,4,0) // 2-5
       cText += "06" // 6-7 : sous-division
-      cText += padr(a[IBAN_IBAN],34) // 8-41 : IBAN
+      cText += padr(ban[BAN_IBAN],34) // 8-41 : IBAN
       cText += padr(PAR->Firme,35) // 42-76 : Nom du b‚n‚f.
       cText += padr(ParStreet(),35) //
       cText += "1" // 123 : indicateur que 8-41 contient un IBAN
-      cText += BicCountry(a[IBAN_BIC]) // Code ISO alphab‚tique du pays de  destination
+      cText += BicCountry(ban[BAN_BIC]) // Code ISO alphab‚tique du pays de  destination
       cText += space(14) // 115-128 : blancs
       cText += CR_LF
       fwrite(fd,dos2latin1(cText))

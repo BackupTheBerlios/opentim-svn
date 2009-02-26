@@ -389,62 +389,68 @@ FUNCTION IsNBAN(x)
 RETURN .f. if empty(x)
 RETURN !isiban(x)
 
+FUNCTION IsBelgian(x)
+local aBan
+RETURN .t. if ! IsIBAN(x)
+aBan:=BanSplit(x)
+RETURN left(aBan[BAN_IBAN],2) == "BE"
 
-FUNCTION BqePostEdit(x)
-local r := BnkParse(x)
-RETURN x if r == NIL
-RETURN r
 
-FUNCTION BqeValidate(x)
-RETURN (BnkParse(x) != NIL)
+* FUNCTION BqePostEdit(x)
+* local r := BnkParse(x)
+* RETURN x if r == NIL
+* RETURN x
+
+* FUNCTION BqeValidate(x)
+* RETURN (BnkParse(x) != NIL)
 
 
 // obsolete, replaced by BanSplit() :
-STATIC FUNCTION BnkParse(x)
-* local lIsIBAN // whether it is a domestic (.f.) or an IBAN number
-local nSplit
-local cCountry
-local cIdBic
-local cIBAN
-local cBBAN := NIL // Basic Bank Account Number
-RETURN x if empty(x)
-x := strtran(x," ")
-x := strtran(x,"-")
-x := strtran(x,".")
-nSplit := at(":",x)
-if nSplit == 0 // also eine Inlands-Kontonummer
-  if MemPays == "B  "
-    RETURN BanBeValidate(x)
-  else
-    // No validation of domestic bank account number
-    RETURN x
-  endif
-endif
-cIdBic := left(x,nSplit-1)
-cIBAN  := strtran(substr(x,nSplit+1)," ")
-if (cCountry := BicCountry(cIdBic)) == NIL
-  SetMsg(MsgBicExist(cIdBic))
-  RETURN NIL
-endif
-if !empty(cCountry) .and. left(cIBAN,2) != cCountry
-  SetMsg(trim(cIBAN) + " : IBAN must start with '"+cCountry+"' !")
-  RETURN NIL
-endif
-RETURN NIL if ! ChkIBAN34(cIBAN)
-cBBAN := substr(cIBAN,5) // Basic Bank Account Number
-if cCountry == "BE"
-  cBBAN := BanBeFormat(cBBAN)
-else
-  // currently no other national validation algorithms supported
-endif
-RETURN NIL if cBBAN == NIL
-RETURN cIdBic+":"+trim(cIBAN)
-* x := cIdBic+":"
-* do while len(cIBAN) > 0
-*   x += left(cIBAN,4)+" "
-*   cIBAN := substr(cIBAN,5)
-* enddo
-* RETURN trim(x)
+*STATIC FUNCTION BnkParse(x)
+** local lIsIBAN // whether it is a domestic (.f.) or an IBAN number
+*local nSplit
+*local cCountry
+*local cIdBic
+*local cIBAN
+*local cBBAN := NIL // Basic Bank Account Number
+*RETURN x if empty(x)
+*x := strtran(x," ")
+*x := strtran(x,"-")
+*x := strtran(x,".")
+*nSplit := at(":",x)
+*if nSplit == 0 // also eine Inlands-Kontonummer
+*  if MemPays == "B  "
+*    RETURN BanBeValidate(x)
+*  else
+*    // No validation of domestic bank account number
+*    RETURN x
+*  endif
+*endif
+*cIdBic := left(x,nSplit-1)
+*cIBAN  := strtran(substr(x,nSplit+1)," ")
+*if (cCountry := BicCountry(cIdBic)) == NIL
+*  SetMsg(MsgBicExist(cIdBic))
+*  RETURN NIL
+*endif
+*if !empty(cCountry) .and. left(cIBAN,2) != cCountry
+*  SetMsg(trim(cIBAN) + " : IBAN must start with '"+cCountry+"' !")
+*  RETURN NIL
+*endif
+*RETURN NIL if ! ChkIBAN34(cIBAN)
+*cBBAN := substr(cIBAN,5) // Basic Bank Account Number
+*if cCountry == "BE"
+*  cBBAN := BanBeFormat(cBBAN)
+*else
+*  // currently no other national validation algorithms supported
+*endif
+*RETURN NIL if cBBAN == NIL
+*RETURN cIdBic+":"+trim(cIBAN)
+** x := cIdBic+":"
+** do while len(cIBAN) > 0
+**   x += left(cIBAN,4)+" "
+**   cIBAN := substr(cIBAN,5)
+** enddo
+** RETURN trim(x)
 
 // used by banclean.act
 FUNCTION banclean(x) 
@@ -456,10 +462,6 @@ if IsIBAN(x)
 endif  
 RETURN x
 
-
-#define BAN_NBAN   1
-#define BAN_BIC    2
-#define BAN_IBAN   3
 
 STATIC FUNCTION BanSplit(cBan,cCountry)
 local nSplit
@@ -491,12 +493,25 @@ cNBAN := substr(cIBAN,5) // Basic Bank Account Number
 if cCountry == "BE"
   cNBAN := BanBeFormat(cNBAN)
 endif
-RETURN { cNBAN, cIdBic, cIBAN}
+RETURN { cNBAN, cIdBic, cIBAN }
 
 
-
-FUNCTION BanValidate(x,cCountry)
+FUNCTION BqePostEdit(x,cCountry)
 local aBan := BanSplit(x)
+RETURN x if aBan == NIL
+RETURN aBan[BAN_BIC]+":"+aBan[BAN_IBAN] if isiban(x)
+RETURN aBan[BAN_NBAN]
+
+FUNCTION BanParse(x,cCountry)
+local aBan := BanSplit(x)
+RETURN aBan if BanValidate(aBan,cCountry)
+RETURN NIL
+
+FUNCTION BqeValidate(x,cCountry)
+// Warning("BqeValidate("+utos(x)+","+utos(cCountry)+")")
+RETURN BanValidate(BanSplit(x),cCountry)
+
+FUNCTION BanValidate(aBan,cCountry)
 default cCountry to nat2iso(PAR->Pays)
 RETURN .f. if !BicValidate(aBan[BAN_BIC],cCountry)
 RETURN .f. if !IbanValidate(aBan[BAN_IBAN],cCountry)
@@ -535,7 +550,6 @@ if !empty(cCountry)
 endif
 RETURN !SetMsg(x + " : IBAN l„nger als 28 !") if len(x) > 28
 RETURN ChkIBAN34(x)
-
 
 
 STATIC FUNCTION ChkIBAN34(x)
@@ -666,7 +680,7 @@ ddAddField(cFieldname+"_A","C",LEN_NBAN,0,;
   "@k@!","V",;
   {|x|gsbNBAN(x,PAR->Pays,cFieldname)},NIL,;
   {|x|NbanValidate(x:buffer,nat2iso(PAR->Pays))},NIL,;
-  {||PAR->Pays=="B  "})
+  {||.t.})
 // BIC
 ddAddField(cFieldname+"_B","C",LenIdBic(),0,;
   "@k@!","V",;
@@ -680,7 +694,7 @@ ddAddField(cFieldname+"_C","C",28,0,;
   {|x|IbanValidate(x:buffer,nat2iso(PAR->Pays))},NIL,{||.t.})
   
 //  "@k@R !!!! !!!! !!!! !!!! !!!! !!!! !!!!","V",;
-ddOnTest("empty("+cFieldname+").or.BanValidate("+cFieldname+",nat2iso(PAR->Pays))")
+ddOnTest("empty("+cFieldname+").or.BqeValidate("+cFieldname+",nat2iso(PAR->Pays))")
 RETURN .t.
 
 
@@ -693,46 +707,52 @@ FUNCTION oBic() ; RETURN NIL
   		 
 FUNCTION LenBqe() ; RETURN 14
   		 
-FUNCTION BqePostEdit(cBqe,cPays) 		 
-local cOld := cBqe 		 
-RETURN cBqe if empty(cBqe) 		 
-if cPays == "B " .or. IsBqe(cBqe) 		 
-cBqe := strtran(cBqe," ") 		 
-cBqe := strtran(cBqe,"-") 		 
-cBqe := strtran(cBqe,".") 		 
-if len(cBqe) == 12 		 
-if val(left(cBqe,10)) % 97 == 0 		 
-RETURN transform(cBqe,"@R !!!-!!!!!!!-!!") if val(right(cBqe,2)) == 97
-elseif val(right(cBqe,2)) == val(left(cBqe,10)) % 97 		 
-RETURN transform(cBqe,"@R !!!-!!!!!!!-!!") 		 
-endif 		 
-endif 		 
-RETURN cOld if Confirm(cOld + MSG033,MsgSure(),MSG_NO) 		 
-RETURN space(len(cOld)) 		 
-endif 		 
-#ifdef LG_FRENCH 		 
-SetMsg("(Pas de controle du no de compte)")
-#else
-SetMsg("(Keine Kontrolle der Kontonummer)")
-#endif 		 
-RETURN cOld 		 
+FUNCTION BqePostEdit(x)
+RETURN x
+
+FUNCTION BqeValidate(x)
+RETURN .t.
+
+*FUNCTION BqePostEdit(cBqe,cPays)
+*local cOld := cBqe 		 
+*RETURN cBqe if empty(cBqe) 		 
+*if cPays == "B " .or. IsBqe(cBqe) 		 
+*cBqe := strtran(cBqe," ") 		 
+*cBqe := strtran(cBqe,"-") 		 
+*cBqe := strtran(cBqe,".") 		 
+*if len(cBqe) == 12 		 
+*if val(left(cBqe,10)) % 97 == 0 		 
+*RETURN transform(cBqe,"@R !!!-!!!!!!!-!!") if val(right(cBqe,2)) == 97
+*elseif val(right(cBqe,2)) == val(left(cBqe,10)) % 97 		 
+*RETURN transform(cBqe,"@R !!!-!!!!!!!-!!") 		 
+*endif 		 
+*endif 		 
+*RETURN cOld if Confirm(cOld + MSG033,MsgSure(),MSG_NO) 		 
+*RETURN space(len(cOld)) 		 
+*endif 		 
+*#ifdef LG_FRENCH 		 
+*SetMsg("(Pas de controle du no de compte)")
+*#else
+*SetMsg("(Keine Kontrolle der Kontonummer)")
+*#endif 		 
+*RETURN cOld 		 
   		 
-FUNCTION IsBqe(cBqe) 		 
-RETURN .f. if len(trim(cBqe)) != 14 		 
-RETURN .f. if ! substr(cBqe,4,1) $ "-." 		 
-RETURN .f. if ! substr(cBqe,12,1) $ "-." 		 
-RETURN .t. 		 
+*FUNCTION IsBqe(cBqe) 		 
+*RETURN .f. if len(trim(cBqe)) != 14 		 
+*RETURN .f. if ! substr(cBqe,4,1) $ "-." 		 
+*RETURN .f. if ! substr(cBqe,12,1) $ "-." 		 
+*RETURN .t. 		 
   		 
-FUNCTION BqeValidate(cBqe) 		 
-cBqe := strtran(cBqe," ") 		 
-cBqe := strtran(cBqe,"-") 		 
-cBqe := strtran(cBqe,".") 		 
-if val(left(cBqe,10)) % 97 == 0 		 
-RETURN .t. if val(right(cBqe,2)) == 97 		 
-elseif val(right(cBqe,2)) == val(left(cBqe,10)) % 97 		 
-RETURN .t. 		 
-endif 		 
-RETURN .f. 		 
+*FUNCTION BqeValidate(cBqe) 		 
+*cBqe := strtran(cBqe," ") 		 
+*cBqe := strtran(cBqe,"-") 		 
+*cBqe := strtran(cBqe,".") 		 
+*if val(left(cBqe,10)) % 97 == 0 		 
+*RETURN .t. if val(right(cBqe,2)) == 97 		 
+*elseif val(right(cBqe,2)) == val(left(cBqe,10)) % 97 		 
+*RETURN .t. 		 
+*endif 		 
+*RETURN .f. 		 
   		 
 #endif // not DEF_IBAN
 

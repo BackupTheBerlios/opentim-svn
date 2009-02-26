@@ -1125,9 +1125,10 @@ ddFld Memo     , M,10,0
 ddFld IdPrj    ,C, LenIdPrj(),0  picture PIC_ID ;
                    pick PickPrj(IMP->IdPrj)
                    * valid ImlPrjValidate(JnlDC(IMP->IdJnl))
-ddFld Compte1  ,C,LenBqe(),0 postedit {|x| BqePostEdit(x,MemPays) } ;
-                             valid BqeValidate(IMP->Compte1) ;
-                             pick ImlPickCompte()
+ddFld Compte1  ,C,LenBqe(),0 ;
+      postedit {|x| BqePostEdit(x,ImlCountry()) } ;
+      valid BqeValidate(IMP->Compte1,ImlCountry()) ;
+      pick ImlPickCompte()
 ddFld Mont2    ,T, LenMont(),0 GET_MONTANT ;
                    when JNLATTR_S $ JnlAttrib(IMP->IdJnl)
 ddFld Date3    ,D, 8,0
@@ -1241,18 +1242,25 @@ endif
 RETURN ph_Refresh()
 
 FUNCTION Par2Name(lAnrede)
-local cIdPar
-if empty(FIELD->IdPar2)
-  cIdPar := FIELD->IdPar
-else
-  cIdPar := FIELD->IdPar2
-endif
-RETURN ParName(cIdPar) if lAnrede
-RETURN ParField( cIdPar, {|| PAR->Firme } )
+* local cIdPar := ImlIdPar2()
+* if empty(FIELD->IdPar2)
+*   cIdPar := FIELD->IdPar
+* else
+*   cIdPar := FIELD->IdPar2
+* endif
+RETURN ParName(ImlIdPar2()) if lAnrede
+RETURN ParField(ImlIdPar2(), {|| PAR->Firme } )
 
 FUNCTION ImlPickCompte()
-RETURN PickParCompte(FIELD->IdPar,FIELD->Compte1) if empty(FIELD->IdPar2)
-RETURN PickParCompte(FIELD->IdPar2,FIELD->Compte1)
+RETURN PickParCompte(ImlIdPar2(),FIELD->Compte1) 
+// RETURN PickParCompte(FIELD->IdPar2,FIELD->Compte1)
+
+FUNCTION ImlCountry()
+RETURN nat2iso(ParExpr(ImlIdPar2(),"PAR->Pays"))
+
+FUNCTION ImlIdPar2()
+RETURN FIELD->IdPar if empty(FIELD->IdPar2)
+RETURN FIELD->IdPar2
 
 
 **
@@ -1310,9 +1318,10 @@ ddFld IdPrj    ,C, LenIdPrj(),0  picture PIC_ID ;
                    * valid ImlPrjValidate(IML->DC)
                    // skip .t.
 ddFld NB2      ,C,30,0 valid NB2Validate(IML->NB2)
-ddFld Compte1  ,C,LenBqe(),0 postedit {|x| BqePostEdit(x,MemPays) } ;
-                             valid BqeValidate(IML->Compte1) ;
-                             pick ImlPickCompte()
+ddFld Compte1  ,C,LenBqe(),0 ;
+      postedit {|x| BqePostEdit(x,ImlCountry() ) } ;
+      valid BqeValidate(IML->Compte1,ImlCountry()) ;
+      pick ImlPickCompte()
                        // skip .t.
 ddFld _ParName ,C,25,0  attrib V block padr(Par2Name(.f.),25)
 ddFld DC       ,C, 1,0 picture PIC_ID valid DcValidate(IML->DC)
@@ -1721,9 +1730,10 @@ ddFld IdPar2   ,C, LenIdPar(),0  GET_PAD ;
                    pick PickPar(NIL,TRL->IdPar2) ;
                    valid TrlPar2Validate()
 ddFld _ParName2,C,30,0  attrib V block ParField(TRL->IdPar2,{||PAR->Firme})
-ddFld Compte1  ,C,LenBqe(),0 postedit {|x| BqePostEdit(x,MemPays) } ;
-                             valid BqeValidate(TRL->Compte1) ;
-                             pick TrlPickCompte()
+ddFld Compte1  ,C,LenBqe(),0 ;
+      postedit {|x| BqePostEdit(x,TrlCountry()) } ;
+      valid BqeValidate(TRL->Compte1,TrlCountry()) ;
+      pick TrlPickCompte()
 ddFld NB1      ,C,30,0
 ddFld NB2      ,C,30,0 valid NB2Validate(TRL->NB2)
 ddFld Periode  , C, LEN_PERIODE,0 ;
@@ -1817,15 +1827,19 @@ endif
 RETURN PickTrt(TRL->IdTrt,TRL->DC,TRL->IdBud)
 
 
+FUNCTION TrlIdPar2() // 20090226
+RETURN TRL->IdPar2 if ! empty(TRL->IdPar2)
+RETURN TRL->IdPar if ! empty(TRL->IdPar) // 19990630
+RETURN TRA->IdPar
+
 FUNCTION TrlParPage()
-RETURN ParPage(TRL->IdPar2) if ! empty(TRL->IdPar2)
-RETURN ParPage(TRL->IdPar) if ! empty(TRL->IdPar) // 19990630
-RETURN ParPage(TRA->IdPar)
+RETURN ParPage(TrlIdPar2()) 
 
 FUNCTION TrlPickCompte()       // 19990630
-RETURN PickParCompte(TRL->IdPar2,TRL->Compte1) if !empty(TRL->IdPar2)
-RETURN PickParCompte(TRL->IdPar,TRL->Compte1) if !empty(TRL->IdPar)
-RETURN PickParCompte(TRA->IdPar,TRL->Compte1)
+RETURN PickParCompte(TrlIdPar2(),TRL->Compte1) 
+
+FUNCTION TrlCountry()
+RETURN nat2iso(ParExpr(TrlIdPar2(),"PAR->Pays")) 
 
 FUNCTION TrlPreEdit()
 RETURN .f. if ! TraPreEdit()

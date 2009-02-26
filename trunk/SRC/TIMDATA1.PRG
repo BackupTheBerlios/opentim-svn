@@ -1015,7 +1015,7 @@ ddFld Pays    ,C, LEN_IDNAT,0 valid ParPlzValidate() ;
                       pick PickNat(PAR->Pays) // ,NIL,NAT_IDNAT)
 ddFld Tel     ,C,LenTel(),0 postedit {|x| TelPostEdit(x,PAR->Pays,PAR->CP) }
 ddFld Fax     ,C,LenTel(),0 postedit {|x| TelPostEdit(x,PAR->Pays,PAR->CP) }
-ddFld Compte1 ,C,15,0 postedit {|x| BqePostEdit(x,PAR->Pays) } ;
+ddFld Compte1 ,C,15,0 postedit {|x| BqePostEdit(x) } ;
                       valid BqeValidate(PAR->Compte1)
 ddFld NoTVA   ,C,LEN_NOTVA,0 picture PIC_ID ;
                       postedit {|x| GetNoTva(x,PAR->Pays) } ;
@@ -1069,7 +1069,7 @@ ddFld IdDev    , C, LEN_IDDEV,0 picture PIC_ID ;
                pick PickDev(PAR->IdDev) ;
                when empty(PAR->Debit+PAR->Credit)
 ddFld Memo    ,M,10,0
-ddFld Compte2 ,C,15,0 postedit {|x| BqePostEdit(x,PAR->Pays) } ;
+ddFld Compte2 ,C,15,0 postedit {|x| BqePostEdit(x) } ;
                       valid BqeValidate(PAR->Compte2)
 ddFld RueNum  ,C, 4,0 GET_NUM
 ddFld RueBte  ,C, 6,0

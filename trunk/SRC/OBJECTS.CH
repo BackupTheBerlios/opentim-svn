@@ -1036,3 +1036,11 @@
 
 #define VNASATIS_D "D"
 
+
+#ifdef DEF_IBAN
+
+#define BAN_NBAN   1
+#define BAN_BIC    2
+#define BAN_IBAN   3
+
+#endif
