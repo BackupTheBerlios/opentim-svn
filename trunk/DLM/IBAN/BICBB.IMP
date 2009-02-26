@@ -1,0 +1,19 @@
+// import from Bundesbank
+// http://www.bundesbank.de/zahlungsverkehr/zahlungsverkehr_bankleitzahlen_download.php
+// Delimiter chr(9)
+SeekKey padr(substr(i_line,140,11),LenIdBic())
+
+LineValidate substr(i_line,9,1)=="1" // Merkmal, ob bankleitzahlfhrendes Kreditinstitut
+// LineValidate !empty(i_fields[7])
+// LineValidate !empty(i_fields[17])
+
+FieldNew BIC->IdBic substr(i_line,140,11)
+FieldNew BIC->Name latin2dos(substr(i_line,108,27))
+FieldUpdate BIC->Country "DE"
+FieldUpdate BIC->NBID substr(i_line,1,8)
+
+InputFile AppRoot()+"\download\BLZ_20090309.txt"
+FieldDisplay BIC      " "+substr(i_line,140,11)
+FieldDisplay Name     " "+latin2dos(substr(i_line,108,27))
+FieldDisplay Country  " DE"
+FieldDisplay count    " "+ntrim(i_count)
