@@ -1256,7 +1256,7 @@ RETURN PickParCompte(ImlIdPar2(),FIELD->Compte1)
 // RETURN PickParCompte(FIELD->IdPar2,FIELD->Compte1)
 
 FUNCTION ImlCountry()
-RETURN nat2iso(ParExpr(ImlIdPar2(),"PAR->Pays"))
+RETURN NIL // nat2iso(ParExpr(ImlIdPar2(),"PAR->Pays"))
 
 FUNCTION ImlIdPar2()
 RETURN FIELD->IdPar if empty(FIELD->IdPar2)
@@ -1839,7 +1839,7 @@ FUNCTION TrlPickCompte()       // 19990630
 RETURN PickParCompte(TrlIdPar2(),TRL->Compte1) 
 
 FUNCTION TrlCountry()
-RETURN nat2iso(ParExpr(TrlIdPar2(),"PAR->Pays")) 
+RETURN NIL // nat2iso(ParExpr(TrlIdPar2(),"PAR->Pays")) 
 
 FUNCTION TrlPreEdit()
 RETURN .f. if ! TraPreEdit()

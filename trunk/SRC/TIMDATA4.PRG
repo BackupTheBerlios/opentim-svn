@@ -84,8 +84,8 @@ ddFld IdDbv   ,C, 5,0 picture PIC_ID ;
 ddFld CodeCli   ,C, 11,0 picture PIC_ID
 ddFld CodeBqe   ,C, 3,0 picture PIC_ID
 ddFld Compte    ,C, 14,0 picture PIC_ID ;
-      postedit {|x| BqePostEdit(x,nat2iso(MemPays)) } ;
-      valid BqeValidate(JNL->Compte,nat2iso(MemPays))
+      postedit {|x| BqePostEdit(x) } ;
+      valid BqeValidate(JNL->Compte)
 ddFld DocAttr ,C,6,0 picture PIC_ID ;
                      pick JnlPickFca()
 ddFld IdDoc   ,C,LEN_IDDOC,0 picture PIC_ID ;

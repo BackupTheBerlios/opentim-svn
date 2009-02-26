@@ -392,7 +392,7 @@ RETURN !isiban(x)
 FUNCTION IsBelgian(x)
 local aBan
 RETURN .t. if ! IsIBAN(x)
-aBan:=BanSplit(x)
+aBan:=BanSplit(x,"BE")
 RETURN left(aBan[BAN_IBAN],2) == "BE"
 
 
@@ -474,8 +474,8 @@ local x := BanUnformat(cBan)
 // x := strtran(x,"-")
 // x := strtran(x,".")
 RETURN { x, cIdBic, cIBAN } if empty(x)
+default cCountry to nat2iso(MemPays)
 nSplit := at(":",x)
-// cCountry := nat2iso(cIdNat)
 if nSplit == 0 // National BAN, no IBAN
   if cCountry == "BE"
     cIBAN := be2iban(x)
@@ -489,48 +489,59 @@ if nSplit == 0 // National BAN, no IBAN
 endif
 cIdBic := left(x,nSplit-1)
 cIBAN := substr(x,nSplit+1)
-cNBAN := substr(cIBAN,5) // Basic Bank Account Number
-if cCountry == "BE"
-  cNBAN := BanBeFormat(cNBAN)
+if left(cIBAN,2) == "BE"
+  cNBAN := BanBeFormat(substr(cIBAN,5)) // Basic Bank Account Number
 endif
 RETURN { cNBAN, cIdBic, cIBAN }
 
 
 FUNCTION BqePostEdit(x,cCountry)
-local aBan := BanSplit(x)
+local aBan := BanSplit(x,cCountry)
 RETURN x if aBan == NIL
 RETURN aBan[BAN_BIC]+":"+aBan[BAN_IBAN] if isiban(x)
 RETURN aBan[BAN_NBAN]
 
 FUNCTION BanParse(x,cCountry)
-local aBan := BanSplit(x)
+local aBan := BanSplit(x,cCountry)
 RETURN aBan if BanValidate(aBan,cCountry)
 RETURN NIL
 
 FUNCTION BqeValidate(x,cCountry)
+local ban := BanSplit(x,cCountry)
+local c
 // Warning("BqeValidate("+utos(x)+","+utos(cCountry)+")")
-RETURN BanValidate(BanSplit(x),cCountry)
+RETURN .f. if ! BanValidate(ban,cCountry)
+RETURN .t. if !isiban(x)
+RETURN .t. if left(ban[BAN_IBAN],2) != "BE"
+c := be2iban(ban[BAN_NBAN])
+RETURN !SetMsg("be2iban() sagt "+c+" statt "+ban[BAN_IBAN]) ;
+  if c != ban[BAN_IBAN]
+c := be2bic(ban[BAN_NBAN])
+RETURN !SetMsg("be2bic() sagt "+c+" statt "+ban[BAN_BIC]) ;
+  if c != ban[BAN_BIC]
+RETURN .t.  
 
 FUNCTION BanValidate(aBan,cCountry)
-default cCountry to nat2iso(PAR->Pays)
-RETURN .f. if !BicValidate(aBan[BAN_BIC],cCountry)
-RETURN .f. if !IbanValidate(aBan[BAN_IBAN],cCountry)
+default cCountry to nat2iso(MemPays)
+RETURN .f. if !BicValidate(aBan[BAN_BIC])
+RETURN .f. if !IbanValidate(aBan[BAN_IBAN])
 RETURN .f. if !NbanValidate(aBan[BAN_NBAN],cCountry)
 RETURN .t.
 
 
-FUNCTION BicValidate(x,cCountry)
+FUNCTION BicValidate(x)
 local cBicCountry
 RETURN .t. if empty(x)
 cBicCountry := BicCountry(x)
 RETURN !SetMsg(MsgBicExist(x)) if cBicCountry == NIL
-RETURN .t. if empty(cCountry)
-if cBicCountry != cCountry
-  RETURN !SetMsg(utos(trim(x)) ;
-    + " : Landescode BIC (" + utos(cBicCountry) ; 
-    + ") != Partner ("+utos(cCountry) + ") !")
-endif
 RETURN .t.
+* RETURN .t. if empty(cCountry)
+* if cBicCountry != cCountry
+*   RETURN !SetMsg(utos(trim(x)) ;
+*     + " : Landescode BIC (" + utos(cBicCountry) ; 
+*     + ") != Partner ("+utos(cCountry) + ") !")
+* endif
+* RETURN .t.
 
 
 FUNCTION NbanValidate(x,cCountry)
@@ -541,13 +552,13 @@ endif
 // currently no other national validation algorithms supported
 RETURN .t.
 
-FUNCTION IbanValidate(x,cCountry)
+FUNCTION IbanValidate(x)
 RETURN .t. if empty(x)
 x := BanUnformat(x)
-if !empty(cCountry)
-  RETURN !SetMsg(x + " : IBAN muss mit '" ;
-    +cCountry+"' beginnen !") if left(x,2) != cCountry
-endif
+* if !empty(cCountry)
+*   RETURN !SetMsg(x + " : IBAN muss mit '" ;
+*     +cCountry+"' beginnen !") if left(x,2) != cCountry
+* endif
 RETURN !SetMsg(x + " : IBAN l„nger als 28 !") if len(x) > 28
 RETURN ChkIBAN34(x)
 
@@ -603,7 +614,7 @@ if val(left(x,10)) % 97 == 0
 elseif val(right(x,2)) == val(left(x,10)) % 97
   RETURN .t.
 endif
-RETURN !SetMsg(alltrim(x) + " : ungltige Belgische Bankkontonummer!")
+RETURN !SetMsg(alltrim(x) + " : ungltige belgische Bankkontonummer!")
 
 
 // http://fr.wikipedia.org/wiki/ISO_13616#Composition
@@ -631,8 +642,8 @@ RETURN DbfPeek(oBic(),"BE"+padr(left(cCompte,3),LEN_NBID),;
 
 #define LEN_NBAN 14
 
-FUNCTION gsbNBAN(x,cIdNat,cFieldname)
-local cCountry := nat2iso(cIdNat)
+FUNCTION gsbNBAN(x,cCountry,cFieldname)
+// local cCountry := nat2iso(cIdNat)
 local aBan 
 local cBIC
 local cIBAN
@@ -653,8 +664,8 @@ else
 endif
 RETURN NIL
 
-FUNCTION gsbBIC(x,cIdNat,cFieldname)
-local aBan := BanSplit(&cFieldname,nat2iso(cIdNat))
+FUNCTION gsbBIC(x,cCountry,cFieldname)
+local aBan := BanSplit(&cFieldname,cCountry)
 RETURN padr(aBan[BAN_BIC],LenIdBic()) if x == NIL
 cFieldname := "PAR->" + cFieldname
 &cFieldname := alltrim(x) + ":" + aBan[BAN_IBAN]
@@ -666,8 +677,8 @@ x := strtran(x,"-")
 x := strtran(x,".")
 RETURN x
 
-FUNCTION gsbIBAN(x,cIdNat,cFieldname)
-local aBan := BanSplit(&cFieldname,nat2iso(cIdNat))
+FUNCTION gsbIBAN(x,cCountry,cFieldname)
+local aBan := BanSplit(&cFieldname,cCountry)
 RETURN padr(IbanFormat(aBan[BAN_IBAN]),34) if x == NIL
 cFieldname := "PAR->" + cFieldname
 &cFieldname := aBan[BAN_BIC] + ":" + BanUnformat(x)
@@ -675,28 +686,42 @@ RETURN NIL
 
 
 FUNCTION ddAddBanFields(cFieldname)
+local cCountry := nat2iso(MemPays)
 // NBAN
 ddAddField(cFieldname+"_A","C",LEN_NBAN,0,;
   "@k@!","V",;
-  {|x|gsbNBAN(x,PAR->Pays,cFieldname)},NIL,;
-  {|x|NbanValidate(x:buffer,nat2iso(PAR->Pays))},NIL,;
+  {|x|gsbNBAN(x,cCountry,cFieldname)},NIL,;
+  {|x|NbanValidate(x:buffer,cCountry)},NIL,;
   {||.t.})
 // BIC
 ddAddField(cFieldname+"_B","C",LenIdBic(),0,;
   "@k@!","V",;
-  {|x|gsbBIC(x,PAR->Pays,cFieldname)},NIL,;
-  {|x|BicValidate(x:buffer,nat2iso(PAR->Pays))},;
-  {|x|PickBic(x,nat2iso(PAR->Pays))},{||.t.})
+  {|x|gsbBIC(x,cCountry,cFieldname)},NIL,;
+  {|x|BicValidate(x:buffer)},;
+  {|x|PickBic(x)},{||.t.})
 // IBAN
 ddAddField(cFieldname+"_C","C",28,0,;
   "@k@!","V",;
-  {|x|gsbIBAN(x,PAR->Pays,cFieldname)},NIL,;
-  {|x|IbanValidate(x:buffer,nat2iso(PAR->Pays))},NIL,{||.t.})
-  
+  {|x|gsbIBAN(x,cCountry,cFieldname)},NIL,;
+  {|x|IbanValidate(x:buffer)},NIL,{||.t.})
 //  "@k@R !!!! !!!! !!!! !!!! !!!! !!!! !!!!","V",;
-ddOnTest("empty("+cFieldname+").or.BqeValidate("+cFieldname+",nat2iso(PAR->Pays))")
+// ddOnTest("BanTest("+cFieldname+","+utos(cCountry)+")")
+ddOnTest("empty("+cFieldname+").or.BqeValidate(";
+   +cFieldname+",'"+cCountry+"')")
 RETURN .t.
 
+*FUNCTION BanTest(x,cCountry)
+*local ban
+*RETURN .t. if empty(x)
+*ban := BanParse(x,cCountry)
+*RETURN .f. if ban == NIL
+*RETURN .t. if !isiban(x)
+*RETURN .t. if left(ban[BAN_IBAN],2) != "BE"
+*RETURN !SetMsg("be2iban() fails") if ;
+*  be2iban(ban[BAN_NBAN]) != ban[BAN_IBAN]
+*RETURN !SetMsg("be2bic() fails") if ;
+*  be2bic(ban[BAN_NBAN]) != ban[BAN_BIC]
+*RETURN .t.
 
 #else 
 
