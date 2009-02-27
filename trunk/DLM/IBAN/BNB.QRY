@@ -1,0 +1,7 @@
+//
+// BNB.QRY - generated 27.02.09
+// for BNB.DBF
+//
+column 1 BNB pict @K@!
+column 2 BIC pict @K@!
+column 3 Name

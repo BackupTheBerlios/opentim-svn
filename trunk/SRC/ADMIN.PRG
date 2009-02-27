@@ -1680,6 +1680,9 @@ aadd( a, oUsr() )
 aadd( a, oPlz() )
 aadd( a, oPar() )
 aadd( a, oNat() )
+#ifdef DEF_BNB
+  aadd( a, oBNB() )
+#endif DEF_BNB
 #ifdef DEF_IBAN
   aadd( a, oBic() )
 #endif DEF_IBAN

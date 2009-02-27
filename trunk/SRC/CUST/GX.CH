@@ -142,5 +142,7 @@
 
 #define DEF_EID
 
+#define DEF_BNB
+
 // #define SIMULATE_CARD_READER
 
