@@ -1,9 +1,9 @@
 //
-// BIC.QRY - generated 26.02.09
+// BIC.QRY - generated 27.02.09
 // for BIC.DBF
 //
 window 15 71 0 0 
 column 1 BIC pict @K@!
+column 4 NBID
 column 2 Name der Bank
 column 3 Lnd pict @K@!
-column 4 NBID

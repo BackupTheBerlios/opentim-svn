@@ -354,8 +354,8 @@ static b := NIL
 if b != NIL ; RETURN b ; endif
 define data b                  ;
   name BIC
-ddIndex b on BIC->IdBic
-ddIndex b on BIC->Country+BIC->NBID
+ddIndex b on BIC->IdBic+BIC->NBID
+ddIndex b on BIC->Country+BIC->NBID+BIC->IdBic
 ddFld IdBic     ,C,LenIdBic(),0 picture PIC_ID
 ddFld Name      ,C,40,0
 ddFld Country   ,C, 2,0 // ISO2 country code
@@ -378,8 +378,17 @@ RETURN cIdBic + utrp(" : unknown BIC!",;
   " : BIC inconnu!")
 
 FUNCTION BicCountry(cIdBic)
-RETURN DbfPeek(oBic(),padr(cIdBic,LenIdBic()),;
-  "iif(empty(BIC->Country),nat2iso(BIC->IdNat),BIC->Country)",NIL)
+RETURN BicPeek(cIdBic,;
+  "iif(empty(BIC->Country),nat2iso(BIC->IdNat),BIC->Country)")
+
+FUNCTION BicPeek(cIdBic,xuValue,uReturn)
+open area oBic()
+  softseek padr(cIdBic,LenIdBic())
+  if !eof()
+    uReturn := &xuValue
+  endif
+close area
+RETURN uReturn
 
 
 FUNCTION IsIBAN(x)
@@ -479,9 +488,7 @@ nSplit := at(":",x)
 if nSplit == 0 // National BAN, no IBAN
   if cCountry == "BE"
     cIBAN := be2iban(x)
-    #ifdef DEF_BNB
     cIdBic := be2bic(x)
-    #endif DEF_BNB
     // cBan := BanBeFormat(x)
   * else
   *   cIBAN := x
@@ -518,11 +525,9 @@ RETURN .t. if left(ban[BAN_IBAN],2) != "BE"
 c := be2iban(ban[BAN_NBAN])
 RETURN !SetMsg("be2iban() sagt "+c+" statt "+ban[BAN_IBAN]) ;
   if c != ban[BAN_IBAN]
-#ifdef DEF_BNB  
-  c := be2bic(ban[BAN_NBAN])
-  RETURN !SetMsg("be2bic() sagt "+c+" statt "+ban[BAN_BIC]) ;
-    if c != ban[BAN_BIC]
-#endif    
+c := be2bic(ban[BAN_NBAN])
+RETURN !SetMsg("be2bic() sagt "+c+" statt "+ban[BAN_BIC]) ;
+  if c != ban[BAN_BIC]
 RETURN .t.  
 
 FUNCTION BanValidate(aBan,cCountry)
@@ -629,6 +634,12 @@ cNBAN := strtran(cNBAN,"-","")
 cData := cNBAN + "1114" // "BE" converted to numbers
 cData += "00" // the yet unknown control digits
 RETURN "BE"+strtran(str(98-BigMod(cData,97),2)," ","0")+cNBAN
+
+// http://fr.wikipedia.org/wiki/ISO_13616#Composition
+FUNCTION be2bic(cCompte)
+RETURN "" if empty(cCompte)
+RETURN DbfPeek(oBic(),"BE"+padr(left(cCompte,3),LEN_NBID),;
+  "trim(BIC->IdBIC)","",2)
 
 
 #define LEN_NBAN 14
@@ -862,32 +873,27 @@ RETURN (VcsParse(x) != NIL)
 #endif
 
 
-#ifdef DEF_BNB
-
-
-**
-** BNB - Banque Nationale de Belgique
-**
-FUNCTION oBNB()
-static b := NIL
-if b != NIL ; RETURN b ; endif
-define data b                  ;
-  name BNB
-ddIndex b on BNB->IdBnb
-ddFld IdBnb     ,C,3,0 picture PIC_ID
-ddFld IdBic     ,C,LenIdBic(),0 picture PIC_ID
-ddFld Name      ,C,40,0
-ddEndDef()
-RETURN b
-
-
-// http://fr.wikipedia.org/wiki/ISO_13616#Composition
-FUNCTION be2bic(cCompte)
-RETURN "" if empty(cCompte)
-RETURN DbfPeek(oBnb(),left(cCompte,3),"trim(BNB->IdBIC)","")
-
-#else
-
-FUNCTION oBNB() ; RETURN NIL
-
-#endif DEF_BNB
+*#ifdef DEF_BNB
+*
+*
+***
+*** BNB - Banque Nationale de Belgique
+***
+*FUNCTION oBNB()
+*static b := NIL
+*if b != NIL ; RETURN b ; endif
+*define data b                  ;
+*  name BNB
+*ddIndex b on BNB->IdBnb
+*ddFld IdBnb     ,C,3,0 picture PIC_ID
+*ddFld IdBic     ,C,LenIdBic(),0 picture PIC_ID
+*ddFld Name      ,C,40,0
+*ddEndDef()
+*RETURN b
+*
+*
+*#else
+*
+*FUNCTION oBNB() ; RETURN NIL
+*
+*#endif DEF_BNB

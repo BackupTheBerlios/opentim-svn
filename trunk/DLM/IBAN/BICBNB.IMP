@@ -1,0 +1,23 @@
+// import from Banque Nationale de Belgique
+// http://www.bnb.be/pub/07_00_00_00_00/07_06_00_00_00/07_06_02_00_00.htm
+Delimiter chr(9)
+SeekKey padr(strtran(i_fields[2]," "),LenIdBic())+padr(i_fields[1],10) // LEN_NBID
+
+LineValidate !empty(i_fields[2])
+LineValidate i_fields[2] != "VRIJ"
+LineValidate i_fields[2] != "nav"
+LineValidate i_fields[2] != "Biccode"
+// LineValidate len(strtran(i_fields[2]," ")) == 8
+// LineValidate !empty(i_fields[17])
+
+FieldNew BIC->IdBic strtran(i_fields[2]," ")
+FieldNew BIC->NBID i_fields[1]
+FieldNew BIC->Name latin2dos(i_fields[3])
+FieldUpdate BIC->Country "BE"
+
+InputFile AppRoot()+"\download\R_FullList_of_Codes_Current.txt"
+FieldDisplay BIC      " "+i_fields[2]
+FieldDisplay NBID     " "+i_fields[1]
+FieldDisplay Name     " "+latin2dos(i_fields[3])
+FieldDisplay Country  " BE"
+FieldDisplay count    " "+ntrim(i_count)

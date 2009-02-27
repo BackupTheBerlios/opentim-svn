@@ -1,0 +1,11 @@
+//
+// BIC2.QRY - generated 27.02.09
+// for BIC.DBF
+//
+window 15 71 0 0 
+column 3 Lnd pict @K@!
+column 4 NBID
+column 1 BIC pict @K@!
+column 2 Name der Bank
+order 2
+help BIC
