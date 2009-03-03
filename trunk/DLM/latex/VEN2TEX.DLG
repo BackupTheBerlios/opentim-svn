@@ -53,7 +53,7 @@ field name="Model" \
       caption="Modell " \
       picture="@k@!"
 
-// field name="AsPdf" \
+field name="AsPdf" \
     caption2=" Format PDF au lieu de DVI" \
     reader={|g|CbxReader(g)}
 
