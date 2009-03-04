@@ -2114,10 +2114,13 @@ FUNCTION PrjValidate() ; RETURN .t.
 FUNCTION ImlVcsCreate(cVcs)
 local aIml := {}
 local cIdMvi := vcs2hst(cVcs)
+local u
 RETURN .f. if cIdMvi == NIL
-if !DbfPeek(oMvi(),cIdMvi,{||MviImlCollect(aIml,.f.)},.f.)
+u := DbfPeek(oMvi(),cIdMvi,{||ImpMviPreCollect().and.MviImlCollect(aIml,.f.)},NIL)
+if u == NIL
   RETURN !SetMsg(cVcs+" ("+cIdMvi+") : Buchung nicht gefunden!") 
 endif
+RETURN .f. if ! u
 ImlGenerate(aIml,IMP->IdJnl,IMP->IdDoc)
 RETURN .t.
 
