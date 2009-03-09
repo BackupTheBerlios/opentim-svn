@@ -1,0 +1,1809 @@
+2007
+====
+
+20070102
+--------
+- Neue Funktion NafAuto(), Nachfolger von VnaAuto(). Fürs SPZ.
+
+- parse_kw() hatte einen Bug, der z.B. aus align="left" ein 
+  align="t" machte.
+  
+  vorher::
+    cValue:= substr(cParams,nPos-1)
+  nachher::
+    cValue:= left(cParams,nPos-1)
+
+20070103
+--------
+
+- NextPeriode() berücksichtigte PerShift() irgendwie nicht. INS auf
+  Periode 0612 bei PAC schlug zwar korrekt 0613 vor, aber INS auf
+  Periode 0613 schlug fälschlicherweise 0714 vor.
+
+20070104
+--------
+- Neues Feld NEW->img. Änderung in NEW.HTM und NewToHtml().
+
+20070105
+--------
+
+- Wenn _SesGrpCheck() .f. zurück gibt (z.B. bei Gruppen mit 2
+  Therapeuten), dann wird SES->GCount jetzt trotzdem gesetzt.
+- Einträge einer Gruppensitzung brauchen jetzt nicht mehr den gleichen
+  Therapeuten zu haben. Also das "!" ist nicht mehr nötig.
+
+jetzt::
+
+  if SES->Gruppe==cGruppe.and.!empty(cGruppe);
+            .and.SES->Was==cWas;
+            .and.SES->Von==cVon;
+            .and.SES->Bis==cBis
+
+vorher::
+
+  if SES->Gruppe==cGruppe.and.!empty(cGruppe);
+      .and.SES->IdPar==cIdPar;
+      .and.SES->Von==cVon;
+      .and.SES->Bis==cBis
+
+20070105
+--------
+
+- Neue Sprache "* Multilingual" in :xfile:`LNG.DBC`. SiteMenu() nimmt dann
+  MemLang1. Beispiel: die Seite "Videofilme" listet referierende Artikel
+  in allen Sprachen auf.
+
+20070105
+--------
+
+- Kitz weiter von heute Vormittag: nCount und aRecnos werden nur
+  gesammet, wenn es der gleiche Therapeut (SES->IdPar) ist. GCount muss
+  4 und nicht 8 sein für die 2x4 Sitzungen am 04.12.2006
+
+20070106
+--------
+- dlm\std\prprint.drv und prn2pdf.drv ignorieren jetzt die Optionen 6, 7
+  und 8 nicht mehr. Denn die funktionieren jetzt.
+
+20070108
+--------
+- RptLoad() machte die defaults für CLN_TEXT, als RPT_TOCSV noch gar
+  nicht gesetzt war. Deshalb funktionierte ARTCTS01.REP noch nicht mit
+  ToCSV eingeschaltet.
+
+20070109
+--------
+- Neue Datei :xfile:`COPIES.DLG` in :xfile:`DLM/STD` zum includen 
+  von anderen Druckdialogdateien aus.
+- TIM nahm einen ACF-Record nur dann, wenn ACF->Packing == VNL->Qte war.
+  Jetzt reicht es, dass qton(VNL->Qte) >= qton(ACF->Packing) ist.
+
+20070112
+--------
+
+- NafAuto() funktioniert jetzt im SPZ. Nach ein paar kleinen Änderungen.
+
+20070112
+--------
+- VenVenEdit() sortiert Dokumente mit dem gleichen Datum jetzt richtig.
+- Neue Funktion JnlSeq() gibt eine interne Sequenznummer des Journals
+  zurück. Wird gebraucht für VenVenEdit()
+- Neue Funktion VenVenLast() gibt das VEN->IdJnl des letzten Dokuments
+  in VenVenEdit() zurück.
+
+20070114
+--------
+
+- dlm\latex\texparse.act
+  dlm\latex\tex2dvi.act
+  dlm\latex\tex2pdf.act
+
+  Vor dem LaTeX-Lauf werden jetzt die temporären Dateien `*.dvi`, `*.log` und
+  `*.aux` gelöscht. Das tat er bisher nämlich nicht, und das führte zu
+  einer (bei Himaco fatalen) Meldung über einen Fehler in der CAT.AUX.
+  ``FileDelete("FOO.TXT")`` sucht die Datei nämlich nicht im aktuellen
+  Verzeichnis, dazu muss man ``FileDelete(".\FOO.TXT")`` machen.
+
+20070115
+--------
+
+- VnlFirstCheck() setzte saIpb nicht auf NIL zurück, wenn es keine
+  Artikelzeile war. Dadurch hatte Marie-Claire einen Bug, den wir lange
+  Zeit nicht reproduzieren konnten: Code TVA 21 au lieu de D21: tilt,
+  j'ai trouvé comment reproduire ce problŖme. Il ne vient que si tu
+  encodes d'abord une facture vente et puis des facture achat. Donc: si
+  le problŖme revient, il suffit de quitter/redémarrer TIM pour que cela
+  disparaisse.
+
+20070115
+--------
+
+- Neue Datei trig.prg. Die Funktion cos() daraus wird bei FW benutzt,
+  um die Stichhöhe zu ermitteln.
+
+20070116
+--------
+
+- smirror.btp ruft jetzt nicht mehr die timtools.bat, sondern direkt die
+  sync.exe auf.
+
+20070118
+--------
+- xCmdSpooler wird jetzt wieder wie früher X mal ausgeführt, wenn
+  p_setcopies() > 1 ist.
+  Und darf sich also nicht um p_copies() kümmern.
+  Und p_copies() fliegt wieder raus (vor allem damit man merkt, wenn ich
+  vergesse, die prnprint.drv gleichzeitig zu aktualisieren)
+  Siehe auch 20061226.
+  Dadurch löse ich alle Probleme auf einmal:
+  
+  - ich brauche bei eh  (wo ich kein Upgrade machen kann) nicht
+    den dlm\std\prnprint.drv zu patchen
+    
+  - GX braucht sich keine Sorgen zu machen wegen Inkompatibilität.
+
+
+20070119
+--------
+
+- KRG->Mont1 ist jetzt nicht mehr die Summe aus KRL->Mont, sondern der
+  Gesamtbetrag (KK+Kind). Da ist nämlich ein feiner Unterschied.
+
+  Beispiel: Rechnung 719
+
+  Preis = 1.00 B also 50% von 114.83 = 57,42 EUR.
+  Das ist der von der INAMI festgelegte Preis der Sitzung.
+  Kind zahlt 1.48, also zahlt KK nur noch 55.94 EUR. Alles klar.
+
+  Aber in den beiden anderen Zeilen dieser Rechnung ist der Preis 0
+  (weil Kontingent C), dann ändert die Logik.
+
+  KRL->Mont2 bleibt Anteil Kind
+
+  KRL->Mont ist nicht mehr der "Preis der Sitzungen", sondern der
+  "maximal von der KK rückerstattete Betrag"
+
+  Anteil KK = iif(empty(KRL->Mont),0,val(KRL->Mont)-(KRL->Mont2))
+
+  KrgKrlUpdate() und KrgIsValid() machen jetzt::
+
+    nMont1T += max(val(KRL->Mont),val(KRL->Mont2))
+
+  statt bisher::
+
+    nMont1T += val(KRL->Mont)
+
+  Vorher sah Rechnung 719 so aus::
+  
+    ┌─
+    │  603 Edam Mustafa                Preis            57.42
+    │  605 Edam Mohammed, Herr         Eigenanteil       4.44
+    │                                  Anteil KK        52.98
+    │
+    │                           719 : Inhalt
+    │      Art.Nr Preis      AnteilKind AnteilKK   Datum    Ktg
+    │ ───────────┬──────────┬──────────┬──────────┬────────┬─────
+    │      1.00  │     57.42│      1.48│     55.94│11.12.06│  11
+    │      1.00  │          │      1.48│          │15.12.06│  12
+    │      1.00  │          │      1.48│          │18.12.06│  12
+    └─
+
+  Jetzt so::
+  
+    ┌─
+    │  603 Edam Mustafa                Preis            60.38
+    │  605 Edam Mohammed, Herr         Eigenanteil       4.44
+    │                                  Anteil KK        55.94
+    │
+    │                           719 : Inhalt
+    │      Art.Nr Tarif      AnteilKind AnteilKK   Datum    Ktg
+    │ ───────────┬──────────┬──────────┬──────────┬────────┬────
+    │      1.00  │     57.42│      1.48│     55.94│11.12.06│  11
+    │      1.00  │          │      1.48│          │15.12.06│  12
+    │      1.00  │          │      1.48│          │18.12.06│  12
+    │            │     57.42│          │          │        │
+    └─
+
+     507 Mustermann Tom              Preis           967.80
+       5 Mustermann Thomas           Eigenanteil      11.60
+                                     Anteil KK       956.20
+
+    ════════════════════════════      1 ══════════════════════
+         Art.Nr Tarif      AnteilKind AnteilKK   Datum    Ktg
+    ───────────┬──────────┬──────────┬──────────┬────────┬────
+         0.50  │     48.39│      1.45│     46.94│06.01.05│   1
+         1.00  │     96.78│      1.45│     95.33│03.01.05│   1
+         1.00  │     96.78│      1.45│     95.33│27.01.05│   1
+         1.00  │     96.78│      1.45│     95.33│31.01.05│   1
+         1.50  │    145.17│      1.45│    143.72│10.01.05│   1
+         1.50  │    145.17│      1.45│    143.72│14.01.05│   1
+         1.50  │    145.17│      1.45│    143.72│28.01.05│   1
+         2.00  │    193.56│      1.45│    192.11│20.01.05│   1
+               │    967.80│          │          │        │
+
+
+- Wenn man den Periodenbereich auf leer setzte, dann sprang TIM auf BEF
+  um. GetPeriode() macht jetzt das SetDevise(DevDefault(MemPer1)) nur
+  noch, wenn MemPer1 nicht leer ist.
+
+20070119
+--------
+
+- FntHeight() gibt jetzt 1/6, 1/7 oder 1/8 zurück, wenn das per
+  p_setspecial() so gesetzt ist. Driver-Optionen 6, 7 und 8 sollten also
+  nur dafür benutzt werden.
+- p_setspecial() gibt jetzt die aktuelle Einstellung zurück, wenn ohne
+  Parameter.
+
+
+20070131
+--------
+
+- NafExec() und ParVenAppend() kennen jetzt die Möglichkeit, zu
+  simulieren (in ein array zu sammeln) statt wirklich zu fakturieren.
+
+- spz :
+  nafautos.dlg und nafautos.act ersetzen die biherige Liste "zu
+  fakturieren"
+
+20070201
+--------
+
+- NewTitle() macht jetzt etwas Sinnvolles, wenn der Titel leer ist:
+  schreibt das Datum im Langformat. Wird benutzt für vor-cycling.be
+
+- Neue Datei localdlm\www\par.def.
+  Datei web\tim.dbi abgeändert, WWW vor CRM, damit die PAR.DEF aus WWW
+  genommen wird. PAR.DEF und PAR.MSK in WWW angepasst. Unnötiges raus.
+  Neue Funktion ParIsContainer(). Neue Datei par2htm.act. Die
+  html-Dateien der einzelnen Partner sitzen jetzt in basepath/orgs/
+  statt bisher /par/.
+  Neue Funktion ListPlsPars().
+  Beispiel: MSX "Angeschlossene Vereine" in VOR.
+  Neue Funktionen ListMtgComing() und ListMtgPast()
+
+20070202
+--------
+
+- Eine Referenz (also "[ref XXX:nnn Titel]") mit leerem Titel führt zu
+  einem unsichtbaren Link. Das unpraktische daran ist, dass mann dann
+  nicht mehr weiß, wie der Titel gewesen wäre. Deshalb jetzt eine neue
+  Konvention: Wenn der Titel mit * beginnt, wird der Link ebenfalls
+  nicht angezeigt. Als hätte man ihn gelöscht. Und wenn man statt des *
+  ein @ an die erste Stelle setzt, dann wird der Standardtitel statt des
+  dort stehenden genommen. Z.B. für die mehrsprachigen Topics in
+  Meetings.
+
+  Der Trick mit dem @ funktioniert auch mit [xe XXX:nnn @Titel]. Dadurch
+  kann ich die TPC für häufig benutzte mehrsprachige Textfragmente
+  nutzen.
+
+20070203
+--------
+
+- Neuer Eintrag ParCity in der tim.dbi
+  Und PlzString() hat jetzt einen dritten optionalen Parameter cZipCode.
+  Und DLM\ZIP\ZIP.DLM programmiert ParCity um:
+
+20070206
+--------
+
+- DEF_KITZ qte2art() rundet jetzt immer komplett nach unten ab.
+
+20070207
+--------
+- Neues Modul DEF_TSK
+
+- Ein alter Bug ist raus: virtuelle Felder mit DbcText() im MSKGET_BLOCK
+  wurden beim ersten FldRefresAll() einer Bildschirmmaske nicht
+  angezeigt. Habe die Makroausführung in die Zeile davor verlegt statt
+  bisher im "@ .... say ..."-Befehl.
+
+- VenAppend() setzt jetzt (wenn DEF_VNA) nicht mehr einfach immer den
+  VNL->Match, dass er auf die kopierte Operation zeigt, sondern nur noch
+  dann, wenn das auch mäglich ist. Die neue Funktion TrnLocate() ist
+  eine Abspaltung der bisherigen Funktion VnaTrnLocate(). Also wenn mein
+  bei PAC Alt-F6 auf einer VNA macht, um daraus eine andere VNA zu
+  machen, dann werden die VNL->Match auf leer gesetzt, weil es für
+  VNA/VNA keine TRN gibt. Aber wenn man ein erlaubtes Folgededokument
+  macht (z.B. von einem BLV aus eine VNA machen), dann werden die
+  VNL->Match so gesetzt, dass der BLV durch die VNA befriedigt wird.
+
+- release PAC
+
+- TIM testet jetzt vor dem Öffnen von DBF und DBT-Dateien, ob deren
+  Dateigröße nicht die Obergrenze für DBF-Dateien überschreitet. Wenn
+  das bei einem Kunden mal passieren sollte, dann sollte es wenigstens
+  nicht unbemerkt passieren.
+
+
+20070213
+--------
+
+- MviTest() rief seit 20060828 TestOkay() nicht auf und dadurch brach
+  der gesamte Testlauf ab als hätte man Escape gedrückt.
+  In der timtest.txt stand dann::
+  
+    > Buchungen : Vorgang schlug fehl.
+    > Buchungen : OK
+    > 0 warnings in 5 of 12 tests.
+
+20070213
+--------
+
+- ImpImlTest() macht jetzt wieder SetDialog(.f.), damit die
+  ImlPreClose-Events (von denen im CPAS Eupen eines ein Confirm()
+  enthält) beim Testlauf nicht nerven.
+
+- Neue Funktionen DbfMaxSize() und DbtMaxSize(), damit man die seit
+  20070207 hardcodierte maximale Größe von DBF- und DBT-Dateien in der
+  TIM.INI verändern kann. Hardcodierter Defaultwert ist weiterhin 200 MB
+  für DBF und 32 MB für DBT.
+
+20070215
+--------
+- :func:`SwapLng` swappt jetzt auch die JNL.DBF (DocLibX und DocLibXN).
+  DbfSwapLng() hat einen neuen Paremeter cSuffix und ist jetzt immer
+  eingelinkt.
+- Die Warnung " : kein Journal in dieser Gruppe" in DocEdit() ist jetzt
+  erstens übersetzt und zeigt zweitens nicht mehr GrjName(cIdGrj)
+  sondern cIdGrj an. Dann nützt sie auch dann etwas, wenn die angegebene
+  cIdGrj eine ungültige GRJ ist.
+
+- release ACE
+
+- Neues Modul DLM\TSK
+
+- [ven date yyyy] versteht den Parameter jetzt als Datumsformat. Weil
+  val(p)!= 0 ist. Wird aber nicht benutzt.
+
+- VenAppend() hat einen neuen Parameter xlOkay. Damit RunTasks()
+  fehlschlagen kann, wenn Benutzer das Dokument nicht registriert hat.
+  Siehe z.B. DLM\TSK\TSKVENAP.ACT
+
+20070223
+--------
+
+- Neuer Eintrag OnVnlClose in der tim.dbi. Wird bei PAC benutzt, um
+  factures récurrentes zu implementieren. Wenn eine VNA mit einem
+  zyklischen Artikel (d.h. ART->Months nicht leer), der sich auf ein
+  ABO-Dokument bezieht, registriert wird, dann muss das VEN->DatEch des
+  ABO-Dokuments erhöht werden.
+  dann muss
+
+20070224
+--------
+- AboUpdate() funktioniert jetzt. Scheinbar.
+
+- ArtStdName() macht jetzt noch ein StrParse() der Artikelbezeichnung.
+  storniert am 20070227
+
+20070226
+--------
+
+- (SPZ) ParDlsSuggest() fakturierte DLP-Einträge auch, wenn DLS->Zahlart
+  nicht "R" war
+
+- (PAC) Neuer Eintrag VnaMustEdit in der tim.dbi wird beim Einsammeln
+  der Vorschläge von der VNA ausgeführt (wenn VEN auf dem
+  Ursprungsdokument positioniert ist) und muss .t. oder .f. zurück
+  geben. Wenn mindestens eine (ausgewählte) Zeile ein .t. hat, dann wird
+  lDlg auf .t. gesetzt.
+
+20070227
+--------
+
+- Das StrParse() in StdArtName() habe ich wieder raus geholt.
+
+20070301
+--------
+
+- DEF_DLS wird bei PAC in Betrieb genommen.
+
+20070305
+--------
+- _ParDlsCollect() und _ParDlpCollect() machen die Bedingung
+  "DLS->Zahlart=='R'" jetzt nicht mehr selber, sondern die wird im SPZ
+  von der NAFAUTO.ACT bzw NAFAUTOS.ACT gemacht. _ParDlsCollect() macht
+  auch die Bedinungen "!empty(DLS->Montant)" überhaupt nicht mehr. Weil
+  die bei PAC nicht sein darf und im SPZ wahrscheinlich nicht nötig ist.
+  Renamed::
+  
+    ParDlsCollect() to Par2Naf()
+    _ParDlsCollect() to ParDls2Naf()
+
+  ParDls2Naf() hat jetzt neue optionale Parameter, die bei PAC (d.h. von
+  ParVnaSuggest() aus) benutzt werden::
+
+    ParDls2Naf(aNaf,jnl,dDate1,dDate2,lTagged,xlDlsFilter,;
+               xcDesig,xcMemo,xcQte,xcPrixU,xcMont,;
+               xlUpdate,xlAfter)
+
+  Bei PAC (DEF_VNA) wird nicht VNL->IdDls, sondern VNL->Match benutzt.
+  Und das wäre eigentlich auch im SPZ sinnvoll. Und dann könnte man ein
+  DLS->IdJnl einführen...
+
+20070307
+--------
+- Diverse kleine Änderungen, um mit Xbase kompiliert zu werden.
+
+20070308
+--------
+- Weitere Änderungen
+
+- Wenn TplLang() "*" ist, wählt tr() jetzt MemLang1 statt bisher immer
+  EN.
+
+20070309
+--------
+- Ich habe an drei Stellen in ddedit.prg das soBrowse:configure()
+  rauskommentiert, das ich wahrscheinlich nur wegen xbase da rein getan
+  hatte. Und danach funktionierte das Brwose im xbase. Bin aber nicht
+  sicher, ob das nicht schon vorher war...
+
+- DocDelete() hat einen neuen optionalen Parameter lConfirm. Wenn der
+  .f. ist, wird die Standardbestätigung vor dem Löschen übersprungen.
+
+20070312
+--------
+- Ctrl-PfeilNachOben produzierte seit 20070309 einen RTE "array access".
+  ddseek.prg, ddSearch()
+
+20070313
+--------
+- ParHasDls() und ParHasDlp() öffnen jetzt auch die DLA. Denn in
+  PARCTRL.REP wird im Filter DlaExist() benutzt.
+
+- In Dialogfenstern wurde GetReader() statt MyGetReader() gesetzt.
+  Deshalb funktionierte F10 und PgDn nicht mehr seit dem 20070309.
+
+- dlm\std\winstd.drv und prnprint.drv machen jetzt -p statt --printer,
+  und nicht mehr utos() vom Printernamen. Weil das Druckerproblem im SPZ
+  dadurch auf mysteriöse Weise behoben war.
+  
+20070314
+--------
+- dlg.prg : DLGGET_READER wurde mit GetReader() vorbelegt (und seit
+  gestern mit MyGetReader()), aber das war alles Quatsch, denn dort soll
+  einfach NIL stehen, um den Standard-Reader zu kriegen.
+
+- dlm\std\parnewid.act vergaß bisher die DLS und DLP
+- Funktionen oDlp() und oDla() gibt es jetzt auch wenn nicht DEF_DLS
+
+- Neue Funktion VnlSelect()
+- Wenn PickAttrib() ein cStart mit Länge 0 kriegt, dann macht er jetzt
+  kein padr(9 des Resultats mehr.
+
+20070315
+--------
+- TxtEdit() : Die Xbase-Version machte einen Endless-Loop, wenn man
+  Alt-T tipte.
+- FldRead() beließ get:picture auf NIL. Das fiel in Xbase durch einen
+  RTE auf. Clipper ließ das durch. Aber das hatte dort vielleicht
+  Nebenwirkungen.
+
+20070320
+--------
+- die console.msg wurde bisher mit
+  FO_READWRITE geöffnet, jetzt mit FO_READWRITE+FO_DENYWRITE. Weil ich
+  sonst nicht rein schreiben kann, wenn tail -f die console.msg anzeigt.
+
+- WINSTD.DRV : Bezeichnung kürzer.
+- Dialogfenster PRINTING ist jetzt eine Zeile höher und zeigt den Port
+  bzw. das capture file auf separater Zeile an.
+
+20070322
+--------
+
+- ddAddField() macht jetzt kein GetNew() mehr. ad[AD_FIELDS] enthält
+  jetzt keine Get-Objekte mehr, sondern arrays of AG_ALEN.
+
+20070323
+--------
+- ddedit.prg : hier mache ich jetzt ddQryAddColumns(ad,qry,lHeaders)
+  *vor* dem Auswerten von nStart. Weil ich in Xbase für start bottom
+  b:goBottom() machen muss und das macht einen RTE, wenn die Kolonnen
+  des Browses noch nicht definiert wurden. Nebenwirkung könnte sein,
+  dass manchmal Kolonnenbreiten nicht korrekt gesetzt werden...
+  Auch mache ich das ddRefreshAll() jetzt nur noch, wenn nStart == 0
+  ist. Weil ich in den anderen Fällen jetzt richtig goBottom() statt
+  eval(goBottomBlock) mache.
+
+- Renamed AppName() to ProgName() because AppName() is defined in xbase.
+- Splitted AppMain() into AppInit() and AppMain(). The xbase version
+  calls AppInit() already during appsysxb.prg. New Function
+  SetWindowSize() is ignored by Clipper by sets the window size in the
+  xbase version. Must be called during tim.ini (later it has no effect).
+
+20070326
+--------
+
+- LSMEMO() filtert jetzt die xbase-Events raus, die nicht die Tastatur
+  betreffen.
+
+- ext_edit() kriegt jetzt einen unverarbeiteten Memostring und kümmert
+  sich selbst um das Erstellen der temporären Datei ~memotxt.txt.
+
+- F1 in einem Texteditor benutzt jetzt nicht mehr KEYBOARD, sondern fügt
+  den Rückgabestring using mlctopos() ein. Weil in xbase der typeahead
+  kleiner ist und diese Methode mit manchen Zeichen (z.B. ";") nicht
+  funktionierte.
+
+20070327
+--------
+- Wurstelei am Browse.
+- RPT_URGENT wird jetzt ignoriert (weil wenn das vor AppSys passiert,
+  kommt ein fatal error.
+- set date war auf american. Deshalb ist jetzt meine modifizierte
+  dbesys.prg mit dabei.
+- SetCollation() : eupper() tut bei __XPP__ jetzt nichts mehr.
+- PickNum() konnte man mit Alt+Pfeilen nur im 80x25-Bereich bewegen.
+  Jetzt überallhin.
+- IniLoad() zeigt jetzt Dateiname und Zeilennummer an, wenn das Keyword
+  okay ist, aber der Codeblock nicht .t. zurück gibt. Komisch, dass das
+  bisher nicht war. Aber was passiert, wenn SetMsg() NIL ist?
+- abrowse() macht jetzt nicht mehr configure(), invalidate() usw., wenn
+  ich rowPos verändere, sondern vorher b:deHilite() und nachher
+  b:forceStable()
+
+20070328
+--------
+
+- Erfreulich: fopen() & Co von Alaska funktionieren auch mit langen
+  Dateinamen. DEF_LFN ist nicht mehr nötig und trotzdem kann ich .html
+  machen.
+
+- UrlOpen() macht jetzt einfach "start URL" (statt bisher "timtools
+  openurl") und setzt falls nötig ein "http://" davor.
+
+- chdir() funktioniert jetzt auch mit xbase.
+
+
+- todo:
+
+  - Bei RTE during IniLoad() der TIM.INI (also bevor das CRT existiert),
+    kriegt er einen fatalen Rappel
+    
+  - PfeilNachOben in einem MemoReader springt schon eine Zeile zu früh
+    ins vorige Feld zurück.
+    
+  - DbfEdit() mit start bottom startet nicht unten.
+  
+  - Ctrl-End in einem READ springt nicht ins letzte Feld.
+  
+  - SetCollation() nutzbar machen?
+
+20070329
+--------
+- Ich habe meinen TIM wieder auf Clipper zurück gefahren, weil doch noch
+  zu viele ungelöste Problemchen waren. Ein paar kleine Änderungen im
+  TBrowse() (wenn man rowPos setzt) habe ich wieder Clipperkompatibel
+  gemacht.
+
+20070403
+--------
+
+- fixed: Das valid eines GET wurde in xbase auch dann ausgeführt, wenn
+  das GET nicht aktualisiert wurde. (z.B. bei F7 auf einem NEW kommt
+  immer ein Confirm())
+
+- fixed: Wenn man memoedit() mit TAB beendete, wurden die Änderungen
+  nicht gespeichert.
+
+- fixed: Probleme wenn man TBrowse:rowPos setzt sind jetzt scheinbar
+  alle behoben. Wichtig war der Tipp, dass ich in xbase dann vorher
+  forceStable() machen muss.
+
+- dlm\std\std:dlm :
+  do setvar("asPDF"," ")
+
+20070505
+--------
+- Renamed PickTrnAttrib() to PickTrnAttr().
+
+20070411
+--------
+- TIM sagte "[=VenIfcMemo()] : return type must be CHAR, NIL or
+  LOGICAL!", weil dvaltype(cRetVal) in xbase nicht "C" sondetrn "M" ist.
+  Bug fixed.
+
+20070412
+--------
+- Das MsgDisplay() vor dem Ausdrucken der Seitenvorschau enthält jetzt
+  auch die destination (cFile bzw. scPort.
+
+20070414
+--------
+- Der String, den VnlDesig() zurückgab, hatte nicht immer als Länge
+  LenVnlDesig(). Und zwar dann, wenn er memoline(VNL->Memo) nahm, weil
+  sowohl VNL->Desig als auch ART->Name1 leer waren. Bei Clipper machte
+  das nichts aus, aber mit xbase konnte man das virtuelle Feld dann
+  nicht bearbeiten.
+
+- Reports : CLN_WIDTH enthält jetzt nicht mehr den numerischen Wert,
+  sondern den Ausdruck zum Berechnen der Kolonnenbreite. Und wird per
+  Makrooperator jedesmal bei Bedarf berechnet. Und die Berechnung der
+  sonstigen Kolonnenbreiten sowie der Gesamtbreite des Berichts findet
+  jetzt in _report() statt bisher in rptload() statt. Grund: jetzt kann
+  man SetMntFormat() einfach in einer before-Klausel des Berichts setzen
+  und das überschreibt dann ein eventuelles SetMntFormat() des
+  Druckparametersatzes. Bisher musste SetMntFormat() immer doppelt
+  gemacht werden: als #exec-Anweisung vor der ersten Kolonnendefinition
+  und als before-Klausel.
+
+20070416
+--------
+
+- Die Clipper-Version sucht nach tim.mrk und tim.mem, xbase-Version
+  schiebt ein ".xbase" dazwischen (tim.xbase.mrk und tim.xbase.mem).
+  Damit man die beiden Versionen parallel laufen lassen kann. Und ist
+  auch leichter für mich bei den Upgrades.
+
+- Support für ADSDBE wenn DEF_ADS.
+  Ich kann dann trotzdem diese tim4.exe ohne ADS-Server laufen lassen,
+  wenn ich den neuen Eintrag "UseAdsDbe off" in die TIM.ini einbauen.
+
+- Neue Funktion SetFontSize(nWidth,nHeight). Default ist
+  SetFontHeight(9,16)
+
+20070417
+--------
+
+- Arbeiten in dbesys.prg für ADS-Support
+  ax_error() und ax_cacherecords mit __XPP__
+
+- LogClose() ruft jetzt AdsDisconnect(), damit die Verbindung zum
+  ADS-Server geschlossen wird. Wenn AppMain() .f. returnt, dann wurde
+  bisher einfach QUIT gemacht statt falls nötig auch die .rpt und die
+  .log zu schließen.
+
+20070419
+--------
+- :xfile:`HSTVEN.REP` und :xfile:`HSTVEN.DLG` und :xfile:`HSTVEN.DBC`  
+  vertragen jetzt ausländische
+  MWSt-Nummern auch für L und F. N.B.: Verteilung laut MWSt-Code wird
+  nicht mehr unterstützt für ausländische Rechnungen.
+  todo: IdReg "N" wird benutzt für "non-assujetti", kann also nicht für
+  Ausland NL benutzt werden.
+
+20070420
+--------
+- Neue Klausel "recnos" in reports. Für PAC ParPackScan.
+- Neue Funktion SetPageFooter(), wie SetPageHeader()
+
+20070421
+--------
+- PrjUpdate() & Co für CUST_PAC
+- K_ALT_UP im abrowse() funktionierte nicht.
+
+20070423
+--------
+- Ich habe setmouse(.t.) wieder eingeschaltet und begonnen, getsysx.prg
+  anzupassen. TIM fängt an, auf die Maus zu reagieren, zumindest während
+  ReadModal(). Und noch ein Vorteil (zufällig bemerkt): ich kann jetzt
+  [Shift-Ins] belegen.
+  Todo: FlushKeyStack()
+
+20070423
+--------
+- p_tabexec() gibt jetzt .t. zurück, wenn normal verlaufen (nicht mehr
+  NIL)
+
+20070425
+--------
+
+- Habe den errorsys.prg von xbase angepasst und xbase-tim benutzt jetzt
+  die neue Version.
+
+- TplParse() ersetzte bei [=expr] noch nicht die CRLF in expr durch
+  Leerzeichen. Dadurch kam bei PAC ein "error in macro expression"
+
+- SetPageFooter() (sh. 20070420) wurde nicht auf NIL gesetzt in
+  OpenPrinter. Wenn es einmal benutzt worden war, blieb das bis zum Ende
+  der TIM-Sitzung aktiv. Behoben.
+
+- das raise("no output stream is active") habe ich ersetzt durch
+  "Attempted to print X while no output stream is active"
+
+- MSK-Editor :
+  FldMove() machte RTE wenn die Expression NIL zurück gab.
+  ShowField() benutzt jetzt xparse(statt bisher einen RTE zu machen,
+  wenn man sich vertippt).
+
+20070502
+--------
+- VenDoClose() stellte zwar die Frage "Dokument enthält keine Buchungen!
+  Sind sie sicher?", aber registrierte dann auch bei J nicht.
+
+- DEF_SPZ : neue Funktion ParAkten()
+
+20070503
+--------
+
+- ddedit.prg : K_UP bewirkt jetzt ein soBrowse:forceStable() (wenn __XPP__)
+
+- ShowLogList() zeigt auch mit xbase jetzt die Namen der anderen
+  Benutzer an.
+
+20070503
+--------
+- Neuer Befehl OnSuccess in Druckertreibern.
+  dlm\std\winstd.drv benutzt den, um die PDF-Datei optional als E-Mail zu
+  verschicken. Wird aber nicht benutzt, weil das mit dem PrnStatus nicht
+  sauber ist.
+
+- Neue funktion AddSpooler(), und xCmdSpooler ist jetzt ein array von
+  codeblocks statt bisher eine expression. SetSpooler() und AddSpooler()
+  vertragen beide aber auch einen String, der dann zu einem Codeblock
+  konvertiert wird. SetSpooler() setzt saCmdSpooler vorher auf {}
+  zurück, während Addspoller() ein weiteres Event hinzufügt.
+- Fonction() macht jetzt default cLangue to SetTplLang()
+
+20070505
+--------
+
+- das forceStable() vom 20070503 habe ich wieder rausgeholt, weil das
+  bei einem fast leeren Bildschirm
+
+20070507
+--------
+- msx_url() hängt jetzt den Sprachsuffix immer selber dran.
+  vor-cycling.be: Die einzelnen Seiten verweisen jetzt auf ihre
+  jeweilige Übersetzung.
+
+  Wenn zwei Seiten den gleichen Match haben, dann müssen sie
+  unterschiedliche Sprachen haben.
+
+- abrowse() machte einen RTE wenn man «mit großer Geschwindigkeit» gegen
+  den oberen Rand knallte. Das forceStable() muss vor dem Test ob snItem
+  > 1 gemacht werden.
+
+20070507
+--------
+- ParVenAppend() gibt jetzt -1 statt bisher 0 zurück, wenn PreVenAuto()
+  nicht gefluppt hat. Denn das zählt ja als Fehler::
+
+    * 20070507 RETURN 0 if ! PreVenAuto(jnl[JNL_IDJNL])
+    RETURN -1 if ! PreVenAuto(jnl[JNL_IDJNL])
+
+  Beispiel: Bei PAC machte VnaAuto() dann keine
+  Fehlermeldung, wenn die letzte VNA nicht registriert war. Jetzt kommt
+  dort wie erwünscht::
+  
+    Le document précédent (VNA 060539) n'est pas cloturé.
+              Continuer le traitement (O/N) ? O
+
+20070508 
+--------
+Support for sendmail.py in DLM\STD :
+ASPDF.DLG
+WINSTD.DRV
+EML.DRV
+STD.DLM
+MAIL.EML
+
+20070509
+--------
+- PIN:7 : VEN->IdPrj jetzt nicht mehr bearbeitbar wenn Dokument
+  registriert ist.
+
+- "Partner nach Umsatz" (dlm\sprl\par001.rep) machte einen RTE wenn man
+  nach CSV exportierte. Der Bug war in ClnFetch.
+
+- dlm\std\winstd.drv macht jetzt DlgDefault("asPDF"," ")
+
+20070510 
+--------
+Alt+Enter emulieren:
+- Neue Funktion SelectFont()
+- Experimente mit Fonts.
+
+20070510
+--------
+- dlm\asrt\artseek.dlg : da waren noch zwei eupper() drin.
+- pac\parcrea.dlg : idem
+
+20070511
+--------
+- SelectFont(), AltEnter(), SetWinFont(), SetWinDimensions()
+- ddedit.prg : ddSettle() blockierte, wenn ENTER in der letzten Kolonne.
+- Noch eupper() gefunden
+
+- PlzString() bringt jetzt im Fall einer leeren PLZ nicht mehr "EE - ee"
+  sondern "Estland"
+- Das alte virtuelle Feld PAR->_PlzNom wird jetzt mit ParCity()
+  ermittelt. (storniert 20070519)
+
+20070512
+--------
+- ddRefreshAll() macht mit __XPP__ jetzt auch vorher ein forceStable().
+  Das war bisher noch nicht, und dadurch geriet der record pointer
+  durcheinander, wenn sich bei einem DoGet() die Sortierfolge geändert
+  hatte.
+
+- abrowse() (Auswahl aus einer Liste) hatte in der xbase-Version anfangs
+  den Cursor immer auf der ersten Zeile, auch wenn das zweite Element
+  selektiert war. Dadurch waren die Elemente vor dem selektierten
+  Element unsichtbar über dem oberen Rand und wurden erst bei
+  PfeilNachOben sichtbar.
+
+20070513
+--------
+
+- TIM braucht für OpenMail() und OpenUrl() jetzt nicht mehr die
+  TIM-Tools. Und wenn man die neuen Einträge OpenMail und WebBrowser in
+  der TIM.INI ordentlich setzt, kann man beide Befehle jetzt auch ganz
+  ohne die cmd.exe (d.h. mit kurzem DOS-Fenster dazwischen) starten.
+
+20070515
+--------
+
+- Man kann jetzt mehrere OnVnlClose-Einträge haben. Bisher wurde
+  stillschweigend der Letzte genommen. Achtung, ich habe in einem auch
+  die Syntax verändert: die Codeblock-Klammern dürfen jetzt nicht mehr
+  in der tim.dbi drin stehen.
+
+- txtedit() vertrug keine Memos mit TAB. Wenn man einen Text mit TABs
+  (chr(9)) in ein memo-Feld einfügte, dann blieb TIM stecken und musste
+  abgeknallt werden. Grund: die xbase-Version von MemoEdit hat es nicht
+  gerne, dass nTabSize auf 0 stand. Ich habs jetzt wieder auf NIL, also
+  Defaultwert. Also wenn ein Tab im Memofeld ist, wird das mit 4
+  Leerzeichen dargestellt. Ist ja auch logischer.
+
+- Das forceStable() im ddRefreshAll() (20070512) habe ich wieder raus
+  geholt, denn es hatte den Nebeneffekt, dass start bottom wieder nicht
+  mehr funktionierte.
+
+20070516
+--------
+- ddSettle() und DoGet()= scheinen jetzt zu funktionieren. ddSettle()
+  macht jetzt (wenn __XPP__) einen komplett neuen Algoritmus, weil das
+  Browse nicht nach rechts rollt, wenn man einfach nur colPos verändert.
+  Stattdessen benutze ich soBrowse:right() und rufe das
+  TBColumn:cargo[COL_SKIPBLOCK] dann über soBrowse:rowPos ab. In DoGet()
+  habe ich direkt vor und direkt nach dem Setzen von rowPos ein
+  forceStable() gesetzt.
+
+- PprCreate() funktinoiert jetzt anders. Im SPZ hatten die damit
+  zumindest seit xbase Probleme. Der legte zuerst einen Record mit
+  leerem IdPrb an, dann erst wurde das F1 ausgewertet und ein IdPrb
+  gefüllt. Jetzt wird der Record erst erzeugt, wenn man ein IdPrb
+  ausgewählt hat.
+
+- PlzString() hatte seit 20070511 einen Bug (zeigte für belgische
+  Städte einen " - " vor der Postleitzahl.
+
+- Neue Klausel forloop in rpt-Dateien.
+  Wird benutzt in pac\srvlist.rep
+- monthname(nMonth,cLangue) macht jetzt default cLangue to TplLang()
+
+20070517
+--------
+- Versuche im TBrowse
+- DbfSkipper() testet jetzt auch beim Raufgehen auf eof() (PIN:24)
+
+20070518
+--------
+- Support für FOXCDX: man kann TIM
+  jetzt mit Fox-Pro statt Dbase-Dateien benutzen. Experiment hat auch
+  fast geklappt, aber dann war da doch noch ein unerklärbares Phänomen.
+  In der USR und der JNL funktionierte die Navigation nicht. Alle
+  Records wurden angezeigt, aber man konnte nicht runtergehen. Und
+  Ctrl-PgDn leerte den Bildschirm. Die FOXDBE scheint nicht so stabil
+  zu sein. Habe auch keine Performanceverbesserung bemerkt. Bis auf
+  weiteres springe ich wieder zurück zur guten alten DBFNTX.
+  
+  - Neuer Eintrag UseAde in der TIM.DBI.
+  
+  - Funktionen ntx_ext(), dbf_ext() und dbt_ext() werden jetzt überall
+    benutzt.
+    
+  - neue Funktion dbf2fox() hat super geklappt.
+
+- Neuer GTYPE_PWD "X" für das Feld USR->Password. Der wird mit DBFNTX
+  ein C, aber mit ADS oder FOX ein X. Kann sein, dass das Passwortproblem
+  im CPAS dadurch behoben wird.
+
+- Der F1-Indikator in getsysxb.prg ist jetzt nicht mehr wie bisher
+  chr(23) sondern chr(18). Dann wird er auch in der xbase-Version als
+  Doppelpfeil dargestellt.
+
+- ddAddField() forciert jetzt die Länge eines Memo-Feldes auf 10 (bzw. 4
+  bei FOXPRO) und ignoriert die angegebene Länge einfach.
+
+20070519
+--------
+- HtmlMake() macht jetzt OpenUrl() statt bisher AppShell("start ...")
+
+- PAR->_PlzNom war nicht PlzString(), sondern PlzName(). Ich Tuppes.
+  Änderung vom 20070511 wieder storniert.
+
+- Neue Funktion PrjTreeUpdate(). OPnContainer() hat einen neuen
+  Parameter xlOnEach
+
+20070521
+--------
+- PIN : Ctrl-F2 und ENTER und Alt-F7 sind jetzt nicht mehr hardkodiert
+  belegt.
+
+20070522
+--------
+- Automatikfakturierung (ParVenAppend()) setzt VEN->Auteur nicht mehr
+  auf "AUTO", sondern auf UserId()
+- Aus ParVenAppend() habe ich die neue Funktion VenMake()
+  rausgesplittet, die ggf. auch ein leeres Dokument erzeugt.
+- OpenData() macht jetzt SetAppWindow():setTitle()
+
+20070522
+--------
+- PnsRefresh() erwartete, dass PRJ irgendwo auf war. Gefährlich. Jetzt
+  nicht mehr.
+- ParPage() tat einfach nichts, wenn PAR->IdPrt ungültig war. Jetzt
+  macht er dann eine Meldung.
+
+20070524
+--------
+- PickPrt() : wenn cPrtList nicht leer ist, aber keine gültige
+  Partnerart enthält, dann werden jetzt alle Partnerarten zur Auswahl
+  angezeigt. Bisher kam bei F1 auf einem Feld, das schon eine Nummer
+  enthielt, immer die die Warnung " Auswahl Aktenart : Auswahlliste leer
+  !  Drücken Sie eine Taste um weiterzumachen"
+
+20070524
+--------
+- Beeindruckend leere Stammdaten Partner bei SPZ. Das lag daran, dass
+  slIsEof seit ungefähr 20070517 durch DbfOnBottom() von außerhalb auf
+  dem falschen Wert stand. Habe jetzt mal alle Tests auf slIsEof dirch
+  eof() ersetzt. Dieses slIsEof ist mir nicht geheuer.
+- Neue Funktionen save_recno() und rest_recno(), die den Trick
+  local nRecNo := iif(eof(),NIL,recno()) machen, und die ich jetzt
+  systematisch überall in ddedit.prg benutze.
+
+20070525
+--------
+- ParVnaStop() macht das bisherige :data:`PARATTR_S` konfigurierbar.
+  Bei PA
+  will das Hospital "une facture par commande" kriegen. Leider muss dann
+  auch ein BLV par CDV gemacht werden. Das benutze ich also nicht.
+
+- Neuer Eintrag VnaMatch und Funktion VnaMatch() ermittelt den
+  "Selektierer", der angewendet werden soll. Aber nur wenn auch
+  :data:`TRNATTR_1` ("nur 1 VnaMatch pro Dokument") eingeschaltet ist. Wenn der
+  nicht NIL ist, sammelt VnaSuggest() immer nur einen Selektierer auf
+  einmal.
+
+  TIM.DBI bei PAC::
+  
+    VnaMatch iif("1"$PAR->Attrib,VnaParent("CDV"),NIL)
+
+  OnVenVnaParent() ermittelt beim Ausdrucken (wenn Betreff leer ist)
+  dann automatisch die erste Bestellung und druckt deren Betreff.
+
+- FIN->Remarq eines registrierten Dokuments kann man jetzt bearbeiten.
+  Das fand ich schon oft unlogisch. Dazu musste ich den preedit-Block
+  in oFin() rausholen und durch eine when FinPreEdit() auf jedem Feld
+  ersetzen.
+
+20070526
+--------
+- dlm\hst\genhst.rep : zeigte die Titelkonten immer in Sprache MemLang1
+  statt der gewählten Sprache an.
+
+- Der bei OnHstCtrMix angegebene Codeblock kriegt jetzt cMatch als
+  Parameter mit.
+- report mit toCSV machte "LenMnt()" als defaultwert für CLN_WIDTH. Das
+  musste sein LenMont().
+- report mit toCSV machte bisher::
+
+    c := "{|x|ntom(x,"+ntrim(cln[CLN_DECPOS])+","+cln[CLN_WIDTH]+")}"
+    cln[CLN_TEXT] := &c
+    
+  Das erkannte OpenOffice nicht als Zahlen an. Jetzt macht er deshalb::
+  
+    c := "{|x|komma(ntom(x,"+ntrim(cln[CLN_DECPOS])+","+cln[CLN_WIDTH]+"))}"
+    cln[CLN_TEXT] := &c
+  
+20070527
+--------
+- Neuer Eintrag FnlFillFilter. Damit kann ich bei mir selber die Kasse
+  führen. Und in einem wird damit das Problem der Zahlungsaufträge im
+  SPZ (Rechnungen mit Zahlart DOM nicht vorschlagen) gelöst.
+
+20070527
+--------
+- MakeHtml() macht jetzt ein Confirm(), denn OpenUrl() macht seit
+  20070513 keines mehr.
+
+20070529
+--------
+- dlm\HST\PARHST.DLG
+  dlm\HST\HSTPAR.DLG
+  dlm\HST\HSTFIN.DLG
+  dlm\EE\HSTVEN.DLG
+  können jetzt auch nach PDF exportieren.
+
+- dlm\ee\hstven.rep : Buchungen mit Verkauf Estland 0% fanden ihre
+  Kolonne nicht.
+
+20070530
+--------
+- Neue Datei dlm\std\clearpwd.act, mit der man alle Bentuzerpasswörter in
+  einer Datenbank auf einmal löschen kann.
+- DEF_ADS vergaß seit 20070518, die DBE zu laden.
+
+- Neue Funktion WhileLoop()
+- DbfEdit() gibt jetzt .t. zurück. Das .f. war doch einfach unlogisch,
+  und ich habe nicht das Gefühl, dass das viel Schaden anrichten wird.
+
+
+20070604
+--------
+- Function encrypt() verwendet jetzt (wenn DEF_ADS) einen anderen
+  Algorithmus, damit das verschlüsselte Resultat aus reinen
+  ASCII-Zeichen (32-126) besteht.
+
+- Neue Funktion PnsLocate()
+
+20070608
+--------
+- dlm\hst\genhst.rep schreibt jetzt (wenn HasDlm("BIL")) auch die
+  GEN->IdBil auf die Saldenliste Generalkonten.
+
+
+20070611
+--------
+- DcfJnlFileter() gibt jetzt ".t." (bei CDL->JnlType "A") zurück statt
+  bisher eine liste aller Journale mit Attribut G
+- Neue DCFTYPE.DBC F+ und I+, die in DcfValues() berücksichtigt werden.
+
+  Weil in der Bilanz die Schuld beim Steueramt entweder im Passiv oder
+  im Aktiv stehen muss. Das ssind zwei verschiedene Bilanzposten, von
+  denen immer nur einer pro Jahr existiert.
+
+20070612
+--------
+  Renner/Penner-Liste ignorierte VEN->Remise.
+  VnlCtsCollect() berücksichtigt jetzt VEN->Remise (wenn DEF_VENREMISE)
+
+20070614
+--------
+- GTYPE_PWD macht jetzt doch kein X mehr wenn DEF_ADS. Weil zumindest
+  mein ADS-Server auf duden das nicht kapierte. Komisch, dass der
+  ADS-Server von Gerd es scheinbar kapierte...
+
+20070615
+--------
+- bugfix: PIN->IdPns postblock funktionierte nicht seit PnsLocate() 20070604_
+
+20070629
+--------
+- CUST_MOOR : Neue Funktion CarPassFile().
+- appsysxb.prg : Fenstergröße default 25 lines statt bisher 43
+
+20070704
+--------
+- dlm\std\startup.act nimmt jetzt auch noch COMPUTERNAME, wenn PC nicht
+  gesetzt ist. Und USERNAME, wenn USER nicht gesetzt ist.
+
+20070705
+--------
+- CarPassFile() macht jetzt auch das OpenUrl()
+- DlgExec() berechnete zumindest in PINACT.DLG die Fensterhöhe zu groß.
+  fixed.
+
+20070706
+--------
+- Neue Funktion QuickStabilize() behebt wahrscheinlich das Problem im
+  ÖSHZ, dass Extras / Globalsicht Einnahmen sich scheinbar aufhängt.
+
+- dlm\std\winstd.drv testet jetzt nicht nur, ob mailto leer ist, sondern
+  auch ob mailhost leer ist. Denn wenn mailhost leer ist und mailto
+  nicht, dann soll keine Mail verschickt werden.
+
+20070707
+--------
+- Neue Funktion PinRouse()
+
+20070709
+--------
+- dcltva.act : kannte noch nicht den neuen MWSt-Code 19 (19% MWSt.
+  Deutschland). Diese Zahlen fehlten deshalb in den Feldern 47,49,63 und
+  64.
+
+20070711
+--------
+- DbfOnBottom() testet jetzt, ob eof(). Wenn ja, dann wird der
+  blOnBottom nicht ausgeführt.
+
+20070714
+--------
+
+- VenHstGenerate() ohne IFCATTR_E : wenn IFC->IdPar nicht leer ist, dann
+  wird der Lieferant in der Gesamtbuchung jetzt nicht mehr *ersetzt*,
+  sondern durch 2 weitere Buchungen ergänzt:
+
+  1. Lieferant kriegt seine Buchung (mit Umsatz)
+  2. Buchung 1 wird bezahlt
+  3. Buchung 2 gegenbuchen in IFC->IdPar
+
+  Das sind die Zahlarten LUC und KUS, also wenn ein Teilhaber oder
+  Mitarbeiter eine Ausgabe für die Firma aus eigener Tasche bar zahlt,
+  den Kassenzettel an die Buchhaltung gibt und diese Kleinkredite an die
+  Firma später irgendwann abgerechnet werden. Diese Fälle machten bisher
+  den Lieferanten in der Buchhaltung quasi unsichtbar.
+
+- ParCanDelete() machte RTE wenn DEF_DLS und nicht DEF_DLP
+
+20070716
+--------
+- MsgPrint() öffnet jetzt die AMK und positioniert den record pointer.
+
+- Reproduzierbar auch bei mir: auf einen Artikel gehen, der in F5 etwas
+  stehen hat. Dann schnell hintereinander F5 und ESC drücken. Also wenn
+  man ESC drückt, bevor das Browse vom F5 sich stabilisiert hat, dann
+  bleibt TIM im noch leeren TBrowse des F5-Fensters hängen. Mit
+  Ctrl-Enter kommt man wieder raus (was übrigens komisch ist).
+
+  Erklärung: ddScan() wurde zum Berechnen der ColEofBlock() gerufen und
+  machte bei ESC ein Confirm("Arbeitsvorgang unterbrechen?"), was jedoch
+  nicht angezeigt wurde, weil dispbegin() den Bildschirm deaktiviert
+  hatte. Jetzt hat ddScan() einen neuen Parameter lNoConfirm, der an
+  TaskInter() weitergeleitet wird. Also wenn man während ColEofBlock()
+  ESC drückt, dann wird jetzt ohne Rückfrage unterbrochen.
+
+- CUST_MOOR : Neuer Eintrag OnCarPassFile
+
+20070717
+--------
+
+- CUST_MOOR : CarPassFile() zählt jetzt die Sequenznummer der Datei
+  hoch, falls man mehrmals am gleichen Tag schickt.
+
+- dlm\std : renamed pdf.pps to winstd.pps
+
+- OpenUrl() setzte http:// davor, wenn die cUrl kein "://" enthielt.
+  Jetzt reicht ein ":", um das abzuschalten.
+
+- Neue Funktion mailto_url(cName,cAddr,cSubj,cBody) gibt den mailto:-URL
+  zurück.
+
+- mailto() benutzt jetzt openurl("mailto:...") statt bisher
+  "start mailto:...". In der Hoffnung, dass das mit Outlook funktioniert
+  und dann kein DOS-Fenster mehr geöffnet wird.
+
+20070723
+--------
+
+- dlm\latex\texparse.act setzt bisher immer einen ".\" vor OutFile.
+  Jetzt nicht mehr. Ich will nämlich die generierten PDF-Dokumente nach
+  AppPath()+"\pdf\" archivieren.
+
+20070724
+--------
+
+- dlm\std\winstd.pps macht jetzt endlospapier, wenn asMail angekreuzt
+  ist.
+- p_linesleft() gibt jetzt -1 zurück, wenn setpapheight 0 ist.
+- p_block() verursachte vielleicht eine endlosschleife wenn setpapheight 0 ist.
+- p_eject() macht die PrintLines() vor dem footer jetzt nur noch, wenn
+  setpapheight nicht 0 ist.
+
+- ClosePrinter() macht jetzt raise("stack underflow") statt sich
+  aufzuhängen, wenn es kein vorheriges OpenPrinter() gab.
+
+- TplPrint() benutzt jetzt OpenPrinter() statt open printer.
+
+  Note: "open printer" als Befehl sollte ich peu g peu durch if
+  OpenPrinter() ersetzen. Wenn OpenPrinter() .f. zurück gibt, darf
+  ClosePrinter() nicht gerufen werden.
+
+
+- mailto_tb() funktioniert jetzt mit attachment.
+  mailto_url() theoretisch auch (nicht getestet).
+  Neue Funktion fileurl().
+  dos2latin1() konvertiert jetzt auch 1/4 und 1/2
+
+20070731
+--------
+- wenn KRL->IdKtg auf * gesetzt wird, dann wird jetzt auch KRL->Mont
+  gesetzt. Denn der wird ja für diese KRLs bei DistKtg() nicht mehr
+  gesetzt. N.B.: DG-Kinder dürfen nicht Vipo sein.
+
+20070801
+--------
+- Neue Funktion :func:`SetConsole`, damit TIM die console.msg selber verwalten
+  kann. Sollte logischerweise direkt in der tim.ini benutzt werden.
+
+  Defaultwert ist das bisherige Verhalten::
+  
+    do SetConsole({|cMsg|LogMsg(AppPath()+"\CONSOLE.MSG",cMsg)})
+
+  Alternativen::
+  
+    do SetConsole({||.t.}) // komplett deaktivieren
+    do SetConsole({|cMsg|LogMsg(\
+      AppPath()+"\console\"+left(dtos(date()),6)+".txt",cMsg)})
+
+- Wenn DEF_FOX und UseDbe FOXCDX, dann wird jetzt nur noch eine
+  Indexdatei pro Tabelle geöffnet. Bei PAC gibt es 56 Tabellen und 119
+  Indexe. Mit der FOXCDX jetzt also immerhin 63 Dateien weniger im
+  Datenbankverzeichnis.
+
+- KeyGoBottom() benutzt jetzt (mit __XPP__) nicht mehr NextStr(),
+  sondern den Xbase-spezifischen Parameter lLast von dbseek(). Weil
+  der Trick mit NextStr() (nämlich bei leerem cKey ein chr(255)
+  dranzuhängen) mit FOXCDX nicht funktioniert.
+
+- Bei der Suche nach obigem Bug habe ich eine Reihe "if recno() ==
+  lastrec() +1" durch "if eof()" ersetzt (markiert mit 20070801), weil
+  das sowieso möglicherweise nicht für alle DBEs funktioniert (weil der
+  recno() nicht immer numerisch ist). Das war aber Fehlalarm, der
+  recno() ist in allen mir bekannten DBEs numerisch.
+
+
+20070802
+--------
+- descend() muss immer mit dem zweiten optionalen Parameter lCompatible
+  auf .t. gerufen werden, damit DEF_FOX wie DEF_DBF funktioniert.
+
+20070813
+--------
+- Neues Attribut QRYATTR_D. Anpassungen in ddedit.prg :
+  - Skipper(), KeyGoBottom(), KeyGoTop()
+- Neuer Parameter lDescend für DbfScan(), DbfListToHtml()
+
+
+20070814
+--------
+- pic2html() macht jetzt par défaut keinenalt=name mehr. Weil der Name
+  oft lang ist, und wenn man offline ist, zeigt der Browser diesen Text
+  an und das bringt das Layout stark durcheinander.
+
+20070815
+--------
+
+- neue Funktion VocToHtml()
+
+- 20070815.act in privat/web, weil VOC->TypeEE falsch ist, das Feld muss
+  VOC->TypeET heißen.
+
+20070818
+--------
+- DocDateValidate() lässt jetzt ein Zurückspringen in der Periode zu,
+  wenn das Journal weder JNLATTR_G noch JNLATTR_F hat. Weil FG bei PAC
+  sich über die Warnung "date hors période" beim Erfassen von SRV des
+  Vormonats beklagte.
+
+- DEF_KITZ : KrgCol() nimmt jetzt nicht mehr
+    &("ART->INAMI"+KTG->Phase)
+  sondern
+    &("ART->INAMI"+PRJ->Zentrum+KTG->Phase)
+
+
+20070820
+--------
+- ListNgrNews() zeigt die News pro Gruppe jetzt wieder in descending
+  chronological order.
+- DbfToHtml(), DbfSum() vertragen jetzt auch einen optionalen lDescend
+
+- VenUndo() wusste noch nichts von IFCATTR_E und "korrigierte" die
+  Lagerbestandszähler auch wenn das Attribut gesetzt war.
+
+20070821
+--------
+- F1 auf QRY->Qttrib zeigte statt QRYATTR_D ein QRYATTR_S
+- Neue Funktionen ClearMailTo(), AddMailTo() und PickMailTo()
+
+20070823
+--------
+- scFontName default ist jetzt nicht mehr Alaska Crt sondern Lucida
+  Console.
+- MsgPrint() öffnet und positioniert jetzt auch die PXS (wenn DEF_PXT)
+- ddedit.prg : hier habe ich jeden Test "if eof()" auf "if
+  eof().or.bof()" konvertiert. Denn wenn dbdescend() .t. ist, kommt am
+  Ende bof() und nicht eof(). Laut Mail von Till Warweg.
+
+20070829
+--------
+- ListNews() jetzt auch wie ListNgrNews() mit lDescend .t.
+
+- ddEditdelete() : wenn der preEdit-Block .f. zurück gab, dann nützte
+  bisher auch USRATTR_W nichts. Ab jetzt wird der pre-edit-block zwar
+  ausgeführt, aber wenn er .f. zurück gibt und USRATTR_W gesetzt wird,
+  geht es trotzdem weiter. Bin noch nicht sicher, ob das nicht auch
+  unerwünschte Nebeneffekte hat (aber USRATTR_W wird kaum benutzt und
+  ist deshalb sowieso schlecht getestet.)
+
+- oMvi() definiert jetzt einen MviPreDelete() und preEdit .f.
+
+- MsxLabel() bentuzt jetzt nicht mehr lngsuffix(), wenn das neue
+  MSXATTR_S gesetzt ist. Wegen laulud.html und vvl.html, die nicht
+  übersetzt sind aber auch nicht in der Hauptsprache.
+
+20070830
+--------
+- dlm\hst\hstven.rep : verträgt jetzt ausländische MWSt-Nummern auch
+  dann, wenn das Generalkonto für Umsätze Ausland ".." in GEN->IdClj
+  hat. Das funktionierte seit 20070419 nicht mehr.
+  Die im jeweiligen Ausland verwendbaren MWSt-Codes müssen dann in der
+  (neuen) dritten Kolonne von AUSLAND.DBC spezifiziert werden. Achtung,
+  dort muss am Ende ein Komma o.ä. stehen, weil auf den MWSt-Code
+  mitsamt seinen Leerzeichen getestet wird.
+
+- KeyGoBottom() und KeyGoTop() funktionierten nicht richtig, wenn
+  __XPP__ und DBFNTX als DBE lief. Wenn dann cKey leer war, dann
+  ignoriert das dbseek() den vierten Parameter. Der Bug in Xbase ist
+  noch nicht behoben, aber ich umgehe ihn, indem ich das teste und "if
+  empty(cKey)" einfach "go bottom" statt
+  "dbseek(cKey,.t.,NIL,!dbdescend())" mache
+
+- VenRecTest() toleriert jetzt einen Unterschied von 0,01 EUR zwischen
+  Inhalt und Historik/Gesamtbetrag/Partnerhistorik. Denn das kann ja
+  auch kommen, wenn man die Buchungsanweisungen ändert, so dass das
+  Dokument jetzt ein weiteres G-Konto benutzen würde.
+
+20070831
+--------
+- Neue Funktion SetPickIndicator() kann in der tim.dbi den bisher
+  hardcodierten defaultwert (chr(18)) verändern.
+
+20070903
+--------
+- Fakturierung KITZ : TIM setzte bei Rechnungen an DG-Kinder den Preis
+  der Sitzungen nicht richtig ein. Machte kein "seek KRL->IdArt in ART"
+
+20070910
+--------
+- PickHstPar() macht jetzt nicht mehr::
+
+    default bReturn to {||HST->IdJnl+HST->IdDoc}
+    
+  sondern::
+  
+    default bReturn to {||HST->Match}
+    
+  Außerdem übernimmt es dann in VEN->Mont den für diesen Match noch
+  offenen Betrag.
+  Für LW, weil der Steuerberater verlangt, dass sie
+  Securex-Rechnungen erst nach ihrer Zahlung gebucht werden sollen.
+
+
+20070912
+--------
+- HstDocName() macht jetzt kein padr() mehr und gibt jetzt
+  trim1(VenDocLibell())+VNL->Desig zurück.
+  wobei VenDocLibell() ja par défaut trim1(VEN->NB1) ist.
+
+20070914
+--------
+- RfxScanChildren() ruft DbfScan() jetzt ebenfalls mit lDescend = .t.,
+  weil die MSX-Seiten mit Attribut G ihre News ebenfalls rückwärts
+  chronologisch anzeigen sollen.
+
+20070918
+--------
+- Neue Funktion fox2dbf(), die das Gegenteil von dbf2fox() macht.
+- ArcEval() kann jetzt bis zu zwei optionale Parameter an den xlEval
+  weiterreichen.
+
+- PerYEar() setzt jetzt nicht mehr CHR(255) an Position 3-4 in
+  CTG->Periode für die Jahressumme, sondern "_". Weil chr(255) in xbase
+  kleiner als "9" ist. Symptom: Saldenliste Generalkonten von 2006 war
+  bei Moor leer.
+
+20070920
+--------
+- :parsercmd:`etc loop` und :parsercmd:`etc endloop` funktionieren jetzt.
+
+- Neue Funktion SetXmlInput() und dos2xml(). Bei JB bin ich jetzt
+  fast so weit, dass ich mit TIM eine odt-Datei als Template benutzen
+  kann. Dazu hole ich mit unzip die content.xml aus der lbfa.odt raus.
+  Die wird von TIM geparst. Und dann wird sie mit zip wieder in eine
+  Kopie der lbfa.odt reingetan, die Kopie wird dann geöffnet.
+
+20070920
+--------
+- ParPreDelete() macht bisher::
+
+    RETURN .f. if ! ArcEval({||ParCanDelete(cIdPar)})
+    
+  jetzt::
+  
+    if IsArchive(oPar())
+      ** wenn PAR selber in einem Archiv steht, dann interessieren uns die
+      ** anderen Archive nicht
+      RETURN .f. if ! ParCanDelete(cIdPar)
+    else
+      ** wenn es Archive gibt und PAR gemeinsam ist, dann muss jedes Archiv
+      ** getestet werden, ob es was gegen das Löschen hat.
+      RETURN .f. if ! ArcEval({||ParCanDelete(cIdPar)})
+    endif
+    
+- RfxScanChildren() zeigt jetzt nicht nur für TPC, sondern auch für PAR
+  alle Seiten an (statt nur die NEW und MTG)
+
+20070928
+--------
+- ArtCreate(). DEF_ACF. Wenn man einen Artikel beim Erstellen kopiert,
+  dann werden jetzt auch die Partnerpreise kopiert.
+
+20071001
+--------
+- Neues :staticmod:`DEF_TPLTEXT` wird nur bei gx benutzt, weil die 
+  ADSDBE scheinbar keine box characters in Memofeldern gespeichert 
+  kriegt. Wenn das definiert ist, dann werden die Inhalte der Felder
+  TPL->Memo1 bis TPL->Memo3 nicht als solche gespeichert, sondern in
+  Textdateien :file:`TPL/{IdTpt+IdTpl+TplLang()}.TPL`
+
+20071002
+--------
+- GetTime() macht jetzt aus "913  " nicht mehr " 9:13", sondern "09:13".
+  Aber nur wenn len(x) == 5 ist und wenn es keine negative Zeitangabe
+  ist.
+  Z.B.: "    -5" wird "-5:00"
+
+- AdsDisconnect() wird jetzt nicht mehr in LogClose() sondern in
+  rpt_close() gerufen. Denn wenn man mit ADSDBE Relogin() machte, kamm
+  ein RTE "Database Engine and active Session are not compatible".
+
+- TaskInter() macht jetzt ``RETURN .f. if lNoConfirm``.
+  Denn die Summenberechung im Browse soll er bei ESC ohne Rückfrage
+  unterbrechen (und nicht ununterbrechbar sein).
+
+- Nach F11 konnte ein RTE in ddSetFilter() kommen, wenn der Cursor
+  vorher auf der letzten Bildschirmzeile gestanden hatte und durch den
+  Filter der Bildschirm nicht mehr voll ist. Das soBrowse:configure()
+  war der Schuldige. Frag mich nicht, warum...
+
+- itest() zeigt jetzt ein paar neue nützliche Inos an:
+  - Gesamtdauer des Tests
+  - Anzahl Records in jeder Datei
+
+20071003
+--------
+- MVA, CTA und ODA gibt es jetzt nur noch wenn DEF_CPASANA.
+- Neues #define ORD_HST_ANA 9 wird bisher nur im SPZ benutzt.
+
+20071004
+--------
+- GetTime() hat einen neuen Parameter lDuration, mit dem man verhindern
+  kann, dass bei len(x) == 5 die 0 davor gesetzt wird. Z.B. für
+  DLS->Pause und DLS->Duree.
+
+- VnaParent() gibt jetzt nicht mehr NIL zurück, wenn es keinen Parent
+  gibt, sondern ``space(LenIdJnl()+LenIdDoc())`` . Denn mit FG hatten wir
+  definiert, dass bei :data:`PARATTR_!` ein BLV ohne CDV nicht zusammen mit BLVs
+  mit CDV auf die Rechnung kommen darf.
+
+20071005
+--------
+- ddRefreshAll() macht jetzt auch im Vollbildmodus ein
+  eval(goTopBlock), wenn eof() ist.
+
+- mailto() macht jetzt nicht mehr OpenUrl(s), sondern wieder
+  ``AppShell("start "+s)``. Storniert Änderung vom 20070717_.
+
+20071008
+--------
+- Damit ParWait() die Tickets/Partner anzeigt, muss jetzt WaitKey 38 statt
+  bisher 18 angezeigt werden. 18 zeigte seit einigen Tagen (Änderung bei
+  Nols vor Ort) sowieso die Partnerpreise (wie ParAcfEdit()) an.
+
+20071010
+--------
+- TrlPrint() gibt jetzt .f. zurück (und druckt nicht aus), wenn
+  SetDevise() fehlschlägt.
+
+- den ``preedit .f.`` in oMvi() habe ich wieder rausgeholt.
+  Den hatte ich am 20070829 wahrscheinlich ungewollt reingetan.
+
+
+20071019
+--------
+- Neuer Eintrag MustAcfReplicate in der :xfile:`TIM.INI`. 
+  Bei PA wird der auf
+  ``MustAcfReplicate {||.f.}`` gesetzt, damit die Partnerpreise nicht
+  kopiert werden, wenn man einen Artikel kopiert.
+
+20071022
+--------
+
+- Das ``#xtranslate eupper() => upper()`` hatte ich vorige Woche
+  rausgeholt. Aber jetzt fällt mir auf, dass das falsch war. 
+  In __XPP__
+  muss eupper() tatsächlich nichts machen, weil die meisten AI_FORMAT
+  das benutzen.
+
+- JnlAnaCheck() macht jetzt zusätzlich RETURN .f. if ! AnaExist(cIdAna).
+  Bisher wurden ungültige Analysekontoangaben akzeptiert und fielen erst
+  beim I-Test auf. Und vielleicht noch nicht mal dort...
+
+- HstTest() prüft jetzt, ob HST->IdAna ein gültiges AK enthält (wenn
+  nicht leer)::
+  
+    #ifdef DEF_ANA
+    elseif !empty(HST->IdAna) .and. ! AnaExist(HST->IdAna)
+      it_warning("HST-> " + MsgIdJnlDoc() + " : " + SetMsg() )
+    #endif DEF_ANA
+
+- VNL->IdAna und FNL->IdAna werden jetzt automatisch aus GEN->IdAna
+  befüllt, wenn sie leer sind.
+
+- FNL->IdAna wurde bisher nicht nach HST->IdAna kopiert.
+
+20071023
+--------
+
+- Im Dialog von ReClose() (Historik rekonstruieren) kann man jetzt auch
+  mehrere Journale auf einmal auswählen.
+
+20071025
+--------
+
+- ddQryReset() machte (falls der aktuelle Record im neuen QRY nicht
+  sichtbar ist) seit 200703xx ein eval(soBrowse:goTopBlock). Jetzt macht
+  er wieder soBrowse:goTop(). Dadurch wird Ticket #312 ("Error in array
+  index" qd F11 sur SRV) gelöst. Und außerdem, falls snStart == 2 ist,
+  macht er goBottom() statt goTop().
+
+- Aus TrlPostEdit() die Warnung "System-I-Kontonummer Stammdaten : muss
+  mit 06 oder 08 beginnen" raus, weil System-I wird sowieso nicht mehr
+  benutzt, aber das Gleiche wollen sie demnächst für andere Zwecke nutzen.
+
+20071026
+--------
+- Neue Funktion WinWidth()
+
+- Neues Attribut :data:`NAFATTR_S` : "Situation du Stock".
+
+- NafLine() füllt jetzt immer die Breite des Fensters aus, statt bisher
+  eine hardcodierte Breite von 75 zu haben.
+  
+- Funktion NafAttrib() ersetzt durch neuen Ini-Befehl TagVnaAttrib::
+
+    TagVnaAttrib {|cIdJnl| "ID"} // default
+    TagVnaAttrib {|cIdJnl| iif(cIdJnl=="BLV","IDS","ID")} // PA
+    
+  der einen Codeblock angibt, der vor dem abrowse() die Attribute in
+  Funktion des Journals bestimmt.
+
+20071029
+--------
+- WinWidth() machte einen RTE wenn kein Fenster offen war. Jetzt gibt
+  sie in diesem Fall maxcol() zurück.
+
+20071030
+--------
+- PinRouse() hat jetzt einen optionalen dritten Parameter dDate. Weil
+  ich will, dass meine scheduled tickets erst am Tag *danach* geöffnet
+  werden. Bei PAC dagegen soll es wie bisher bleiben.
+
+- HPLJ6.DRV : "&l80P" auf "&l90P" ersetzt. Um zu probieren, ob das
+  hilft.
+
+20071031
+--------
+- Neue Funktion "Bearbeiten / Suchen & Ersetzen" (ddEditReplace()).
+  Funktioniert aber noch nicht.
+
+20071105
+--------
+- KrgAuto() hat jetzt einen neuen Parameter cIdKrg. Man kann jetzt
+  in KRGAUTO.DLG manuell bestimmen, welches die erste zu generierende
+  Rechnungsnummer sein soll. Anwendungsbeispiele: aus Versehen sind die
+  Rechnungen 18 und 19 gelöscht worden. Oder falls man am Jahresende ein
+  paar Nummern frei lassen möchte.
+- Habe begonnen, LENIDDOC durch LenIdDoc() zu ersetzen. Die Funktion
+  existierte schon, wurde aber nicht überall benutzt.
+
+20071106
+--------
+- VnlQteValidate() setzte die Qte nicht rechtsbündig, wenn man VNL->Qte
+  als erstes auf einer Zeile angab.
+
+- vnlmeths.prg: hier hatte ich am 20070801 den Test
+    if recno() == lastrec() + 1
+  ersetzt durch
+    if eof() // 20070801
+  Jetzt stelle sich raus, dass das sein muss:
+    if eof() .or. bof() // 20071106, 20070801
+
+
+20071108
+--------
+- RfxRefName() gab für PIN einen leeren String zurück. PIN war noch
+  nicht in den saRfxTables definiert.
+
+20071109
+--------
+- Scheinbar seit einiger Zeit (20070823, dbdescend) gibt ParExist() für
+  einen leeren cIdPar nicht mehr .f. zurück. Liegt vielleicht an dem
+  xtranslate if eof() in <alias> => alias->(eof())
+
+- VenPostEdit() : Die Meldung "unerlaubte Währung für Journal X" kommt
+  jetzt nicht mehr als Warning(), sondern als SetMsg()
+
+20071112
+--------
+- ParExist() und mehrere andere XxxExsit()-Funktionen gaben .t. zurück,
+  wenn cId leer war. Schuld war ein Seiteeffekt, wenn man die beiden
+  xtranslate "return x if y" und "eof() in x" kombiniert. Diese beiden
+  dürfen nicht kombiniert werden. Auch in Clipper nicht!
+  Beispiel 24.prg
+
+- DlaName() hat jetzt einen optionalen Parameter cIdDla
+
+20071112
+--------
+- DlsVnlExpr(xuExpr,uExpr), damit man in DLS.MSK Nummer und Datum der
+  Abrechnung anzeigen kann.
+
+20071113
+--------
+- ListMtgPast() funktionierte nicht. Bentuzt jetzt lDescend.
+
+- ddSearch() : Wenn man in einer Kolonne mit Betrag (GTYPE_AMOUNT) oder
+  Menge (GTYPE_QTY) suchen wollte, dann musste man den Betrag selber
+  rechtsbündig eingeben, damit TIM ihn fand. Weil er diese Kolonnentypen
+  nicht wie GTYPE_CHAR behandelte. Behoben.
+
+- ddedit.prg : hier wurde ddNextKey() einmal zu viel abgefragt seit
+  DEF_GASTON.
+
+20071120
+--------
+- OpenPrinter() setzt jetzt slAsPdf und slAsMail jedesmal auf .f., aber
+  vor dem DlgExec(). Denn dort wird ja ggf. wieder umgeschaltet (evtl.
+  noch bevor der Dialog angezeigt wird).
+
+- AfterVenClose in der TIM.DBI : durfte bisher nur einmal vorkommen.
+  Jetzt mehrmals. Und jetzt dürfen keine Codeblock-Klammern mehr drum
+  sein, sondern es ist ein einfaches Event ohne Parameter.
+
+- Neuer Test "if !isprinter(scPort)" und Warnung "printer port not
+  ready"
+
+- ddCreate() macht jetzt auch bei CREATE_EDIT ein ddRefreshAll().
+  Scheinbar merkt das TBrowse von Xbase sonst nicht, dass da jetzt ein
+  neuer Record existiert. Ticket 352 solved.
+
+
+20071126
+--------
+- Neuer Eintrag ArtIdGen in der TIM.DBI. Bisherige Funktion ArtIdGen()
+  heißt jetzt StdArtIdGen() und wird vom Default-Eintrag gerufen.
+
+20071130
+--------
+- Seit 20071126 kam die Meldung "TIM/0 cIdCtr is empty;Thread ID: 1",
+  wenn man ein Dokument mit Artikeln entregistriert.
+
+- Das ``set key K_ALT_F1 to DebugBreak`` habe ich jetzt noch mal raus. Für
+  Endbenutzer war das eher irritierend... KDK hatte es für sarkastische
+  Bemerkungen benutzt ;-)
+
+
+20071203
+--------
+- Bug fixed: RepPrint() ruft OpenPrinter jetzt mit dem neuen optionalen
+  Parameter lAsPdf. Denn seit 20071120 konnte man Listen, die RepPrint
+  benutzen, nicht mehr in PDF ausdrucken. Wenn man asPDF ankreuzte,
+  wurde dies einfach ignoriert.
+
+
+20071204
+--------
+- gx hatte aus Versehen DEF_DEBUG eingelinkt. Da funktionierte Alt-F9
+  auf PAR nicht mehr. Zumindest nicht mehr wie gewohnt. Ich selber hatte
+  diese Funktionalität komplett vergessen und musste sie erst wieder
+  finden. Habe jetzt diese beiden Tastenzuweisungen an der gleichen
+  Stelle im Code stehen::
+
+   #ifdef DEF_DEBUG
+     set key K_ALT_F1 to DebugBreak
+     set key K_ALT_F9 to ShowCallStack
+   #endif
+
+- :func:`OpenPrinter` hat einen weiteren Parameter lAsMail, der 
+  wie lAsPdf funktioniert.
+  
+- :func:`PrintTemplate`
+  kann jetzt ebenfalls lAsPdf
+  und lAsMail kriegen und leitet das dann an OpenPrinter weiter.
+- Und RepPrint() schickt jetzt auch SetAsMail() an OpenPrinter().
+
+- SetAsPdf() und SetAsMail() werden leider nicht restored nach dem
+  ClosePrinter(). Bei VENPRINT.DLG für PC muss ich deshalb 
+  SetAsMail() in eine setvar() speichern.
+
+20071210
+--------
+
+- Neues #define DEF_EID und neue Funktion ParGetEid(). Momentan zeigt
+  die lediglich den Inhalt des arrays an, das von EID_GET()
+  zurückgegeben wird. in der project.xpj musste ich lediglich
+  ..\eidtools\eidtools.lib hinzufügen.
+
+  Und es funktioniert: beim ersten Start reklamierte TIM, dass er die
+  eidtools.dll nicht finden könne. Was ja auch logisch ist. Nachdem ich
+  die ins Programmverzeichnis kopiert hatte::
+
+   ╔═══════════════════════════════ Confirmation ══════════════════════════════╗
+   ║   EID_GET() returned: {"BEID_GetId() returned 17", NIL, NIL, NIL, NIL,    ║
+   ║   NIL, NIL, NIL, NIL, NIL, NIL, NIL, NIL, NIL, NIL, NIL, NIL, NIL, NIL,   ║
+   ║                    NIL, NIL, NIL, NIL, NIL, NIL, NIL}                     ║
+   ║                             Continue (Y/N) ? Y                            ║
+   ╚═══════════════════════════════════════════════════════════════════════════╝
+
+
+20071210
+--------
+
+- xparse() ersetzt jetzt auch CR/LF durch Leerzeichen. Weil Word die
+  langen Ausdrücke in RTF-Dokumenten sonst immer kaputt macht (in
+  AMKUSR.RTF).
+  
+  ::
+  
+    #ifdef __XPP__
+      cExpr := strtran(cExpr,chr(141)," ")
+      cExpr := strtran(cExpr,chr(13)+chr(10)," ")
+    #endif __XPP__
+
+
+20071211
+--------
+
+- renamed ParOnPxs() to ParOnPxt() because this was not logical.
+
+20071212
+--------
+
+- TIM kann jetzt Bilder in einer Vollbildansicht anzeigen.
+- Neuer Eintrag ParLogo in der tim.dbi, sowie Funktion ParLogo(), die
+  den ausführt und das Resultat zurück gibt.
+- MskVisible(), MskScroll(), MSK_VOFFSET habe ich rausgeklinkt. Weil für
+  Bilder machte das Komplikationen, und sowieso benutzt das niemand und
+  es geht theoretisch auf die Performance.
+- vol2loc() macht jetzt ein trim() des Dateinamens. Weil
+  XbpBitmap:loadFile() keine filenames mit spaces dahinter kapiert.
+
+20071213
+-------- 
+
+- Neue Funktion TagUpdate()
+- Neue Funktion TryRecLockM(aAliases,bTry)
+
+- abrowse() gibt jetzt einen zweiten Parameter an den 
+  USING-Codeblock: nämlich snItem, also den array-Index. 
+  Ebenso für den Block einer Aktion aus aActions.
+
+20071220
+--------
+- Reports in CSV ging bisher nur via RepPrint() und nicht über
+  RepExec(). Jetzt geschieht das Öffnen und Schließen der TMP.CSV in
+  _Report() statt bisher in :func:`RepPrint`.
+
+- RptAddColumn() und ClnFetch() setzten die Defaultwerte auf
+  unterschiedliche Art und Weise. Jetzt machen sie es gleich
+  (RptAddColumn() ändert sich, ich schätze, dass die weniger benutzt
+  wird).
+
+20071220
+--------
+- VenMake() setzte VEN->Etat bisher immer einfach auf DocStatOpen().
+  Jetzt dagegen auf iif(len(aVna)==0,DocStatNew(),DocStatOpen()).
+  Ticket #409
+
+20071229
+--------
+
+- val2csv() setzt (if not slExcelUser and type GTYPE_CHAR) jetzt ein "'"
+  vor den Text. Dadurch werden Textfelder zumindest in OOo nicht als
+  Zahlen interpretiert. Z.B. Felder wie Periode oder IdDoc mit führenden
+  Nullen.
+
+- csvsep() gibt jetzt wenn slExcelUser .t. ist, wieder ";" statt ",".
+  Zumindest in Office 2003 ist das nötig. Ich verstehe nicht, weshalb
+  ich irgendwan mal das ";" durch "," ersetzt habe.
+

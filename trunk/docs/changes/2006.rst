@@ -1,0 +1,1984 @@
+2006
+====
+
+20060102
+--------
+- StrParse() neuer Parameter cCmdTags. SPRL\SPRL.DLM nutzt das aus um
+  die NEWS.TXT anzuzeigen.
+
+- release bei YB
+
+- Die temporäre Datei von ddListing() (wenn man "Export nach Excel"
+  ankreuzt) heißt jetzt nicht mehr tmp.txt, sondern txt.csv.
+
+
+20060103
+--------
+
+- SetPeriode() macht bei nicht existierender Periode jetzt keine
+  Warning() mehr sondern nur noch SetMsg()
+
+- RfxRefUpdate() macht es jetzt andersrum: ein [ref X] oder [xe X] führt
+  zu einem R-RFX im Shift-F9-Fenster statt im F9-Fenster.
+
+- Neuer RFXTYPE_A : der wird durch DbfListToHtml() erstellt. Und
+  ungefähr jede XXX.HTM (bisher nur NEW und PUB) zeigt diese parents im
+  supertitle an.
+
+  Doof ist noch, dass die RFXTYPE_A nicht bei F2 sondern erst bei F7
+  aktualisiert werden.
+
+- 20060103.act holt den RFXTYPE_D raus, der seit heute nicht mehr
+  benutzt wird. Die Sortierfolge wird jetzt wieder ausschließlich auf
+  Basis des alias() im RFX->To ermittelt. Wenn schon muss dafür ein
+  eigenes Feld RFX->SortType kommen. Oder den SortText manuell
+  bearbeiten können, um Sortierung nach Sequenz zu kriegen. Oder mit
+  Alt-PfeilRauf und Alt-PfeilRunter den SortText manuell verändern
+  können.
+
+todo:
+- actexec('20060103') for LUC und TIM
+
+- db lino : PRJ:36 (replace field and table names...) must be removed
+  from todo-list when generating it. Delete existing children RFXTYPE_A
+  if the were not in the DbfListToHtml()).
+
+20060105
+--------
+- (gm) : PrjVenScan() :
+  Die Meldung "Überlauf Lagerbestand" kam fälschlicherweise in manchen
+  Fällen, wenn EK und VK am gleichen Tag stattgefunden hatte. Jetzt
+  nicht mehr. Und ab jetzt wird übrigens auch immer das Datum des
+  Überlaufs angegeben.
+
+20060106
+--------
+- VenCopy()
+
+20060109
+--------
+
+- tim.btp schaut jetzt nach, ob eine Datei backup.bat existiert. Wenn
+  sie existiert:
+  
+  - wird sie auch dann ausgeführt, wenn in der Kommandozeile kein
+    Datenbankname angegeben ist
+  - wird die dbback.btp mit %1 wird nicht gestartet.
+
+  Z.B.
+  
+  - im SPZ sollen die TIM-Icons der einzelnen Benutzer zwar EUPEN
+    bzw. STVITH angeben, aber dadurch soll kein Backup gestartet werden.
+    Ich erstelle dort also eine leere Datei backup.bat
+  - Bei Pavonet wird statt des bisherigen dbback.bat ein
+     "sync -r c:\tim  d:\tim" gemacht.
+
+- DlsTest() funktioniert jetzt. Neue Funktion DlpTest().
+
+- localdlm/spz :
+      stat.act
+      parstat.exp
+      prbstat.exp (neu)
+    
+  - Ich benutze jetzt die neuen Funktionen ParDlsScan()...PrbDlsScan()
+  - Bisher wurde eine Datei parstat.txt generiert, jetzt par2005.csv und
+    prb2005.csv.
+
+20060112
+--------
+- SPZ/STVITH : Wenn PLZ readonly ist und man eine neue PLZ eingibt, dann
+  kommt jetzt eine Meldung "Unbekannte PLZ/Ort" statt bisher ein RTE
+  nach dem Dialogfenster in ParPlzValidate()
+
+20060113
+--------
+- (fw) Neuer Treiber HPLJ6.DRV.
+  Wenn neue DLM aufgespielt wird, muss in den Druckparametersätzen auch
+  HPLJ4 nach HPLJ6 geändert werden.
+
+20060114
+--------
+
+- NEW.DBF : NEW2.NTX jetzt rückwärts. NEW3.NTX raus.
+- DbfListToHtml() : neuer optionaler Parameter nMaxCount
+
+20060116
+--------
+
+- Bei Sh-F7 heißt es jetzt "Export nach CSV" statt "nach excel", und TIM
+  erstellt jetzt eine "richtige" CSV-Datei statt wie bisher mit TAB als
+  Trenner.
+  - http://en.wikipedia.org/wiki/Comma-separated_values
+  - http://members.aol.com/getmydata/pskb/CSV-File-Format.htm
+  TIM benutzt bis auf Weiteres Semikolon als Feldtrenner, und Beträge
+  werden mit mit Komma als Dezimaltrenner geschrieben. Mal sehen, was
+  unser Klugscheißer (gemeint ist Excel, A.d.R.) dazu sagt.
+  ddListing(). renamed val2excel() to val2csv().
+
+20060116
+--------
+- ddedit.prg : neue static Variable slCanSkip. Die wird gesetzt, wenn
+  ein Record nach der Bearbeitung nicht mehr sichtbar ist
+  (wegen ddCheckWhile()). In so einem Fall soll man den Record
+  wenigstens in Ruhe weiter bearbeiten können, aber mit Skippen ist es
+  natürlich vorbei. Bisher wurde dann sofort ddGoTop() gemacht.
+
+  Beispiel SPZ: Stammdaten/Personen, Insert, Partnerart auf "G" setzen,
+  F10. TIM stand dann wieder auf der Person und meinte, dass deren Name
+  1 nicht leer sein darf und wollte die Akte löschen. Und anschließend
+  war dann in "Gruppen" der beanstandete leere Eintrag.
+
+20060118
+--------
+
+- DlsCanEdit() und verschiedene when-Klauseln in DLS
+  Im SPZ kann man jetzt Sekretär und Therapeut zugleich sein.
+  Für "Sekretär" benutzt TIM jetzt das Attribut S (das bei euch bisher
+  keine Bedeutung hatte). Zusammenfassend gelten ab der Installation des
+  beiliegenden Patchs folgende Bedeutungen der Benutzerattribute:
+
+S : Sekretär ("Superuser")
+    - Kann die Dienstleistungen anderer Benutzer erfassen und bearbeiten
+
+C : ("confidential") kann vertrauliche Daten sehen
+
+    - Stammdaten Themen
+    - F6 auf einer Akte
+    
+    N.B.: Um die Liste der Themen bearbeiten zu können, muss man
+          außerdem noch Boss sein.
+
+B : Verwalter (Boss)
+
+    - Kann die Liste der Dienstleistungsarten bearbeiten
+      (N.B.: anschauen darf diese Liste jeder)
+    - Kann die Liste der Themen bearbeiten (wenn er auch Attribut C hat)
+
+E : Experte : reserviert für Luc
+
+20060118
+--------
+
+- DEF_QTESUB : VNL->Qte1 (Anzahl) ließ seit dem vorletzten Upgrade keine
+  Nachkommastellen mehr zu.
+
+20060119
+--------
+
+- Export nach CSV : Excel ist noch nicht zufrieden. Alle Strings
+  kriegen jetzt Gänsefüßchen. Mal sehen.
+
+- Neues Feld TRT->IdBudI. Wenn TRT->IdJnl nicht leer ist, dann wird beim
+  Zentralisieren TraCentral() eine automatische Gegenbuchung gemacht.
+  Bisher wurde das nur für System-I benutzt. In Zukunft auch in anderen
+  Fällen, bei denen dann aber nicht nur DC invertiert wird, sondern auch
+  der Artikel ändert sich. Wenn TRT->IdJnl unleer ist, dann darf
+  TRT->IdBudI nicht leer sein.
+
+20060120
+--------
+- HPLJ4.DRV umbenannt nach HPLJ4A.DRV.
+  HPLJ4.DRV ist die alte Version, die noch im CPAS benutzt wurde und
+  auch weiterhin.
+
+20060125
+--------
+- TrtPostEdit() machte einen RTE in BudExist()
+
+20060125
+--------
+
+- ddIndex() versuchte auch schreibgeschützte Tabellen zu reindexieren
+  und schlug dann fehl.
+
+- ddIndex() machte raise() wenn das "use exclusive" fehlschlug. Jetzt
+  wieder wie früher lediglich return .f. weil im SPZ deswegen dann die
+  DBLOCK.IND nicht gelöscht wurde.
+
+- Die Frage "Arbeitsvorgang fortsetzen" kam bisher nur wenn ddCheck()
+  fehlschlug, jetzt auch wenn ddIndex oder ddConvertDbf() fehlschlagen.
+
+- Buggefahr : AppReorg() und ddCheck() habe ich teilweise umgeschrieben.
+
+- release SPZ
+
+20060125
+--------
+
+- DLM\STD\JNLIDDOC.DLG : funktioniert jetzt auch wenn Liste leer ist.
+  IdJnl kann man nicht mehr bearbeiten. Prüft die eingegebene Nummer ein
+  bisschen auf Gültigkeit.
+
+20060127
+--------
+- DbfToHtml() fängt erstmals an zu funktionieren.
+
+20060127
+--------
+
+- Behoben: Wenn eine Memo-Datei geschlossen, aber ihr handle noch nicht
+  wiederverwendet worde war, dann kam die Warnung "len(saMemoStack)".
+  Reproduzierbar wie folgt:
+
+  - Tim starten & login
+  - Programm / Datenbank-Check
+  - Escape
+  - Programm / Benutzermenü
+
+20060127
+--------
+
+(DEF_WWW)
+
+- HEAD.HTM funktioniert jetzt nicht mehr für LetterPaper. Wenn ich das
+  mal wieder reintun will, muss ich head_ltr.htm benutzen.
+  
+- Neue Funktion ArcPath() gibt entweder den DbPath() oder das
+  Archivverzeichnis zurück. Wird in head.htm und foot.htm benutzt.
+
+20060129
+--------
+- renamed DbfList() to DbfTplScan()
+- new functions DbfList() and ListNews().
+
+todo:
+
+  RTF "No output stream active" wenn F7 auf "Neuigkeiten" (mehr als 1
+  Seite). Mit debugger kommt sogar ein GPF, vielleicht weil WWW.OBJ zu
+  viele Segmente hat?
+
+20060130
+--------
+- val2csv() : OpenOffice erkennt Zahlen mit Nachkommastellen nicht als
+  solche, wenn statt des Kommas ein Punkt da steht. Neue Funktion
+  SetExcelUser()
+  SetExcelUser(.t.) : ich bin ein Excel-Benutzer
+  SetExcelUser(.f.) : ich bin kein Excel-Benutzer
+
+
+
+20060130
+--------
+- new file rfx.prg contains RFX and KWD. Weil WWW.OBJ scheinbar zu groß
+  war.
+
+20060131
+--------
+- neue Funktion SetAbtlg() ("Abteilung")
+- Die doofe Warnung "AppOnLogin failed" kommt jetzt nicht mehr, sondern
+  stattdessen fliegt man einfach ohne weiteren Kommentar raus.
+
+- OpenData() macht jetzt SetTplLang(MemLang1), denn bisher war meine
+  SetTplLang() immer E, weil meine TIM4.exe Englisch ist. Aber ich will
+  ja in WEB\LUC D haben und in WEB\LINO E usw...
+
+20060201
+--------
+- neue Funktion SetGroups(), ähnlich wie SetAbtlg()
+
+- release CPASANA
+
+- EndOStream() machte eine Fehlwarnung "IF stack not empty at EOF", wenn
+  ich Seite "Neuigkeiten" generierte. Er testete den saIfStack nach dem
+  restore statt vorher...
+
+- not finished: SiteMenu() nicht mehr mit MSX->MapCode, sondern mit
+  MSX->Parent+MSX->Seq. Strukturierung via MLM hatte ich ja aufgehört,
+  weil Strukturierung 1:N und nicht N:M sein muss. Sonst wird das Menü
+  verwirrend. MapCode war ja nicht dumm, aber in der Praxis ist es viel
+  zu kompliziert, eine bestehende Sammlung von Seiten zu strukturieren.
+
+20060202
+--------
+- not finished: ddAutoRefresh() kann aus OnShowTime() aufgerufen werden
+  und refresht nur dann, wenn kein Menü aktiv ist.
+
+20060203, 20060205, 20060205
+----------------------------
+- viele undokumentierte Änderungen in DEF_WWW. MSX->Parent und
+  NEW->Parent sind zurück.
+
+20060206
+--------
+- NEW->IdMsx wird wieder benutzt. Oft kann eine Nachricht doch einer
+  einzigen Kategorie zugewiesen werden. Hm... nein, nicht Kategorie,
+  sondern der Typ. Eine Surfnotiz ist immer klar eine Surfnotiz, und
+  eine Problemmeldung ist immer eine Problemmeldung.
+  Hm.. aber nicht NEW->IdMsx, sondern NEW->IdNgr und NGR->IdMsx, denn
+  nur der Verwalter soll neue Newsgruppen erstellen.
+  Und ein Codechange ist ein Codechange, kann aber gleichzeitig Bugfix,
+  Feature, unfinshed etc sein... das sind Attribute, die pro NGR
+  existieren. In der Heimatseite (LUC) sind andere NGR als in LINO.
+  Deshalb keine NEWTYPE.DBC sondern NGR. NEW->Attrib kriegt als
+  picker PickMemoAttrib(NGR->AttrMemo).
+
+20060207 
+--------
+
+TIM kann jetzt in einer Listenansicht einen automatischen Refresh alle X
+Sekunden machen. Das war nicht trivial.
+
+- Neuer Parameter bOnIdle für ddedit() (ersetzt lNoSkip, der bisher
+  unbenutzt und nur noch als Platzhalter zwischen lFull und cTitle stand)
+
+- Neuer Parameter bOnIdle für WaitKey()
+- WaitKeySet() gibt jetzt nSeconds und bOnIdle weiter.
+- ddedit.ch : Neue Klausel "onidle".
+- DbfEdit() idem
+- Taste Alt alleine (K_ALT) startete zwar das Menü. Aber irritierend
+  war, dass sie es nicht beendete. Wenn das Menü einmal da war, dann kam
+  man nur mit Escape wieder raus.
+
+(release CPASANA)
+
+20060207
+--------
+
+- oMbr() : muss neuindexiert werden.
+  bisheriger MBR1.NTX ist nicht mehr nötig (?)
+  neuer Index on MBR->IdPar2
+
+vorher:
+ddIndex b on MBR->IdPls+MBR->IdPar+MBR->IdPar2  // ORD_MBR_PLSPAR
+ddIndex b on MBR->IdPls+MBR->SortText           // ORD_MBR_PLSTEXT
+ddIndex b on MBR->IdPar+MBR->IdPls              // ORD_MBR_PAR
+
+jetzt:
+ddIndex b on MBR->IdPls+MBR->SortText           // ORD_MBR_PLSTEXT
+ddIndex b on MBR->IdPar+MBR->IdPls              // ORD_MBR_PAR
+ddIndex b on MBR->IdPar2+MBR->IdPls             // ORD_MBR_PAR2
+
+20060207 
+--------
+
+- h2time() hatte einen Bug: Bei negativen Zeiten von weniger als einer
+  Stunde vergaß TIM, das "-" davor zu schreiben.
+  Testcase 20060207.tst
+
+- Man kann jetzt einfach "tim /exec:actexec('runtests')" starten, ohne
+  zuvor LoadDlm("TESTS") zu machen. Dadurch werde ich die tests
+  vielleicht öfter mal laufen lassen.
+
+  - moved dlm\tests\tests.act to dlm\std\runtests.act
+  - moved dlm\tests\*.tst to dlm\std
+
+- 20050331.TST failte wieder. Bug behoben.
+
+20060208
+--------
+- ParPreDelete() verweigert jetzt das Löschen, wenn Mitgliedschaften
+  bestehen.
+- MbrEnter()
+- bei Sh-F6 auf PAR wurde MbrEnter() gar nicht aufgerufen, weil es nicht
+  mode find war. Neue Funktion ParMbr2Edit()
+
+20060208 
+--------
+
+- VenVnlScan() funktionierte nicht, wenn es in VKL von total.inc aus
+  aufgerufen wurde, um die Summen des VKL zu berechnen. Weil dann ja gar
+  nicht die VNL aktiv ist, deshalb ist indexord() oder indexexpr()
+  nicht getestet werden. Also bei Rocatec muss das ddSetSumScan() in der
+  VNL.DEF weiterhin auf indexord() testen.
+
+
+20060208
+--------
+- nafsuggest() sortiert jetzt auch nach Datum
+- die generierten Rechnungen kriegen jetzt VNL->Date gesetzt wenn
+  lByDate. Das war bisher immer leer. Wird aber noch nicht beim Drucken
+  benutzt.
+- In der NOLS\VENBOTTM.TPL fehlte ein endif. Das hatte TIM bisher aber
+  noch nie bemängelt.
+
+
+20060209
+--------
+- ddRefreshAll() macht jetzt noch ein skip 0 vor dem "slIsEof := eof()"
+
+
+20060211
+--------
+- ddChkWhile() im Browse. Was passiert, wenn durch eine Änderung der
+  aktuelle Record aus der Liste verschwindet?
+
+20060213
+--------
+
+- Coda-Import : Jede Zeile, die mit "21" begann, führte zu einem neuen
+  MVM. Aber das war falsch, denn bei Auslandsüberweisungen können
+  mehrere solcher Zeilen kommen. Ich habe es jetzt so gemacht, dass TIM
+  alle weiteren 21-Zeilen einfach ignoriert. Um uns keine Sorgen über
+  ungelegte Eier zu machen. Kann sein, dass bei einer
+  Auslandsüberweisung mit Kosten dann die Kosten ignoriert werden.
+
+- release cpasana
+
+20060214
+--------
+
+- Coda-Import : Zeilen, die mit "21" begann, führte seit 20060214_
+  manchmal fälschlicherweise *nicht* zu einem neuen MVM-Record. Und zwar
+  dann, wenn ein neues Konto oder ein neuer Auszug gestartet hatte, aber
+  NoMvm gleich geblieben war ("0001").
+  In den Daten, die mit Version 20060213 importiert wurden, fehlt also
+  ungefähr die erste Bewegung jedes Kontoauszugs (außer die des
+  letzten Auszugs jeder `*.F56`-Datei).
+
+20060215
+--------
+- azmake() jetzt so, dass es aus MSX->Body gerufen werden kann und muss.
+  ListBubs(), ListKwds()
+
+20060215
+--------
+- CUST_NOLS : nf_suggest() kann jetzt Zischensummen pro Kennzeichen
+  einfügen und sammelt die Rabatte pro Artikel für am Ende der Rechnung.
+
+20060216
+--------
+- Kommandozeilenoption /user funktinoiert jetzt wieder.
+  Habe sie dann aber trotzdem rausgeholt, weil man stattdessen
+  ``tim /exec:usredit()``
+  eingeben kann. Die Option kannte sowieso niemand außer mir.
+
+- Neue Kommandozeilenoption /quietlogin. Login() musste ich intern
+  ziemlich umschreiben.
+
+20060222
+--------
+- Neue Funktion SetRptArchive(). Beispiele::
+
+    SetRptArchive("c:\timsess\rpt")
+
+  Wenn das benutzt wird, dann brauchen die Arbeitsverzeichnisse kein
+  Unterverzeichnis "RPT" mehr zu haben.
+  
+  N.B.: Das RptArchive muss auf dem gleichen Laufwerk wie die
+  Benutzerverzeichnisse liegen.
+        
+- Die session.rpt einer unterbrochenen Sitzung wird jetzt nicht mehr
+  nach yymmddA.rpt...yymmddZ.rpt sondern nach
+  yymmddAA.rpt...yymmddZZ.rpt umbenannt.
+
+- rpt_move() benutzt jetzt 2-stellige Suffixe (AA bis ZZ statt A bis Z)
+
+20060224
+--------
+- Neue Funktionen rpt_filename() und log_filename()
+
+- SetRptArchive() ohne Parameter gibt jetzt die aktuelle Einstellung
+  zurück. SetRptArchive("") bewirkt Rückstellung auf Defaultwert wie
+  zuvor SetRptArchive().
+
+20060228
+--------
+
+- (cpasana) Neues Feld TRT->IdTpl. Wenn das nicht leer ist, dann muss
+  eine entsprechende TRL-Druckmaske existieren, und im Vorlauf zum
+  Zentralisieren werden alle diese TRLs dann ausgedruckt.
+
+20060301
+--------
+- Neue Funktion SetIsLegal()
+  Um den Vermerk "(offen)" in Periodeangaben zu unterdrücken, kann man
+  in der tim.dbi ein SetIsLegal(.f.) setzen.
+
+20060306
+--------
+
+- ImlTest() : Schönheitsfehler. Die Warnung "no MVI record" kam
+  fälschlicherweise für IML-Records eines noch nicht registrierten
+  Dokuments. Behoben.
+
+20060309
+--------
+- ArtPrValidate() funktionierte nicht. Das war ein Tippfehler.
+- DLM\VEN\VEN.DLM : Warnung "Article invisible" kam fälschlicherweise
+  auch z.B. bei Artikeln "+"
+
+20060311
+--------
+- Wenn ein Datumfeld leer ist und man dort was eintippt, dann setzt TIM
+  als Vorgabewert erstmal das Tagesdatum ein. Dadurch braucht man jetzt
+  in Kontoauszügen nicht mehr immer auch das Jahr zu tippen...
+
+20060321
+--------
+
+- PrintTemplate() macht jetzt ein SetMsg("unbekannte Druckmaske"), wenn
+  sie nicht existiert.
+- TplValue() gibt jetzt NIL zurück, wenn der Textblock nicht existiert.
+  Achtung, Gefahr von Nachwehen in Form von anderem Verhalten, wenn eine
+  Druckmaske nicht existiert.
+- N.B. OpenPrinter gibt weiterhin meldungslos .f. zurück. wenn
+  DrvOnSelect() das tut. Und auch wenn cIdDlg angegeben ist, und dort
+  was nicht funktioniert.
+
+20060321
+--------
+- AddExpFields() rief noch val2excel statt val2csv
+
+20060327
+--------
+- Neues Modul DEF_MTG (Meetings). Ich will mal versuchen, den Website
+  vom V.O.R. doch noch mit TIM zu machen.
+
+20060328
+--------
+- ca. 4 Stunden Bugsuche: PubToHtml() machte AutName() und positionierte
+  somit AUT. Wenn das von AUT2WWW.ACT gestartet wurde, dann wurden also
+  nicht alle Autoren generiert. In LINO fiel das auf, weil er da auf
+  AUT:5 endlos loopte.
+
+20060329
+--------
+
+- Neue Funktion SesGrpMembers()
+
+20060330
+--------
+- TraCentral() :
+
+  - Die Warnung "Fehler beim Vorlauf" kam unlogischerweise
+    nur, wenn "definitiv" angeschaltet war.
+    
+  - CtlCollect() returnt jetzt !SetMsg() statt einfach nur .f., wenn trt
+    NIL ist.
+
+
+20060402
+--------
+
+- PTLRES.REP : Überstunden sollen auf 20 Minuten abgerundet werden.
+  1 Minute zu wenig gearbeitet: -0:20 Überstunden.
+  19 Minuten zu viel gearbeitet: 0 Überstunden
+
+- t2min() funktionierte nicht richtig, wenn nHeures < 0 war,
+  t2hours() wenn -1 < nHeures < 0 war,
+  und min2t() wenn nMinutes < 0 war.
+  
+- neue Funktion downint()
+
+20060405
+--------
+
+- Neue Funktion DoAlaDetail() sowie entsprechender Eintrag in der
+  tim.dbi. Wenn  DoAlaDetail() .f. ist, dann gelten die Komponenten aus
+  ALA nicht als Moduldetails, sondern werden wie normale Artikel
+  eingefügt. Dann ist die erste Zeile eines Moduls in VNL nicht die
+  Summe ihrer Details, sondern die Detailzeilen sind lediglich "Articles
+  liés", die automatisch bei Verwendung des Hauptartikels eingefügt
+  werden, deren Preis jedoch einzeln angeführt wird.
+
+- (Buggefahr) splitted VnlModValidate() into VnlMudInsert() and
+  VnlModUpdate(). Neue Funktion ArtIsLinked(). Pfriemeleien in
+  VnlIdValidate().
+
+
+20060406
+--------
+
+- TraCentral() machte "Fehler beim Vorlauf", wenn ein TRL->IdTrt leer
+  war. Ich hatte am 20060330 gar nicht daran gedacht, dass das ja
+  erlaubt ist (wenn Match und Backmatch ausgefüllt sind)! Je doofer der
+  Fehler, desto größer die Arbeit.
+
+20060408
+--------
+
+- AutRefToStream() und ein paar andere vergaßen getBasePath()
+
+20060410
+--------
+- Ein ganz altbekannter Bug ist noch immer da: wenn man z.B. auf PAR F7
+  macht, und dann in der Auswahl der Druckmaske nochmal F7 drückt, dann
+  startet TIM einen zweiten Printer stream und macht nach Beendigung
+  des zweiten Streams  (z.B. einfach bei ESC) einen RTE "Error BASE/1068
+  Argument error: array access".
+
+20060411
+--------
+- volsplit() arbeitet jetzt anders. Laufwerksbuchstaben sind
+  jetzt automatisch vorhanden und brauchen nicht mehr in der VOL.DBC
+  definiert zu werden.
+
+20060412
+--------
+- loc2vol() funktionierte nicht seit 20060411
+
+...
+- Neue Funktion SetDbcDelim()
+
+20060414
+--------
+- Der Basisbetrag von Verkäufen mit deutscher MWSt-Nr und MWSt-Code "D0
+  " kommen jetzt in der belgischen MWSt-Erklärung im Fach 47.
+  DLM\SPRL\DCLTVA.ACT
+
+20060420
+--------
+- vol2url() funktionierte nicht, wenn es ein Laufwerksbuchstabe war.
+
+20060421
+--------
+
+- Neuer Memobefehl [item MSX:123] führt wie ref und xe zu einem
+  RFX-Eintrag, aber beim Rendern (neue Funktion item2html()) wird der
+  komplette Abstract als list item zwischen <li> und </li> eingefügt.
+
+- xe2html() fügt jetzt keinen Link mehr ein, also im Endresultat sind
+  index entries nicht mehr sichtbar.
+
+20060426
+--------
+
+- DbfOnBottom() funktioniert jetzt auch mit neuen optionalen Parametern
+  cKey,xlWhile,xlFilter. Dann wird KeyGoBottom() gerufen.
+- Neue Funktion ParLastDate() wird benutzt in PARSETH.ACT
+- Neue Funktion ParParCount(): Anzahl der Akten pro Person anzuzeigen.
+- DbfPage() setzte einen ungültigen bIdle, der dann zu einem RTE
+  Noexported method: EVAL führte.
+- DlpCanEdit() erlaubt jetzt zu bearbeiten, wenn DLS->Etat nicht leer
+  ist. Also um F8 zu ändern, braucht man nicht mehr zu entregistrieren.
+  Aber Benutzerrechte und sonstige Bedingungen gelten wie bisher.
+- In DLP kann man jetzt nur noch Insert und Delete, wenn DlpCanEdit()
+  einverstanden ist.
+- PrbPreDelete() macht jetzt Veto, wenn es PPRs gibt.
+- DLSPOST.ACT : Fragt nach dem Status...
+
+20060427
+--------
+
+- Warnung "IF stack not empty at EOF" kommt jetzt überhaupt nicht mehr.
+  Sie kam seit einigen Monaten bei manchen Kunden ohne Grund, und ich
+  habe nicht rausgefunden weshalb. Die Warnung sollte helfen, vergessene
+  etc endifs aufzuspüren. Bin aber nicht sicher, ob sie das je getan
+  hat...
+
+20060501
+--------
+
+- Neues Modul DEF_NZS mit einer einzigen Funktion UsrNzsInit(). Die
+  Felder USR->NZK und USR->NZS müssen manuell in der USR.DEF gemacht
+  werden.
+
+20060504
+--------
+- oPxs() : neue Funktion PxtPreDelete() : bisher wurde entweder gar
+  nicht oder ohne Rückfrage gelöscht (je nachdem ob Partner existiert
+  und inPxtTables() drin ist oder nicht). Jetzt kommt ConfirmDelete()
+  und im anderen Fall eine Meldung "PXS wird automatisch mit Partner
+  gelöscht"
+
+20060509
+--------
+- Neue Option :configcmd:`ToCSV` in :xfile:`*.REP`-Dateien. 
+  Changed::
+  
+    FUNCTION Report(cIdRep,lEmbedded,nLIndent)
+    
+  to::
+  
+    STATIC FUNCTION _Report(lEmbedded,nLIndent)
+    
+  (Ich weiß nicht, ob der direkte Aufruf überhaupt noch benutzt wird.)
+
+- Neues Attribut CLN_TYPE. Damit bestehende Reports mit ToCSV
+  funktionieren, müssen die Kolonnendefinitionen angepasst werden und
+  type statt text und xsum benutzen.
+
+- Neue Funktion XrfLang(), und RfxScanChildren() filtert die Einträge in
+  anderen Sprachen als TplLAng() jetzt raus.
+
+20060509
+--------
+- Änderungen in KrgAuto(). Neue Tarife ab 26.04.2006: Preise können
+  mitten im Monat ändern.
+- Neues Feld KRL->Mont2, weil der SK ja theoretisch auch ändern könnte
+  (und weil auch hier SES->Date statt bisher KRG->Date für den Preis
+  gilt.
+- Neue Tabelle KTG (Kontingente). Neues Feld SES->IdKtg.
+
+20060510
+--------
+- ParToHtml() was missing
+- RepExec() with ToCSV now uses dos2latin1()
+
+20060511
+--------
+- CSV-Dateien nach OpenOffice:
+  val2csv()
+  Auch alle Zahlen werden jetzt mit Gänsefüßchen versehen.
+
+- (storniert) Neuer Eintrag OpenMail in tim.ini oder tim.dbi. Defaultwert
+  ist "timtools openmail", aber mit Thunderbird funktioniert das nicht
+  und es ist besser, die tmp.eml direkt zu öffnen und dort Ctrl-E zu
+  drücken.
+
+  N.B.: OpenMail() hatte ich zuerst umgeschrieben, jetzt sollte ich
+  davon ein Backup zurück spielen. Denn die beiden Methoden sind nicht
+  kompatibel, weil lino openmail die TMP.EML mit Codepage 850 kodiert
+  haben will.
+
+- Neues System zum Schreiben von E-Mails aus TIM, ganz ohne OpenMail().
+  PAR2EML.DLG, PAR.EML, PARHTML.EML, VEN2EML.DLG, VENHTML.EML
+
+- Neue Funktion dos2quoted() ermöglicht die korrekte Kodierung von
+  Non-ASCII-Zeichen im Header laut RFC 2047.
+  Quelle: http://www.faqs.org/rfcs/rfc2047.html
+
+20060512
+--------
+
+- Ich habe die alte OpenMail() wieder zurück geholt. Diese Methode ist
+  jetzt veraltet und wird nicht weiterentwickelt, wird jedoch noch
+  benutzt, zumindest im ÖSHZ. Dort besteht das Problem, dass der Body
+  nicht zu lang sein darf, sonst kommt er nicht rüber.
+
+- Weiter mit CSV-Reports. Neue Datei DLM\STD\TOCSV.DLG.
+  Der Report "Partner nach Umsatz" (DLM\SPRL\PAR002.*) ist der erste,
+  den ich CSV-fähig mache. Seit heute funktioniert er.
+
+20060512
+--------
+- SesSetPhase() durfte natürlich nur die Sitzungen nehmen, deren
+  SES->Etat auf "F" steht.
+
+20060513
+--------
+
+- Neue Funktion GetField() um in DLM\ART\ARTCTS01.REP zu prüfen, ob
+  ART->Ref existiert. Dann können Himaco nämlich auf die Standardversion
+  der Renner/Penner-Liste geschaltet werden.
+
+20060515
+--------
+
+- Neues Attribut decpos= für Reportkolonnen. Jetzt funktionieren die
+  beiden Reports von Himaco in CSV.
+
+20060515
+--------
+
+- TIM setzte KRL->Count immer auf 1, auch wenn es mehr als 1 waren.
+
+20060516
+--------
+
+- weiter mit den vielen Änderungen im Modul DEF_KITZ
+- timediff() : default nLen jetzt nicht mehr 5 sondern
+  max(len(c1),len(c2))
+- Buggefahr bzw. Gefahr von Nebenwirkungen: TimTest() und PrintAct()
+  machen jetzt nicht mehr SetDialog(.f.)
+
+20060517
+--------
+- dtocf("dddd") nahm nicht TplLang() sondern UsrLang() als default, wenn
+  cFormat nur aus einem Token bestand.
+
+
+20060523
+--------
+- DLM\STD\TIMTEST.*
+
+20060526
+--------
+- DlsCanEdit() gibt jetzt auch .t. zurück, wenn DLS->Etat nicht leer
+  ist.
+- DlsPostEdit() fragt jetzt den Stand der Akte (wenn das Feld leer ist)
+- DlsDlpFill() holt jetzt ein eventuelles PARATTR_H raus.
+
+20060531
+--------
+- url_ngr() war noch falsch. NGR haben keine eigene Seite, sondern
+  müssen auf ein NGR->IdMsg weiterverweisen.
+
+- NissValidate() funktioniert jetzt auch für Kinder, die ab 2000 geboren
+  sind.
+- MSG->Etat ist nicht mehr hidden par défaut.
+
+20060601
+--------
+- KrgCol() hatte noch einen Bug. Siehe Mail an Alexa. Behoben.
+
+- Neue Funktion mapto(x,a1,a2,u).
+
+  Anwendung in CPAS\MSG*.QRY::
+  
+    ColorBlock {|x|{mapto(MSG->Type,{"VISIT,"TERMN","EXTRN"},{3,4,5},6),2}}
+
+  Im ColorTable des .QRY müssen die ersten beiden Farbpaare bleiben, und
+  Farbpaare 3 bis 6 dann je nach Geschmack auswählen.
+
+
+20060603
+--------
+- RunTimediff() macht jetzt "." statt ":" als Trenner.
+- ACF->IdPar : postedit füllte Nullen nicht auf. Jetzt wohl.
+- AcfCreate() funktioniert jetzt auch in ACTART.QRY, wenn order nicht 1
+  ist (sondern z.B. 3 bei PAC)
+
+20060609
+--------
+- Die Warnung "recno() changed unexpectedly!" habe ich wieder
+  rauskommentiert. Sie kommt z.B. wenn man in FNL mehr als einen
+  Buchungsvorschlag ankreuzt. Oder beim Erstellen eines Bon de
+  production bei Himaco.
+
+- wenn beim Login das Tagesdatum mit Systemdatum übereinstimmt (was ja
+  meistens der Fall ist) wird sdDate auf NIL gesetzt, und UserDate()
+  gibt in diesem Fall das Systemdatum (date()) zurück. Dann schaltet TIM
+  über Nacht das Datum automatisch um.
+
+20060613
+--------
+
+- Bei HI fügte TIM seit dem letzten Upgrade in Aufträgen die
+  Komponenten von Produktionsartikeln ein. Jetzt muss PA deshalb in
+  seiner TIM.DBI folgenden Eintrag machen, um dieses Verhalten zu
+  kriegen::
+  
+    VnlIsLinked {||HasRecords(oAla(),1,"ALA->IdArt1",VNL->IdArt)}
+
+20060627
+--------
+- ImlTest() macht jetzt seek in IMP vor dem &xlFilter. Die Warnung "IML
+  XXX : no IMP record" kann also nicht mehr rausgefiltert werden.
+
+- cpas\timtest.* : GenTest() wird jetzt nur aufgerufen, wenn die
+  Funktion existiert.
+
+20060630
+--------
+- ImlPreEdit() gibt jetzt .t. zurück, wenn kein IMP-Record existiert.
+
+20060702
+--------
+- NewToHtml() macht jetzt wieder einen Hinweis auf NEW->IdNgr.
+
+20060703
+--------
+- DoGet() in ddedit.prg protokolliert jetzt ebenfalls alle Änderungen,
+  wenn die Tabelle das Attribut S hat. Also ddSetAttrib("S") in einer
+  :xfile:`*.DEF` aktiviert jetzt die Protokollierung "aller" Änderungen, nicht
+  mehr nur die in der Vollbildansicht.
+
+20060703
+--------
+- dlm\latex\ven*.tex : Anpassungen für VKR060024.pdf : Beschreibung ist
+  ein einziger unformatierter Satz, aber zu lang für VNL->Descript.
+
+- NewToHtml() funktioniert jetzt auch, wenn NGR noch nicht geöffnet ist.
+  Denn wenn ich z.B. in "Unsere Liebesgeschichte" [item NEW:
+
+20060704
+--------
+- CPAS kann am 1.1.2007 für manche Beträge in
+  Zahlungsaufträgen die Bank anweisen, diesen Betrag vor Pfändung zu
+  schützen (lt. Gesetz vom 14.06.2004). Die ersten 3 Positionen der
+  communication libre müssen dazu die Zeichenfolge "/C/" enthalten. Das
+  ist jetzt mit TIM wie folgt möglich.
+
+  Neuer Eintrag ZauComPrefix in der tim.ini oder tim.dbi. Wird vorläufig
+  nur mit DEF_IMP benutzt. Damit kann ein Präfix angegeben werden, der
+  automatisch in der oti-Datei vor jeder Bemerkung des ZAU ermittelt und
+  eingefügt wird. Die maximale Länge einer Mitteilung ist weiterhin 106
+  Zeichen, inklusive des Textes von ZauComPrefix.
+
+  Defaultwert ist::
+  
+    ZauComPrefix ""
+    
+  Bei GX wird folgende Bedingung reinkommen::
+
+    ZauComPrefix BUD-IdFcb=="832" \
+          .and. BUD->CodTot == "71" \
+          .and. (IML->IdPar1==IML->IdPar2.or.empty(IML->IdPar2))
+
+  Deshalb wird jetzt übrigens auch immer die BUD mit geöffnet und
+  auf jeder IML positioniert, bevor ZauComPrefix abgefragt wird.
+
+- SH_TAB in einem Memofeld in einem READ (Vollbildmaske) ging nicht
+  zurück, sondern vorwärts. Behoben.
+
+20060705
+--------
+
+- JnlCheck() und PickDoc() kennen jetzt auch ODS-Journale.
+
+
+20060705
+--------
+- Man kann jetzt F1 auf VEN->Etat machen (wenn in der VEN.DEF Bearbeiten
+  erlaubt). Neue Funktion PickEtat()
+
+20060713
+--------
+- VenAppend() setzt jetzt im Zieldokument in jeder Zeile den
+  VnlVnaMatch() der entsprechenden Originalzeile ein. Dadurch können
+  Dokumente, die mit VenAppend() erstellt wurden, ihr Original
+  befriedigen.
+
+20060714
+--------
+
+- VenAppend() kopiert jetzt nicht mehr VEN->Attrib, sondern setzt die
+  Standardattribute aus JNL->DocAttr ein. Zu beachten bei FW, BP,...
+- p_align() und p_setalign() machen jetzt PrnFlush()
+
+20060719
+--------
+
+- ref2html() returns (on success) no longer .t. but "". Because the [ref
+  xxx] command should not swallow the following CRLF if used on a line
+  by itself.
+
+20060720
+--------
+
+(storniert am 20060725a_)
+
+- dlm\std\prnprint.drv macht jetzt by default -u, damit auf "guten"
+  Druckern auch Landscape funktioniert.
+
+20060724
+--------
+- p_setport(c) now returns scPort if c is NIL.
+- Neue Option OdlIsComposed in der tim.dbi. Defaultwert ist {||.t.}, und
+  dann werden die ALA eines ART in der ODL eingefügt. Bei PAC ist das
+  abgeschaltet.
+- Warnung "Preis unter Selbstkostenpreis" MsgPrixR() kam bei negativem
+  VNL->PrixU fälschlicherweise, wenn PrixR leer war.
+
+20060725a
+---------
+- dlm\std\prnprint.drv benutzt jetzt die neue Funktion DrvHasOption()
+  und macht nur noch -u, wenn Landscape gesetzt ist. Weil sowohl bei PAC
+  als auch im ÖSHZ Bütgenbach die hebräische Transformation auftrat. Für
+  Landscape-Ausdrucke kann Herr Langer dann mit p_setport() auf den
+  Netzerknamen des -u-fähigen Brother-Druckers umschalten.
+
+20060725b
+---------
+
+  (taper "pcd" dans VNL->IdArt devrait automatiquement afficher
+  ARTPICK.QRY.)
+
+- Wenn ich mit ddFldDoGet() (AG_DOGET) den Editor für ein Feld
+  verändere, dann führt TIm nach dem Editieren jetzt auch den postblock
+  aus.
+- Neues Attribut COLATTR_Q ("Quick Pick"). Problem ist, dass man dann
+  trotzdem auch mit F3 immer den Picker kriegt und man dann also keinen
+  Wert direkt eingeben kann. Also unbrauchbar.
+
+  --> Anfrage verweigert, zu schwer zu implementieren.
+
+20060726
+--------
+- AcfCreate() bekommt jetzt nicht mehr ACF->IdCtr als ersten Parameter,
+  sondern ruft die neue Funktion AcfIdCtr() auf. Aber nur wenn IdCtr
+  leer ist, also nicht durch Kopie entstanden. Der neue Eintrag AcfIdCtr
+  in der TIM.DBI kann einen Codeblock definieren. Standard ist
+  ``{||PrtIdCtr(PAR->IdPrt)}``
+
+- VnlAcfCheck() machte ""+10" dans PV "+10.00 : contient des caractŖres
+  non numériques."
+  vorher::
+  
+    get ART->Prix1 GET_DECPOS(ArtPuDecPos()) ;
+               valid ArtP1Validate(val(ART->PrixR))
+
+  Das "get ART->Prix1 GET_DECPOS(ArtPuDecPos())" musste weg. Bei
+  ART->Prix1 und ART->TVAC.
+
+- ddedit.prg : Die Frage "Der Record enthält ungültige Daten. Drücken
+  Sie J um den Record zu löschen" ist jetzt ersetzt durch eine Warnung
+  "Ihre Angaben sind ungültig und können so nicht stehen bleiben.
+  Beheben Sie die Fehler oder löschen Sie den Datensatz!"
+
+20060727
+--------
+
+- New files ACFPRIX.ACT ACFPRIX.DLG werden von ACF.DEF aus
+  aufgerufen wenn man ACF->Prix bearbeitet.
+- ArtAcfDate(cIdArt,cIdCtr) gibt das Datum des jüngsten Partnerpreises
+  zurück.
+- AcfPrixCmp() macht jetzt die Währungskonvertierung nur noch, wenn
+  ArtIdDev()!=ACF->IdDev ist.
+
+- VnlAcfCheck() macht jetzt nicht mehr das alte Dialofenster, das
+  sowieso nur bei PAC benutzt wurde, sondern ruft (momentan hardcodiert)
+  ``ActExec("ACFPRIX")``.
+
+20060727
+--------
+- renamed VnlAcfCheck() to VnlAcfUpdate()
+- Neuer Eintrag :configcmd:`DoVnlAcfUpdate` in der :xfile:`TIM.DBI` 
+  ersetzt das bisherige
+  :data:`JNLATTR_R` für VEN-Journale, das seit ddddmmyy schon "Buchungen
+  rückwirkend erfassen" bedeutete. Bei PA muss also in der TIM.DBI
+  ``DoVnlAcfUpdate {||VNL->IdJnl$"CDA ACH"}`` stehen.
+- Wenn ein unregistriertes VEN gedruckt wird, fragt TIM jetzt immer
+  "Trotzdem drucken" statt wie bisher erbarmungslos zu verweigern.
+- Wenn VnlIsLinked(), dann werden die verknüpften Artikel nur
+  eingefügt, wenn VNL->Qte ausgefüllt worden ist. Und dann übrigens
+  jetzt auch in VnlQteValidate()
+
+20060729
+--------
+
+- Vorbereitung des Demo-Patchs für die Buchhaltung. Keine
+  Codeänderungen, aber neue SPZBH.CH und viele Änderungen
+
+20060731
+--------
+
+- SPZ: Analyse mit Vera. 1 Stunde.
+
+- Wenn in VNL.DEF oder VEN.DEF eine ddOnPostEdit() war, die auch im
+  Integritätstest wichtig ist, dann muss die jetzt ddOnTest heißen. Die
+  onPostEdit wird nur noch nach einer Bearbeitung ausgeführt. onTest
+  wird überall nach onPostEdit ausgeführt, aber zusätzlich auch im
+  Integritätstest und vor dem Registrieren einer VEN.
+
+20060801
+--------
+
+- Im SPZ ist jetzt DEF_TAX raus. Und DEF_ART trotzdem drin. Dazu waren
+  einige Codeanpassungen nötig (theoretisch ohne Konsequenzen).
+
+20060802
+--------
+
+- ParPreEdit() machte "read-only", wenn PARATTR_R gesetzt ist. Das ist
+  jetzt rausgeholt, denn bei Nols bedeutet R was anderes. Ich glaube
+  sowieso nicht, dass jemand das benutzt. Falls doch, müssen wir das eben
+  dort in der PAR.DEF manuell einbauen.
+
+
+20060803
+--------
+
+- Neuer Eintrag VnaCopyFilter in der TIM.DBI wird bei PAC benutzt:
+  empty(VEN->VnaMatch).or.left(VNA->Match,9)==VEN->VnaMatch
+
+- TimTest() macht jetzt auch ACF. Neue Funktion AcfTest()
+
+- (nols) VnlTotRefresh() aktualisiert ja alle folgenden Totals innerhalb
+  des Dokuments. WEnn sie eines fand, verlor sie allerdings den record
+  lock. Das war erstmals bei Nols aufgefallen, weil der in der VNL.DEF
+  noch verändernde ddOnPostEdit() hat.
+  Dazu benutzt er übrigens die neue Funktion a_islock()
+
+20060804
+--------
+
+- :xfile:`BOSS.MNU` :
+
+  - zeigte verschiedene Optionen an, wenn die entsprechende Funktion gar
+    nicht existiert.
+    
+  - Benutzerliste und Buchungsperioden befinden sich jetzt in Verwaltermenü / Konfigurierung
+    statt Verwaltermenü / Datenbank.
+
+- JnlCreate() ließ (wenn indexord() nicht 1 war) zu, dass man mehrere
+  gleiche IdJnl anlegte. Ein Journal mit leerem IdJnl konnte man nicht
+  löschen. IsUnique() und IsNewId() sind eigentlich beide
+  obsolete und sollten durch ein DbfPeek() ersetzt werden.
+
+- An verschiedenen Stellen knallte es, wenn DEF_TAX nicht definiert war:
+
+  - VenParValidate()
+  
+  - Neue Funktion VnlValue(), um in VnlPreEdit() die scOldValue zu
+    ermitteln.
+
+- ArtP1Validate() und ArtPrValidate() rundeten auf 0 Nachkommastellen
+  auf, wenn man statt "." ein "," verwendet hatte. Jetzt wird dort die
+  Funktion mton() benutzt, die zwar existierte, aber scheinbar nirgendwo
+  verwendet wird.
+
+- Redesign DEF_ANA mit DEF_VEN (es gibt außer mir keinen bekannten
+  Benutzer dieser Kombination mehr) : Neuer Eintrag VnlIdAna() in der
+  TIM.DBI besagt, welches das IdAna ist. Normalerweise ein weiteres
+  manuell editierbares Feld in der VNL. Ähnlich wie FNL. Man kann jetzt
+  nicht mehr mit VnlMvaEdit() oder VenMvaEdit() die analytischen
+  Buchungen manuell bearbeiten,
+
+20060807
+--------
+- ART.DBF berücksichtigt jetzt ddOnTest. Sowohl in ArtTest() als auch in
+  ArtPostEdit()
+
+20060809
+--------
+- Neue Funktion ParAcfAuto() generiert eine proposition de commande
+  fournisseur, en fonction des ACF définis et des stocks actuels.
+
+20060810
+--------
+- StkReset() macht jetzt die ODS vor den VEN. Weil bei PAC das Datum
+  beachtet wird.
+
+20060816
+--------
+- OpenPrinter() macht jetzt nicht mehr 'default cRange to ""', sondern
+  ruft SetRange() nur noch auf, wenn cRange nicht NIL ist. Denn bei Nols
+  ignorierte RepPrint() das SetRange(), das im Dialog gemacht wurde.
+
+- (storniert am 20060831) RepPrint() macht jetzt nicht mehr "default
+  cTplIni to "LISTE"", sondern ruft SetTplIni() nur noch auf, wenn
+  cTplIni angegeben ist.
+
+- PrintLine() gibt jetzt .t. (nicht mehr .f.) zurück, wenn nichts
+  gedruckt wird, weil der Seitenbereich vorbei ist oder snPrnStatus
+  nicht PRN_CONTINUE ist. Denn _report() fragte dann bei Nols den
+  Benutzer, ob er den Arbeitsvorgang abbrechen wolle. Und _report() hört
+  ja leider nicht sofort auf, PrintLine()s anzufragen, wenn der
+  Druckvorgang vorbei ist.
+
+20060817
+--------
+- ParAcfAuto() rief NafExec() mit lTagged auf, aber das war ein
+  Missverständnis.
+
+20060818
+--------
+- VnlSetIdTax() : wenn IPB->IdTax unleer ist, dann hat dieser Code
+  jetzt Vorrang vor dem des Generalkontos. Zum Beispiel bei PAC Verkauf
+  Kaffee an Guy.
+
+20060821
+--------
+- Alt-F1 rief DebugBreak() auf, die raise "You pressed Alt-F1" machte.
+  Das habe ich desaktiviert.
+
+20060824
+--------
+
+- Befriedigungsalgorithums vereinfacht. Eine VNL kann jetzt immer nur
+  eine VNA auf einmal befriedigen. VNA->Match wird nicht mehr benutzt.
+  VNL->Match enthält immer das IdJnl+IdDoc+Line der befriedigten VNA.
+  Eine VNL mit leerem VNL->Match befriedigt nichts. MatchVnaEdit() ist
+  nicht mehr. VNAMATCH.QRY wird nicht mehr benutzt. PickVna() für einen
+  Artikel ignoriert jetzt cIdJnl.
+
+- VenClose() kann jetzt im Batch aufgerufen werden.
+  Schaut jetzt nicht mehr auf USRATTR_Y, sondern eine Variable lConfirm,
+  die z.Zt. einfach := lRefresh initialisiert wird.
+  Beispiel : PAC\VENREDO.ACT
+
+- (storniert) Neue Funktion VenHasVnaUs() gibt an, ob die aktuelle VEN mindestens
+  eine unbefriedigte VNA hat. Zur schnellen Anzeige im Browse, um zu
+  sehen, ob ein Angebot eine CDV bekommen hat. Aber was geschieht mit
+  den Alternativen des Angebots, die nicht bestellt wurden?
+
+  Besser funktioniert es einfach nur mit folgender virtueller Kolonne
+  (header="F2")::
+
+    DbfOnBottom(oVen(),5,"VEN->IdJnl","???",\
+      VEN->VnaMatch,"VEN->VnaMatch","recno()!="+ntrim(recno()))
+
+- Neue Funktion setrs_unknown() wegen eines subtilen Problems bei FG:
+
+     Si TIM rouspète qu'il n'y a pas de ACF et qu'on en a fait une,
+     alors il faut faire une pseudo-modification de l'article pour que
+     TIM s'en rende compte.
+
+- Wenn VenUndo() fehlschlägt, dann kriegt man jetzt die Frage "Mark this
+  document as broken (Y/N)?"
+
+20060826
+--------
+- Die Automatikfakturation bei Nols hatte einen subtilen Bug: beim
+  Aufteilen des Betrags der Rabatte in HTVA und MTVA nahm TIM nicht den
+  MWSt-Code des Lieferscheins, sondern den der ersten Zeile des
+  folgenden Lieferscheins. Weil die meisten Leute 21% MWSt haben, fiel
+  das erst auf, als Firma Steffens vor einem Kunden mit MWSt-Code A0
+  getankt hatten. Die Rabatten waren dadurch voll in HTVA gesetzt, und
+  obwohl der richtige MWSt-Code da stand (der wird in VnlGenerate()
+  gesetzt), war der MWSt-Betrag leer.
+
+  todo:
+
+  - 2 oder 4 Nachkommastellen in VNL->cMont bei Zwischensummen ?
+
+  - TimTest muss eventuelle andere Rechnungen mit dem gleichen Fehler
+    rausfinden.
+
+  - VNL->IdTax sollte eigentlich nicht neu ermittelt werden, sondern die
+    Rechnung soll den IdTax des Lieferscheins übernehmen.
+
+20060828
+--------
+- TimTest() hat ein internes Redesign bekommen. Resultate werden jetzt
+  in eine log-Datei geschrieben und erst dann ausgedruckt.
+- fprint() hat einen neuen Parameter bPageHeader (das titblock vom "open
+  printer")
+
+- bugfix: Wenn man Alt-F4 auf einem ungültigen Record drückte, dann
+  begann TIM eine Endlosschleife.
+
+20060829
+--------
+
+- (SPZ) man kann jetzt eine Partnerart "*" definieren, die alle Partner
+  nach Name sortiert anzeigt. Dazu diente bisher auch schon die
+  Partnerart <leer>, aber die ist jetzt veraltet. "*" hat den Vorteil,
+  dass man das auch in CTR->PrtList angeben kann. PickPar()
+
+- ddedit() macht jetzt (wenn ein Fenster angegeben ist) nicht mehr
+  automatisch CfgWaitColor(), sondern nur wenn auch mode=wait ist. Wird
+  benutzt im SPZ, um "Adressen / alle alphabetisch" zu implementieren.
+
+- Neue Funktion PickVnlMatch(), die als hardcodierter Pickblock für
+  VNL->Match dient. Sie benutzt ein neues VNAPICK.QRY. Die alte Funktion
+  VnaPick() wird meines Wissens nicht benutzt.
+
+20060830
+--------
+
+- GsbVnlMont() rief VnlActUpdate() auch auf, wenn man ein Generalkonto
+  eingab. Das fiel dann erst später im Integritätstest auf.
+
+- dlm\std\boss.mnu : #ifdef type("oTax()")!="U" funktioniert nicht, weil
+  das eine user-defined function ist.
+
+- VenTaxMemo() (also [ven memo_tax]) funktioniert jetzt intern ein
+  bisschen anders. Vor allem ist die Reihenfolge jetzt nicht mehr
+  zufällig, sondern immer so wie in der TAX.DBF. Und er loopt jetzt
+  richtig über die TAX.DBF, deshalb kann ich neue Tricks machen, die
+  nicht mehr TAX->Memo benutzen. Beispiel sh. PAC.
+
+20060831
+--------
+
+- :xfile:`BOSS.MNU` meldete "IVT.MNU: file not found" wenn !HasDlm("IVT")
+
+- Auch VenTest() benutzt jetzt einen Parameter xlFilter
+
+- VnlTaxCheck() prüft bei nicht-tolerantem MWSt-Code jetzt nach, dass
+  die Abweichung des erfassten MWSt-Betrags vom theoretischen Betrag
+  maximal 5% des Basisbetrags ist.
+
+- RepPrint() macht jetzt (seit 20060509) wieder default cTplIni to
+  "LISTE", denn bei vielen Reports gibt es kein initialize
+  SetTplIni("LISTE"). Außerdem machte er SetTplIni() erst nach dem
+  DlgExec(), dadurch war der Druckparametersatz im Dialogfenster noch
+  nicht gesetzt. Und er macht RptLoad() jetzt wieder nach dem
+  OpenPrinter(). Deshalb gibt es den Befehl ToCSV in rep-Dateien nicht
+  mehr, sondern stattdessen macht RepPrint() ein getvar("ToCSV").
+  Reports, die nach CSV exportierbar sein sollen, müssen die
+  Ankreuzoption in ihrer DLG-Datei also so nennen. Folgende beiden
+  Reports benutzten das bisher:
+  dlm\art\artcts01.rep
+  dlm\sprl\par002.rep
+
+20060831
+--------
+
+Bei EH funktioniert GENHST.REP nicht mehr ordentlich, weil seit den
+Änderungen 20060509 RepPrint() den Druckparametersatz erst nach dem
+RptLoad() ausführt. Deshalb muss ich folgende drei Zeilen in der
+rpt-Datei hinzufügen::
+
+  #exec SetTplIni("LISTE")
+  #exec SetMntFormat("Z12")
+  before SetMntFormat("Z12")
+
+Wahrscheinlich sind auch andere Reports von diesem Problem betroffen,
+die muss ich dann ähnlich lösen.
+
+Ich kann bei Himaco auch nicht so einfach eine neue Version aufspielen,
+weil ich zuerst noch eine Konvertierungsroutine für die Änderungen vom
+20060824 aushecken muss, und das wird nicht trivial sein.
+
+20060901
+--------
+
+- dlm\std\DBCHECK.ACT setzt jetzt MemPer1 und MemPer2 auf leer, wenn der
+  Integritätstest angefragt wird. Denn der berücksichtigt das ja seit
+  20060828.
+
+- Neuer Eintrag TolerateTax() und gleichnamige Funktion. Damit kann Nols
+  angeben, dass für einige bereits deklarierte Rechnungen die
+  untolerierbare MWSt-Abweichung dennoch ausnahmsweise toleriert werden
+  soll.
+
+20060904
+--------
+- CanSkip() ist jezt nicht mehr static.
+- VenAppend() füllte VNL->Match nicht richtig aus, wenn DEF_VNA.
+
+20060905
+--------
+
+(PA) Vorbereitungen für Projekt "Befriedigungen rückgängig machen beim
+Entregistrieren."
+
+- PerSetDirty() macht jetzt nicht mehr Warning() sondern SetMsg(), wenn
+  Journal abgeschlossen ist.
+
+- Mausefalle (seit 20060824): VenDlgClose() schlug allen Ernstes vor,
+  den Status des Dokuments auf Error zu setzen, wenn das Journal
+  abgeschlossen war.
+
+- Und auch wenn PreDocUndo() oder OnVenClose() fehlschlägt, kommt jetzt
+  nicht mehr die Frage "mark document as broken". PreDocUndo() wird
+  nirgendwo mehr benutzt, und OnVenClose() nur bei Himaco, um nach die
+  Kosten zu erfragen. Und auch nach der Bestätigung
+  "Fakturierungsvorschläge gehen verloren" VenUndo(). Aber VenUndo()
+  setzt jetzt dafür ohne Rückfrage (und mit Eintrag in der console.msg)
+  den DocStatError(), wenn beim Loop durch VNL was fehlschlägt.
+
+- VenUndo() macht jetzt schon mal ein VnlVnaCollect(). Das wird dann
+  zwar noch nicht benutzt.
+
+20060905
+--------
+
+- ClosePrinter() macht jetzt keine Warnung "Nichts zu drucken" mehr,
+  wenn nichts gedruckt worden ist. Und setzt auch den Status nicht mehr
+  auf PRN_ABORT. Ich brauche also jetzt nicht mehr ein "after .f." in
+  die Dialogdatei eines TPL zu setzen, wenn das TPL->Memo leer ist.
+  Dadurch kriegen die Dokumente bei PAC jetzt auch wieder ihr VENATTR_P
+  gesetzt.
+
+- DlgExec() hat jetzt einen neuen Parameter lBatch. Wenn der .t. ist,
+  wird der Dialog zwar intern ausgeführt (before und after-Klauseln),
+  aber nicht angezeigt. OpenPrinter() forwardet diesen Parameter und
+  VenDoPrint() nutzt ihn aus (wenn von VenBatch() aus gerufen)
+
+- VenDlgPrint() zeigt jetzt (wenn VenDoPrint() .f. zurückgibt) die
+  SetMsg() nicht mehr als Warning an.
+
+- Wenn man in der Seitenvorschau ESC drückt, dann macht ClosePrinter()
+  jetzt ein SetMsg("Abbruch durch Benutzer").
+
+- Wenn PreVnlUndo() nicht einverstanden ist ("SRV 060029 : les
+  propositions de facturation seront perdues !"), dann muss man jetzt
+  USRATTR_E haben, um das Dokument trotzdem zu entregistrieren. Normale
+  Benutzer müssen zuerst die befriedigenden Dokumente ebenfalls
+  entregistrieren. Etes-vous certain (O/N) ? O
+
+20060906
+--------
+
+- PickPar() macht jetzt nicht mehr
+  ``default prt to PrtLocate(padr("*",LEN_IDPRT))``, weil 
+  dadurch in allen
+  Situationen die Auswahlliste PickPrt() desaktiviert wurde.
+
+- FnlPickMatch() ruft HstPickPar() jetzt mit FNL->IdCtr auf. Und wenn
+  FNL->Match und FNL->IdCpt leer sind, dann werden dadurch in der
+  HSTPICK.QRY nur die offenen Buchungen mit dieser Zentralisierungsart
+  angezeigt.
+
+- :xfile:`HST.DEF` :
+  Zum Suchen nach Betrag verwendet TIM jetzt ``{|x|ntom(qton(x))}`` statt
+  bisher ``padl(x,LenMont())``
+
+20060908
+--------
+
+- RepPrint() macht jetzt die Warnung "Nichts zu drucken", wenn
+  p_curpage() 0 ist. Denn sonst ist es (seit 20060905) irritierend, wenn
+  ein leerer Report ohne jegliche Mitteilung beendet.
+
+- Die NFSuggest() von Nols machte noch "if nf[NF_IDDOC] == NIL", aber
+  seit 20060826 oder 20060824 musste das "if empty(nf[NF_IDDOC])"
+  lauten. Dadurch bekamen Kunden mit PARATTR_D nicht mehr das Datum in
+  den Rechnungen angezeigt.
+
+20060911
+--------
+
+- VenVnlGenerate() öffnete die VNA nicht, so dass TIM beim Generieren von
+  automatischen Rechnungen meldete "Match invalide".
+
+20060912
+--------
+
+- Renamed _login() to BecomeUser(), and this can now be used to relogin
+  the current user without asking her password again. UsrEdit() calls
+  this function if ddSetUpdated(). Weil Vera darüber genörgelt hatte.
+
+- Um GenPreEdit() zu dürfen, muss man jetzt nicht mehr USRATTR_C,
+  sondern USRATTR_B haben. Wie schon bisher bei GenPreDelete() und
+  GenCreate(). Aber bei GenPreDelete() wird das jetzt nicht mehr
+  getestet, weil die nur gerufen wird, wenn GenPreEdit() okay gibt.
+
+- Taste Alt-F11 und Funktion UsrSetAttr() habe ich rausgeholt. Die
+  benutzte sowieso keiner.
+
+- Standardantwort jetzt leer statt bisher N bei Bestätigung "Datum
+  außerhalb der Buchungsperiode". Uff, einfach Lösung für ein altes
+  lästiges Verhalten.
+
+20060913
+--------
+
+- Idee nach Problemmeldung SPZ : Reindexieren können, wenn andere Leute
+  drin sind. Im Hintergrund einen separaten Prozess laufen lassen, der
+  einen Indikator pro Tabelle benutzt. Tabellen skippen können und
+  später noch mal versuchen.
+
+- Problemmeldung bei PAC : "danger de perte de données" beim
+  Kompaktieren.
+  ACF->AcfRef: 15 wird 12
+  ART->Name1: 80 wird 50
+  VNL->Qte: 6 wird 3
+
+20060914
+--------
+
+- VenDocCreate() fragt jetzt nach dem Projekt (falls JNLATTR_J) *bevor*
+  er IsNewId() testet.
+
+- Neue Klausel RECNOS für EDIT DATA. Auch DbfPick() forwarded diese
+  Option. Wenn ein aRecnos angegeben ist, dann wird nicht geskippt,
+  sondern das ist ein array der recno(), die in der Liste stehen sollen.
+  Ansonsten ist es ein normales Browse. Noch nicht getestet.
+
+- Neue Funktion VenPickVnaMatch(), die die neue Klausel RECNOS benutzt.
+
+- bugfix: dlm\hst\hstven.rep machte RTE "Variable does not exist:
+  IDTAX", wenn DEF_TAX nicht reingelinkt war.
+
+20060920
+--------
+
+- PrtParEdit() berücksichtigt jetzt den Sonderfall, dass IdPrt leer oder "*"
+  ist und ruft dann EDIT DATA ohne KEY und VALUE auf.
+  Neue Datei DLM\CRM\PARNAME.QRY
+
+20060921
+--------
+
+- (Worked on timtools)
+
+20060922
+--------
+
+- release timtools 0.6.21
+
+- DEF_KITZ : ParCanDelete() now returns.f. if Sessions exist.
+
+- ParTest() macht jetzt ebenfalls die ddOnTest-Events.
+
+20060928
+--------
+
+- :xfile:`HTM.DRV` : ASCII 128 (Ć) converts now to "&Ccedil;".
+
+20060929
+--------
+
+- VenDetail() füllt jetzt den Inhalt einer EKR, deren JNLATTR_T gesetzt
+  ist (und Gesamtbetrag ausgefüllt) mit einer Zeile und dem PAR->IdGen
+  aus. NafCollect() und VnlGenerate() vertragen jetzt, wenn man statt
+  HTVA und MTVA den TVAC angibt.
+
+- Neuer Startup-Parameter "/PC:" um die Umgebungsvariable PC zu umgehen.
+  Als Vorbereitung für die geplanten Backgroundprozesse.
+
+- Wenn während des MyErrorHandler() ein RTE passiert, dann führt das zu
+  einem Processor stack fault. Und weil errorblock() NIL zurück gibt,
+  kann ich auch nicht auf den Standard-Errorblock zurück schalten.
+
+- AppReadIni() gespaltet in SetPublics(), und diese Funktion wird schon
+  zu Beginn von AppMain() gerufen, damit das Confirm() zum debuggen von
+  /PC wenigstens keinen RTE mehr macht.
+
+20060930
+--------
+
+- url2text() no longer cuts everything after the first /
+
+20061005
+--------
+
+- Wenn der Installationscode abgelaufen war, dann konnte man nicht mehr
+  manuell ein früheres Tagesdatum eingeben
+  (weil das Datumsfeld leer war
+  und TIM bei jedem Tastendruck zuerst UserDate() einsetzen wollte, die
+  aber ein ungültiges Datum enthielt, weil Login() direkt auf die
+  statische Variable sdDate gettete...
+  login.prg: neue local Variable dDate statt sdDate.
+
+20061006
+--------
+
+- Wenn man z.B. einen BLV entregistrierte, dann wurde die CDV seit
+  20060905 zwar entfriedigt, aber VNA->QteUs wurde von leer auf 2 statt
+  1 gesetzt. Der Bug war in VnaScan()::
+
+    VNA->QteUs := ntoq(qton1(VNA->QteUs) - nQtePs,aVna[i][VNA_QTEFORM])
+
+  ersetzt durch::
+
+    VNA->QteUs := ntoq(qton(VNA->QteUs) - nQtePs,aVna[i][VNA_QTEFORM])
+
+- Neues Attribut für Einträge der Befriedigungstabelle TRNATTR_D "Datum
+  ignorieren". Wenn das gesetzt ist, dann darf VEN->Date des
+  befriedigenden Dokuments auch früher als VEN->DatEch des befriedigten
+  Dokuments liegen. Anwendungsbeispiel bei PAC: Eine ACH kann auch schon
+  vor dem BLA ankommen (laut VEN->Date) und ihn trotzdem befriedigen.
+  VnaSuggest() soll also in manchen Fällen nicht aufs Date2 schauen.
+
+20061007
+--------
+
+- p20061005() in DEF_SPZ funktioniert jetzt erstmals. IdPar und IdDls
+  kriegen die Information eingepflanzt, ob E oder S.
+
+20061009
+--------
+
+- dbcheck.dlg : "rebuild" statt "recreate" und "rekonstruieren" statt
+  "neu erstellen"
+
+20061009
+--------
+- Storniert 20061006_: VNA->QteUs wird jetzt immer mit qton1()
+  konvertiert, und bei Rückbefriedigung wird eine "0" eingetragen statt
+  das Feld auf leer zu setzen. Leer heißt immer 1.
+  Bei PAC wurden rückbefriedigende VNA->QteUs auf leer gesetzt und dann
+  war das Ding nicht registriert.
+
+- ntoq() macht jetzt nicht mehr space(LenQte()) wenn nVal 0 ist. Wenn
+  man das will, muss man jetzt die neue Funktion ntoq1() rufen.
+
+- ParTest() meldete keine duplicate references mehr
+- Neuer Integritätstest VnaTest()
+
+20061010
+--------
+
+- Verschiedene kleine Änderungen in DEF_VNA für PAC.
+  Die neue Funktion VenVenEdit() ist schön.
+
+  Allein ca. 4 Stunden manuelle Datenreparatur, nachdem VnaTest 350
+  Warnungen ausdruckte, lauter Folgen der Bugs, die zwischen 20060905
+  und 20061009 aktiv waren.
+
+20061011
+--------
+- VnaAuto() berücksichtigte den Mindestbetrag MemVnaMont.
+- In einem browse (ddedit) mit aRecnos funktioniert jetzt auch Ctrl-PgDn
+
+- VenVenEdit() zeigt nicht im Mode FIND sondern im Modus SHOW an. Dann
+  soll ein ENTER ebenfalls die Vollbildansicht aktivieren (nicht das
+  Detail).
+
+20061013
+--------
+- DLM\STD\BOSS.MNU machte RTE, wenn eine der Funktionen oVnr(), oFrf()
+  oReg() nicht existierte. Diese Funktionen existieren jetzt immer und
+  geben NIL zurück, wenn es die Tabelle nicht gibt.
+
+20061014
+--------
+- Neue Funktion RapOnPrev() und neues Feld RAP->IdDgr
+
+20061016
+--------
+
+- VenVnlFill() füllte das G-Konto des Lieferanten nicht ein, wenn man im
+  gleichen Journal auch automatische VNA-Vorschläge haben konnte.
+
+20061018
+--------
+
+- Bei FW und PA war ein Bug in VnlTaxValidate() : VnlSetTaxe() muss
+  vor VnlTaxCheck() aufgerufen werden. Wenn man den MWSt-Code manuell
+  von 21 nach 6 änderte, dann ließ TIM den Benutzer nicht mehr raus aus
+  dem Feld. Statt den MWSt-Betrag selber anzupassen.
+
+- Wenn man den MWSt-Betrag VEN->MontT selber eintippte, dann füllte TIM
+  nicht selber die Stellen hinterm Komma. Also "25" ließ er als "25"
+  stehen statt "25.0000" draus zu machen.
+
+20061019
+--------
+
+- Während des des AD_CREATE darf man nicht mehr ddRefreshAll() aufrufen.
+  PtlCreate() tat das, und dadurch machte ddRefreshAll() ein goTop(),
+  weil slIsEof in ddedit.prg noch nicht auf .f. gesetzt war.
+
+- Release FW
+
+- VnlCreate() verhedderte sich, wenn es doppelte VNL->Line gab. Was in
+  der Praxis bei PAC passiert, wenn man ParAcfAuto() aufruft und
+  verlinkte Artikel zu automatischen Zwischenzeilen führen. Eigentlich
+  müsste ich VenVnlGenerate() ändern, dass dann keine doppelten Nummern
+  vergeben werden. Aber wenn VnlCreate() jetzt damit klar kommt, kann
+  das von mir aus so bleiben.
+
+- FG hat noch einen fiesen Bug gefunden:
+
+  ACH 060148 bucht die Basisbeträge in 3 verschiedene Generalkonten. Der
+  Lieferant hat die MWSt jedoch auf den Gesamtbasisbetrag berechnet
+  (logisch, weil es der gleiche Prozentsatz ist).
+
+  Gesamtbetrag ist 235.91 EUR, aber TIM will erstens 235,92 einsetzen
+  und zeigt dann zweitens trotzdem am Bildschirm ein "reste a saisir"
+  von 0.01 an. Widerspricht sich also selber::
+
+    V N°Art. Qté    Désignation / Remarque       p.u.       htva       tax
+    ─┬──────┬──────┬────────────────────────────┬──────────┬──────────┬───
+    A│   419│     1│Samsung Monitor 19" LCD 940N│    176.50│    176.50│D21
+    A│   104│     1│Recupel Moniteur LCD        │      2.48│      2.48│D21
+    G│613300│      │Frais de transports Belgique│          │     15.99│D21
+     │      │      │reste à saisir              │          │      0.01│
+
+  Achtung, siehe auch 2001-01-15
+
+- GsbVnlTaxe() akzeptierte seit 20061018 nicht mehr ein versehentliches
+  Komma statt Punkt: "12,20" wurde "leer".
+
+20061020
+--------
+- Neue Funktion ArtVnlSum() ähnlich wie ArtCtsSum().
+  Für :xfile:`ARTVNL01.REP`
+- Purzel() gibt jetzt .t. statt bisher .f. zurück.
+- VNL->Qte ist jetzt GTYPE_QTY statt bisher GTYPE_CHAR
+
+- Release bei FW
+
+20061020 
+--------
+
+"ACH060148" : Änderung beim Runden der MWSt
+
+- MvtCollect() ignorierte JNLATTR_K, wenn DEF_TAX nicht war. Das wäre im
+  SPZ irgendwann aufgefallen.
+
+- MvtCollect() ruft jetzt zweimal MvtColl2() auf und MVT_ALEN hat eine
+  neue Struktur. Wegen der ACH060148 bei PAC: Der MWSt-Betrag darf nicht
+  pro G-Konto gerundet werden, sondern nur pro IdTax.
+
+- Achtung Buggefahr bei Himaco: VenMvtRemise() berechnet die MWSt nach
+  Anwendung der Remise nicht auf Basis des MWStSatzes neu, sondern auf
+  Basis der Remise.
+  Beispiel: 100 EUR mit 5% Remise
+  Bisher: MTVA := 95 * 21% = 19,95
+  Jetzt: MTVA := 21 * 0.95 = 19,95
+
+- ca. 10 Stunden Arbeit bisher (Analyse + Programmierung)
+
+20061022
+--------
+- Neuer Eintrag VenMfcDefault in der tim.dbi. Damit ich in meiner
+  Buchhaltung im Journal KVI die MFC vom vorigen Dokument übernehmen
+  kann, ohne dass TIM nach der Auswahl eines anderen Partners dessen
+  Standardzahlart setzt.
+  Defaultwert (bisheriges Verhalten)::
+  
+    VenMfcDefault ParMfcDefault(VEN->IdJnl)
+    
+  Für LS::
+  
+    VenMfcDefault iif(VEN->IdJnl=="KVI",VEN->IdMfc,ParMfcDefault(VEN->IdJnl))
+
+20061023
+--------
+
+- RepPrint() machte (scheinbar seit längerem?) ein array access, wenn
+  man ToCSV ankreuzte. Reihenfolge von RptLoad() und OpenPrinter()
+  vertauscht.
+
+- DEF_IMP : die Periodenbereichfilter für ImpImlTest() und all die
+  anderen IMP-spezifischen Testfunktionen sind jetzt hardcodiert.
+
+20061024
+--------
+- DEF_SPZ zerspalten in DEF_DLS, DEF_DRG und DEF_LPJ
+- dos2utf8() zerspalten in dos2utf8() und latin2utf8()
+- src2html() nimmt jetzt immer an, dass die angegebene Datei in latin1
+  kodiert ist (statt bisher in cp850).
+
+20061031
+--------
+- LEN_IDDLS ersetzt durch LenIdDls()
+- Neues Release fürs SPZ gestartet:
+
+- (Buggefahr CPASANA:) Bei DEF_ANA und DEF_VEN werden jetzt keine MVA
+  mehr generiert. Theoretisch bleibt die DEF_ANA vom CPAS unverändert,
+  aber ich habs nicht getestet.
+
+20061101 
+--------
+Weiter an SPZ Automatikfakturierung
+
+20061102 
+--------
+Weiter an SPZ Automatikfakturierung
+
+- NafExec() macht jetzt nicht mehr ParExist() sondern DbfPeek().
+  Benötigt also nicht mehr die offene PAR.
+
+- IsReadOnly() gibt jetzt .f. zurück, wenn empty(UserId()) (d.h. während
+  tim /check (vor dem Login))
+
+
+20061107
+--------
+- PprTest() : alte Themen nicht in neuen Akten
+
+- SetExitDelay() : wenn man x Sekunden nicht in TIM arbeitet, fliegt man
+  automatisch raus. (Funktioniert noch nicht.)
+
+20061108
+--------
+
+- SetExitDelay() funktioniert jetzt. Während der letzten 30 Sekunden
+  steht in der Meldungszeile "Diese TIM-Sitzung wird automatisch beendet
+  in X Sekunden".
+
+20061109
+--------
+
+- ParVenAppend() summierte die MTVA statt die HTVA um zu entscheiden, ob
+  es eine Gutschrift ist.
+
+- Neue Funktion FldLocate()
+
+- DlsPostEdit() führt jetzt den postBlock (ddFldSetValid) von DLS->Etat
+  aus, wenn man keinen Status eingegeben hatte und einen auswählt.
+
+
+20061113
+--------
+- (PA) StkReset() prüft jetzt nach, ob die VNA einer VNL storniert
+  wurde.
+
+20061114
+--------
+- ParVenAppend() gibt jetzt nicht mehr .t./.f. zurück, sondern die
+  Anzahl der generierten Dateien (oder -1 wenn Fehler). 0 bedeutet
+  "nichts zu fakturieren (aber kein Fehler)".
+
+- VenCopy() schaut jetzt nach, ob VEN->Mont des Zieldokuments leer ist.
+  Wenn nicht (also wenn man einen Gesamtbetrag eingegeben hat), dann
+  werden die Beträge des Quelldokuments so verändert, dass der
+  Gesamtbetrag gleich bleibt.
+
+  Man kann also jetzt ein Journal "Buchungsvorlagen" machen, in dem man
+  sich Modelle für häufig auftretende Einkaufsrechnungen bereit hält. FG
+  benutzt das für Rechnungen (carburant) bei denen der MWSt-Betrag nur
+  zu 50% abziehbar ist.
+
+20061115a
+---------
+
+- vol.dbc hat wieder eine neue Kolonne: VOL_TYPE. Für die Fotogalerie
+  von mraamat
+
+20061115b
+---------
+- VnaTest() machte eine Fehlwarnung, wenn man einen Artikel mit
+  Mengenformat 1, der 1x bestellt war, mit Menge 1.5 lieferte und
+  fakturierte. Wegen der Rundung.
+
+- itest() verträgt jetzt, wenn man Groß-/Kleinschreibung im Namen eines
+  Tests im Feld "Seulement les tests suivants" nicht beachtet.
+
+
+20061124
+--------
+
+- ParVenAppend() gibt jetzt .f. zurück, wenn das vorige Dokument nicht
+  registriert ist. Bisher wurde der Benutzer dann gefragt, ob er den
+  Arbeitsvorgang trotzdem fortsetzen will. Das gibt es jetzt nicht mehr.
+  Provisorische Lösung für die Erstellung der Abrechnungen im SPZ.
+
+- Und wenn nichts zu fakturieren ist, dann wird jetzt nicht mehr der
+  Name des Partners vorangestellt, weil der an dieser Stelle nicht so
+  einfach zu ermitteln ist. Im SPZ kam nicht der Name des Therapeuten,
+  sondern der der zuletzt bedienten Akte.
+
+- IniLoad() machte eine falsche Zeilenangabe bei der Meldung "unknown
+  keyword..."
+
+20061128
+--------
+- dlm\std\prn2pdf.drv errechnet jetzt die Zeilenhöhen der einzelnen
+  Fonts korrekter.
+
+  Vorher::
+
+    Font  5cpi  5 28/72 chr(27)+"c5 "
+    Font 10cpi 10 14/72 chr(27)+"c10 "
+    Font 12cpi 12 12/72 chr(27)+"c12 "
+    Font 15cpi 15 10/72 chr(27)+"c15 "
+    Font 17cpi 17  8/72 chr(27)+"c17 "
+    Font 20cpi 20  8/72 chr(27)+"c20 "
+
+  Ab heute::
+
+    // line height = PdfPrinter.ratio / charwidth / cpi
+    // also 1.1 / 0.6 / cpi
+    // also 1.8333/cpi
+    //
+    Font  5cpi  5 1.8333/5  chr(27)+"c5 "
+    Font 10cpi 10 1.8333/10 chr(27)+"c10 "
+    Font 12cpi 12 1.8333/12 chr(27)+"c12 "
+    Font 15cpi 15 1.8333/15 chr(27)+"c15 "
+    Font 17cpi 17 1.8333/17 chr(27)+"c17 "
+    Font 20cpi 20 1.8333/20 chr(27)+"c20 "
+
+
+20061130
+--------
+
+- Folgende Funktionen öffnen jetzt auch die DLS, wenn sie durch die VNL
+  einer VEN laufen: VenVnlScan(), VenVnlFind(), VenVnlEdi(),
+  VenVnlWait(), VenVnlList(), VenVnlGenerate()
+
+
+20061205
+--------
+- UsrDlsCollect() füllte die Namen nicht in VNL->Desig rein. Behoben.
+
+20061206
+--------
+- :xfile:`GENHST.REP` und :xfile:`GENHST.DLG` alignierten die Summen 
+  nicht richtig.
+  SetMontant() und SetSolde() werden jetzt als before in der rep-Datei
+  gemacht.
+
+- dlm\hst\hstven.dlg setzte beim zweiten Mal SetTplIni("LISTEX"), und
+  wenn dann IdJnlVen noch vom ersten Aufruf gefüllt war, wurde das nicht
+  auf LISTE zurück gesetzt.
+
+20061206
+--------
+
+- Neue Funktion dberror() ist wie neterr(), aber wenn DEF_ADS, dann
+  fragt sie auch ax_error() ab. Zum Debuggen im ÖSHZ mit ADS Server 8
+  und ADSDOSIP.
+
+20061208
+--------
+
+- GsbVnlTvac() tat nichts, wenn DEF_TAX nicht eingelinkt war (also im
+  SPZ). Und deshalb füllte VenVnlFill() den Gesamtbetrag der
+  Einkaufsrechnungen nicht in die erste Zeile ein.
+
+20061209
+--------
+
+- Neues Feld RAL->RalType, RALTYPE.DBC. RalClose() und PosCreate()
+  berücksichtigen die hardcodierten Werte 1 und 2. Neues
+  Registrierungssystem "Cross", bei dem Einschreibung erst nach dem Lauf
+  zugleich mit der manuellen Zeiterfassung stattfindet.
+
+- RalClose() fragt jetzt keine Bestätigung mehr, wenn es überhaupt keine
+  Arrivées gibt. Denn dann gilt das alte System mit manueller Eingabe
+  der Zeiten.
+
+- Dateien EVENT.DLG, EVENT.ACT und EVENT*.HTM zum Generieren einer
+  Resultateliste aller Läufe eines Tages in HTML.
+
+20061209
+--------
+
+- VnlPostEdit() füllt jetzt VNL->cMont wenn slIsTotal. Dadurch kann man
+  jetzt leicht den Gesamtbetrag der Rechnung auf mehrere Zeilen
+  verteilen. TIM füllt den Restbetrag selber aus.
+
+20061210
+--------
+- NafLine() zeigt jetzt LIBELL vor ArtName() an.
+
+20061211
+--------
+- dlm\std\prnprint berücksichtigte --printer nicht, wenn der sich
+  nach dem Laden des Treibers noch mal änderte.
+
+- timtools.btp vermittelte der binären Installation nur die ersten 5
+  Parameter. Jetzt benutzt sie auch dann ``%*``.
+
+20061212
+--------
+- itest() macht jetzt eine Notiz::
+
+   it_note(utr("Integrity test","Integritätstest","Test d'intégrité") ;
+     + " " + dtocf(date())+" "+time())
+
+20061213
+--------
+- Neues Feld DLS->Kassiert
+- Neue Funktion DlsMust() berechnet, was in DLS->Kassiert vorgeschlagen
+  ist.
+- oPrj() gibt jetzt NIL zurück statt nicht zu existieren, wenn nicht
+  DEF_PRJ
+
+20061214
+--------
+
+- TimeDiff() funktionierte nicht, wenn die Zeiten c1 und c2 breiter als 5
+  Positionen waren.
+
+20061214
+--------
+
+- PARCTRL.REP nutzt die Funktionen ParHasDls() und ParHasDlp(), die ich
+  schon vor einiger Zeit mal undokumentiert geschrieben hatte.
+
+- Neues Attribut TRNATTR_M (nur manuell). Wenn das gesetzt ist, dann
+  werden diese Vorgänge nicht in VnaSuggest() vorgeschlagen, aber wenn
+  man so ein Dokument manuell erstellt, findet die Befriedigung statt.
+
+20061215
+--------
+- Neues #define DEF_VNLDATE bedeutet, dass ein Feld VNL->Date existiert.
+  Momentan ist das nur bei LW aktiv, wo VenVnlGenerate() dann NAF_DATE
+  nach VNL->Datei rein kopiert.
+
+- dlm\std\diag.* hat jetzt ein paar Optionen mehr. Und man kann testen,
+  ob die Seitenränder okay sind.
+
+- pic2html() wird auch bei PAC benutzt, nicht nur wenn DEF_WWW
+
+20061218
+--------
+- TIM schimpfte nicht, wenn ein Lieferant ohne Kontonummer in einem ZAU
+  benutzt wurde.
+  
+  - FinFnlLoop() gab .t. statt .f. zurück, wenn der Codeblock .f. zurück
+    gab.
+    
+  - FinFnlFind() heißt jetzt FinFnlCount() und gibt nicht mehr .t./.f.
+    zurück, sondern -1, 0 oder >0
+
+20061225
+--------
+- TimeDiff() funktionierte seit 20061214 überhaupt nicht. Jetzt wie
+  geplant
+
+20061226
+--------
+
+- Wenn ein xCmdSpooler gesetzt ist (mit SetSpooler()) und p_setcopies()
+  2 oder mehr ist, dann wird der xCmdSpooler jetzt nicht mehr x mal
+  ausgeführt, sondern muss sich selber darum kümmern, p_setcopies() zu
+  befolgen. Neue Funktion p_copies() damit der Spooler das auch abfragen
+  kann. Einziger mir bekannter Fall sind prnprint.drv und prn2pdf.drv
+
+20061229
+--------
+
+- GsbVnlTvac() setzte VNL->Code nicht auf F wenn man den Preis TVAC des
+  Artikels manuell änderte
+
+20061230
+--------
+
+- Neues Feld DLP->Etat (Stattgefunden/Abgesagt/Verpasst) pro
+  Anwesenheit.
+  
+- Nachtrag zu 20061229_ : GsbVnlTvac() nur wenn VNL->Code == LNCODE_ART
+

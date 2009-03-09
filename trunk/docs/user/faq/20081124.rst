@@ -1,0 +1,20 @@
+﻿Alle Rechnungen sind plötzlich wieder offen
+-------------------------------------------
+
+Mögliche Erklärung: 
+
+  - Sie haben :menuselection:`Sammelhistorik rekonstruieren` gestartet und den Vorgang dann mit :kbd:`Escape` unterbrochen. Lösung: :menuselection:`Sammelhistorik rekonstruieren` nochmal starten und bis zum Ende durchlaufen lassen.
+  
+  
+Eingangsrechnung im Vorjahr buchen
+----------------------------------
+
+Wie kann ich eine in 2009 datierte Eingangsrechnung buchen, die sich buchhalterisch noch auf 2008 bezieht?
+
+Antwort: 
+du musst diese Rechnungen dann mit einer 08er Nummer eingeben. Dazu
+musst du (bevor du :kbd:`Insert` drückst) den 
+Dokumentzähler ("Letzte Dokumentnummer") setzen mit :kbd:`F4`,:kbd:`L`. Du kannst dort :kbd:`F1` drücken und
+einfach die letzte Rechnung in 2008 auswählen.
+Und nachher natürlich ebenfalls mit :kbd:`F4`, :kbd:`L` wieder auf die letzte Nummer in 2009 zurücksetzen.
+
