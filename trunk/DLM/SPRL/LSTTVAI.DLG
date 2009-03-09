@@ -41,6 +41,7 @@ field name="Filename" \
       picture="@k@s30" \
       when={||!empty(DlgValue("DoFile"))}
 
+#include "ASPDF.DLG"
 #include "PREVIEW.DLG"
 
 // after SetDevise(DlgValue("IdDev"))

@@ -29,6 +29,7 @@ field caption="Mindestbetrag  " \
     valid={||ValNoTva(MemNoTva)}\
     block={|x|if(x==NIL,MemNoTva,MemNoTva:=x)}
 
+#include "ASPDF.DLG"
 #include "PREVIEW.DLG"
 
 after DoVenTvaListe(\
