@@ -1646,7 +1646,7 @@ open area oFnl(), oPar(), oPlz(), oNat()
       cText += space(6) //
       cText += space(12) // 59-70 : compte frais … d‚biter (si diff‚rent)
       cText += space(1) //
-      cText += BicCountry(a[IBAN_BIC]) // Code ISO alphab‚tique du pays de  destination
+      cText += BicCountry(ban[BAN_BIC]) // Code ISO alphab‚tique du pays de  destination
       cText += space(55) // blancs
       cText += CR_LF
       fwrite(fd,cText)

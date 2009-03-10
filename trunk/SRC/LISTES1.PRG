@@ -2315,7 +2315,7 @@ RETURN .f.
 FUNCTION DoVenTvaliste( ;
   lTaxe,cIdCtr,cTitle,nMontMin, ;
   xlParFilter,xlVenFilter, ;
-  cIdTpl, ;
+  cBegleit, ;
   nOrder, ;
   cDoFile,cFilename)
 local cDC := CtrDC(cIdCtr)
@@ -2412,14 +2412,18 @@ if cDoFile == BUTTON_ON
   endif
   fwrite(fd,cLine + CR_LF)
 endif
-open printer (SetTplIni()) ;
-             preview  SetPreview() ;
-             range    SetRange() ;
-             titblock {|| ;
-               PrintHeader(cTitle, "("+SetDevise()+")", PerText(bCondit) ), ;
-               PrintLine(cTit1),;
-               PrintLine(cTit2) ;
-             }
+OpenPrinter(SetTplIni(),SetPreview(),NIL,{|| ;
+    PrintHeader(cTitle, "("+SetDevise()+")", PerText(bCondit) ), ;
+    PrintLine(cTit1),;
+    PrintLine(cTit2) }, SetRange(),NIL,NIL,NIL,SetAsPdf())
+*open printer (SetTplIni()) ;
+*             preview  SetPreview() ;
+*             range    SetRange() ;
+*             titblock {|| ;
+*               PrintHeader(cTitle, "("+SetDevise()+")", PerText(bCondit) ), ;
+*               PrintLine(cTit1),;
+*               PrintLine(cTit2) ;
+*             }
 cTit1 += " " + padr(MsgTva02(MemLang1),40)
 cTit2 += " " + repl("Ä",40)
 cTit1 += " " + padr(MsgTva03(MemLang1),18)
@@ -2598,10 +2602,11 @@ open area oPar(), oPlz(), oNat()
   endif
   PrintLine(cLine)
 close area
-if lOkay .and. cIdTpl != NIL
+if lOkay .and. !empty(cBegleit)
   SetPageHeader({||NIL})
   p_eject()
-  TplInclude(TPLTYPE_INC,cIdTpl)
+  fparse(cBegleit,NIL,"[]")
+  // TplInclude(TPLTYPE_INC,cIdTpl)
 endif
 close printer
 if cDoFile == BUTTON_ON

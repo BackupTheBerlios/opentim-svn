@@ -52,12 +52,12 @@ after empty(DlgValue("DoFile")).or.!file(DbPath()+"\"+trim(DlgValue("Filename"))
 after DoVenTvaListe(\
   .f.,"V",SetDlgTitle(),NIL,\
   ".t.","VEN->IdReg=='I'",\
-  NIL,\
+  "LSTTVAI.LST",\
   1,\
   DlgValue("DoFile"),\
   DbPath()+"\"+trim(DlgValue("Filename"))\
 )
-after empty(DlgValue("DoFile")).or.fprint("LSTTVAI.LST","[]")
+// after empty(DlgValue("DoFile")).or.fprint("LSTTVAI.LST","[]",,,,,,,SetAsPdf())
 after empty(DlgValue("DoFile")).or.Confirm(\
   "Auch eine Kopie nach Diskette A: machen (J/N)")
 after empty(DlgValue("DoFile")).or.WildCopy(\

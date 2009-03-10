@@ -1386,7 +1386,7 @@ Bei Umstieg Clipper/Xbase:
   (ART->IdGenX) wieder geändert. Evtl. muss UseArtIdGen benutzt werden.
   Siehe auch 20040116.
 
-- NafDelete() : neue Pr³fung "Suppression manuelle uniquement pour articles sans stock!"
+- NafDelete() : neue Prüfung "Suppression manuelle uniquement pour articles sans stock!"
 
 20080229
 --------
@@ -1412,4 +1412,12 @@ Bei Umstieg Clipper/Xbase:
 20090216
 --------
 
-- When upgrading dlm you must also upgrade timtools.
+- When upgrading DLM you must also upgrade timtools.
+
+20090310
+--------
+
+- Integritätstest laufen lassen, weil TIM Bankkontonummern jetzt gründlicher prüft. 
+  Evtl. auch BANCLEAN.ACT laufenlassen.
+  
+- Buggefahr in FinWriteZau() (Generieren von VME- und FBF-Dateien)

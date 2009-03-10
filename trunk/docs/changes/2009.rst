@@ -278,4 +278,12 @@
   :xfile:`LSTTVAD.REP` (Kundenliste Deutschland)
 
 
+20090310
+--------
 
+- Die Änderung von gestern funktionierte noch nicht.
+  Außerdem werden jetzt die Liste und das Begleitschreiben im gleichen Druckjob gedruckt, 
+  also beide stehen in einer einzigen PDF-Datei.
+
+- TIM machte einen RTE, wenn man :func:`TplInclude` für einen Textblock aufrief, 
+  dessen TPL->Width nicht leer war.
