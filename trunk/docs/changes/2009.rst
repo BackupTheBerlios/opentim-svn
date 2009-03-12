@@ -285,5 +285,11 @@
   Außerdem werden jetzt die Liste und das Begleitschreiben im gleichen Druckjob gedruckt, 
   also beide stehen in einer einzigen PDF-Datei.
 
-- TIM machte einen RTE, wenn man :func:`TplInclude` für einen Textblock aufrief, 
-  dessen TPL->Width nicht leer war.
+- TIM machte einen RTE, wenn man :func:`TplInclude` für einen Textblock
+  aufrief, dessen TPL->Width nicht leer war.
+  
+- Patch 20090310
+
+- Committed revision 144.
+
+- Patch 20090310b
