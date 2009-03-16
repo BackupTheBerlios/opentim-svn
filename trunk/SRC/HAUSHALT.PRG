@@ -222,7 +222,7 @@ open printer SetTplIni() preview SetPreview()
       LstRe05(cType,DC_DEBIT ,"1","75",cPeriode,"Ord. Dienst : Zusammenfassung der Ausgaben")
       LstRe05(cType,DC_CREDIT,"2","85",cPeriode,"Auáerord. Dienst : Zusammenfassung der Einnahmen")
       LstRe05(cType,DC_DEBIT ,"2","95",cPeriode,"Auáerord. Dienst : Zusammenfassung der Ausgaben")
-      PrintTemplate("HHR",padr("R05",LenIdTpl())) ; p_eject()
+      TplInclude("HHR",padr("R05",LenIdTpl())) ; p_eject()
     endif
   endif
   if c07 == BUTTON_ON
@@ -241,8 +241,8 @@ open printer SetTplIni() preview SetPreview()
       LstRe08bis(padr("HHT",LenIdJnl()),cPeriode)
     endif
     if c09 == BUTTON_ON
-      PrintTemplate("HHR",padr("R09",LenIdTpl())) ; p_eject()
-      PrintTemplate("HHR",padr("R10",LenIdTpl())) ; p_eject()
+      TplInclude("HHR",padr("R09",LenIdTpl())) ; p_eject()
+      TplInclude("HHR",padr("R10",LenIdTpl())) ; p_eject()
     endif
     if c11 == BUTTON_ON
       LstRe11(padr("LFV",LenIdJnl()),padr("R11",LenIdTpl()))
@@ -636,7 +636,7 @@ next j
 PrintLine(cLine)
 PrintLine(repl("Ä",p_cpl()))
 * PrintTemplate("HHR",padr("HH05"+cDC+cDienst,LenIdTpl()))
-PrintTemplate("HHR",padr(cIdTpl,LenIdTpl()))
+TplInclude("HHR",padr(cIdTpl,LenIdTpl()))
 p_eject()
 RETURN NIL
 
@@ -720,7 +720,7 @@ for j := 1 to len(aBcl)
 next j
 PrintLine(cLine)
 PrintLine(repl("Ä",p_cpl()))
-PrintTemplate("HHR",cIdTpl)
+TplInclude("HHR",cIdTpl)
 p_eject()
 RETURN NIL
 
@@ -1106,7 +1106,7 @@ open area oBud()
   PrintLine(space(nPad) + " " + repl("Ä",LenMntF()))
   PrintLine(cLine)
 close area
-PrintTemplate("HHR",cIdTpl)
+TplInclude("HHR",cIdTpl)
 p_eject()
 RETURN NIL
 
@@ -1179,7 +1179,7 @@ for i := 1 to len(aBcl)
   cLine += " " + ntomf(aSum[i])
 next i
 PrintLine(cLine)
-PrintTemplate("HHR",padr("R12"+cDC,LenIdTpl()))
+TplInclude("HHR",padr("R12"+cDC,LenIdTpl()))
 p_eject()
 RETURN NIL
 
@@ -1338,7 +1338,7 @@ for i := 1 to len(aCdc)
   cLine += " " + ntomf(aSum[i])
 next i
 PrintLine(cLine)
-PrintTemplate("HHR",padr("R12D"+cDC,LenIdTpl()))
+TplInclude("HHR",padr("R12D"+cDC,LenIdTpl()))
 p_eject()
 RETURN NIL
 

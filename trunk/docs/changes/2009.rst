@@ -293,3 +293,17 @@
 - Committed revision 144.
 
 - Patch 20090310b
+
+20090316
+--------
+
+- :func:`LstHaushalt` rief an 3 Stellen noch :func:`PrintTemplate` auf, aber dort musste seit 20090108_ :func:`TplInclude` aufgerufen werden.
+  Folge: die betroffenen Teile fehlten im Ausdruck, und zwischendurch kamen möglicherweise Fehlermeldungen wie "no output stream active".
+  Genauer gesagt waren folgende Stellen betroffen: 
+  H05 1x, 
+  R09 2x, 
+  LstRe05() 1 x
+  LstHH05() 1 x
+  LstRe11() 1 x
+  LstRe12Detail() 1 x
+
