@@ -198,65 +198,74 @@ scPeriode := cPeriode
 scIdCdc   := cIdCdc
 SetTplLang(MemLang1)
 SetDevise(DevDefault(LastPeriode(scPeriode)))
-* SetDecPos(DevDecPos(scIdDev))
-open printer SetTplIni() preview SetPreview()
-  if c03 == BUTTON_ON
+if !empty(c03+c04+c05+c07+c08bis+c09+c11+c12)
+  if ! OpenPrinter(SetTplIni(),SetPreview())
+    scPeriode := cSavePeriode
+    RETURN .f.
+  endif
+  // open printer SetTplIni() preview SetPreview()
+    if c03 == BUTTON_ON
+      if cType == "R"
+        LstHH04(cType,"02",cMitName2,cPeriode,cIdFcb)
+        LstHH04(cType,"03",cMitName2,cPeriode,cIdFcb)
+      else
+        LstHH04(cType,"03",cMitName2,cPeriode,cIdFcb)
+      endif
+    endif
+    if c04 == BUTTON_ON
+      LstHH04(cType,"04",cMitName2,cPeriode,cIdFcb)
+    endif
+    if c05 == BUTTON_ON
+      if cType == "H"
+        LstHH05(cType,DC_CREDIT,"1",cPeriode,"Ord. Dienst : Zusammenfassung der Einnahmen")
+        LstHH05(cType,DC_DEBIT ,"1",cPeriode,"Ord. Dienst : Zusammenfassung der Ausgaben")
+        LstHH05(cType,DC_CREDIT,"2",cPeriode,"Auáerord. Dienst : Zusammenfassung der Einnahmen")
+        LstHH05(cType,DC_DEBIT ,"2",cPeriode,"Auáerord. Dienst : Zusammenfassung der Ausgaben")
+      else
+        LstRe05(cType,DC_CREDIT,"1","65",cPeriode,"Ord. Dienst : Zusammenfassung der Einnahmen")
+        LstRe05(cType,DC_DEBIT ,"1","75",cPeriode,"Ord. Dienst : Zusammenfassung der Ausgaben")
+        LstRe05(cType,DC_CREDIT,"2","85",cPeriode,"Auáerord. Dienst : Zusammenfassung der Einnahmen")
+        LstRe05(cType,DC_DEBIT ,"2","95",cPeriode,"Auáerord. Dienst : Zusammenfassung der Ausgaben")
+        TplInclude("HHR",padr("R05",LenIdTpl())) ; p_eject()
+      endif
+    endif
+    if c07 == BUTTON_ON
+      if cType == "H"
+        LstHH06("06","3",cPeriode,"Verwaltung der Fonds")
+        LstHH06("07","3",cPeriode,"Gesch„fte fr Rechnung von Dritten")
+        LstHH06("08","3",cPeriode,"Kassengesch„fte")
+      else
+        LstRe06("06","3",cPeriode,"Verwaltung der Fonds")
+        LstRe06("07","3",cPeriode,"Gesch„fte fr Rechnung von Dritten")
+        LstRe06("08","3",cPeriode,"Kassengesch„fte")
+      endif
+    endif
     if cType == "R"
-      LstHH04(cType,"02",cMitName2,cPeriode,cIdFcb)
-      LstHH04(cType,"03",cMitName2,cPeriode,cIdFcb)
-    else
-      LstHH04(cType,"03",cMitName2,cPeriode,cIdFcb)
+      if c08bis == BUTTON_ON
+        LstRe08bis(padr("HHT",LenIdJnl()),cPeriode)
+      endif
+      if c09 == BUTTON_ON
+        TplInclude("HHR",padr("R09",LenIdTpl())) ; p_eject()
+        TplInclude("HHR",padr("R10",LenIdTpl())) ; p_eject()
+      endif
+      if c11 == BUTTON_ON
+        LstRe11(padr("LFV",LenIdJnl()),padr("R11",LenIdTpl()))
+      endif
+      if c12 == BUTTON_ON
+        LstRe12("A","1","O.A. : zu bertragende Verpflichtungen")
+        LstRe12("A","2","A.A. : zu bertragende Verpflichtungen")
+        LstRe12("E","1","O.E. : beizutreibende Restbetr„ge")
+        LstRe12("E","2","A.E. : beizutreibende Restbetr„ge")
+      endif
     endif
-  endif
-  if c04 == BUTTON_ON
-    LstHH04(cType,"04",cMitName2,cPeriode,cIdFcb)
-  endif
-  if c05 == BUTTON_ON
-    if cType == "H"
-      LstHH05(cType,DC_CREDIT,"1",cPeriode,"Ord. Dienst : Zusammenfassung der Einnahmen")
-      LstHH05(cType,DC_DEBIT ,"1",cPeriode,"Ord. Dienst : Zusammenfassung der Ausgaben")
-      LstHH05(cType,DC_CREDIT,"2",cPeriode,"Auáerord. Dienst : Zusammenfassung der Einnahmen")
-      LstHH05(cType,DC_DEBIT ,"2",cPeriode,"Auáerord. Dienst : Zusammenfassung der Ausgaben")
-    else
-      LstRe05(cType,DC_CREDIT,"1","65",cPeriode,"Ord. Dienst : Zusammenfassung der Einnahmen")
-      LstRe05(cType,DC_DEBIT ,"1","75",cPeriode,"Ord. Dienst : Zusammenfassung der Ausgaben")
-      LstRe05(cType,DC_CREDIT,"2","85",cPeriode,"Auáerord. Dienst : Zusammenfassung der Einnahmen")
-      LstRe05(cType,DC_DEBIT ,"2","95",cPeriode,"Auáerord. Dienst : Zusammenfassung der Ausgaben")
-      TplInclude("HHR",padr("R05",LenIdTpl())) ; p_eject()
-    endif
-  endif
-  if c07 == BUTTON_ON
-    if cType == "H"
-      LstHH06("06","3",cPeriode,"Verwaltung der Fonds")
-      LstHH06("07","3",cPeriode,"Gesch„fte fr Rechnung von Dritten")
-      LstHH06("08","3",cPeriode,"Kassengesch„fte")
-    else
-      LstRe06("06","3",cPeriode,"Verwaltung der Fonds")
-      LstRe06("07","3",cPeriode,"Gesch„fte fr Rechnung von Dritten")
-      LstRe06("08","3",cPeriode,"Kassengesch„fte")
-    endif
-  endif
-  if cType == "R"
-    if c08bis == BUTTON_ON
-      LstRe08bis(padr("HHT",LenIdJnl()),cPeriode)
-    endif
-    if c09 == BUTTON_ON
-      TplInclude("HHR",padr("R09",LenIdTpl())) ; p_eject()
-      TplInclude("HHR",padr("R10",LenIdTpl())) ; p_eject()
-    endif
-    if c11 == BUTTON_ON
-      LstRe11(padr("LFV",LenIdJnl()),padr("R11",LenIdTpl()))
-    endif
-    if c12 == BUTTON_ON
-      LstRe12("A","1","O.A. : zu bertragende Verpflichtungen")
-      LstRe12("A","2","A.A. : zu bertragende Verpflichtungen")
-      LstRe12("E","1","O.E. : beizutreibende Restbetr„ge")
-      LstRe12("E","2","A.E. : beizutreibende Restbetr„ge")
-    endif
-  endif
-close printer
+  close printer
+endif
 if c12Detail == BUTTON_ON .and. cType == "R"
-  open printer SetTplIni() preview SetPreview()
+  if ! OpenPrinter(SetTplIni(),SetPreview())
+    scPeriode := cSavePeriode
+    RETURN .f.
+  endif
+  // open printer SetTplIni() preview SetPreview()
   Re12Detail(.f.,"A",cPeriode,;
     "BUD->Service=='1'.and.BUD->IsSum==' '.and.!'H'$BUD->Attrib",;
     "Db2Dev(SetDevise(),MVI->Periode,val(MVI->MontUs))",;
@@ -277,7 +286,7 @@ if c12Detail == BUTTON_ON .and. cType == "R"
   close printer
 endif
 scPeriode := cSavePeriode
-RETURN NIL
+RETURN .t.
 
 FUNCTION LstHH04(cType,cIdSbb,cMitName2,cPeriode,cIdFcb)
 local nCount := 0

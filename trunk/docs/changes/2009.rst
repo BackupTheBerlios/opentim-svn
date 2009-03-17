@@ -310,4 +310,11 @@
 20090317
 --------
 
-- :func:`TplInclude` hat ein spezielles Verhalten, wenn cIdTpl Leerzeichen enthält: dann wird cIdTpt ersetzt durch den Teil von cIdTpl vor dem Leerzeichen. Aber LstHaushalt() machte ein padr() von cIdTpl, dadurch missverstanden die beiden sich. Jetzt macht TplInclude() ein trim(cIdTpl), bevor sie dort nach Leerzeichen sucht.
+- :func:`TplInclude` hat ein spezielles Verhalten, wenn cIdTpl Leerzeichen enthält: dann wird cIdTpt ersetzt durch den Teil von cIdTpl vor dem Leerzeichen. Aber :func:`LstHaushalt` machte ein padr() von cIdTpl, dadurch missverstanden die beiden sich. Jetzt macht TplInclude() ein trim(cIdTpl), bevor sie dort nach Leerzeichen sucht.
+
+20090317b
+---------
+
+- :func:`LstHaushalt` machte einen RTE "saOsStack: stack underflow;Thread ID : 1", wenn man während :xfile`PRN2PDF.DLG` mit :kbd:`Escape`abbrach. Weil dann trotzdem :func:`ClosePrinter` gerufen wurde. 
+  Außerdem startete sie einen unnützen leeren Druckjob, wenn man lediglich c12Detail ankreuzte.
+  Behoben.
