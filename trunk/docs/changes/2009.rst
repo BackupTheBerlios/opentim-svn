@@ -307,3 +307,7 @@
   LstRe11() 1 x
   LstRe12Detail() 1 x
 
+20090317
+--------
+
+- :func:`TplInclude` hat ein spezielles Verhalten, wenn cIdTpl Leerzeichen enthält: dann wird cIdTpt ersetzt durch den Teil von cIdTpl vor dem Leerzeichen. Aber LstHaushalt() machte ein padr() von cIdTpl, dadurch missverstanden die beiden sich. Jetzt macht TplInclude() ein trim(cIdTpl), bevor sie dort nach Leerzeichen sucht.

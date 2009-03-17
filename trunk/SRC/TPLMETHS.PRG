@@ -741,6 +741,7 @@ RETURN (LstError() == PRN_DONE)
 FUNCTION TplInclude(cIdTpt,cIdTpl)
 local tpl
 local nPos
+cIdTpl := trim(cIdTpl)
 if (nPos := at(" ",cIdTpl)) != 0
   cIdTpt := left(cIdTpl,nPos-1)
   cIdTpl := alltrim(substr(cIdTpl,nPos+1))
