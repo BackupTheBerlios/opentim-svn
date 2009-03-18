@@ -123,7 +123,7 @@
 #undef DEF_HELP
 
 * #define DEF_INTERBNK
-* #define DEF_IBAN
+#define DEF_IBAN
 #define DEF_EUPPER_ALPHA
 * #define DEF_DGR // erweitertes Mahnwesen (RAP, RPL und DGR)
 
