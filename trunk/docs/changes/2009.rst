@@ -318,3 +318,10 @@
 - :func:`LstHaushalt` machte einen RTE "saOsStack: stack underflow;Thread ID : 1", wenn man während :xfile`PRN2PDF.DLG` mit :kbd:`Escape`abbrach. Weil dann trotzdem :func:`ClosePrinter` gerufen wurde. 
   Außerdem startete sie einen unnützen leeren Druckjob, wenn man lediglich c12Detail ankreuzte.
   Behoben.
+  
+  
+20090326
+--------
+
+- :attr:`TRL.Compte1`, :attr:`IML.Compte1` und :attr:`IMP.Compte1` formatierten nationale belgische Nummern nicht, und akzeptierten manuell eingebrachte falsche Formatierungen, z.B. mit Punkten statt Strichen. Außerdem benutzten diese Felder noch das Land des Partners statt MemPays als Land wenn es kein IBAN-Konto war.
+  

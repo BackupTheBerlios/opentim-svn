@@ -489,7 +489,7 @@ if nSplit == 0 // National BAN, no IBAN
   if cCountry == "BE"
     cIBAN := be2iban(x)
     cIdBic := be2bic(x)
-    // cBan := BanBeFormat(x)
+    cBan := BanBeFormat(x)
   * else
   *   cIBAN := x
   *   cIdBic := ""

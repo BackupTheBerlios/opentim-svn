@@ -1126,8 +1126,8 @@ ddFld IdPrj    ,C, LenIdPrj(),0  picture PIC_ID ;
                    pick PickPrj(IMP->IdPrj)
                    * valid ImlPrjValidate(JnlDC(IMP->IdJnl))
 ddFld Compte1  ,C,LenBqe(),0 ;
-      postedit {|x| BqePostEdit(x,ImlCountry()) } ;
-      valid BqeValidate(IMP->Compte1,ImlCountry()) ;
+      postedit {|x| BqePostEdit(x) } ;
+      valid BqeValidate(IMP->Compte1) ;
       pick ImlPickCompte()
 ddFld Mont2    ,T, LenMont(),0 GET_MONTANT ;
                    when JNLATTR_S $ JnlAttrib(IMP->IdJnl)
@@ -1319,8 +1319,8 @@ ddFld IdPrj    ,C, LenIdPrj(),0  picture PIC_ID ;
                    // skip .t.
 ddFld NB2      ,C,30,0 valid NB2Validate(IML->NB2)
 ddFld Compte1  ,C,LenBqe(),0 ;
-      postedit {|x| BqePostEdit(x,ImlCountry() ) } ;
-      valid BqeValidate(IML->Compte1,ImlCountry()) ;
+      postedit {|x| BqePostEdit(x) } ;
+      valid BqeValidate(IML->Compte1) ;
       pick ImlPickCompte()
                        // skip .t.
 ddFld _ParName ,C,25,0  attrib V block padr(Par2Name(.f.),25)
@@ -1731,8 +1731,8 @@ ddFld IdPar2   ,C, LenIdPar(),0  GET_PAD ;
                    valid TrlPar2Validate()
 ddFld _ParName2,C,30,0  attrib V block ParField(TRL->IdPar2,{||PAR->Firme})
 ddFld Compte1  ,C,LenBqe(),0 ;
-      postedit {|x| BqePostEdit(x,TrlCountry()) } ;
-      valid BqeValidate(TRL->Compte1,TrlCountry()) ;
+      postedit {|x| BqePostEdit(x) } ;
+      valid BqeValidate(TRL->Compte1) ;
       pick TrlPickCompte()
 ddFld NB1      ,C,30,0
 ddFld NB2      ,C,30,0 valid NB2Validate(TRL->NB2)
