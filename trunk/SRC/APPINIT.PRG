@@ -596,18 +596,25 @@ RETURN ProgName() + " " + ntrim(AppVer()) + " - " + CopyRight()
 
 FUNCTION runbg(cProgram,cParams,lAsync,lBackground,lLog)
 local uRetVal
+local cMsg
 default lAsync to .f.
 default lBackground to .t.
-default lLog to .t.
 RETURN !SetMsg("runbg(): "+cProgram+MsgFileExist()) if ! file(cProgram)
 default cParams to ""
+default lLog to ! ">" $ cParams
 #ifdef __XPP__
-  if lLog .and. .not. ">" $ cParams
+  if lLog 
     cParams += " > runbg.log 2>&1"
   endif
   uRetVal := RunShell(cParams,cProgram,lAsync,lBackground)
   RETURN .t. if uRetVal == 0
-  RETURN !SetMsg("runbg("+cProgram+" "+cParams+") returned "+utos(uRetVal))
+  cMsg := "runbg("+cProgram+" "+cParams+") returned "+utos(uRetVal)
+  if lLog 
+      LogConsole(cMsg)
+      RptWrite(memoread("runbg.log"))
+      SetKeepReport(.t.)
+  endif
+  RETURN !SetMsg(cMsg)
 #endif
 RETURN AppShell(cProgram+" "+cParams)
 

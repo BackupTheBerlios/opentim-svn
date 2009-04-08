@@ -276,7 +276,10 @@ FUNCTION ddDeclare( ;
 )
 local ad := array(AD_ALEN)
 if sadCurrent != NIL
-  Warning(cAlias + " : sadCurrent != NIL")
+  // Warning(cAlias + " : sadCurrent != NIL")
+  Warning("Started ddDeclare(" + cAlias ;
+    + ") before ending ddDeclare(" ;
+    +  sadCurrent[AD_NAME] + ")")
 endif
 default cAttrib to ""
 * default blOnTest to {}

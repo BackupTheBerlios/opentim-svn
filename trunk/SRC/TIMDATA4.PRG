@@ -1877,6 +1877,7 @@ RETURN "DE" if cIdNat == "D"
 RETURN "FR" if cIdNat == "F"
 RETURN "LU" if cIdNat == "L"
 RETURN "NL" if cIdNat == "NL"
+RETURN "EE" if cIdNat == "EE"
 RETURN NatCountry(padr(cIdNat,3))
 
 

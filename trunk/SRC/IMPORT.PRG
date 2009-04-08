@@ -680,17 +680,21 @@ FUNCTION csv2array(cLine)
 local a := {}
 local nPos
 do while .t.
-  if left(cLine,1) != '"'
-    SetMsg(left(cLine,1) + ' : " expected at '+ntrim(len(a)))
-    RETURN NIL
+  if left(cLine,1) == '"'
+    cLine := substr(cLine,2)
+    if (nPos := at('"',cLine)) == 0
+      SetMsg('parse error : missing second " at '+ntrim(len(a)))
+      RETURN NIL
+    endif
+    aadd(a,left(cLine,nPos-1))
+    cLine := substr(cLine,nPos+1)
+  elseif (nPos := at(',',cLine)) == 0
+    aadd(a,cLine)
+    cLine := ""
+  else
+    aadd(a,left(cLine,nPos-1))
+    cLine := substr(cLine,nPos+1)
   endif
-  cLine := substr(cLine,2)
-  if (nPos := at('"',cLine)) == 0
-    SetMsg('parse error : missing second " at '+ntrim(len(a)))
-    RETURN NIL
-  endif
-  aadd(a,left(cLine,nPos-1))
-  cLine := substr(cLine,nPos+1)
   RETURN a if empty(cLine)
   if .not. left(cLine,1) $ ';,'
     SetMsg(', or ; expected at '+ntrim(len(a)))

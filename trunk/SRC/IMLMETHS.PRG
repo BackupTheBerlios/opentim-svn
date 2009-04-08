@@ -1931,6 +1931,7 @@ local nMontDev
 local nDecPos  := saDev[DEV_DECPOS]
 local dev
 * RETURN .f. if ! ImlSetMont() // (ggf. fllen falls leer)
+RETURN .f. if ! NumValidate(IML->Mont)
 if saDev[DEV_IDDEV] == DevDefault(IMP->Periode)
   if ParExist(IML->IdPar) .and. ! empty(PAR->IdDev)
     if PAR->IdDev != DevDefault(IMP->Periode)

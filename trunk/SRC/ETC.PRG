@@ -1,5 +1,5 @@
 ** Copyright (c) 1992-2001 PAC Systems
-** Copyright (c) 2001-2008 Luc Saffre
+** Copyright (c) 2001-2009 Luc Saffre
 **
 ** This file is part of TIM.
 **
@@ -707,6 +707,12 @@ RETURN " : invalid data in line "
 #define MSG_STRANGE " : contains non-numeric characters."
 #endif
 
+FUNCTION NumValidate(x)
+local nDec := MntDecPos(x)
+RETURN .t. if empty(x)
+RETURN .t. if x == str(val(x),len(x),nDec)
+RETURN !SetMsg(utos(x)+" : ungltiger Betrag.")
+
 **
 ** GetNum()
 **
@@ -739,7 +745,7 @@ else
   ** TIM nahm ohne Warnung als Wert "2" an
   if nDec > nMaxDec
     if xeval(sbOnDecExceed,cMont,nMaxDec)
-      nMinDec := nDec // sonst kommt ja sp„ter MSG_STRANGE
+      nMinDec := nDec // sonst kommt nachher MSG_STRANGE
     else
       RETURN str(val(cMont),nLen,nMaxDec)
     endif
