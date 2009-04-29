@@ -935,6 +935,16 @@ if snPrintFrom == 0 .or. snCurPage >= snPrintFrom
   endif
 endif
 slKeepBlock := .f.
+if sbPageHeader != NIL
+  aStatus := SaveStatus()
+  snTMargin := 0
+  scPrnBuffer := ""
+  scAlign := ALIGN_LEFT
+  // debug SendConsole("p_PageBegin() "+ ntrim(snCurPage) + " executes sbPageHeader")
+  eval(sbPageHeader)
+  PrnFlush()
+  RestoreStatus(aStatus)
+endif
 if sbHeader != NIL
   if snLogPage > 1 .or. ! slNoFirst
     aStatus := SaveStatus()
@@ -948,16 +958,6 @@ if sbHeader != NIL
     PrnFlush()
     RestoreStatus(aStatus)
   endif
-endif
-if sbPageHeader != NIL
-  aStatus := SaveStatus()
-  snTMargin := 0
-  scPrnBuffer := ""
-  scAlign := ALIGN_LEFT
-  // debug SendConsole("p_PageBegin() "+ ntrim(snCurPage) + " executes sbPageHeader")
-  eval(sbPageHeader)
-  PrnFlush()
-  RestoreStatus(aStatus)
 endif
 // debug SendConsole("p_PageBegin() "+ ntrim(snCurPage) + " skip to first line after header")
 do while snVPos < snTMargin .and. snPrnStatus == PRN_CONTINUE

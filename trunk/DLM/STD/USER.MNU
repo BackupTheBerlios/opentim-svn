@@ -10,6 +10,9 @@ MnuAddTitle(utr("~Master","~Stammdaten","~SignalÇtique"))
 #else
   MnuAddItem(utr("~Partners","~Partner","~Partenaires"),{||PrtParEdit("P",NIL,MnuItemName()) })
 #endif
+
+#if "C"$UsrAttrib()
+
 #if HasDlm("CRM")
 MnuAddItem(utr("Partner ~Lists             ","Partner~listen             ","~Listes de partenaires     "),{||PlsEdit("Partnerlisten")})
 #endif
@@ -28,16 +31,25 @@ MnuAddItem(utr("~General Accounts          ","~Generalkonten             ","Comp
 #if HasDlm("ANA")
 MnuAddItem(utr("Anal~ytic Accounts","Anal~ysekonten","Comptes anal~ytiques"),{||AnaEdit()})
 #endif
+
+#endif
+
 #if HasDlm("ART")
 MnuAddSep()
 MnuAddItem(utr("Product Gro~ups            ","Artikelgr~uppen            ","Gro~upes d'articles        "),{||GraEdit()})
 MnuAddItem(utr("Products by ~Id            ","~Artikel nach Nummer       ","~Articles par code id      "),{||ArtEdit()})
 MnuAddItem(utr("Products by ~Description   ","Artikel nach ~Bezeichnung  ","Articles par ~dÇsignation  "),{||ArtEdit("ART3","Artikel nach Bezeichnung")})
+#if "C"$UsrAttrib()
 MnuAddItem(utr("Delivery ~units            ","Liefer~einheiten           ","~UnitÇs de livraison       "),{||DbfEdit({oUnt()}, MnuItemName())})
 #endif
+#endif
+
+#if "C"$UsrAttrib()
+
 #if HasDlm("VNLDATE")
 MnuAddItem(utr("~Text blocks               ","EinfÅge~texte              ","~Textes d'insertion        "),{||TplEdit(TptLocate("BLK"),MnuItemName())})
 #endif
+
 MnuAddSep()
 MnuAddItem(utr("~Cities                    ","Postleit~zahlen            ","Codes ~postaux             "),{||PlzEdit()})
 #if HasDlm("BIL")
@@ -69,6 +81,8 @@ MnuAddItem(   "Wortschatz /E~nglish       ",{||DbfEdit(\
 #if GetTableDef("LOC")!=NIL
 MnuAddSep()
 MnuAddItem( "~Locations",{||DbfEdit({oLoc(),oPar()},MnuItemName(),"LOC")})
+#endif
+
 #endif
 
 #if HasDlm("DLS")

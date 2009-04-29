@@ -323,22 +323,30 @@ snBufCol := nCol
 snWinRow := row()
 snWinCol := col()
 if nMode == ME_UNKEY .or. nMode == ME_UNKEYX
-  *if nMode == ME_UNKEY
-  *  LogConsole("LSMEMO(ME_UNKEY) "+utos(nLastkey))
-  *else
-  *  LogConsole("LSMEMO(ME_UNKEYX) "+utos(nLastkey))
-  *endif
+  // if nMode == ME_UNKEY
+  //   LogConsole("LSMEMO(ME_UNKEY) "+utos(nLastkey))
+  // else
+  //   LogConsole("LSMEMO(ME_UNKEYX) "+utos(nLastkey))
+  // endif
   if nLastkey == K_ESC .or. nLastkey == K_ALT_F4
-    snRequest := TXT_ESCAPE
-    if nMode == ME_UNKEYX
-      RETURN K_ESC if ! Confirm(MSG009)
-      snRequest := TXT_EXIT
-      RETURN K_CTRL_W
-    else
-      if nLastkey == K_ALT_F4
-        AppTerminate(.t.)
+    // 20090429 : xbase memoedit() meldet oft UNKEY statt UNKEYX, 
+    // wenn der Text bereit ver„ndert wurde. Workaround: ESC speichert
+    // einfach stillschweigend auch immer ab. Also keine M”glichkeit
+    // mehr, die Žnderungen zu stornieren. Wird niemanden st”ren.
+    snRequest := TXT_EXIT
+    RETURN K_CTRL_W
+    if .f.
+      snRequest := TXT_ESCAPE
+      if nMode == ME_UNKEYX
+        RETURN K_ESC if ! Confirm(MSG009)
+        snRequest := TXT_EXIT
+        RETURN K_CTRL_W
+      else
+        if nLastkey == K_ALT_F4
+          AppTerminate(.t.)
+        endif
+        RETURN K_ESC
       endif
-      RETURN K_ESC
     endif
   endif
   if nLastkey == K_F1
@@ -455,7 +463,7 @@ if nMode == ME_UNKEY .or. nMode == ME_UNKEYX
     RETURN K_CTRL_Y
   endif
 elseif nMode == ME_INIT
-  * LogConsole("LSMEMO(ME_INIT) "+utos(nLastkey))
+  // LogConsole("LSMEMO(ME_INIT) "+utos(nLastkey))
   snBufRow := 0
 endif
 RETURN ME_DEFAULT

@@ -189,6 +189,15 @@ local lOkay := .f.
     RETURN !SetMsg("Zuerst Sitzungen l”schen, dann den Patienten!")
   endif
 #endif DEF_KITZ
+#ifdef DEF_ACF
+  if HasRecords(oAcf(),ORD_ACF_PAR,"ACF->IdPar",cIdPar)
+    RETURN !SetMsg(;
+      "Zuerst Sonderpreise l”schen, dann den Partner!") if ;
+      !Confirm(trim(ParName()) + " : Sonderpreise l”schen?")
+    RETURN .f. if !DbfDelete(NIL,NIL,{oAcf()},;
+      ORD_ACF_PAR,PAR->IdPar,"ACF->IdPar=='"+PAR->IdPar+"'")
+  endif
+#endif DEF_ACF
 #ifdef DEF_DLS
   lOkay := .f. // nReturn := DDDEL_FAIL
   open area oDls()

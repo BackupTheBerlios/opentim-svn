@@ -1,5 +1,5 @@
 MnuAddTitle(utr("~Program","~Programm","~Programme"))
-#if SetDialog()
+#if SetDialog() .and. "C"$UsrAttrib()
   MnuAddItem(utr("~User menu           ","Ben~utzermenÅ        ","Menu ~utilisateur    "),{||AppRefresh()})
   MnuAddItem(utr("~Reports menu        ","D~ruckmenÅ           ","Menu imp~ressions    "),{||AppRefresh("PRINT")})
   MnuAddItem(utr("~Admin menu          ","Verw~altermenÅ       ","Menu ~administrateur "),{||AppRefresh("BOSS")})
@@ -19,11 +19,13 @@ MnuAddTitle(utr("~Program","~Programm","~Programme"))
                  "SÇlectio~nner police"),\
                  {||SelectFont()})
 #endif
+#if "C"$UsrAttrib()
   MnuAddItem(utr("~Database Check      ","~Datenbank-Check     ","Test base de ~donnÇes"),{||ActExec("DBCHECK")})
+#endif  
   MnuAddItem("~Login               ",{||Relogin()})
   MnuAddItem(utr("Ab~out               ","Inf~o                ","Ö prop~os            "),{||AppAbout()})
   MnuAddItem(utr("Change ~password     ","~Password Ñndern     ","Modifer mot de ~passe"),{||UsrChangePwd()})
   MnuAddSep()
-#endif
+#endif // SetDialog()
   MnuAddItem(utr("~Exit TIM    [Alt-F4]","TIM be~enden [Alt-F4]","~Quitter TIM [Alt-F4]"),{||AppNormEnd()})
 

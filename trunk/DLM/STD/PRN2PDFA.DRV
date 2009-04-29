@@ -6,16 +6,12 @@ Name           prn2pdf
 Reset      ""
 FormFeed       chr(12)
 
-// line height = PdfPrinter.ratio / charwidth / cpi
-// also 1.1 / 0.6 / cpi
-// also 1.8333/cpi
-//
-Font  5cpi  5 1.8333/5  chr(27)+"c5 "
-Font 10cpi 10 1.8333/10 chr(27)+"c10 "
-Font 12cpi 12 1.8333/12 chr(27)+"c12 "
-Font 15cpi 15 1.8333/15 chr(27)+"c15 "
-Font 17cpi 17 1.8333/17 chr(27)+"c17 "
-Font 20cpi 20 1.8333/20 chr(27)+"c20 "
+Font  5cpi  5 28/72 chr(27)+"c5 "
+Font 10cpi 10 14/72 chr(27)+"c10 "
+Font 12cpi 12 12/72 chr(27)+"c12 "
+Font 15cpi 15 10/72 chr(27)+"c15 "
+Font 17cpi 17  8/72 chr(27)+"c17 "
+Font 20cpi 20  8/72 chr(27)+"c20 "
 
 BoldOn   chr(27)+"b1"
 BoldOff  chr(27)+"b0"
@@ -28,7 +24,9 @@ Option L  Landscape     chr(27)+"L" // prn2pdf-specific ctrl sequence
 
 Option 8  8LinesPerInch chr(27)+"l8 "
 Option 7  7LinesPerInch chr(27)+"l7 "
-Option 6  6LinesPerInch chr(27)+"l6 "
+// Option 6  6LinesPerInch chr(27)+"l6 "
+// ignore 6cpi special command because if prn2pdf finds no ESC l it uses
+// the appropriate line spacing as indicated by the font
 
 
 // Option 1  11ZollPapier  chr(27)+"C"+chr(0)+chr(11)

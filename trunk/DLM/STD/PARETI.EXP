@@ -1,0 +1,8 @@
+// Adressetiketten 35x70mm 
+OutputFile    "C:\TEMP\PARETI.TXT"
+Delimiter     chr(9)
+// Delimiter     csvsep()
+#include "PARCOLS.EXP"
+#include "DOS2WIN.CVT"
+OnSuccess AppShell("start "+GetDlmPath("PARETI.DOC"),NIL,.f.)
+

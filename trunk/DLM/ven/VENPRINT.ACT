@@ -5,6 +5,7 @@
 //
 // RETURN ActExec("BLGPRINT") if JnlIdGrj(VEN->IdJnl) == "BLG"
 RETURN ActExec(VEN->IdJnl+"PRINT") if GetDlmPath(VEN->IdJnl+"PRINT.ACT") != NIL
+RETURN ActExec("VENPRINT") if GetDlmPath("VENPRINT.ACT") != NIL
 // RETURN VenPrint() if ! empty(JnlIdTpt(VEN->IdJnl)) // $ "DON"
 // RETURN DlgExec("VEN2PRN")
 RETURN DlgExec("VEN2TEX")

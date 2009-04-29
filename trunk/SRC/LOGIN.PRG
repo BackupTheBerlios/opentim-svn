@@ -649,6 +649,7 @@ local cMemo := ""
 local cSessId
 local nUsrCount := 1
 local nSessId := 0
+local nTryCount := 0
 scLogPath := DbPath()
 aDir := directory(scLogPath + "\*.LOG")
 for i := 1 to len(aDir)
@@ -707,7 +708,12 @@ do while snLogFile == -1
     snLogFile := fopen(scLogFile,FO_READWRITE+FO_DENYWRITE)
   endif
   if snLogFile == -1
-    if ! Confirm( ;
+    nTryCount += 1
+    /*
+    20090420 TIM probiert jetzt (wie bei missglckten Record Locks)
+    drei mal, bevor er den Benutzer mit einer Frage bel„stigt.
+    */
+    if nTryCount > 3 .and. ! Confirm( ;
       scLogFile+MsgDosError(ferror()), ;
       MsgRetry(), MSG_YES, "MSG003";
     )

@@ -247,7 +247,11 @@ do while .t.
     endif
     RETURN NIL if (cLine := mgetline(fd)) == NIL
   elseif left(cLine,4) == "#if "
-    aadd(saMemoStack[fd][MS_IFSTACK],xparse(substr(cLine,5)))
+    if atail(saMemoStack[fd][MS_IFSTACK])
+      aadd(saMemoStack[fd][MS_IFSTACK],xparse(substr(cLine,5)))
+    else
+      aadd(saMemoStack[fd][MS_IFSTACK],.f.)
+    endif
     RETURN NIL if (cLine := mgetline(fd)) == NIL
   elseif left(cLine,5) == "#else"
     a := saMemoStack[fd][MS_IFSTACK]
@@ -255,7 +259,7 @@ do while .t.
     * saMemoStack[fd][MS_IFSTACK][len(saMemoStack[fd][MS_IFSTACK])] ;
     *   := ! atail(saMemoStack[fd][MS_IFSTACK][n]
     RETURN NIL if (cLine := mgetline(fd)) == NIL
-  elseif cLine == "#endif"
+  elseif left(cLine,6) == "#endif"
     if len(saMemoStack[fd][MS_IFSTACK]) > 1
       asize(saMemoStack[fd][MS_IFSTACK],len(saMemoStack[fd][MS_IFSTACK])-1)
     else

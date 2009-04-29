@@ -345,9 +345,78 @@
   
 20090407
 --------
-- :func:`csv2array` hatte ein Problem beim Import von Swedbank-CSV-Dateien, deren Zeilen neuerdings mit einem Komma enden:
-  ╔═════════════ Confirmation ════════════╗
-  ║   csv2array() :  : " expected at 12   ║
-  ║           Continue (Y/N) ? Y          ║
-  ╚═══════════════════════════════════════╝
+- :func:`csv2array` hatte ein Problem beim Import von Swedbank-CSV-Dateien, deren Zeilen neuerdings mit einem Komma 
+  enden::
   
+    ╔═════════════ Confirmation ════════════╗
+    ║   csv2array() :  : " expected at 12   ║
+    ║           Continue (Y/N) ? Y          ║
+    ╚═══════════════════════════════════════╝
+  
+  
+20090414
+--------
+
+- Neuer Standard-Exportfilter für Adressetiketten: 
+  :xfile:`PARETI.EXP`  und :xfile:`PARETI.DOC`.
+  
+  
+20090418
+--------
+
+sbPageHeader (i.e. :func:`SetPageHeader`) 
+is now executed before sbHeader (i.e. :parsercmd:`set header`). 
+Until today it was the opposite.
+AFAIK there is only JB who uses both header methods in the same
+document, and he needs sbPageHeader to come first.
+
+
+20090420 
+--------
+
+:func:`LogOpen` probiert jetzt (wie bei missglückten Record Locks)
+drei mal, bevor er den Benutzer mit der Frage ""[32] Exklusivzugriff
+verweigert. Neu versuchen?" " belästigt.
+
+
+20090422
+--------
+
+:xfile:`ASPDF.DLG` zeigt das lange Feld mit dem Namen der zu
+generierenden PDF-Datei jetzt nur noch an, wenn "E" $ UsrAttrib().
+
+
+20090428
+--------
+
+- Wenn man einen Partner löscht, dann kontrolliert TIM jetzt auch, ob
+  dieser Partner Sonderpreise hat. Wenn ja, dann löscht er dieses zuerst.
+  
+- Patch 20090428
+
+- Bug in mstdio.prg: Wenn man folgende Schachtelung hatte::
+
+   #if .f 
+   #if .t.
+   foo
+   #endif
+   #endif
+  
+  dann wurde foo fälschlicherweise ausgeführt. Jetzt nicht mehr.
+  
+ - Nach einem #endif kann man jetzt egal was hinschreiben (auf der
+   gleichen Zeile). Vorher waren selbst Kommentare dort nicht erlaubt.
+   Auch ein Leerzeichen ist nicht nmötig.
+   
+- :xfile:`PROG.MNU` prüft jetzt an mehreren Stellen nach, ob ``"C"$UsrAttrib()`` 
+   
+20090429
+--------
+
+- :xfile:`USER.MNU` prüft jetzt an mehreren Stellen nach, ob ``"C"$UsrAttrib()`` 
+   
+ 
+- xbase memoedit() meldet oft UNKEY statt UNKEYX, wenn der Text bereit
+  verändert wurde. Workaround: ESC speichert jetzt einfach stillschweigend auch immer ab. Also keine Möglichkeit
+  mehr, die Änderungen zu stornieren. Wird niemanden stören.
+ 
