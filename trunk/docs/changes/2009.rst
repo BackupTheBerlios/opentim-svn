@@ -420,3 +420,8 @@ generierenden PDF-Datei jetzt nur noch an, wenn "E" $ UsrAttrib().
   verändert wurde. Workaround: ESC speichert jetzt einfach stillschweigend auch immer ab. Also keine Möglichkeit
   mehr, die Änderungen zu stornieren. Wird niemanden stören.
  
+ 
+- Neue Funktion :func:`ddFldSetType`. Mit ddFldSetType("_Libell","M") kann man das Eingabeverhalten von VNL verändern. (Funktioniert aber nicht.)
+  
+  
+  

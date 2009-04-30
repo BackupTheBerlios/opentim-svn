@@ -592,6 +592,18 @@ next i
 Warning(cName + MsgFldExist())
 RETURN .f.
 
+FUNCTION ddFldSetType(cName,cType)
+local i
+for i := 1 to len(sadCurrent[AD_FIELDS])
+  if sadCurrent[AD_FIELDS][i][AG_NAME] == cName
+    sadCurrent[AD_FIELDS][i][AG_TYPE] := cType
+    RETURN .t.
+  endif
+next i
+Warning(cName + MsgFldExist())
+RETURN .f.
+
+
 FUNCTION FldLocate(ad,cName)
 local i
 for i := 1 to len(ad[AD_FIELDS])

@@ -550,7 +550,10 @@ RETURN FIELD->Desig if ! empty(FIELD->Desig)
   cRemarq := padr(VnlObjName(PAR->Langue),LenVnlName())
 #endif
 if empty(cRemarq)
-  cRemarq := padr(memoline(VNL->Memo,NIL,1,LenVnlName()),LenVnlName())
+  cRemarq := padr(memoline(VNL->Memo,NIL,1,200),LenVnlName())
+  * if !empty(cRemarq)
+  *    RETURN "[F12] "+left(cRemarq,LenVnlName()-6)
+  * endif
 endif
 RETURN cRemarq
 
