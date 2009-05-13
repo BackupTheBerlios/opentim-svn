@@ -443,8 +443,8 @@ ddFld Memo      ,M, 10,0 when DlsCanEdit()
 *      when DlsCanRechnung()
 #ifdef DEF_DLP
   action b key K_F8      prompt "Anwesenheiten pro Sitzung [F8]" ;
-                         block DlsDlpEdit() ;
-                         when "the" $ SetGroups()
+                         block DlsDlpEdit() 
+                         // 20090512 when "the" $ SetGroups()
 #endif DEF_DLP
 ddEndDef()
 RETURN b

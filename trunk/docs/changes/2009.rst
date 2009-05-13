@@ -424,4 +424,21 @@ generierenden PDF-Datei jetzt nur noch an, wenn "E" $ UsrAttrib().
 - Neue Funktion :func:`ddFldSetType`. Mit ddFldSetType("_Libell","M") kann man das Eingabeverhalten von VNL verändern. (Funktioniert aber nicht.)
   
   
-  
+20090512
+--------
+
+- (SPZ) F8 auf :class:`DLS` dürfen jetzt wieder alle Benutzer (nicht nur Therapeuten) machen.
+
+
+20090513
+--------
+
+- In einer Datenbank mit mehreren Benutzern (MrkMaxUsers > 1) lässt TIM jetzt nicht mehr zu, dass man sich anmeldet, wenn nicht wenigstens die Umgebungsvariable PC gesetzt ist. 
+  Wenn die leer ist, dann sagt er::
+
+   ╔════════════════════ Warning ═══════════════════╗
+   ║    Your PC environment variable is not set.    ║
+   ║   Please contact your system administrator!    ║
+   ║          Press any key to continue...          ║
+   ╚════════════════════════════════════════════════╝
+

@@ -650,6 +650,12 @@ local cSessId
 local nUsrCount := 1
 local nSessId := 0
 local nTryCount := 0
+if MrkMaxUsers > 1
+  if empty(getvar("PC"))
+    RETURN !SetMsg("Your PC environment variable is not set." ;
+            + CR_LF + "Please contact your system administrator!")
+  endif
+endif
 scLogPath := DbPath()
 aDir := directory(scLogPath + "\*.LOG")
 for i := 1 to len(aDir)
