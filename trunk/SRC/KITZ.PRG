@@ -1,4 +1,4 @@
-** Copyright (c) 2003-2008 Luc Saffre
+** Copyright (c) 2003-2009 Luc Saffre
 **
 ** This file is part of TIM.
 **
@@ -395,6 +395,8 @@ ddFld Vipo    ,C,1,0 picture "!" ;
 ddFld Mont1T   ,T, LenMont(),0 when .f.
 ddFld Mont2T   ,T, LenMont(),0 when .f.
 ddFld CountT   ,N,  2,0 when .f.
+ddFld MontKrm  ,T, LenMont(),0 
+ddFld QteKrm   ,C, 5,0 postedit {|x|gettime(x)}
 *
 action b key K_ENTER   prompt MnuInhalt() ;
                        block KrgKrlEdit()
@@ -653,20 +655,20 @@ local nMont2:=0
 local nMont1T:=0
 local nMont2T:=0
 local lOkay := .f.
+local nKrmPrix := KrgKrmPrix()
+local nQteKrm := 0
 * local nSK
 local a
 RETURN .f. if KRG->Etat != ETAT_NEW
 RETURN .f. if empty(KRG->IdPrj1)
 open area oKrl() // ,oArt()
-  * nSK := ArtField(padr("SK",LenIdArt()),{||val(KrlPrix(KRG->Date))})
-  * nSK := ArtField(padr("SK",LenIdArt()),{||val(KrlPrix(KRG->Periode))})
   lOkay := .t.
   softseek KRG->IdKrg
   do while !eof().and.KRL->IdKrg==KRG->IdKrg
     * Dieses if ist unntz, wenn ich mich nicht irre
     if empty(KRL->IdKtg)
       SetMsg(KRL->IdKrg+" "+dtoc(KRL->Date)+" ist keinem Kontingent zugewiesen")
-      lOkay := .t.
+      lOkay := .f. // 20090526
     endif
     if left(KRL->IdArt,1) == "T"
       nMont1T += max(val(KRL->Mont),val(KRL->Mont2)) // 20070119
@@ -677,6 +679,11 @@ open area oKrl() // ,oArt()
       nMont2 += val(KRL->Mont2)
       nCount += 1
     endif
+    if !empty(KRL->IdKtg).and.trim(KRL->IdKtg)!=KTG_DG    
+      nQteKrm += val(iif(left(KRL->IdArt,1)=="T",;
+        substr(KRL->IdArt,2),;
+        KRL->IdArt))
+    endif
     skip
   enddo
 close area
@@ -686,8 +693,6 @@ RETURN !SetMsg(KRG->IdPrj1+" : unbekanntes Protokoll!") if a == NIL
 KRG->IdPar1 := a[1]
 KRG->IdPar3 := a[2]
 KRG->Vipo := a[3]
-// KRG->Days := join(aDays,",")
-// KRG->DaysT := join(aDaysT,",")
 KRG->Mont1 := ntom(nMont1)
 KRG->Mont1T := ntom(nMont1T)
 KRG->Mont2 := ntom(nMont2)
@@ -695,6 +700,10 @@ KRG->Mont2T := ntom(nMont2T)
 KRG->Count := nCount
 KRG->CountT := nCountT
 KRG->Etat := "*"
+KRG->QteKrm := h2time(nQteKrm,5)
+if nKrmPrix != 0
+  KRG->MontKrm := ntom(nQteKrm*nKrmPrix)
+endif
 RETURN KrgPostEdit()
 
 FUNCTION KrgIsValid()
@@ -777,6 +786,10 @@ RETURN .t.
 #define NF_MONT2  7
 #define NF_DAYS   8
 #define NF_ALEN   8
+
+#undef PNF_IDPAR
+#undef PNF_TAGGED
+#undef PNF_ALEN
 
 #define PNF_TAGGED  1
 #define PNF_IDPAR   2
@@ -1580,8 +1593,28 @@ open area oKrl(),oArt(),oKtg(), oPrj()
       endif
     * endif
   enddo
+  if empty(cSesType) .and. !empty(KRG->MontKrm)
+    if n == 1
+      toStream( "783.871 " )
+    elseif n == 2
+      toStream( alltrim(KRG->QteKrm) + " Stunden "  )
+    elseif n == 4
+      toStream( ltrim(ntomf(val(KRG->MontKrm)))+" " )
+    endif
+  endif
 close area
 RETURN lOkay
+
+FUNCTION KrgTot4() // Total zu Lasten der KK
+RETURN val(KRG->Mont1)+val(KRG->Mont1T);
+  -val(KRG->Mont2)-val(KRG->Mont2T);
+  +val(KRG->MontKrm)
+
+FUNCTION KrgTot5() // Total zu Lasten des Patienten
+RETURN val(KRG->Mont2)+val(KRG->Mont2T)
+
+FUNCTION KrgTot6() // Total Total
+RETURN val(KRG->Mont1)+val(KRG->Mont1T)+val(KRG->MontKrm)
 
 /*
 

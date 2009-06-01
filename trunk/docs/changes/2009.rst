@@ -390,7 +390,7 @@ generierenden PDF-Datei jetzt nur noch an, wenn "E" $ UsrAttrib().
 --------
 
 - Wenn man einen Partner löscht, dann kontrolliert TIM jetzt auch, ob
-  dieser Partner Sonderpreise hat. Wenn ja, dann löscht er dieses zuerst.
+  dieser Partner Sonderpreise hat. Wenn ja, dann löscht er diese zuerst.
   
 - Patch 20090428
 
@@ -442,3 +442,16 @@ generierenden PDF-Datei jetzt nur noch an, wenn "E" $ UsrAttrib().
    ║          Press any key to continue...          ║
    ╚════════════════════════════════════════════════╝
 
+20090528
+--------
+
+- Neuer Eintrag :configcmd:`KrgKrmPrix`. 
+  Dieser Ausdruck wird in KrgKrlUpdate ausgeführt, und er muss den Stundentarif für die "majoration du forfait" der INAMI zurück 
+  geben. Dieser ist normlerweise 0, außer für die betroffenen Rechnungen. 
+
+20090529
+--------
+
+- Neue Funktionen KrgTot4, KrgTot5, KrgTot6.
+- Funktion KrgCol() fügt jetzt auch eine Zeile für Artikel 783.871 (hardkodierte Nummer), wenn :attr:`KRG.MontKrm` nicht leer ist.
+- KrgKrlUpdate() vergaß die Stunden der Testsitzungen machte einfach nur val(IdArt), was bei Testsitzungen 0 ergab, weil deren IdArt mit T beginnt.

@@ -79,6 +79,9 @@
 **
 ** STATIC_SECTION global static variables
 **
+#ifdef DEF_KITZ
+static sbKrgKrmPrix := {|| 0 }
+#endif DEF_KITZ
 
 #ifdef DEF_RSV
 static sbRsiRsvColumn := {||NIL}
@@ -5768,6 +5771,9 @@ AddIniCmd( { "PerDevFixed" , {|x| (sbPerDevFixed := xparse(x)) != NIL } } )
 #ifdef DEF_RSV
   AddIniCmd( { "RsiRsvColumn" , {|x| (sbRsiRsvColumn := cblock(x)) != NIL } } )
 #endif DEF_RSV
+#ifdef DEF_KITZ
+  AddIniCmd( { "KrgKrmPrix" , {|x| (sbKrgKrmPrix := cblock(x)) != NIL } } )
+#endif DEF_KITZ
 * AddIniCmd( { "ShouldRebuild" , {|x| (snShouldRebuild := xparse(x)) != NIL } } )
 AddIniCmd( { "LenTel"   , {|x| snLenTel := val(x),.t. } } )
 * AddIniCmd( { "LenQteBig"  , {|x| snLenQteBig := val(x),.t. } } )
@@ -5982,3 +5988,17 @@ RETURN padr(saVcsJournals[i+1],LenIdJnl())
 
 
 #endif
+
+#ifdef DEF_KITZ
+
+/**
+20090528
+Example:
+KrgKrmPrix iif(inrange(KRG->IdKrg,"001188","001300"),26.72,0)
+**/
+
+FUNCTION KrgKrmPrix()
+RETURN eval(sbKrgKrmPrix)
+
+#endif DEF_KITZ
+

@@ -725,6 +725,34 @@ RETURN .t.
 *  be2bic(ban[BAN_NBAN]) != ban[BAN_BIC]
 *RETURN .t.
 
+
+// return checkdigits for cData, using mod 97
+FUNCTION Check97(cData)
+local n := BigMod(cData,97)
+if n == 0
+  n := 97
+endif
+RETURN strtran(str(n,2)," ","0")
+
+* NISS : No. d'identification de securit‚ sociale
+*
+FUNCTION NissValidate(cNATREG)
+local xtest := substr(cnatreg,1,6)+substr(cnatreg,8,3)
+if substr(cnatreg,7,1) == "="
+  xtest := "2"+xtest
+endif
+xtest := val(xtest)
+xtest := abs((xtest-97*(int(xtest/97)))-97)
+if xtest == 0
+   xtest := 97
+endif
+if xtest<>int(val(substr(cnatreg,12,2)))
+  RETURN !SetMsg("Fehlerhafte Nationalregisternummer")
+endif
+RETURN .t.
+
+
+
 #else 
 
 // the following was used before BIC and IBAN came.
@@ -781,33 +809,8 @@ RETURN .t.
 *endif 		 
 *RETURN .f. 		 
   		 
+
 #endif // not DEF_IBAN
-
-
-// return checkdigits for cData, using mod 97
-FUNCTION Check97(cData)
-local n := BigMod(cData,97)
-if n == 0
-  n := 97
-endif
-RETURN strtran(str(n,2)," ","0")
-
-* NISS : No. d'identification de securit‚ sociale
-*
-FUNCTION NissValidate(cNATREG)
-local xtest := substr(cnatreg,1,6)+substr(cnatreg,8,3)
-if substr(cnatreg,7,1) == "="
-  xtest := "2"+xtest
-endif
-xtest := val(xtest)
-xtest := abs((xtest-97*(int(xtest/97)))-97)
-if xtest == 0
-   xtest := 97
-endif
-if xtest<>int(val(substr(cnatreg,12,2)))
-  RETURN !SetMsg("Fehlerhafte Nationalregisternummer")
-endif
-RETURN .t.
 
 
 #ifdef DEF_VCS
