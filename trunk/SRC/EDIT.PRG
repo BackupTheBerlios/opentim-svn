@@ -1068,7 +1068,7 @@ RETURN .f.
 FUNCTION PrjPinEdit()
 local b := oPin()
 local cIdPrj := PRJ->IdPrj
-open area b
+open area b, oPrj()
   ddSetOrder(ORD_PIN_IDPRJ)
   edit data b key PIN->IdPrj ;
               value cIdPrj ;

@@ -455,3 +455,8 @@ generierenden PDF-Datei jetzt nur noch an, wenn "E" $ UsrAttrib().
 - Neue Funktionen KrgTot4, KrgTot5, KrgTot6.
 - Funktion KrgCol() fügt jetzt auch eine Zeile für Artikel 783.871 (hardkodierte Nummer), wenn :attr:`KRG.MontKrm` nicht leer ist.
 - KrgKrlUpdate() vergaß die Stunden der Testsitzungen machte einfach nur val(IdArt), was bei Testsitzungen 0 ergab, weil deren IdArt mit T beginnt.
+
+20090603
+--------
+
+- PrjPinEdit() machte die PRJ nicht erneut auf. Also wenn man F6 auf PRJ machte, wenn PRJ1.NTX nicht aktiv war, dann fand er IdPrj nicht.
