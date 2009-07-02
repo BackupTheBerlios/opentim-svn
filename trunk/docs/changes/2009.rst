@@ -460,3 +460,32 @@ generierenden PDF-Datei jetzt nur noch an, wenn "E" $ UsrAttrib().
 --------
 
 - PrjPinEdit() machte die PRJ nicht erneut auf. Also wenn man F6 auf PRJ machte, wenn PRJ1.NTX nicht aktiv war, dann fand er IdPrj nicht.
+
+20090616
+--------
+
+- :xfile:`WINSTD.DRV` rendert Formatierung Shadow ([S]) jetzt als fett-kursiv statt sie einfach zu ignorieren.
+
+
+2009623
+-------
+- MFC, IFC und TAX ignorierten bisher DEF_4LANG. Behoben. Neue Felder IFC->Memo4 und TAX->Memo4. 
+  IFC.MSK
+
+20090701
+--------
+- Neue Funktion xupper(), die eine Datei xupper.dbc benötigt. Ähnlich wie eupper(), aber eben konfigurierbar und deshalb nicht geeignet um in Indexdateien verwendet zu werden.
+
+20090702
+--------
+
+- LstHaushalt() : Unterteilungen 6,7 und 8 (Haushalt und Rechnung) haben scheinbar in 2007 mal die Gesamtsummen fett gedruckt. Das muss aber ein Wunder gewesen sein.... Jedenfalls sind diese Zeilen jetzt (wieder) fett. 
+
+- Ein fieser alter Bug ist raus: ms_wrap() hatte ein Problem in schmalen Kolonnen, wenn es überhaupt keine Stelle für den Zeilenumbruch fand. Dann wurde der Text in der betreffenden Kolonne abgeschnitten, und auf der nächsten Zeile waren alle Kolonnen verschoben.
+
+- Neue Funktion DrvFilename(). 
+
+- DIAG.LST zeigt jetzt auch Druckertreiber an und testet Zeichenformatierungen (bold, underline, italic, shadow)
+
+- release gx
+

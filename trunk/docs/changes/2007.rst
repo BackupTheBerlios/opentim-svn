@@ -112,7 +112,7 @@ vorher::
   Zeit nicht reproduzieren konnten: Code TVA 21 au lieu de D21: tilt,
   j'ai trouvé comment reproduire ce problŖme. Il ne vient que si tu
   encodes d'abord une facture vente et puis des facture achat. Donc: si
-  le problŖme revient, il suffit de quitter/redémarrer TIM pour que cela
+  le problème revient, il suffit de quitter/redémarrer TIM pour que cela
   disparaisse.
 
 20070115

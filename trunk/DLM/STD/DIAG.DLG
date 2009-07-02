@@ -2,15 +2,15 @@ before SetTplIni("LISTE")
 title MnuItemName()
 field name="diag.Path" \
       caption2=" Path" \
-      value="X" \
+      default="X" \
       reader={|g|CbxReader(g)}
 field name="diag.Tables" \
       caption2=" Tables" \
-      value="X" \
+      default="X" \
       reader={|g|CbxReader(g)}
 field name="diag.Width" \
       caption="Width " \
-      value=80 \
+      default=80 \
       picture="999"
 #include "ASPDF.DLG"
 #include "PREVIEW.DLG"

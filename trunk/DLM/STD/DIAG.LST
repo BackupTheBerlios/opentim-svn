@@ -32,6 +32,10 @@ ali reccount   header  recsize ro path
 [=ntrim(len(AppDataList()))] tables analyzed.
 [etc endif]
 
+Printer Driver : [=DrvFilename()] [=DrvName()]
+Formatting: [B]bold[b] / [I]italic[i] / [U]underline[u] / [S]shadow[s]
+            [B][I]bold italic[i][b] / [B][U]bold underline[u][b] / [U][I]underline italic[i][u]
+
 [etc goto -2]
 [etc line]
 [=tr("End of report","Ende des Berichts","Fin du rapport")]

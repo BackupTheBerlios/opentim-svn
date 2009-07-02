@@ -1,5 +1,5 @@
 ** Copyright (c) 1992-2001 PAC Systems
-** Copyright (c) 2001-2008 Luc Saffre
+** Copyright (c) 2001-2009 Luc Saffre
 **
 ** This file is part of TIM.
 **
@@ -425,6 +425,54 @@ local i
 local cStream := ""
 local nLineCount := 0 // 960708 (vorher 1)
 local nWidth := ms[TF_WIDTH] - eval(ms[TF_MRGL])
+local cBuffer := TextUnformat(ms[TF_BUFFER])
+do while len(cBuffer) > 0
+  if (nPos := at(CR_LF,cBuffer)) == 0
+    nPos := len(cBuffer) + 1
+  endif
+  if nPos - 1 <= nWidth // ms[TF_WIDTH]
+    nPos2 := nPos + 2
+    cStream += left(cBuffer,nPos+1)
+  else
+    // donc nPos > nWidth
+    // nPos2 := nPos + 1
+    for i := nWidth to 1 step -1
+      if substr(cBuffer,i,1) == " "
+        nPos := i
+        nPos2 := i+1
+        exit
+      elseif substr(cBuffer,i,1) == "-" ;
+             .and. substr(cBuffer,i+1,1) != "-"
+        nPos  := i+1
+        nPos2 := i+1
+        exit
+      endif
+    next i
+    if nPos > nWidth
+      nPos := nWidth + 1
+      nPos2 := nPos
+    endif
+    cStream += left(cBuffer,nPos-1) + CR_LF
+  endif
+  nLineCount += 1
+  cBuffer := substr(cBuffer,nPos2)
+enddo
+ms[TF_BUFFER] := cStream
+ms[TF_LCOUNT] := nLineCount // mlcount(cStream,250)
+RETURN NIL
+
+
+/*** before 20090702
+
+FUNCTION ms_wrap(ms)
+local nPos
+local nPos2
+* local nLen
+* local nPad
+local i
+local cStream := ""
+local nLineCount := 0 // 960708 (vorher 1)
+local nWidth := ms[TF_WIDTH] - eval(ms[TF_MRGL])
 ms[TF_BUFFER] := TextUnformat(ms[TF_BUFFER])
 do while len(ms[TF_BUFFER]) > 0
   if (nPos := at(CR_LF,ms[TF_BUFFER])) == 0
@@ -459,6 +507,8 @@ enddo
 ms[TF_BUFFER] := cStream
 ms[TF_LCOUNT] := nLineCount // mlcount(cStream,250)
 RETURN NIL
+
+***/
 
 FUNCTION p_TabHeight(n)
 snCellHeight := n

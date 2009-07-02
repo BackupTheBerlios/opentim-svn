@@ -1,5 +1,5 @@
 ** Copyright (c) 1992-2001 PAC Systems
-** Copyright (c) 2001-2008 Luc Saffre
+** Copyright (c) 2001-2009 Luc Saffre
 **
 ** This file is part of TIM.
 **
@@ -857,7 +857,8 @@ cLine += " " + ntomf(nTot1)
 cLine += " " + ntomf(nTot2)
 cLine += " " + ntomf(nTot3)
 cLine += " " + ntomf(nTot4)
-PrintLine(cLine)
+// PrintLine(cLine)
+PrintLine("{B}"+cLine+"{b}")
 p_eject()
 RETURN NIL
 
@@ -944,7 +945,7 @@ for i := 1 to len(aBcl)
     endif
   endif
 next i
-PrintLine(cLine)
+PrintLine("{B}"+cLine+"{b}")
 p_eject()
 RETURN NIL
 

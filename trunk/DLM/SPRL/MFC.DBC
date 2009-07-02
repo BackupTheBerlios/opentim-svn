@@ -1,9 +1,10 @@
 // Zahlarten
-BAR|Barzahlung                      |au comptant                     |
-E  |Bei Erhalt der Rechnung         |dŠs r‚ception facture           |
-S2 |Skonto 2% (8 Tage) / 30 Tage netto|escompte 2% (8 jours) / 30 jours net|
-30 |30 Tage Rechnungsdatum          |30 jours date facture           |
-30M|30 Tage Monatsende              |30 jours fin de mois            |
-60 |60 Tage Rechnungsdatum          |60 jours date facture           |
-60M|60 Tage Monatsende              |60 jours fin de mois            |
-DOM|per Bankeinzug                  |domiciliation                   |
+BAR|Barzahlung                        |au comptant                         ||
+E  |Bei Erhalt der Rechnung           |dŠs r‚ception facture               ||
+S2 |Skonto 2% (8 Tage) / 30 Tage netto|escompte 2% (8 jours) / 30 jours net||
+30 |30 Tage Rechnungsdatum            |30 jours date facture               ||
+30M|30 Tage Monatsende                |30 jours fin de mois                ||
+60 |60 Tage Rechnungsdatum            |60 jours date facture               ||
+60M|60 Tage Monatsende                |60 jours fin de mois                ||
+DOM|per Bankeinzug                    |domiciliation                       ||
+                                                                      

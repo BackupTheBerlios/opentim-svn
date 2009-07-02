@@ -120,7 +120,8 @@
 #define IFC_IDREG   10
 #define IFC_TEXT    11
 #define IFC_IDPAR   12
-#define IFC_ALEN    12
+#define IFC_MEMO4   13
+#define IFC_ALEN    13
 
 #ifdef DEF_VNA
 
@@ -211,7 +212,8 @@
   #define TAX_DATE    11
   #define TAX_VALID   12
   #define TAX_REGLIST 13
-  #define TAX_ALEN    13
+  #define TAX_MEMO4   14
+  #define TAX_ALEN    14
 
   #define REG_IDREG   1
   #define REG_LIBELL  2
@@ -440,7 +442,8 @@
 #define MFC_NAME1 2
 #define MFC_NAME2 3
 #define MFC_NAME3 4
-#define MFC_ALEN  4
+#define MFC_NAME4 5
+#define MFC_ALEN  5
 
 #define PNS_ID   1
 #define PNS_NAME 2

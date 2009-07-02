@@ -146,3 +146,5 @@
 
 // #define SIMULATE_CARD_READER
 
+// #define DEF_FOX
+

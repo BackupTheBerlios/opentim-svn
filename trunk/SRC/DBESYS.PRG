@@ -137,6 +137,8 @@ LOCAL cServerDrive := left(AppName(.t.),2)
       IF ( !soSession:isConnected( ) )
         raise("Error connecting to ADS on "+cServerDrive+" : "+utos(soSession:getLastError()))
       ENDIF
+      // SetCollation(DbeCollation())
+      // Warning(ntrim(DbeCollation()))
     endif
   #endif DEF_ADS
 

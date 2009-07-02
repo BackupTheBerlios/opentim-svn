@@ -1395,6 +1395,10 @@ FUNCTION IfcMemo(cIdJnl,cIdMfc)
 local cMemo := ""
 local ifc := IfcLocate(JnlIdCtr(cIdJnl),cIdJnl,cIdMfc)
 RETURN NIL if ifc == NIL
+#ifdef DEF_4LANG
+  RETURN ifc[IFC_MEMO4] if TplLang() == MemLang4 ;
+                    .and. ! empty(ifc[IFC_MEMO4])
+#endif
 if TplLang() == MemLang3
   cMemo := ifc[IFC_MEMO3]
 elseif TplLang() == MemLang2

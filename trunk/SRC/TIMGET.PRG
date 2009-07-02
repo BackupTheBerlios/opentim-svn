@@ -2556,7 +2556,7 @@ RETURN MnuDone()
 #ifdef DEF_TAX
 
 FUNCTION TaxMemoEdit()
-local cLangue := PickLng(scMemoLang,MemLang1+MemLang2+MemLang3)
+local cLangue := PickLng(scMemoLang) // ,MemLang1+MemLang2+MemLang3)
 RETURN .f. if cLangue == NIL
 scMemoLang := cLangue
 return MnuDone() if ! ddRecLock()
@@ -2606,7 +2606,7 @@ RETURN MnuDone()
 #ifdef DEF_JNL
 
 FUNCTION IfcMemoEdit()
-local cLangue := PickLng(scMemoLang,MemLang1+MemLang2+MemLang3)
+local cLangue := PickLng(scMemoLang) // ,MemLang1+MemLang2+MemLang3)
 RETURN .f. if cLangue == NIL
 scMemoLang := cLangue
 return MnuDone() if ! ddRecLock()

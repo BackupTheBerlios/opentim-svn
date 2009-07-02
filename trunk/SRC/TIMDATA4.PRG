@@ -165,6 +165,11 @@ ddFld Memo2     ,M, 10,0
 ddFld Memo3     ,M, 10,0
 ddFld IdPar     ,C, LenIdPar(),0 picture PIC_ID ;
                     pick PickPar(NIL,IFC->IdPar)
+#ifdef DEF_4LANG
+ddFld Memo4     ,M, 10,0
+#else
+ddFld Memo4     ,M, 10,0 attrib H
+#endif
 action b key K_F12   prompt "~Text-Editor    [F12]" block IfcMemoEdit()
 action b key K_ENTER block IfcMemoEdit()
 ddEndDef()
@@ -502,6 +507,11 @@ ddFld Date     ,D, 8,0
 ddFld Seq     ,C,3,0 postedit {|x|GetSeq(x)}
 ddFld xlValid  ,C,128,0
 ddFld RegList  ,C,10,0 picture PIC_ID pick PickReg(TAX->RegList)
+#ifdef DEF_4LANG
+  ddFld Memo4    ,M,10,0
+#else
+  ddFld Memo4    ,M,10,0 attrib H
+#endif 
 action b key K_F12   prompt "~Text-Editor         [F12]" block TaxMemoEdit()  // T
 action b key K_ENTER block TaxMemoEdit()
 #ifdef DEF_CTT

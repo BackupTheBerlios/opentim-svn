@@ -24,15 +24,6 @@
 ** STATIC_SECTION global static variables
 **
 
-**
-** MSG_SECTION    MSGnnn definitions
-**
-* static MSG001 := ""
-
-**
-** PROCEDURE_SECTION  - (...grins)
-**
-
 #define MAX_PREVIEW 32000
 #define MEMO_PREVIEW
 * #define FILE_PREVIEW
@@ -481,6 +472,9 @@ RETURN NIL
 FUNCTION DrvName
 RETURN scDrvName if left(scDrvName,1) != "="
 RETURN &(substr(scDrvName,2))
+
+FUNCTION DrvFilename
+RETURN scLastRead + ".DRV"
 
 FUNCTION DrvInit
 RETURN if(scDrvInit=="","",xparse(scDrvInit))

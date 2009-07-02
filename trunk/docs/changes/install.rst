@@ -1370,7 +1370,7 @@ Bei Umstieg Clipper/Xbase:
   durch die nach dem Upgrade Rundungsdifferenzen beim 
   Integritätstest kommen:
   
-  VKP A62250 : Total du document (60.60) en dķsaccord avec contenu (60.58)
+  VKP A62250 : Total du document (60.60) en désaccord avec contenu (60.58)
   
 
 
@@ -1421,3 +1421,8 @@ Bei Umstieg Clipper/Xbase:
   Evtl. auch BANCLEAN.ACT laufenlassen.
   
 - Buggefahr in FinWriteZau() (Generieren von VME- und FBF-Dateien)
+
+20090623
+--------
+
+- MFC.DBC muss eine neue Kolonne kriegen MFC_NAME4 (auch wenn nicht DEF_4LANG)

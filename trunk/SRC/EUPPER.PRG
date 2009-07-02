@@ -1,5 +1,5 @@
 ** Copyright (c) 1992-2001 PAC Systems
-** Copyright (c) 2001-2008 Luc Saffre
+** Copyright (c) 2001-2009 Luc Saffre
 **
 ** This file is part of TIM.
 **
@@ -21,7 +21,7 @@
 * eupper() is provided for backwards compatibility
 * There may be calls to eupper() in *.dlg, *.act, *.def
 
-* The is without #include tim.ch because the expression eupper() would
+* This file is without #include tim.ch because the expression eupper() would
 * get preprocessed to upper().
 
 
@@ -65,3 +65,13 @@ RETURN padr(left(c,nLenRoot) + c2,nLen)
 #endif __XPP__
 
 
+FUNCTION xupper(x)
+local i
+static a := NIL
+if a == NIL
+    a := ReadArray("xupper.dbc",2)
+endif
+for i := 1 to len(a)
+    x := strtran(x,a[i][1],a[i][2])
+next i
+RETURN upper(x)

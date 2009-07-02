@@ -29,6 +29,8 @@ ItalOn   chr(27)+"i1"
 ItalOff  chr(27)+"i0"
 UnderOn  chr(27)+"u1"
 UnderOff chr(27)+"u0"
+ShadowOn  chr(27)+"i1"+chr(27)+"b1"
+ShadowOff chr(27)+"i0"+chr(27)+"b0"
 
 Option L  Landscape     chr(27)+"L"
 Option 8  8LinesPerInch chr(27)+"l8 "

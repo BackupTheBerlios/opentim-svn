@@ -1,5 +1,5 @@
 ** Copyright (c) 1992-2001 PAC Systems
-** Copyright (c) 2001-2008 Luc Saffre
+** Copyright (c) 2001-2009 Luc Saffre
 **
 ** This file is part of TIM.
 **
@@ -233,6 +233,12 @@ static saPta := NIL
 #endif DEF_PIN
 
 
+
+#ifdef DEF_4LANG
+  #xtranslate FIELD_MEMO4 => FIELD->Memo4
+#else
+  #xtranslate FIELD_MEMO4 => NIL
+#endif
 
 
 
@@ -1279,6 +1285,7 @@ RETURN .t.
 **
 ** IfcRefresh()
 **
+
 FUNCTION IfcRefresh()
 saIfc := {}
 open area oIfc()
@@ -1297,7 +1304,8 @@ open area oIfc()
       IFC->IdMfc,         ; // IFC_IDMFC
       IFC->IdReg,         ; // IFC_IDREG
       trim(IFC->Text),    ; // IFC_TEXT
-      IFC->IdPar          ; // IFC_IDPAR
+      IFC->IdPar,         ; // IFC_IDPAR
+      FIELD_MEMO4           ; // IFC_MEMO4
     } )
     skip
   enddo
@@ -1505,7 +1513,8 @@ do while !eof()
     TAX->Memo3,                         ; // TAX_MEMO3
     TAX->Date,                          ; // TAX_DATE
     trim(TAX->xlValid),                 ; // TAX_VALID
-    trim(TAX->RegList)                  ; // TAX_REGLIST
+    trim(TAX->RegList),                 ; // TAX_REGLIST
+    FIELD_MEMO4                         ; // TAX_MEMO4
   } )
   skip
 enddo
@@ -1563,6 +1572,10 @@ if cLangue == MemLang3
   cMemo := tax[TAX_MEMO3]
 elseif cLangue == MemLang2
   cMemo := tax[TAX_MEMO2]
+#ifdef DEF_4LANG  
+elseif cLangue == MemLang4
+  cMemo := tax[TAX_MEMO4]
+#endif  
 endif
 if empty(cMemo)
   cMemo := tax[TAX_MEMO1]
@@ -3115,6 +3128,9 @@ RETURN NIL
 FUNCTION MfcName(cIdMfc,cIdLng)
 local mfc := MfcLocate(cIdMfc)
 RETURN cIdMfc if mfc == NIL
+#ifdef DEF_4LANG
+RETURN mfc[MFC_NAME4] if cIdLng == MemLang4 .and. ! empty(mfc[MFC_NAME4])
+#endif
 RETURN mfc[MFC_NAME3] if cIdLng == MemLang3 .and. ! empty(mfc[MFC_NAME3])
 RETURN mfc[MFC_NAME2] if cIdLng == MemLang2 .and. ! empty(mfc[MFC_NAME2])
 RETURN mfc[MFC_NAME1]

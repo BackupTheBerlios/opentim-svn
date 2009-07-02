@@ -1,5 +1,5 @@
 ** Copyright (c) 1992-2001 PAC Systems
-** Copyright (c) 2001-2008 Luc Saffre
+** Copyright (c) 2001-2009 Luc Saffre
 **
 ** This file is part of TIM.
 **
@@ -237,7 +237,9 @@ set wrap on
   set date german
 #endif
 #ifdef __XPP__
- set collation to system
+  ** this is probably useless and has no effect
+  ** because it will be overridden by SetCollation from TIM.INI:
+  set collation to system
 #endif __XPP__
 set scoreboard off
 set century off
